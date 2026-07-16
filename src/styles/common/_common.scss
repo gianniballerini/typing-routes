@@ -1,0 +1,166 @@
+// Small Devices Portrait
+$small-breakpoint: 370px;
+
+// Small Devices Landscale
+$small-wide-breakpoint: 568px;
+
+// Big Devices Portrait
+// $medium-breakpoint: 820px;
+$medium-breakpoint: 568px;
+$medium-wide-breakpoint: 880px;
+
+// Big Devices Landscape
+$wide-breakpoint: 960px;
+
+// Desktop Devices
+$wide-1080-breakpoint: 1080px;
+$wide-1300-breakpoint: 1366px;
+$wide-1600-breakpoint: 1600px;
+$wide-1700-breakpoint: 1700px;
+$wide-1800-breakpoint: 1800px;
+$wide-1900-breakpoint: 1920px;
+$wide-2000-breakpoint: 2000px;
+$wide-2500-breakpoint: 2560px;
+$wide-3500-breakpoint: 3500px;
+$ultra-small-height-breakpoint: 200px;
+$small-height-breakpoint: 450px;
+$medium-height-breakpoint: 530px;
+$high-height-breakpoint: 600px;
+$ultra-high-height-breakpoint: 660px;
+
+// Pixel to rem
+$ptr: 0.0625rem;
+
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+html {
+
+    font-size: 14px;
+
+    text-size-adjust: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    @include respond-to($wide-1300-breakpoint) {
+        font-size: 15px;
+    }
+
+    @include respond-to($wide-1600-breakpoint) {
+        font-size: 17px;
+    }
+
+    @include respond-to($wide-1800-breakpoint) {
+        font-size: 19px;
+    }
+
+    @include respond-to($wide-2000-breakpoint) {
+        font-size:22px;
+    }
+
+    @include respond-to($wide-2500-breakpoint) {
+        font-size: 28px;
+    }
+
+    @include respond-to($wide-3500-breakpoint) {
+        font-size: 40px;
+    }
+}
+
+html,
+body {
+    margin: 0;
+
+    width: 100%;
+    height: 100vh;
+
+    touch-action: pan-x pan-y;
+}
+
+body {
+    display: flex;
+
+    flex-direction: column;
+
+    margin: 0;
+
+    color: $white;
+
+    font-family: 'Roboto', sans-serif;
+
+    background-color: $background;
+
+    overflow: hidden;
+}
+
+a {
+    color: $white;
+
+    // text-decoration: none;
+}
+
+img {
+    @include user-select('none');
+    @include user-drag('none');
+}
+
+h1.seo__title, h2.seo__subtitle {
+    @include user-select('none');
+
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+div.hidden, img.hidden, canvas.hidden {
+    display: none;
+    pointer-events: none;
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+div.before_enter {
+    // pointer-events: none;
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+div.before_exit {
+    pointer-events: none;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+}
+
+/* ===== Scrollbar CSS ===== */
+
+/* Firefox */
+// * {
+//     scrollbar-width: auto;
+//     scrollbar-color: #fff #fff;
+// }
+
+/* Chrome, Edge, and Safari */
+// *::-webkit-scrollbar {
+//     width: 12 * $ptr;
+// }
+
+// *::-webkit-scrollbar-track {
+//     background: #F6ECE0;
+//     background-image: repeating-linear-gradient( -45deg, transparent, transparent 18 * $ptr, #B70000 18 * $ptr, #B70000 36 * $ptr );
+
+//     border-right: 2 * $ptr solid transparent;
+//     border-left: 2 * $ptr solid transparent;
+
+//     border-radius: 6 * $ptr;
+
+//     background-clip: padding-box;
+// }
+
+// *::-webkit-scrollbar-thumb {
+//     background-color: #B70000;
+
+//     border-radius: 10 * $ptr;
+
+//     box-shadow: inset 0 0 6px rgb(0 0 0 / 50%);
+// }

@@ -1,0 +1,61 @@
+
+@mixin respond-to($breakpoint) {
+    @media screen and (min-width: $breakpoint) and (orientation: landscape), print {
+        @content;
+    }
+}
+
+@mixin respond-to-vertical($breakpoint) {
+    @media screen and (min-height: $breakpoint) and (orientation: landscape), print {
+        @content;
+    }
+}
+
+@mixin respond-to-mobile($breakpoint) {
+    @media screen and (min-width: $breakpoint) and (orientation: portrait), print {
+        @content;
+    }
+}
+
+@mixin vendor-prefix($name, $value) {
+    @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '') {
+        #{$vendor}#{$name}: #{$value};
+    }
+}
+
+@mixin user-select($value) {
+    @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '') {
+        #{$vendor}user-select: #{$value};
+    }
+}
+
+@mixin user-drag($value) {
+    @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '') {
+        #{$vendor}user-drag: #{$value};
+    }
+}
+
+@mixin backdrop-filter($value) {
+    @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '') {
+        #{$vendor}backdrop-filter: #{$value};
+    }
+}
+
+@mixin filter($value) {
+    @each $vendor in ('-webkit-', '-moz-', '') {
+        #{$vendor}filter: #{$value};
+    }
+}
+
+@mixin mask-image($value) {
+    @each $vendor in ('-webkit-', '') {
+        #{$vendor}mask-image: #{$value};
+    }
+}
+
+@mixin hide-scrollbar($value) {
+    &::-webkit-scrollbar { display: none; }
+    @each $vendor in ('-webkit-scrollbar', '-ms-overflow-style', 'scrollbar-width') {
+        #{$vendor}: none;
+    }
+}
