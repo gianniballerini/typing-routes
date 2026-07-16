@@ -1,0 +1,685 @@
+{
+  "total_routes": 136,
+  "routes": [
+    {
+      "id": "rn-0001",
+      "route": "0001",
+      "cities": []
+    },
+    {
+      "id": "rn-0003",
+      "route": "0003",
+      "cities": []
+    },
+    {
+      "id": "rn-0005",
+      "route": "0005",
+      "cities": []
+    },
+    {
+      "id": "rn-0007",
+      "route": "0007",
+      "cities": []
+    },
+    {
+      "id": "rn-0008",
+      "route": "0008",
+      "cities": []
+    },
+    {
+      "id": "rn-0009",
+      "route": "0009",
+      "cities": []
+    },
+    {
+      "id": "rn-0011",
+      "route": "0011",
+      "cities": []
+    },
+    {
+      "id": "rn-0012",
+      "route": "0012",
+      "cities": []
+    },
+    {
+      "id": "rn-0014",
+      "route": "0014",
+      "cities": []
+    },
+    {
+      "id": "rn-0016",
+      "route": "0016",
+      "cities": []
+    },
+    {
+      "id": "rn-0018",
+      "route": "0018",
+      "cities": []
+    },
+    {
+      "id": "rn-0019",
+      "route": "0019",
+      "cities": []
+    },
+    {
+      "id": "rn-0020",
+      "route": "0020",
+      "cities": []
+    },
+    {
+      "id": "rn-0022",
+      "route": "0022",
+      "cities": []
+    },
+    {
+      "id": "rn-0023",
+      "route": "0023",
+      "cities": []
+    },
+    {
+      "id": "rn-0025",
+      "route": "0025",
+      "cities": []
+    },
+    {
+      "id": "rn-0026",
+      "route": "0026",
+      "cities": []
+    },
+    {
+      "id": "rn-0033",
+      "route": "0033",
+      "cities": []
+    },
+    {
+      "id": "rn-0034",
+      "route": "0034",
+      "cities": []
+    },
+    {
+      "id": "rn-0035",
+      "route": "0035",
+      "cities": []
+    },
+    {
+      "id": "rn-0036",
+      "route": "0036",
+      "cities": []
+    },
+    {
+      "id": "rn-0038",
+      "route": "0038",
+      "cities": []
+    },
+    {
+      "id": "rn-0040",
+      "route": "0040",
+      "cities": []
+    },
+    {
+      "id": "rn-0050",
+      "route": "0050",
+      "cities": []
+    },
+    {
+      "id": "rn-0051",
+      "route": "0051",
+      "cities": []
+    },
+    {
+      "id": "rn-0052",
+      "route": "0052",
+      "cities": []
+    },
+    {
+      "id": "rn-0060",
+      "route": "0060",
+      "cities": []
+    },
+    {
+      "id": "rn-0064",
+      "route": "0064",
+      "cities": []
+    },
+    {
+      "id": "rn-0065",
+      "route": "0065",
+      "cities": []
+    },
+    {
+      "id": "rn-0066",
+      "route": "0066",
+      "cities": []
+    },
+    {
+      "id": "rn-0068",
+      "route": "0068",
+      "cities": []
+    },
+    {
+      "id": "rn-0073",
+      "route": "0073",
+      "cities": []
+    },
+    {
+      "id": "rn-0074",
+      "route": "0074",
+      "cities": []
+    },
+    {
+      "id": "rn-0075",
+      "route": "0075",
+      "cities": []
+    },
+    {
+      "id": "rn-0076",
+      "route": "0076",
+      "cities": []
+    },
+    {
+      "id": "rn-0077",
+      "route": "0077",
+      "cities": []
+    },
+    {
+      "id": "rn-0078",
+      "route": "0078",
+      "cities": []
+    },
+    {
+      "id": "rn-0079",
+      "route": "0079",
+      "cities": []
+    },
+    {
+      "id": "rn-0081",
+      "route": "0081",
+      "cities": []
+    },
+    {
+      "id": "rn-0086",
+      "route": "0086",
+      "cities": []
+    },
+    {
+      "id": "rn-0089",
+      "route": "0089",
+      "cities": []
+    },
+    {
+      "id": "rn-0095",
+      "route": "0095",
+      "cities": []
+    },
+    {
+      "id": "rn-0098",
+      "route": "0098",
+      "cities": []
+    },
+    {
+      "id": "rn-0101",
+      "route": "0101",
+      "cities": []
+    },
+    {
+      "id": "rn-0105",
+      "route": "0105",
+      "cities": []
+    },
+    {
+      "id": "rn-0117",
+      "route": "0117",
+      "cities": []
+    },
+    {
+      "id": "rn-0118",
+      "route": "0118",
+      "cities": []
+    },
+    {
+      "id": "rn-0119",
+      "route": "0119",
+      "cities": []
+    },
+    {
+      "id": "rn-0120",
+      "route": "0120",
+      "cities": []
+    },
+    {
+      "id": "rn-0121",
+      "route": "0121",
+      "cities": []
+    },
+    {
+      "id": "rn-0122",
+      "route": "0122",
+      "cities": []
+    },
+    {
+      "id": "rn-0123",
+      "route": "0123",
+      "cities": []
+    },
+    {
+      "id": "rn-0127",
+      "route": "0127",
+      "cities": []
+    },
+    {
+      "id": "rn-0130",
+      "route": "0130",
+      "cities": []
+    },
+    {
+      "id": "rn-0131",
+      "route": "0131",
+      "cities": []
+    },
+    {
+      "id": "rn-0135",
+      "route": "0135",
+      "cities": []
+    },
+    {
+      "id": "rn-0136",
+      "route": "0136",
+      "cities": []
+    },
+    {
+      "id": "rn-0141",
+      "route": "0141",
+      "cities": []
+    },
+    {
+      "id": "rn-0142",
+      "route": "0142",
+      "cities": []
+    },
+    {
+      "id": "rn-0143",
+      "route": "0143",
+      "cities": []
+    },
+    {
+      "id": "rn-0144",
+      "route": "0144",
+      "cities": []
+    },
+    {
+      "id": "rn-0145",
+      "route": "0145",
+      "cities": []
+    },
+    {
+      "id": "rn-0146",
+      "route": "0146",
+      "cities": []
+    },
+    {
+      "id": "rn-0147",
+      "route": "0147",
+      "cities": []
+    },
+    {
+      "id": "rn-0148",
+      "route": "0148",
+      "cities": []
+    },
+    {
+      "id": "rn-0149",
+      "route": "0149",
+      "cities": []
+    },
+    {
+      "id": "rn-0150",
+      "route": "0150",
+      "cities": []
+    },
+    {
+      "id": "rn-0151",
+      "route": "0151",
+      "cities": []
+    },
+    {
+      "id": "rn-0152",
+      "route": "0152",
+      "cities": []
+    },
+    {
+      "id": "rn-0153",
+      "route": "0153",
+      "cities": []
+    },
+    {
+      "id": "rn-0154",
+      "route": "0154",
+      "cities": []
+    },
+    {
+      "id": "rn-0157",
+      "route": "0157",
+      "cities": []
+    },
+    {
+      "id": "rn-0158",
+      "route": "0158",
+      "cities": []
+    },
+    {
+      "id": "rn-0168",
+      "route": "0168",
+      "cities": []
+    },
+    {
+      "id": "rn-0173",
+      "route": "0173",
+      "cities": []
+    },
+    {
+      "id": "rn-0174",
+      "route": "0174",
+      "cities": []
+    },
+    {
+      "id": "rn-0175",
+      "route": "0175",
+      "cities": []
+    },
+    {
+      "id": "rn-0178",
+      "route": "0178",
+      "cities": []
+    },
+    {
+      "id": "rn-0188",
+      "route": "0188",
+      "cities": []
+    },
+    {
+      "id": "rn-0193",
+      "route": "0193",
+      "cities": []
+    },
+    {
+      "id": "rn-0205",
+      "route": "0205",
+      "cities": []
+    },
+    {
+      "id": "rn-0226",
+      "route": "0226",
+      "cities": []
+    },
+    {
+      "id": "rn-0228",
+      "route": "0228",
+      "cities": []
+    },
+    {
+      "id": "rn-0229",
+      "route": "0229",
+      "cities": []
+    },
+    {
+      "id": "rn-0231",
+      "route": "0231",
+      "cities": []
+    },
+    {
+      "id": "rn-0232",
+      "route": "0232",
+      "cities": []
+    },
+    {
+      "id": "rn-0234",
+      "route": "0234",
+      "cities": []
+    },
+    {
+      "id": "rn-0237",
+      "route": "0237",
+      "cities": []
+    },
+    {
+      "id": "rn-0242",
+      "route": "0242",
+      "cities": []
+    },
+    {
+      "id": "rn-0249",
+      "route": "0249",
+      "cities": []
+    },
+    {
+      "id": "rn-0250",
+      "route": "0250",
+      "cities": []
+    },
+    {
+      "id": "rn-0251",
+      "route": "0251",
+      "cities": []
+    },
+    {
+      "id": "rn-0252",
+      "route": "0252",
+      "cities": []
+    },
+    {
+      "id": "rn-0259",
+      "route": "0259",
+      "cities": []
+    },
+    {
+      "id": "rn-0260",
+      "route": "0260",
+      "cities": []
+    },
+    {
+      "id": "rn-0281",
+      "route": "0281",
+      "cities": []
+    },
+    {
+      "id": "rn-0288",
+      "route": "0288",
+      "cities": []
+    },
+    {
+      "id": "rn-0293",
+      "route": "0293",
+      "cities": []
+    },
+    {
+      "id": "rn-1S40",
+      "route": "1S40",
+      "cities": []
+    },
+    {
+      "id": "rn-1V03",
+      "route": "1V03",
+      "cities": []
+    },
+    {
+      "id": "rn-1V09",
+      "route": "1V09",
+      "cities": []
+    },
+    {
+      "id": "rn-1V11",
+      "route": "1V11",
+      "cities": []
+    },
+    {
+      "id": "rn-1V26",
+      "route": "1V26",
+      "cities": []
+    },
+    {
+      "id": "rn-1V38",
+      "route": "1V38",
+      "cities": []
+    },
+    {
+      "id": "rn-1V40",
+      "route": "1V40",
+      "cities": []
+    },
+    {
+      "id": "rn-1V66",
+      "route": "1V66",
+      "cities": []
+    },
+    {
+      "id": "rn-24CA",
+      "route": "24CA",
+      "cities": []
+    },
+    {
+      "id": "rn-24CB",
+      "route": "24CB",
+      "cities": []
+    },
+    {
+      "id": "rn-24CI",
+      "route": "24CI",
+      "cities": []
+    },
+    {
+      "id": "rn-24CJ",
+      "route": "24CJ",
+      "cities": []
+    },
+    {
+      "id": "rn-24CK",
+      "route": "24CK",
+      "cities": []
+    },
+    {
+      "id": "rn-2S40",
+      "route": "2S40",
+      "cities": []
+    },
+    {
+      "id": "rn-2V03",
+      "route": "2V03",
+      "cities": []
+    },
+    {
+      "id": "rn-2V09",
+      "route": "2V09",
+      "cities": []
+    },
+    {
+      "id": "rn-2V40",
+      "route": "2V40",
+      "cities": []
+    },
+    {
+      "id": "rn-3V09",
+      "route": "3V09",
+      "cities": []
+    },
+    {
+      "id": "rn-A001",
+      "route": "A001",
+      "cities": []
+    },
+    {
+      "id": "rn-A002",
+      "route": "A002",
+      "cities": []
+    },
+    {
+      "id": "rn-A003",
+      "route": "A003",
+      "cities": []
+    },
+    {
+      "id": "rn-A004",
+      "route": "A004",
+      "cities": []
+    },
+    {
+      "id": "rn-A005",
+      "route": "A005",
+      "cities": []
+    },
+    {
+      "id": "rn-A007",
+      "route": "A007",
+      "cities": []
+    },
+    {
+      "id": "rn-A008",
+      "route": "A008",
+      "cities": []
+    },
+    {
+      "id": "rn-A009",
+      "route": "A009",
+      "cities": []
+    },
+    {
+      "id": "rn-A010",
+      "route": "A010",
+      "cities": []
+    },
+    {
+      "id": "rn-A011",
+      "route": "A011",
+      "cities": []
+    },
+    {
+      "id": "rn-A012",
+      "route": "A012",
+      "cities": []
+    },
+    {
+      "id": "rn-A013",
+      "route": "A013",
+      "cities": []
+    },
+    {
+      "id": "rn-A014",
+      "route": "A014",
+      "cities": []
+    },
+    {
+      "id": "rn-A015",
+      "route": "A015",
+      "cities": []
+    },
+    {
+      "id": "rn-A016",
+      "route": "A016",
+      "cities": []
+    },
+    {
+      "id": "rn-A019",
+      "route": "A019",
+      "cities": []
+    },
+    {
+      "id": "rn-A025",
+      "route": "A025",
+      "cities": []
+    },
+    {
+      "id": "rn-A026",
+      "route": "A026",
+      "cities": []
+    },
+    {
+      "id": "rn-V143",
+      "route": "V143",
+      "cities": []
+    },
+    {
+      "id": "rn-V146",
+      "route": "V146",
+      "cities": []
+    }
+  ]
+}
