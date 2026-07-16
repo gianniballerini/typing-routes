@@ -13,5 +13,8 @@
     "sass": "^1.101.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.1"
+  },
+  "dependencies": {
+    "maplibre-gl": "^5.24.0"
   }
 }
