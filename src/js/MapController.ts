@@ -2,6 +2,7 @@ import type { FeatureCollection } from 'geojson';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { MouseInfoCard } from './MouseInfoCard';
+import { Settings } from './Settings';
 
 class MapController {
     map: maplibregl.Map;
@@ -25,16 +26,11 @@ class MapController {
                 "sources": {},
                 "layers": []
             },
-            center: [-63.6167, -38.4161], // Centered over Argentina
-
-            zoom: 3.5,
-            maxZoom: 7,
-            minZoom: 3,
-
-            maxBounds: [
-                [-76.0, -56.0], // southwest corner [lng, lat]
-                [-52.0, -21.0]  // northeast corner [lng, lat]
-            ]
+            center: Settings.center as [number, number],
+            zoom: Settings.initialZoom,
+            maxZoom: Settings.maxZoom,
+            minZoom: Settings.minZoom,
+            maxBounds: Settings.maxBounds as [[number, number], [number, number]]
         });
     }
 
@@ -45,20 +41,20 @@ class MapController {
             this.pendingCallbacks = [];
 
             this.onReady(() => {
-                this.map.addSource('openmaptiles', {
+                this.map.addSource(Settings.sourceIds.openmaptiles, {
                     type: 'vector',
                     url: 'https://demotiles.maplibre.org/tiles/tiles.json'
                 });
 
                 this.map.addLayer({
-                    'id': 'argentina-limits',
+                    'id': Settings.layerIds.argentinaLimits,
                     'type': 'line',
-                    'source': 'openmaptiles',
+                    'source': Settings.sourceIds.openmaptiles,
                     'source-layer': 'countries',
                     'filter': ['==', 'ADM0_A3', 'ARG'],
                     'paint': {
-                        'line-color': '#32323222',
-                        'line-width': 2.5
+                        'line-color': Settings.argentinaBorder.color,
+                        'line-width': Settings.argentinaBorder.width
                     }
                 });
             });
@@ -76,33 +72,33 @@ class MapController {
 
     renderRoutes(fc: FeatureCollection) {
         this.onReady(() => {
-            this.map.addSource('national-routes', {
+            this.map.addSource(Settings.sourceIds.nationalRoutes, {
                 type: 'geojson',
                 data: fc,
                 promoteId: 'id'
             });
             this.map.addLayer({
-                id: 'national-routes-line',
+                id: Settings.layerIds.nationalRoutesLine,
                 type: 'line',
-                source: 'national-routes',
+                source: Settings.sourceIds.nationalRoutes,
                 paint: {
                     'line-color': [
                         'case',
-                        ['boolean', ['feature-state', 'selected'], false], '#6CACE4',
-                        ['boolean', ['feature-state', 'hovered'], false], '#777777',
-                        ['get', 'visited'], '#FFB81C',
-                        '#cccccc'
+                        ['boolean', ['feature-state', 'selected'], false], Settings.routeLine.colors.selected,
+                        ['boolean', ['feature-state', 'hovered'], false], Settings.routeLine.colors.hovered,
+                        ['get', 'visited'], Settings.routeLine.colors.visited,
+                        Settings.routeLine.colors.default
                     ],
                     'line-width': [
                         'interpolate', ['linear'], ['zoom'],
-                        3, 1.2,
-                        7, 4
+                        Settings.routeLine.widthByZoom.minZoom, Settings.routeLine.widthByZoom.minWidth,
+                        Settings.routeLine.widthByZoom.maxZoom, Settings.routeLine.widthByZoom.maxWidth
                     ],
-                    'line-opacity': 0.9
+                    'line-opacity': Settings.routeLine.opacity
                 }
             });
 
-            this.map.on('mousemove', 'national-routes-line', (e) => {
+            this.map.on('mousemove', Settings.layerIds.nationalRoutesLine, (e) => {
                 if (!e.features || e.features.length === 0) return;
                 const feature = e.features[0];
                 const properties = feature.properties as { name?: string; cities_count?: number } | undefined;
@@ -110,11 +106,11 @@ class MapController {
 
                 if (this.hoveredId !== nextHoveredId) {
                     if (this.hoveredId !== null) {
-                        this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: false });
+                        this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: this.hoveredId }, { hovered: false });
                     }
                     this.hoveredId = nextHoveredId;
                     if (this.hoveredId !== null) {
-                        this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: true });
+                        this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: this.hoveredId }, { hovered: true });
                     }
 
                     if (this.hoveredId !== null && this.mouseInfoCard) {
@@ -128,16 +124,16 @@ class MapController {
                 this.map.getCanvas().style.cursor = 'pointer';
             });
 
-            this.map.on('mouseleave', 'national-routes-line', () => {
+            this.map.on('mouseleave', Settings.layerIds.nationalRoutesLine, () => {
                 if (this.hoveredId !== null) {
-                    this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: false });
+                    this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: this.hoveredId }, { hovered: false });
                 }
                 this.hoveredId = null;
                 this.mouseInfoCard?.hide();
                 this.map.getCanvas().style.cursor = '';
             });
 
-            this.map.on('click', 'national-routes-line', (e) => {
+            this.map.on('click', Settings.layerIds.nationalRoutesLine, (e) => {
                 if (!e.features || e.features.length === 0) return;
                 const clickedId = e.features[0].id ?? null;
                 this.selectRoute(this.selectedId === clickedId ? null : clickedId);
@@ -147,54 +143,54 @@ class MapController {
 
     selectRoute(routeId: string | number | null) {
         if (this.selectedId !== null) {
-            this.map.setFeatureState({ source: 'national-routes', id: this.selectedId }, { selected: false });
+            this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: this.selectedId }, { selected: false });
         }
         this.selectedId = routeId;
         if (routeId !== null) {
-            this.map.setFeatureState({ source: 'national-routes', id: routeId }, { selected: true });
+            this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: routeId }, { selected: true });
         }
     }
 
     renderCities(fc: FeatureCollection) {
         this.onReady(() => {
-            this.map.addSource('cities', {
+            this.map.addSource(Settings.sourceIds.cities, {
                 type: 'geojson',
                 data: fc
             });
             this.map.addLayer({
-                id: 'cities-circle',
+                id: Settings.layerIds.citiesCircle,
                 type: 'circle',
-                source: 'cities',
+                source: Settings.sourceIds.cities,
                 paint: {
                     'circle-radius': [
                         'interpolate', ['linear'], ['zoom'],
-                        3, 2,
-                        7, 6
+                        Settings.cityCircle.radiusByZoom.minZoom, Settings.cityCircle.radiusByZoom.minRadius,
+                        Settings.cityCircle.radiusByZoom.maxZoom, Settings.cityCircle.radiusByZoom.maxRadius
                     ],
                     'circle-color': [
                         'case',
-                        ['get', 'visited'], '#2a9d8f',
-                        '#cccccc'
+                        ['get', 'visited'], Settings.cityCircle.colors.visited,
+                        Settings.cityCircle.colors.default
                     ],
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': '#ffffff'
+                    'circle-stroke-width': Settings.cityCircle.stroke.width,
+                    'circle-stroke-color': Settings.cityCircle.stroke.color
                 }
             });
         });
     }
 
     updateCities(fc: FeatureCollection) {
-        const source = this.map.getSource('cities') as maplibregl.GeoJSONSource;
+        const source = this.map.getSource(Settings.sourceIds.cities) as maplibregl.GeoJSONSource;
         if (source) source.setData(fc);
     }
 
     updateRoutes(fc: FeatureCollection) {
-        const source = this.map.getSource('national-routes') as maplibregl.GeoJSONSource;
+        const source = this.map.getSource(Settings.sourceIds.nationalRoutes) as maplibregl.GeoJSONSource;
         if (source) source.setData(fc);
     }
 
     setCityVisited(cityId: string, visited: boolean) {
-        const source = this.map.getSource('cities') as maplibregl.GeoJSONSource;
+        const source = this.map.getSource(Settings.sourceIds.cities) as maplibregl.GeoJSONSource;
         if (!source) return;
         void cityId;
         void visited;
