@@ -1,10 +1,15 @@
 import maplibregl from 'maplibre-gl';
+import type { FeatureCollection } from 'geojson';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 class MapController {
     map: maplibregl.Map;
+    private ready: boolean;
+    private pendingCallbacks: Array<() => void>;
 
     constructor() {
+        this.ready = false;
+        this.pendingCallbacks = [];
         this.map = new maplibregl.Map({
             container: 'map', // container id
             // style: 'https://demotiles.maplibre.org/globe.json', // style URL
@@ -28,27 +33,59 @@ class MapController {
 
     init() {
         this.map.on('load', () => {
-            this.map.addSource('openmaptiles', {
-                type: 'vector',
-                url: 'https://demotiles.maplibre.org/tiles/tiles.json'
-            });
+            this.ready = true;
+            this.pendingCallbacks.forEach((cb) => cb());
+            this.pendingCallbacks = [];
 
+            this.onReady(() => {
+                this.map.addSource('openmaptiles', {
+                    type: 'vector',
+                    url: 'https://demotiles.maplibre.org/tiles/tiles.json'
+                });
+
+                this.map.addLayer({
+                    'id': 'argentina-limits',
+                    'type': 'line',
+                    'source': 'openmaptiles',
+                    'source-layer': 'countries',
+                    'filter': ['==', 'ADM0_A3', 'ARG'],
+                    'paint': {
+                        'line-color': '#32323222',
+                        'line-width': 2.5
+                    }
+                });
+            });
+        });
+    }
+
+    onReady(cb: () => void) {
+        if (this.ready) cb();
+        else this.pendingCallbacks.push(cb);
+    }
+
+    renderRoutes(fc: FeatureCollection) {
+        this.onReady(() => {
+            this.map.addSource('national-routes', {
+                type: 'geojson',
+                data: fc
+            });
             this.map.addLayer({
-                'id': 'argentina-limits',
-                'type': 'line',
-                'source': 'openmaptiles',
-                'source-layer': 'countries',
-                'filter': ['==', 'ADM0_A3', 'ARG'],
-                'paint': {
-                    'line-color': '#32323222',
-                    'line-width': 2.5
+                id: 'national-routes-line',
+                type: 'line',
+                source: 'national-routes',
+                paint: {
+                    'line-color': '#d62828',
+                    'line-width': [
+                        'interpolate', ['linear'], ['zoom'],
+                        3, 1.2,
+                        7, 4
+                    ],
+                    'line-opacity': 0.9
                 }
             });
         });
     }
 }
 
-const mapController = new MapController();
-mapController.init();
-export { mapController as MapController };
+export { MapController };
 

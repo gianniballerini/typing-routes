@@ -1,4 +1,5 @@
 import { MapController } from './MapController';
+import { RoutesController } from './RoutesController';
 
 declare global {
     interface Window {
@@ -7,9 +8,17 @@ declare global {
 }
 
 class MainApplication {
-    map_controller: typeof MapController;
+    map_controller: MapController;
+    routes_controller: RoutesController;
+
     constructor() {
-        this.map_controller = MapController;
+        this.map_controller = new MapController();
+        this.map_controller.init();
+        this.routes_controller = new RoutesController();
+        this.routes_controller.init();
+
+        const fc = this.routes_controller.getRoutesFeatureCollection();
+        this.map_controller.renderRoutes(fc);
     }
 }
 
