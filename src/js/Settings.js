@@ -53,7 +53,8 @@ class Settings
       },
       colors: {
         default: '#cccccc',
-        visited: '#2a9d8f'
+        visited: '#2a9d8f',
+        selected: '#E88D00'
       },
       stroke: {
         width: 1,

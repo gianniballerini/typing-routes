@@ -43,6 +43,7 @@ export interface SettingsShape {
     colors: {
       default: string;
       visited: string;
+      selected: string;
     };
     stroke: {
       width: number;

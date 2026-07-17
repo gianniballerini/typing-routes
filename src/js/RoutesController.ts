@@ -65,10 +65,12 @@ interface RawRoutesGeometriesData {
 class RoutesController {
     routes: { [key: string]: Route };
     private geometriesMap: { [key: string]: Geometry };
+    private routeCityIdsMap: { [key: string]: string[] };
 
     constructor() {
         this.routes = {};
         this.geometriesMap = {};
+        this.routeCityIdsMap = {};
     }
 
     private toCity(raw: any): City {
@@ -133,6 +135,8 @@ class RoutesController {
                 route.cities = citiesMap[routeEntry.id].map((rawCity) => this.toCity(rawCity));
             }
 
+            this.routeCityIdsMap[routeEntry.id] = route.cities.map((city) => city.id);
+
             this.routes[routeEntry.id] = route;
         }
 
@@ -181,16 +185,47 @@ class RoutesController {
         return this.getRoutesFeatureCollection();
     }
 
+    getRouteCityIdsMap(): { [key: string]: string[] } {
+        return Object.fromEntries(
+            Object.entries(this.routeCityIdsMap).map(([routeId, cityIds]) => [routeId, [...cityIds]])
+        );
+    }
+
     getCitiesFeatureCollection(): FeatureCollection {
-        const allCities: City[] = Object.values(this.routes).flatMap((r) => r.cities);
+        const cityAggregates: {
+            [key: string]: {
+                city: City;
+                visited: boolean;
+            };
+        } = {};
+
+        for (const route of Object.values(this.routes)) {
+            for (const city of route.cities) {
+                const existing = cityAggregates[city.id];
+                const derivedVisited = city.visited || route.visited;
+
+                if (!existing) {
+                    cityAggregates[city.id] = {
+                        city,
+                        visited: derivedVisited
+                    };
+                    continue;
+                }
+
+                existing.visited = existing.visited || derivedVisited;
+            }
+        }
+
+        const aggregatedCities = Object.values(cityAggregates);
         return {
             type: 'FeatureCollection',
-            features: allCities.map((city) => ({
+            features: aggregatedCities.map(({ city, visited }) => ({
                 type: 'Feature',
+                id: city.id,
                 properties: {
                     id: city.id,
                     name: city.name,
-                    visited: city.visited,
+                    visited,
                     tier: city.tier
                 },
                 geometry: {

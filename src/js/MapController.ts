@@ -10,6 +10,8 @@ class MapController {
     private pendingCallbacks: Array<() => void>;
     private hoveredId: string | number | null;
     private selectedId: string | number | null;
+    private routeCityIdsMap: { [key: string]: string[] };
+    private selectedRouteCityIds: string[];
     private mouseInfoCard: MouseInfoCard | null;
 
     constructor() {
@@ -17,6 +19,8 @@ class MapController {
         this.pendingCallbacks = [];
         this.hoveredId = null;
         this.selectedId = null;
+        this.routeCityIdsMap = {};
+        this.selectedRouteCityIds = [];
         this.mouseInfoCard = null;
         this.map = new maplibregl.Map({
             container: 'map', // container id
@@ -68,6 +72,36 @@ class MapController {
 
     setMouseInfoCard(mouseInfoCard: MouseInfoCard) {
         this.mouseInfoCard = mouseInfoCard;
+    }
+
+    setRouteCityIdsMap(routeCityIdsMap: { [key: string]: string[] }) {
+        this.routeCityIdsMap = routeCityIdsMap;
+    }
+
+    private clearSelectedRouteCitiesFeatureState() {
+        for (const cityId of this.selectedRouteCityIds) {
+            this.map.setFeatureState(
+                { source: Settings.sourceIds.cities, id: cityId },
+                { selected: false }
+            );
+        }
+        this.selectedRouteCityIds = [];
+    }
+
+    private applySelectedRouteCitiesFeatureState() {
+        if (this.selectedId === null) return;
+
+        const selectedRouteId = String(this.selectedId);
+        const cityIds = this.routeCityIdsMap[selectedRouteId] ?? [];
+
+        for (const cityId of cityIds) {
+            this.map.setFeatureState(
+                { source: Settings.sourceIds.cities, id: cityId },
+                { selected: true }
+            );
+        }
+
+        this.selectedRouteCityIds = [...cityIds];
     }
 
     renderRoutes(fc: FeatureCollection) {
@@ -145,9 +179,13 @@ class MapController {
         if (this.selectedId !== null) {
             this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: this.selectedId }, { selected: false });
         }
+
+        this.clearSelectedRouteCitiesFeatureState();
+
         this.selectedId = routeId;
         if (routeId !== null) {
             this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: routeId }, { selected: true });
+            this.applySelectedRouteCitiesFeatureState();
         }
     }
 
@@ -155,7 +193,8 @@ class MapController {
         this.onReady(() => {
             this.map.addSource(Settings.sourceIds.cities, {
                 type: 'geojson',
-                data: fc
+                data: fc,
+                promoteId: 'id'
             });
             this.map.addLayer({
                 id: Settings.layerIds.citiesCircle,
@@ -169,6 +208,7 @@ class MapController {
                     ],
                     'circle-color': [
                         'case',
+                        ['boolean', ['feature-state', 'selected'], false], Settings.cityCircle.colors.selected,
                         ['get', 'visited'], Settings.cityCircle.colors.visited,
                         Settings.cityCircle.colors.default
                     ],
@@ -181,7 +221,12 @@ class MapController {
 
     updateCities(fc: FeatureCollection) {
         const source = this.map.getSource(Settings.sourceIds.cities) as maplibregl.GeoJSONSource;
-        if (source) source.setData(fc);
+        if (source) {
+            source.setData(fc);
+            // Keep selected-route city highlighting after source data refreshes.
+            this.clearSelectedRouteCitiesFeatureState();
+            this.applySelectedRouteCitiesFeatureState();
+        }
     }
 
     updateRoutes(fc: FeatureCollection) {

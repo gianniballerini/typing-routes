@@ -21,12 +21,21 @@ class MainApplication {
         this.map_controller.init();
         this.routes_controller = new RoutesController();
         this.routes_controller.init();
+        this.map_controller.setRouteCityIdsMap(this.routes_controller.getRouteCityIdsMap());
 
         const fc = this.routes_controller.getRoutesFeatureCollection();
         this.map_controller.renderRoutes(fc);
 
         const citiesFc = this.routes_controller.getCitiesFeatureCollection();
         this.map_controller.renderCities(citiesFc);
+    }
+
+    setRouteVisited(routeId: string, visited: boolean) {
+        const routesFc = this.routes_controller.setRouteVisited(routeId, visited);
+        this.map_controller.updateRoutes(routesFc);
+
+        const citiesFc = this.routes_controller.getCitiesFeatureCollection();
+        this.map_controller.updateCities(citiesFc);
     }
 }
 
