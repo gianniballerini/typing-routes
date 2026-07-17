@@ -2,11 +2,16 @@ import { MapController } from './MapController';
 
 declare global {
     interface Window {
-        map: maplibregl.Map;
+        app: MainApplication;
     }
 }
 
-const map_controller = MapController;
+class MainApplication {
+    map_controller: typeof MapController;
+    constructor() {
+        this.map_controller = MapController;
+    }
+}
 
-
-window.map = map_controller; // Expose the map object to the global window object for debugging purposes
+const app = new MainApplication();
+window.app = app; // Expose the app object to the global window object for debugging purposes
