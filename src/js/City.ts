@@ -6,6 +6,7 @@ class City {
     lon: number;
     province: string;
     tier: string;
+    visited: boolean;
 
     constructor() {
         this.id = "";
@@ -15,6 +16,7 @@ class City {
         this.lon = 0;
         this.province = "";
         this.tier = "";
+        this.visited = false;
     }
 }
 

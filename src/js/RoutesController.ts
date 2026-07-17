@@ -138,6 +138,26 @@ class RoutesController {
             }))
         };
     }
+
+    getCitiesFeatureCollection(): FeatureCollection {
+        const allCities: City[] = Object.values(this.routes).flatMap((r) => r.cities);
+        return {
+            type: 'FeatureCollection',
+            features: allCities.map((city) => ({
+                type: 'Feature',
+                properties: {
+                    id: city.id,
+                    name: city.name,
+                    visited: city.visited,
+                    tier: city.tier
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [city.lon, city.lat]
+                }
+            }))
+        };
+    }
 }
 
 export { RoutesController };

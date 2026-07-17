@@ -19,6 +19,9 @@ class MainApplication {
 
         const fc = this.routes_controller.getRoutesFeatureCollection();
         this.map_controller.renderRoutes(fc);
+
+        const citiesFc = this.routes_controller.getCitiesFeatureCollection();
+        this.map_controller.renderCities(citiesFc);
     }
 }
 
