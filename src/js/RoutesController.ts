@@ -132,11 +132,17 @@ class RoutesController {
                 properties: {
                     id,
                     route: this.routes[id]?.route_number ?? '',
-                    name: this.routes[id]?.route_name ?? ''
+                    name: this.routes[id]?.route_name ?? '',
+                    visited: this.routes[id]?.visited ?? false
                 },
                 geometry
             }))
         };
+    }
+
+    setRouteVisited(routeId: string, visited: boolean): FeatureCollection {
+        if (this.routes[routeId]) this.routes[routeId].visited = visited;
+        return this.getRoutesFeatureCollection();
     }
 
     getCitiesFeatureCollection(): FeatureCollection {

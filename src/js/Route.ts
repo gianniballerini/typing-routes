@@ -4,6 +4,7 @@ class Route {
     sections: any[];
     cities: City[];
     cities_cleared: City[];
+    visited: boolean;
 
     route_id: string;
     route_number: string;
@@ -16,6 +17,7 @@ class Route {
         this.sections = [];
         this.cities = [];
         this.cities_cleared = [];
+        this.visited = false;
 
         this.route_id = "";
         this.route_number = "";

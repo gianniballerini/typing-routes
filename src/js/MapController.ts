@@ -6,10 +6,14 @@ class MapController {
     map: maplibregl.Map;
     private ready: boolean;
     private pendingCallbacks: Array<() => void>;
+    private hoveredId: string | number | null;
+    private selectedId: string | number | null;
 
     constructor() {
         this.ready = false;
         this.pendingCallbacks = [];
+        this.hoveredId = null;
+        this.selectedId = null;
         this.map = new maplibregl.Map({
             container: 'map', // container id
             // style: 'https://demotiles.maplibre.org/globe.json', // style URL
@@ -67,14 +71,21 @@ class MapController {
         this.onReady(() => {
             this.map.addSource('national-routes', {
                 type: 'geojson',
-                data: fc
+                data: fc,
+                promoteId: 'id'
             });
             this.map.addLayer({
                 id: 'national-routes-line',
                 type: 'line',
                 source: 'national-routes',
                 paint: {
-                    'line-color': '#d62828',
+                    'line-color': [
+                        'case',
+                        ['boolean', ['feature-state', 'selected'], false], '#6CACE4',
+                        ['boolean', ['feature-state', 'hovered'], false], '#777777',
+                        ['get', 'visited'], '#FFB81C',
+                        '#cccccc'
+                    ],
                     'line-width': [
                         'interpolate', ['linear'], ['zoom'],
                         3, 1.2,
@@ -83,7 +94,45 @@ class MapController {
                     'line-opacity': 0.9
                 }
             });
+
+            this.map.on('mousemove', 'national-routes-line', (e) => {
+                if (!e.features || e.features.length === 0) return;
+                const feature = e.features[0];
+                if (this.hoveredId === feature.id) return;
+                if (this.hoveredId !== null) {
+                    this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: false });
+                }
+                this.hoveredId = feature.id ?? null;
+                if (this.hoveredId !== null) {
+                    this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: true });
+                }
+                this.map.getCanvas().style.cursor = 'pointer';
+            });
+
+            this.map.on('mouseleave', 'national-routes-line', () => {
+                if (this.hoveredId !== null) {
+                    this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: false });
+                }
+                this.hoveredId = null;
+                this.map.getCanvas().style.cursor = '';
+            });
+
+            this.map.on('click', 'national-routes-line', (e) => {
+                if (!e.features || e.features.length === 0) return;
+                const clickedId = e.features[0].id ?? null;
+                this.selectRoute(this.selectedId === clickedId ? null : clickedId);
+            });
         });
+    }
+
+    selectRoute(routeId: string | number | null) {
+        if (this.selectedId !== null) {
+            this.map.setFeatureState({ source: 'national-routes', id: this.selectedId }, { selected: false });
+        }
+        this.selectedId = routeId;
+        if (routeId !== null) {
+            this.map.setFeatureState({ source: 'national-routes', id: routeId }, { selected: true });
+        }
     }
 
     renderCities(fc: FeatureCollection) {
@@ -116,6 +165,11 @@ class MapController {
 
     updateCities(fc: FeatureCollection) {
         const source = this.map.getSource('cities') as maplibregl.GeoJSONSource;
+        if (source) source.setData(fc);
+    }
+
+    updateRoutes(fc: FeatureCollection) {
+        const source = this.map.getSource('national-routes') as maplibregl.GeoJSONSource;
         if (source) source.setData(fc);
     }
 
