@@ -25,7 +25,7 @@ class Settings
 
     this.argentinaBorder = {
       color: '#32323222',
-      width: 4
+      width: 2
     };
 
     this.routeLine = {

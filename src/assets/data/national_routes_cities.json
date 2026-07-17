@@ -1,5 +1,5 @@
 {
-  "total_routes": 136,
+  "total_routes": 98,
   "routes": [
     {
       "id": "rn-0001",
@@ -12,35 +12,317 @@
       "source_note": "Approximate scaffold data cross-referenced with Wikipedia and ACA/Secretaría de Turismo RN3 survey (Feb-Mar 2026). Coordinates are approximate and should be validated against Georef API / BAHRA before production use.",
       "total_length_km": 3079,
       "cities": [
-          { "order": 1, "id": "rn3-001", "name": "Ciudad Autónoma de Buenos Aires", "typing": "buenos aires", "lat": -34.6037, "lon": -58.3816, "province": "Buenos Aires (CABA)", "tier": "major", "km_mark": 0 },
-          { "order": 2, "id": "rn3-002", "name": "Cañuelas", "typing": "canuelas", "lat": -35.0530, "lon": -58.7622, "province": "Buenos Aires", "tier": "minor", "km_mark": 65 },
-          { "order": 3, "id": "rn3-003", "name": "San Miguel del Monte", "typing": "san miguel del monte", "lat": -35.4442, "lon": -58.8022, "province": "Buenos Aires", "tier": "minor", "km_mark": 110 },
-          { "order": 4, "id": "rn3-004", "name": "Las Flores", "typing": "las flores", "lat": -36.0155, "lon": -59.1000, "province": "Buenos Aires", "tier": "minor", "km_mark": 175 },
-          { "order": 5, "id": "rn3-005", "name": "Azul", "typing": "azul", "lat": -36.7770, "lon": -59.8585, "province": "Buenos Aires", "tier": "medium", "km_mark": 300 },
-          { "order": 6, "id": "rn3-006", "name": "Benito Juárez", "typing": "benito juarez", "lat": -37.6822, "lon": -59.8028, "province": "Buenos Aires", "tier": "minor", "km_mark": 400 },
-          { "order": 7, "id": "rn3-007", "name": "Tres Arroyos", "typing": "tres arroyos", "lat": -38.3739, "lon": -60.2761, "province": "Buenos Aires", "tier": "medium", "km_mark": 500 },
-          { "order": 8, "id": "rn3-008", "name": "Bahía Blanca", "typing": "bahia blanca", "lat": -38.7196, "lon": -62.2724, "province": "Buenos Aires", "tier": "major", "km_mark": 690 },
-          { "order": 9, "id": "rn3-009", "name": "Carmen de Patagones", "typing": "carmen de patagones", "lat": -40.7970, "lon": -62.9840, "province": "Buenos Aires", "tier": "medium", "km_mark": 940 },
-          { "order": 10, "id": "rn3-010", "name": "Viedma", "typing": "viedma", "lat": -40.8135, "lon": -62.9967, "province": "Río Negro", "tier": "medium", "km_mark": 945 },
-          { "order": 11, "id": "rn3-011", "name": "San Antonio Oeste", "typing": "san antonio oeste", "lat": -40.7333, "lon": -64.9333, "province": "Río Negro", "tier": "minor", "km_mark": 1100 },
-          { "order": 12, "id": "rn3-012", "name": "Las Grutas", "typing": "las grutas", "lat": -40.8083, "lon": -65.0833, "province": "Río Negro", "tier": "minor", "km_mark": 1115 },
-          { "order": 13, "id": "rn3-013", "name": "Sierra Grande", "typing": "sierra grande", "lat": -41.6000, "lon": -65.3500, "province": "Río Negro", "tier": "minor", "km_mark": 1230 },
-          { "order": 14, "id": "rn3-014", "name": "Puerto Madryn", "typing": "puerto madryn", "lat": -42.7692, "lon": -65.0385, "province": "Chubut", "tier": "medium", "km_mark": 1360 },
-          { "order": 15, "id": "rn3-015", "name": "Puerto Pirámides", "typing": "puerto piramides", "lat": -42.5711, "lon": -64.2822, "province": "Chubut", "tier": "detour", "km_mark": null },
-          { "order": 16, "id": "rn3-016", "name": "Trelew", "typing": "trelew", "lat": -43.2489, "lon": -65.3051, "province": "Chubut", "tier": "medium", "km_mark": 1425 },
-          { "order": 17, "id": "rn3-017", "name": "Garayalde", "typing": "garayalde", "lat": -44.6667, "lon": -67.0667, "province": "Chubut", "tier": "minor", "km_mark": 1700 },
-          { "order": 18, "id": "rn3-018", "name": "Comodoro Rivadavia", "typing": "comodoro rivadavia", "lat": -45.8641, "lon": -67.4966, "province": "Chubut", "tier": "major", "km_mark": 1890 },
-          { "order": 19, "id": "rn3-019", "name": "Caleta Olivia", "typing": "caleta olivia", "lat": -46.4361, "lon": -67.5286, "province": "Santa Cruz", "tier": "medium", "km_mark": 1960 },
-          { "order": 20, "id": "rn3-020", "name": "Puerto San Julián", "typing": "puerto san julian", "lat": -49.3057, "lon": -67.7181, "province": "Santa Cruz", "tier": "minor", "km_mark": 2280 },
-          { "order": 21, "id": "rn3-021", "name": "Comandante Luis Piedrabuena", "typing": "comandante luis piedrabuena", "lat": -49.9755, "lon": -68.9089, "province": "Santa Cruz", "tier": "minor", "km_mark": 2440 },
-          { "order": 22, "id": "rn3-022", "name": "Río Gallegos", "typing": "rio gallegos", "lat": -51.6230, "lon": -69.2168, "province": "Santa Cruz", "tier": "major", "km_mark": 2612 },
-          { "order": 23, "id": "rn3-023", "name": "Cruce Estrecho de Magallanes (ferry, vía Chile)", "typing": "estrecho de magallanes", "lat": -52.4500, "lon": -69.4000, "province": "N/A", "tier": "ferry_crossing", "km_mark": 2674, "ferry_crossing": true, "note": "Route interrupted; requires ferry crossing through Chilean territory (Punta Delgada / Primera Angostura) before re-entering Argentina at San Sebastián" },
-          { "order": 24, "id": "rn3-024", "name": "San Sebastián", "typing": "san sebastian", "lat": -53.2167, "lon": -68.4667, "province": "Tierra del Fuego", "tier": "minor", "km_mark": 2760 },
-          { "order": 25, "id": "rn3-025", "name": "Río Grande", "typing": "rio grande", "lat": -53.7833, "lon": -67.7000, "province": "Tierra del Fuego", "tier": "medium", "km_mark": 2830 },
-          { "order": 26, "id": "rn3-026", "name": "Tolhuin", "typing": "tolhuin", "lat": -54.5167, "lon": -67.2000, "province": "Tierra del Fuego", "tier": "minor", "km_mark": 2960 },
-          { "order": 27, "id": "rn3-027", "name": "Ushuaia", "typing": "ushuaia", "lat": -54.8019, "lon": -68.3030, "province": "Tierra del Fuego", "tier": "major", "km_mark": 3045 },
-          { "order": 28, "id": "rn3-028", "name": "Lapataia (Parque Nacional Tierra del Fuego)", "typing": "lapataia", "lat": -54.8461, "lon": -68.5936, "province": "Tierra del Fuego", "tier": "endpoint", "km_mark": 3079 }
-        ]
+        {
+          "order": 1,
+          "id": "rn3-001",
+          "name": "Ciudad Autónoma de Buenos Aires",
+          "typing": "buenos aires",
+          "lat": -34.6037,
+          "lon": -58.3816,
+          "province": "Buenos Aires (CABA)",
+          "tier": "major",
+          "km_mark": 0
+        },
+        {
+          "order": 2,
+          "id": "rn3-002",
+          "name": "Cañuelas",
+          "typing": "canuelas",
+          "lat": -35.053,
+          "lon": -58.7622,
+          "province": "Buenos Aires",
+          "tier": "minor",
+          "km_mark": 65
+        },
+        {
+          "order": 3,
+          "id": "rn3-003",
+          "name": "San Miguel del Monte",
+          "typing": "san miguel del monte",
+          "lat": -35.4442,
+          "lon": -58.8022,
+          "province": "Buenos Aires",
+          "tier": "minor",
+          "km_mark": 110
+        },
+        {
+          "order": 4,
+          "id": "rn3-004",
+          "name": "Las Flores",
+          "typing": "las flores",
+          "lat": -36.0155,
+          "lon": -59.1,
+          "province": "Buenos Aires",
+          "tier": "minor",
+          "km_mark": 175
+        },
+        {
+          "order": 5,
+          "id": "rn3-005",
+          "name": "Azul",
+          "typing": "azul",
+          "lat": -36.777,
+          "lon": -59.8585,
+          "province": "Buenos Aires",
+          "tier": "medium",
+          "km_mark": 300
+        },
+        {
+          "order": 6,
+          "id": "rn3-006",
+          "name": "Benito Juárez",
+          "typing": "benito juarez",
+          "lat": -37.6822,
+          "lon": -59.8028,
+          "province": "Buenos Aires",
+          "tier": "minor",
+          "km_mark": 400
+        },
+        {
+          "order": 7,
+          "id": "rn3-007",
+          "name": "Tres Arroyos",
+          "typing": "tres arroyos",
+          "lat": -38.3739,
+          "lon": -60.2761,
+          "province": "Buenos Aires",
+          "tier": "medium",
+          "km_mark": 500
+        },
+        {
+          "order": 8,
+          "id": "rn3-008",
+          "name": "Bahía Blanca",
+          "typing": "bahia blanca",
+          "lat": -38.7196,
+          "lon": -62.2724,
+          "province": "Buenos Aires",
+          "tier": "major",
+          "km_mark": 690
+        },
+        {
+          "order": 9,
+          "id": "rn3-009",
+          "name": "Carmen de Patagones",
+          "typing": "carmen de patagones",
+          "lat": -40.797,
+          "lon": -62.984,
+          "province": "Buenos Aires",
+          "tier": "medium",
+          "km_mark": 940
+        },
+        {
+          "order": 10,
+          "id": "rn3-010",
+          "name": "Viedma",
+          "typing": "viedma",
+          "lat": -40.8135,
+          "lon": -62.9967,
+          "province": "Río Negro",
+          "tier": "medium",
+          "km_mark": 945
+        },
+        {
+          "order": 11,
+          "id": "rn3-011",
+          "name": "San Antonio Oeste",
+          "typing": "san antonio oeste",
+          "lat": -40.7333,
+          "lon": -64.9333,
+          "province": "Río Negro",
+          "tier": "minor",
+          "km_mark": 1100
+        },
+        {
+          "order": 12,
+          "id": "rn3-012",
+          "name": "Las Grutas",
+          "typing": "las grutas",
+          "lat": -40.8083,
+          "lon": -65.0833,
+          "province": "Río Negro",
+          "tier": "minor",
+          "km_mark": 1115
+        },
+        {
+          "order": 13,
+          "id": "rn3-013",
+          "name": "Sierra Grande",
+          "typing": "sierra grande",
+          "lat": -41.6,
+          "lon": -65.35,
+          "province": "Río Negro",
+          "tier": "minor",
+          "km_mark": 1230
+        },
+        {
+          "order": 14,
+          "id": "rn3-014",
+          "name": "Puerto Madryn",
+          "typing": "puerto madryn",
+          "lat": -42.7692,
+          "lon": -65.0385,
+          "province": "Chubut",
+          "tier": "medium",
+          "km_mark": 1360
+        },
+        {
+          "order": 15,
+          "id": "rn3-015",
+          "name": "Puerto Pirámides",
+          "typing": "puerto piramides",
+          "lat": -42.5711,
+          "lon": -64.2822,
+          "province": "Chubut",
+          "tier": "detour",
+          "km_mark": null
+        },
+        {
+          "order": 16,
+          "id": "rn3-016",
+          "name": "Trelew",
+          "typing": "trelew",
+          "lat": -43.2489,
+          "lon": -65.3051,
+          "province": "Chubut",
+          "tier": "medium",
+          "km_mark": 1425
+        },
+        {
+          "order": 17,
+          "id": "rn3-017",
+          "name": "Garayalde",
+          "typing": "garayalde",
+          "lat": -44.6667,
+          "lon": -67.0667,
+          "province": "Chubut",
+          "tier": "minor",
+          "km_mark": 1700
+        },
+        {
+          "order": 18,
+          "id": "rn3-018",
+          "name": "Comodoro Rivadavia",
+          "typing": "comodoro rivadavia",
+          "lat": -45.8641,
+          "lon": -67.4966,
+          "province": "Chubut",
+          "tier": "major",
+          "km_mark": 1890
+        },
+        {
+          "order": 19,
+          "id": "rn3-019",
+          "name": "Caleta Olivia",
+          "typing": "caleta olivia",
+          "lat": -46.4361,
+          "lon": -67.5286,
+          "province": "Santa Cruz",
+          "tier": "medium",
+          "km_mark": 1960
+        },
+        {
+          "order": 20,
+          "id": "rn3-020",
+          "name": "Puerto San Julián",
+          "typing": "puerto san julian",
+          "lat": -49.3057,
+          "lon": -67.7181,
+          "province": "Santa Cruz",
+          "tier": "minor",
+          "km_mark": 2280
+        },
+        {
+          "order": 21,
+          "id": "rn3-021",
+          "name": "Comandante Luis Piedrabuena",
+          "typing": "comandante luis piedrabuena",
+          "lat": -49.9755,
+          "lon": -68.9089,
+          "province": "Santa Cruz",
+          "tier": "minor",
+          "km_mark": 2440
+        },
+        {
+          "order": 22,
+          "id": "rn3-022",
+          "name": "Río Gallegos",
+          "typing": "rio gallegos",
+          "lat": -51.623,
+          "lon": -69.2168,
+          "province": "Santa Cruz",
+          "tier": "major",
+          "km_mark": 2612
+        },
+        {
+          "order": 23,
+          "id": "rn3-023",
+          "name": "Cruce Estrecho de Magallanes (ferry, vía Chile)",
+          "typing": "estrecho de magallanes",
+          "lat": -52.45,
+          "lon": -69.4,
+          "province": "N/A",
+          "tier": "ferry_crossing",
+          "km_mark": 2674,
+          "ferry_crossing": true,
+          "note": "Route interrupted; requires ferry crossing through Chilean territory (Punta Delgada / Primera Angostura) before re-entering Argentina at San Sebastián"
+        },
+        {
+          "order": 24,
+          "id": "rn3-024",
+          "name": "San Sebastián",
+          "typing": "san sebastian",
+          "lat": -53.2167,
+          "lon": -68.4667,
+          "province": "Tierra del Fuego",
+          "tier": "minor",
+          "km_mark": 2760
+        },
+        {
+          "order": 25,
+          "id": "rn3-025",
+          "name": "Río Grande",
+          "typing": "rio grande",
+          "lat": -53.7833,
+          "lon": -67.7,
+          "province": "Tierra del Fuego",
+          "tier": "medium",
+          "km_mark": 2830
+        },
+        {
+          "order": 26,
+          "id": "rn3-026",
+          "name": "Tolhuin",
+          "typing": "tolhuin",
+          "lat": -54.5167,
+          "lon": -67.2,
+          "province": "Tierra del Fuego",
+          "tier": "minor",
+          "km_mark": 2960
+        },
+        {
+          "order": 27,
+          "id": "rn3-027",
+          "name": "Ushuaia",
+          "typing": "ushuaia",
+          "lat": -54.8019,
+          "lon": -68.303,
+          "province": "Tierra del Fuego",
+          "tier": "major",
+          "km_mark": 3045
+        },
+        {
+          "order": 28,
+          "id": "rn3-028",
+          "name": "Lapataia (Parque Nacional Tierra del Fuego)",
+          "typing": "lapataia",
+          "lat": -54.8461,
+          "lon": -68.5936,
+          "province": "Tierra del Fuego",
+          "tier": "endpoint",
+          "km_mark": 3079
+        }
+      ]
     },
     {
       "id": "rn-0005",
@@ -520,196 +802,6 @@
     {
       "id": "rn-0293",
       "route": "0293",
-      "cities": []
-    },
-    {
-      "id": "rn-1S40",
-      "route": "1S40",
-      "cities": []
-    },
-    {
-      "id": "rn-1V03",
-      "route": "1V03",
-      "cities": []
-    },
-    {
-      "id": "rn-1V09",
-      "route": "1V09",
-      "cities": []
-    },
-    {
-      "id": "rn-1V11",
-      "route": "1V11",
-      "cities": []
-    },
-    {
-      "id": "rn-1V26",
-      "route": "1V26",
-      "cities": []
-    },
-    {
-      "id": "rn-1V38",
-      "route": "1V38",
-      "cities": []
-    },
-    {
-      "id": "rn-1V40",
-      "route": "1V40",
-      "cities": []
-    },
-    {
-      "id": "rn-1V66",
-      "route": "1V66",
-      "cities": []
-    },
-    {
-      "id": "rn-24CA",
-      "route": "24CA",
-      "cities": []
-    },
-    {
-      "id": "rn-24CB",
-      "route": "24CB",
-      "cities": []
-    },
-    {
-      "id": "rn-24CI",
-      "route": "24CI",
-      "cities": []
-    },
-    {
-      "id": "rn-24CJ",
-      "route": "24CJ",
-      "cities": []
-    },
-    {
-      "id": "rn-24CK",
-      "route": "24CK",
-      "cities": []
-    },
-    {
-      "id": "rn-2S40",
-      "route": "2S40",
-      "cities": []
-    },
-    {
-      "id": "rn-2V03",
-      "route": "2V03",
-      "cities": []
-    },
-    {
-      "id": "rn-2V09",
-      "route": "2V09",
-      "cities": []
-    },
-    {
-      "id": "rn-2V40",
-      "route": "2V40",
-      "cities": []
-    },
-    {
-      "id": "rn-3V09",
-      "route": "3V09",
-      "cities": []
-    },
-    {
-      "id": "rn-A001",
-      "route": "A001",
-      "cities": []
-    },
-    {
-      "id": "rn-A002",
-      "route": "A002",
-      "cities": []
-    },
-    {
-      "id": "rn-A003",
-      "route": "A003",
-      "cities": []
-    },
-    {
-      "id": "rn-A004",
-      "route": "A004",
-      "cities": []
-    },
-    {
-      "id": "rn-A005",
-      "route": "A005",
-      "cities": []
-    },
-    {
-      "id": "rn-A007",
-      "route": "A007",
-      "cities": []
-    },
-    {
-      "id": "rn-A008",
-      "route": "A008",
-      "cities": []
-    },
-    {
-      "id": "rn-A009",
-      "route": "A009",
-      "cities": []
-    },
-    {
-      "id": "rn-A010",
-      "route": "A010",
-      "cities": []
-    },
-    {
-      "id": "rn-A011",
-      "route": "A011",
-      "cities": []
-    },
-    {
-      "id": "rn-A012",
-      "route": "A012",
-      "cities": []
-    },
-    {
-      "id": "rn-A013",
-      "route": "A013",
-      "cities": []
-    },
-    {
-      "id": "rn-A014",
-      "route": "A014",
-      "cities": []
-    },
-    {
-      "id": "rn-A015",
-      "route": "A015",
-      "cities": []
-    },
-    {
-      "id": "rn-A016",
-      "route": "A016",
-      "cities": []
-    },
-    {
-      "id": "rn-A019",
-      "route": "A019",
-      "cities": []
-    },
-    {
-      "id": "rn-A025",
-      "route": "A025",
-      "cities": []
-    },
-    {
-      "id": "rn-A026",
-      "route": "A026",
-      "cities": []
-    },
-    {
-      "id": "rn-V143",
-      "route": "V143",
-      "cities": []
-    },
-    {
-      "id": "rn-V146",
-      "route": "V146",
       "cities": []
     }
   ]
