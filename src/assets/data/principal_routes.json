@@ -1,0 +1,275 @@
+[
+  {
+    "categoria": "Rutas Troncales Principales (1 a 9)",
+    "rutas": [
+      {
+        "numero": 1,
+        "nombre_oficial": "Doctor Ricardo Balbín",
+        "descripcion": "Conocida como Autopista Buenos Aires - La Plata. Su administración fue transferida a la Provincia de Buenos Aires.",
+        "provincias": ["Buenos Aires", "Ciudad Autónoma de Buenos Aires"],
+        "ciudades": ["Ciudad Autónoma de Buenos Aires", "Avellaneda", "Quilmes", "Berazategui", "Ensenada", "La Plata"]
+      },
+      {
+        "numero": 3,
+        "descripcion": "Recorre toda la costa atlántica desde Buenos Aires hasta Tierra del Fuego.",
+        "provincias": ["Buenos Aires", "Río Negro", "Chubut", "Santa Cruz", "Tierra del Fuego"],
+        "ciudades": ["San Justo", "Cañuelas", "Azul", "Tres Arroyos", "Bahía Blanca", "Viedma", "San Antonio Oeste", "Puerto Madryn", "Trelew", "Comodoro Rivadavia", "Caleta Olivia", "Puerto San Julián", "Río Gallegos", "Río Grande", "Tolhuin", "Ushuaia"]
+      },
+      {
+        "numero": 5,
+        "descripcion": "Conecta la provincia de Buenos Aires con Santa Rosa.",
+        "provincias": ["Buenos Aires", "La Pampa"],
+        "ciudades": ["Luján", "Mercedes", "Chivilcoy", "Pehuajó", "Trenque Lauquen", "Catriló", "Santa Rosa"]
+      },
+      {
+        "numero": 7,
+        "descripcion": "Cruza el país de este a oeste, conectando Buenos Aires con el límite con Chile.",
+        "provincias": ["Buenos Aires", "Santa Fe", "Córdoba", "San Luis", "Mendoza"],
+        "ciudades": ["Luján", "Junín", "Rufino", "Laboulaye", "Vicuña Mackenna", "Villa Mercedes", "San Luis", "La Paz", "San Martín", "Mendoza", "Uspallata", "Las Cuevas"]
+      },
+      {
+        "numero": 8,
+        "descripcion": "Conecta Buenos Aires con el sur de Córdoba.",
+        "provincias": ["Buenos Aires", "Santa Fe", "Córdoba"],
+        "ciudades": ["Pilar", "San Antonio de Areco", "Pergamino", "Venado Tuerto", "Canals", "La Carlota", "Río Cuarto", "Villa Mercedes"]
+      },
+      {
+        "numero": 9,
+        "descripcion": "Eje central que une Buenos Aires con el extremo norte del país en La Quiaca.",
+        "provincias": ["Buenos Aires", "Santa Fe", "Córdoba", "Santiago del Estero", "Tucumán", "Salta", "Jujuy"],
+        "ciudades": ["San Nicolás de los Arroyos", "Rosario", "Carcarañá", "Cañada de Gómez", "Villa María", "Córdoba", "Jesús María", "Santiago del Estero", "San Miguel de Tucumán", "Metán", "Salta", "San Salvador de Jujuy", "Humahuaca", "La Quiaca"]
+      }
+    ]
+  },
+  {
+    "categoria": "Rutas Troncales Secundarias (11 al 40)",
+    "rutas": [
+      {
+        "numero": 11,
+        "descripcion": "Conecta Santa Fe con la frontera en Clorinda.",
+        "provincias": ["Santa Fe", "Chaco", "Formosa"],
+        "ciudades": ["Rosario", "San Lorenzo", "Santa Fe", "Reconquista", "Resistencia", "Formosa", "Clorinda"]
+      },
+      {
+        "numero": 12,
+        "descripcion": "Atraviesa la región mesopotámica hasta Puerto Iguazú.",
+        "provincias": ["Buenos Aires", "Entre Ríos", "Corrientes", "Misiones"],
+        "ciudades": ["Zárate", "Ceibas", "Gualeguay", "Paraná", "La Paz", "Goya", "Esquina", "Corrientes", "Ituzaingó", "Posadas", "Eldorado", "Puerto Iguazú"]
+      },
+      {
+        "numero": 14,
+        "descripcion": "Eje del Mercosur, corre paralela al Río Uruguay.",
+        "provincias": ["Buenos Aires", "Entre Ríos", "Corrientes", "Misiones"],
+        "ciudades": ["Ceibas", "Gualeguaychú", "Concepción del Uruguay", "Colón", "Concordia", "Federación", "Paso de los Libres", "Santo Tomé", "Apóstoles", "Oberá", "San Vicente", "Bernardo de Irigoyen"]
+      },
+      {
+        "numero": 16,
+        "descripcion": "Conecta el Noreste (NEA) con el Noroeste (NOA).",
+        "provincias": ["Chaco", "Santiago del Estero", "Salta"],
+        "ciudades": ["Resistencia", "Presidencia Roque Sáenz Peña", "Pampa del Infierno", "Taco Pozo", "Monte Quemado", "El Galpón", "Metán"]
+      },
+      {
+        "numero": 18,
+        "descripcion": "Cruza la provincia de Entre Ríos de oeste a este.",
+        "provincias": ["Entre Ríos"],
+        "ciudades": ["Paraná", "Villaguay", "San Salvador", "General Campos", "Concordia"]
+      },
+      {
+        "numero": 19,
+        "descripcion": "Conecta las ciudades de Santa Fe y Córdoba.",
+        "provincias": ["Santa Fe", "Córdoba"],
+        "ciudades": ["Santo Tomé", "San Carlos Centro", "San Francisco", "Arroyito", "Monte Cristo", "Córdoba"]
+      },
+      {
+        "numero": 20,
+        "descripcion": "Conecta el centro del país con la región de Cuyo.",
+        "provincias": ["Córdoba", "San Luis", "San Juan"],
+        "ciudades": ["Córdoba", "Villa Carlos Paz", "Mina Clavero", "Quines", "San Juan"]
+      },
+      {
+        "numero": 22,
+        "descripcion": "Atraviesa el norte de la Patagonia.",
+        "provincias": ["Buenos Aires", "La Pampa", "Río Negro", "Neuquén"],
+        "ciudades": ["Bahía Blanca", "Río Colorado", "Choele Choel", "Villa Regina", "General Roca", "Cipolletti", "Neuquén", "Plottier", "Plaza Huincul", "Cutral Có", "Zapala"]
+      },
+      {
+        "numero": 23,
+        "descripcion": "Recorre el interior de Río Negro de este a oeste.",
+        "provincias": ["Río Negro"],
+        "ciudades": ["San Antonio Oeste", "Valcheta", "Ministro Ramos Mexía", "Sierra Colorada", "Los Menucos", "Maquinchao", "Ingeniero Jacobacci", "Dina Huapi"]
+      },
+      {
+        "numero": 25,
+        "descripcion": "Cruza Chubut desde la costa atlántica hasta la cordillera.",
+        "provincias": ["Chubut"],
+        "ciudades": ["Rawson", "Trelew", "Gaiman", "Las Plumas", "Los Altares", "Tecka", "Esquel"]
+      },
+      {
+        "numero": 26,
+        "descripcion": "Recorre el sur de Chubut y el norte de Santa Cruz.",
+        "provincias": ["Chubut", "Santa Cruz"],
+        "ciudades": ["Comodoro Rivadavia", "Rada Tilly", "Sarmiento", "Río Mayo"]
+      },
+      {
+        "numero": 33,
+        "descripcion": "Conecta los puertos de Bahía Blanca y Rosario.",
+        "provincias": ["Buenos Aires", "Santa Fe"],
+        "ciudades": ["Bahía Blanca", "Pigüé", "Trenque Lauquen", "Garré", "Rufino", "Venado Tuerto", "Firmat", "Casilda", "Pérez", "Rosario"]
+      },
+      {
+        "numero": 34,
+        "descripcion": "Une Rosario con el extremo norte del país.",
+        "provincias": ["Santa Fe", "Santiago del Estero", "Tucumán", "Salta", "Jujuy"],
+        "ciudades": ["Rosario", "San Jorge", "Rafaela", "Ceres", "Pinto", "Añatuya", "La Banda", "Rosario de la Frontera", "Metán", "General Güemes", "San Pedro de Jujuy", "Libertador General San Martín", "Tartagal", "Profesor Salvador Mazza"]
+      },
+      {
+        "numero": 35,
+        "descripcion": "Conecta el sur de Buenos Aires con Córdoba pasando por La Pampa.",
+        "provincias": ["Buenos Aires", "La Pampa", "Córdoba"],
+        "ciudades": ["Bahía Blanca", "Jacinto Aráuz", "General Acha", "Santa Rosa", "Eduardo Castex", "Realicó", "Huinca Renancó", "Vicuña Mackenna", "Río Cuarto"]
+      },
+      {
+        "numero": 36,
+        "descripcion": "Une las ciudades de Río Cuarto y Córdoba.",
+        "provincias": ["Córdoba"],
+        "ciudades": ["Río Cuarto", "Elena", "Berrotarán", "Almafuerte", "Río Tercero", "San Agustín", "Alta Gracia", "Córdoba"]
+      },
+      {
+        "numero": 38,
+        "descripcion": "Conecta Córdoba con el Valle de Catamarca y Tucumán.",
+        "provincias": ["Córdoba", "La Rioja", "Catamarca", "Tucumán"],
+        "ciudades": ["Villa Carlos Paz", "Cosquín", "La Falda", "Cruz del Eje", "Chamical", "La Rioja", "San Fernando del Valle de Catamarca", "Concepción", "Famaillá", "San Miguel de Tucumán"]
+      },
+      {
+        "numero": 40,
+        "descripcion": "La ruta más larga del país, paralela a la Cordillera de los Andes.",
+        "provincias": ["Santa Cruz", "Chubut", "Río Negro", "Neuquén", "Mendoza", "San Juan", "La Rioja", "Catamarca", "Tucumán", "Salta", "Jujuy"],
+        "ciudades": ["Cabo Vírgenes", "Río Gallegos", "28 de Noviembre", "El Calafate", "Gobernador Gregores", "Perito Moreno", "Río Mayo", "Tecka", "Esquel", "El Bolsón", "San Carlos de Bariloche", "Villa La Angostura", "San Martín de los Andes", "Junín de los Andes", "Zapala", "Chos Malal", "Malargüe", "San Rafael", "Tunuyán", "Mendoza", "San Juan", "San José de Jáchal", "Villa Unión", "Chilecito", "Londres", "Belén", "Santa María", "Cafayate", "Cachi", "San Antonio de los Cobres", "Susques", "La Quiaca"]
+      }
+    ]
+  },
+  {
+    "categoria": "Rutas Regionales - Región I: Noroeste y Zona Andina del Norte (50 al 80)",
+    "rutas": [
+      {
+        "numero": 50,
+        "descripcion": "Ubicada en el norte de Salta (Pichanal - Aguas Blancas).",
+        "provincias": ["Salta"],
+        "ciudades": ["Pichanal", "Orán", "Aguas Blancas"]
+      },
+      {
+        "numero": 51,
+        "descripcion": "Pasa por San Antonio de los Cobres hasta el Paso Sico.",
+        "provincias": ["Salta", "Jujuy"],
+        "ciudades": ["Salta", "Campo Quijano", "Santa Rosa de Tastil", "San Antonio de los Cobres", "Paso Sico"]
+      },
+      {
+        "numero": 52,
+        "descripcion": "Desde Purmamarca hasta el Paso de Jama (límite con Chile).",
+        "provincias": ["Salta", "Jujuy"],
+        "ciudades": ["Purmamarca", "Susques", "Paso de Jama"]
+      },
+      {
+        "numero": 60,
+        "descripcion": "Conecta con el Paso de San Francisco.",
+        "provincias": ["Córdoba", "Catamarca", "La Rioja"],
+        "ciudades": ["Villa de María de Río Seco", "Deán Funes", "Aimogasta", "Tinogasta", "Fiambalá", "Paso de San Francisco"]
+      },
+      {
+        "numero": 64,
+        "descripcion": "Conecta Tucumán, Catamarca y Santiago del Estero.",
+        "provincias": ["Tucumán", "Catamarca", "Santiago del Estero"],
+        "ciudades": ["Santiago del Estero", "San Pedro de Guasayán", "Bañado de Ovanta", "Altos de San Antonio"]
+      },
+      {
+        "numero": 65,
+        "descripcion": "Conecta Tucumán y Catamarca.",
+        "provincias": ["Tucumán", "Catamarca"],
+        "ciudades": ["Concepción", "Alpachiri", "Las Estancias", "Andalgalá"]
+      },
+      {
+        "numero": 66,
+        "descripcion": "Ubicada en la provincia de Jujuy.",
+        "provincias": ["Jujuy"],
+        "ciudades": ["San Salvador de Jujuy", "Palpalá", "Perico"]
+      },
+      {
+        "numero": 68,
+        "descripcion": "Recorre el Valle de Lerma y Cafayate.",
+        "provincias": ["Salta"],
+        "ciudades": ["Salta", "Cerrillos", "El Carril", "Coronel Moldes", "Talapampa", "Cafayate"]
+      },
+      {
+        "numero": 74,
+        "descripcion": "Ubicada en la provincia de La Rioja.",
+        "provincias": ["La Rioja"],
+        "ciudades": ["Patquía", "Nonogasta"]
+      },
+      {
+        "numero": 75,
+        "descripcion": "Ubicada en la provincia de La Rioja.",
+        "provincias": ["La Rioja"],
+        "ciudades": ["La Rioja", "Sanagasta", "Aminga", "Anillaco", "Aimogasta"]
+      },
+      {
+        "numero": 76,
+        "descripcion": "Recorre el norte de San Juan y La Rioja hasta el Paso Pircas Negras.",
+        "provincias": ["San Juan", "La Rioja"],
+        "ciudades": ["San José de Jáchal", "Villa Unión", "Vinchina", "Jagüé", "Paso Pircas Negras"]
+      },
+      {
+        "numero": 77,
+        "descripcion": "Conecta Córdoba y La Rioja.",
+        "provincias": ["Córdoba", "La Rioja"],
+        "ciudades": ["El Chacho", "Milagro"]
+      },
+      {
+        "numero": 78,
+        "descripcion": "Ubicada en la provincia de La Rioja.",
+        "provincias": ["La Rioja"],
+        "ciudades": ["Famatina", "Campanas"]
+      },
+      {
+        "numero": 79,
+        "descripcion": "Atraviesa el norte de San Luis, La Rioja y Catamarca.",
+        "provincias": ["San Luis", "La Rioja", "Catamarca"],
+        "ciudades": ["Quines", "Ulapes", "Chamical", "Olta", "Casa de Piedra"]
+      }
+    ]
+  },
+  {
+    "categoria": "Rutas Regionales - Región Ii: Región Chaqueña (81 al 99)",
+    "rutas": [
+      {
+        "numero": 81,
+        "descripcion": "Cruza Formosa de este a oeste y termina en Salta.",
+        "provincias": ["Formosa", "Salta"],
+        "ciudades": ["Formosa", "Palo Santo", "Las Lomitas", "Ingeniero Juárez", "Pluma de Pato"]
+      },
+      {
+        "numero": 86,
+        "descripcion": "Corre paralela al Río Pilcomayo.",
+        "provincias": ["Formosa"],
+        "ciudades": ["Clorinda", "General Belgrano", "Villa General Güemes", "Posta Cambio Zalazar"]
+      },
+      {
+        "numero": 89,
+        "descripcion": "Conecta el Chaco con Santiago del Estero.",
+        "provincias": ["Chaco", "Santiago del Estero"],
+        "ciudades": ["Avia Terai", "Charata", "General Pinedo", "Quimilí", "Suncho Corral"]
+      },
+      {
+        "numero": 95,
+        "descripcion": "Eje norte-sur que cruza Santa Fe, Chaco y Formosa.",
+        "provincias": ["Santa Fe", "Chaco", "Formosa"],
+        "ciudades": ["Tostado", "Villa Ángela", "Presidencia Roque Sáenz Peña", "Castelli", "Villa General Güemes"]
+      },
+      {
+        "numero": 98,
+        "descripcion": "Conecta el norte de Santa Fe con Santiago del Estero.",
+        "provincias": ["Santa Fe", "Santiago del Estero"],
+        "ciudades": ["Reconquista", "Vera", "Tostado", "Bandera"]
+      }
+    ]
+  }
+]

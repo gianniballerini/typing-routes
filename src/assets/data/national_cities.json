@@ -1,0 +1,3286 @@
+{
+  "total_cities": 328,
+  "id_scheme": "ar-<province_slug>-<city_slug> — stable identity, independent of any route. georef_id is a placeholder for the official Georef API locality code (apis.datos.gob.ar/georef), to be filled in when cross-referencing the full national dataset.",
+  "cities": [
+    {
+      "id": "ar-caba-ciudad_autonoma_buenos_aires",
+      "georef_id": null,
+      "name": "Ciudad Autónoma de Buenos Aires",
+      "typing": "buenos aires",
+      "lat": -34.6037,
+      "lon": -58.3816,
+      "province": "Buenos Aires (CABA)",
+      "tier": "major"
+    },
+    {
+      "id": "ar-buenos_aires-canuelas",
+      "georef_id": null,
+      "name": "Cañuelas",
+      "typing": "canuelas",
+      "lat": -35.053,
+      "lon": -58.7622,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_miguel_del_monte",
+      "georef_id": null,
+      "name": "San Miguel del Monte",
+      "typing": "san miguel del monte",
+      "lat": -35.4442,
+      "lon": -58.8022,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-las_flores",
+      "georef_id": null,
+      "name": "Las Flores",
+      "typing": "las flores",
+      "lat": -36.0155,
+      "lon": -59.1,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-azul",
+      "georef_id": null,
+      "name": "Azul",
+      "typing": "azul",
+      "lat": -36.777,
+      "lon": -59.8585,
+      "province": "Buenos Aires",
+      "tier": "medium"
+    },
+    {
+      "id": "ar-buenos_aires-benito_juarez",
+      "georef_id": null,
+      "name": "Benito Juárez",
+      "typing": "benito juarez",
+      "lat": -37.6822,
+      "lon": -59.8028,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-tres_arroyos",
+      "georef_id": null,
+      "name": "Tres Arroyos",
+      "typing": "tres arroyos",
+      "lat": -38.3739,
+      "lon": -60.2761,
+      "province": "Buenos Aires",
+      "tier": "medium"
+    },
+    {
+      "id": "ar-buenos_aires-bahia_blanca",
+      "georef_id": null,
+      "name": "Bahía Blanca",
+      "typing": "bahia blanca",
+      "lat": -38.7196,
+      "lon": -62.2724,
+      "province": "Buenos Aires",
+      "tier": "major"
+    },
+    {
+      "id": "ar-buenos_aires-carmen_de_patagones",
+      "georef_id": null,
+      "name": "Carmen de Patagones",
+      "typing": "carmen de patagones",
+      "lat": -40.797,
+      "lon": -62.984,
+      "province": "Buenos Aires",
+      "tier": "medium"
+    },
+    {
+      "id": "ar-rio_negro-viedma",
+      "georef_id": null,
+      "name": "Viedma",
+      "typing": "viedma",
+      "lat": -40.8135,
+      "lon": -62.9967,
+      "province": "Río Negro",
+      "tier": "medium"
+    },
+    {
+      "id": "ar-rio_negro-san_antonio_oeste",
+      "georef_id": null,
+      "name": "San Antonio Oeste",
+      "typing": "san antonio oeste",
+      "lat": -40.7333,
+      "lon": -64.9333,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-las_grutas",
+      "georef_id": null,
+      "name": "Las Grutas",
+      "typing": "las grutas",
+      "lat": -40.8083,
+      "lon": -65.0833,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-sierra_grande",
+      "georef_id": null,
+      "name": "Sierra Grande",
+      "typing": "sierra grande",
+      "lat": -41.6,
+      "lon": -65.35,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-puerto_madryn",
+      "georef_id": null,
+      "name": "Puerto Madryn",
+      "typing": "puerto madryn",
+      "lat": -42.7692,
+      "lon": -65.0385,
+      "province": "Chubut",
+      "tier": "medium"
+    },
+    {
+      "id": "ar-chubut-puerto_piramides",
+      "georef_id": "26007030000",
+      "name": "Puerto Pirámides",
+      "typing": "puerto piramides",
+      "lat": -42.5711,
+      "lon": -64.2822,
+      "province": "Chubut",
+      "tier": "detour"
+    },
+    {
+      "id": "ar-chubut-trelew",
+      "georef_id": null,
+      "name": "Trelew",
+      "typing": "trelew",
+      "lat": -43.2489,
+      "lon": -65.3051,
+      "province": "Chubut",
+      "tier": "medium"
+    },
+    {
+      "id": "ar-chubut-garayalde",
+      "georef_id": null,
+      "name": "Garayalde",
+      "typing": "garayalde",
+      "lat": -44.6667,
+      "lon": -67.0667,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-comodoro_rivadavia",
+      "georef_id": null,
+      "name": "Comodoro Rivadavia",
+      "typing": "comodoro rivadavia",
+      "lat": -45.8641,
+      "lon": -67.4966,
+      "province": "Chubut",
+      "tier": "major"
+    },
+    {
+      "id": "ar-santa_cruz-caleta_olivia",
+      "georef_id": null,
+      "name": "Caleta Olivia",
+      "typing": "caleta olivia",
+      "lat": -46.4361,
+      "lon": -67.5286,
+      "province": "Santa Cruz",
+      "tier": "medium"
+    },
+    {
+      "id": "ar-santa_cruz-puerto_san_julian",
+      "georef_id": null,
+      "name": "Puerto San Julián",
+      "typing": "puerto san julian",
+      "lat": -49.3057,
+      "lon": -67.7181,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-comandante_luis_piedrabuena",
+      "georef_id": null,
+      "name": "Comandante Luis Piedrabuena",
+      "typing": "comandante luis piedrabuena",
+      "lat": -49.9755,
+      "lon": -68.9089,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-rio_gallegos",
+      "georef_id": null,
+      "name": "Río Gallegos",
+      "typing": "rio gallegos",
+      "lat": -51.623,
+      "lon": -69.2168,
+      "province": "Santa Cruz",
+      "tier": "major"
+    },
+    {
+      "id": "xx-ferry-estrecho_de_magallanes",
+      "georef_id": null,
+      "name": "Cruce Estrecho de Magallanes (ferry, vía Chile)",
+      "typing": "estrecho de magallanes",
+      "lat": -52.45,
+      "lon": -69.4,
+      "province": "N/A",
+      "tier": "ferry_crossing"
+    },
+    {
+      "id": "ar-tierra_del_fuego-san_sebastian",
+      "georef_id": null,
+      "name": "San Sebastián",
+      "typing": "san sebastian",
+      "lat": -53.2167,
+      "lon": -68.4667,
+      "province": "Tierra del Fuego",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-tierra_del_fuego-rio_grande",
+      "georef_id": null,
+      "name": "Río Grande",
+      "typing": "rio grande",
+      "lat": -53.7833,
+      "lon": -67.7,
+      "province": "Tierra del Fuego",
+      "tier": "medium"
+    },
+    {
+      "id": "ar-tierra_del_fuego-tolhuin",
+      "georef_id": null,
+      "name": "Tolhuin",
+      "typing": "tolhuin",
+      "lat": -54.5167,
+      "lon": -67.2,
+      "province": "Tierra del Fuego",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-tierra_del_fuego-ushuaia",
+      "georef_id": null,
+      "name": "Ushuaia",
+      "typing": "ushuaia",
+      "lat": -54.8019,
+      "lon": -68.303,
+      "province": "Tierra del Fuego",
+      "tier": "major"
+    },
+    {
+      "id": "ar-tierra_del_fuego-lapataia",
+      "georef_id": null,
+      "name": "Lapataia (Parque Nacional Tierra del Fuego)",
+      "typing": "lapataia",
+      "lat": -54.8461,
+      "lon": -68.5936,
+      "province": "Tierra del Fuego",
+      "tier": "endpoint"
+    },
+    {
+      "id": "ar-buenos_aires-avellaneda",
+      "georef_id": null,
+      "name": "Avellaneda",
+      "typing": "avellaneda",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-quilmes",
+      "georef_id": null,
+      "name": "Quilmes",
+      "typing": "quilmes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-berazategui",
+      "georef_id": null,
+      "name": "Berazategui",
+      "typing": "berazategui",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-ensenada",
+      "georef_id": null,
+      "name": "Ensenada",
+      "typing": "ensenada",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-la_plata",
+      "georef_id": null,
+      "name": "La Plata",
+      "typing": "la plata",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_justo",
+      "georef_id": null,
+      "name": "San Justo",
+      "typing": "san justo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-lujan",
+      "georef_id": null,
+      "name": "Luján",
+      "typing": "lujan",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-mercedes",
+      "georef_id": null,
+      "name": "Mercedes",
+      "typing": "mercedes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-chivilcoy",
+      "georef_id": null,
+      "name": "Chivilcoy",
+      "typing": "chivilcoy",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-pehuajo",
+      "georef_id": null,
+      "name": "Pehuajó",
+      "typing": "pehuajo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-trenque_lauquen",
+      "georef_id": null,
+      "name": "Trenque Lauquen",
+      "typing": "trenque lauquen",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-catrilo",
+      "georef_id": null,
+      "name": "Catriló",
+      "typing": "catrilo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-santa_rosa",
+      "georef_id": null,
+      "name": "Santa Rosa",
+      "typing": "santa rosa",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-junin",
+      "georef_id": null,
+      "name": "Junín",
+      "typing": "junin",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-rufino",
+      "georef_id": null,
+      "name": "Rufino",
+      "typing": "rufino",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-laboulaye",
+      "georef_id": null,
+      "name": "Laboulaye",
+      "typing": "laboulaye",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-vicuna_mackenna",
+      "georef_id": null,
+      "name": "Vicuña Mackenna",
+      "typing": "vicuna mackenna",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-villa_mercedes",
+      "georef_id": null,
+      "name": "Villa Mercedes",
+      "typing": "villa mercedes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_luis",
+      "georef_id": null,
+      "name": "San Luis",
+      "typing": "san luis",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-la_paz",
+      "georef_id": null,
+      "name": "La Paz",
+      "typing": "la paz",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_martin",
+      "georef_id": null,
+      "name": "San Martín",
+      "typing": "san martin",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-mendoza",
+      "georef_id": null,
+      "name": "Mendoza",
+      "typing": "mendoza",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-uspallata",
+      "georef_id": null,
+      "name": "Uspallata",
+      "typing": "uspallata",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-las_cuevas",
+      "georef_id": null,
+      "name": "Las Cuevas",
+      "typing": "las cuevas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-pilar",
+      "georef_id": null,
+      "name": "Pilar",
+      "typing": "pilar",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_antonio_de_areco",
+      "georef_id": null,
+      "name": "San Antonio de Areco",
+      "typing": "san antonio de areco",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-pergamino",
+      "georef_id": null,
+      "name": "Pergamino",
+      "typing": "pergamino",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-venado_tuerto",
+      "georef_id": null,
+      "name": "Venado Tuerto",
+      "typing": "venado tuerto",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-canals",
+      "georef_id": null,
+      "name": "Canals",
+      "typing": "canals",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-la_carlota",
+      "georef_id": null,
+      "name": "La Carlota",
+      "typing": "la carlota",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-rio_cuarto",
+      "georef_id": null,
+      "name": "Río Cuarto",
+      "typing": "rio cuarto",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_nicolas_de_los_arroyos",
+      "georef_id": null,
+      "name": "San Nicolás de los Arroyos",
+      "typing": "san nicolas de los arroyos",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-rosario",
+      "georef_id": null,
+      "name": "Rosario",
+      "typing": "rosario",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-carcarana",
+      "georef_id": null,
+      "name": "Carcarañá",
+      "typing": "carcarana",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-canada_de_gomez",
+      "georef_id": null,
+      "name": "Cañada de Gómez",
+      "typing": "canada de gomez",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-villa_maria",
+      "georef_id": null,
+      "name": "Villa María",
+      "typing": "villa maria",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-cordoba",
+      "georef_id": null,
+      "name": "Córdoba",
+      "typing": "cordoba",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-jesus_maria",
+      "georef_id": null,
+      "name": "Jesús María",
+      "typing": "jesus maria",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-santiago_del_estero",
+      "georef_id": null,
+      "name": "Santiago del Estero",
+      "typing": "santiago del estero",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_miguel_de_tucuman",
+      "georef_id": null,
+      "name": "San Miguel de Tucumán",
+      "typing": "san miguel de tucuman",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-metan",
+      "georef_id": null,
+      "name": "Metán",
+      "typing": "metan",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-salta",
+      "georef_id": null,
+      "name": "Salta",
+      "typing": "salta",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_salvador_de_jujuy",
+      "georef_id": null,
+      "name": "San Salvador de Jujuy",
+      "typing": "san salvador de jujuy",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-humahuaca",
+      "georef_id": null,
+      "name": "Humahuaca",
+      "typing": "humahuaca",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-la_quiaca",
+      "georef_id": null,
+      "name": "La Quiaca",
+      "typing": "la quiaca",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-san_lorenzo",
+      "georef_id": null,
+      "name": "San Lorenzo",
+      "typing": "san lorenzo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-santa_fe",
+      "georef_id": null,
+      "name": "Santa Fe",
+      "typing": "santa fe",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-reconquista",
+      "georef_id": null,
+      "name": "Reconquista",
+      "typing": "reconquista",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-resistencia",
+      "georef_id": null,
+      "name": "Resistencia",
+      "typing": "resistencia",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-formosa",
+      "georef_id": null,
+      "name": "Formosa",
+      "typing": "formosa",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-clorinda",
+      "georef_id": null,
+      "name": "Clorinda",
+      "typing": "clorinda",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-zarate",
+      "georef_id": null,
+      "name": "Zárate",
+      "typing": "zarate",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-ceibas",
+      "georef_id": null,
+      "name": "Ceibas",
+      "typing": "ceibas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-gualeguay",
+      "georef_id": null,
+      "name": "Gualeguay",
+      "typing": "gualeguay",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-parana",
+      "georef_id": null,
+      "name": "Paraná",
+      "typing": "parana",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-goya",
+      "georef_id": null,
+      "name": "Goya",
+      "typing": "goya",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-esquina",
+      "georef_id": null,
+      "name": "Esquina",
+      "typing": "esquina",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-corrientes",
+      "georef_id": null,
+      "name": "Corrientes",
+      "typing": "corrientes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-ituzaingo",
+      "georef_id": null,
+      "name": "Ituzaingó",
+      "typing": "ituzaingo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-posadas",
+      "georef_id": null,
+      "name": "Posadas",
+      "typing": "posadas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-eldorado",
+      "georef_id": null,
+      "name": "Eldorado",
+      "typing": "eldorado",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-puerto_iguazu",
+      "georef_id": null,
+      "name": "Puerto Iguazú",
+      "typing": "puerto iguazu",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-gualeguaychu",
+      "georef_id": null,
+      "name": "Gualeguaychú",
+      "typing": "gualeguaychu",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-concepcion_del_uruguay",
+      "georef_id": null,
+      "name": "Concepción del Uruguay",
+      "typing": "concepcion del uruguay",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-colon",
+      "georef_id": null,
+      "name": "Colón",
+      "typing": "colon",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-concordia",
+      "georef_id": null,
+      "name": "Concordia",
+      "typing": "concordia",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-federacion",
+      "georef_id": null,
+      "name": "Federación",
+      "typing": "federacion",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-paso_de_los_libres",
+      "georef_id": null,
+      "name": "Paso de los Libres",
+      "typing": "paso de los libres",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-santo_tome",
+      "georef_id": null,
+      "name": "Santo Tomé",
+      "typing": "santo tome",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-apostoles",
+      "georef_id": null,
+      "name": "Apóstoles",
+      "typing": "apostoles",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-obera",
+      "georef_id": null,
+      "name": "Oberá",
+      "typing": "obera",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_vicente",
+      "georef_id": null,
+      "name": "San Vicente",
+      "typing": "san vicente",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-bernardo_de_irigoyen",
+      "georef_id": null,
+      "name": "Bernardo de Irigoyen",
+      "typing": "bernardo de irigoyen",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-presidencia_roque_saenz_pena",
+      "georef_id": null,
+      "name": "Presidencia Roque Sáenz Peña",
+      "typing": "presidencia roque saenz pena",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-pampa_del_infierno",
+      "georef_id": null,
+      "name": "Pampa del Infierno",
+      "typing": "pampa del infierno",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-taco_pozo",
+      "georef_id": null,
+      "name": "Taco Pozo",
+      "typing": "taco pozo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-monte_quemado",
+      "georef_id": null,
+      "name": "Monte Quemado",
+      "typing": "monte quemado",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-el_galpon",
+      "georef_id": null,
+      "name": "El Galpón",
+      "typing": "el galpon",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-villaguay",
+      "georef_id": null,
+      "name": "Villaguay",
+      "typing": "villaguay",
+      "lat": 0,
+      "lon": 0,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-san_salvador",
+      "georef_id": null,
+      "name": "San Salvador",
+      "typing": "san salvador",
+      "lat": 0,
+      "lon": 0,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-general_campos",
+      "georef_id": null,
+      "name": "General Campos",
+      "typing": "general campos",
+      "lat": 0,
+      "lon": 0,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-san_carlos_centro",
+      "georef_id": null,
+      "name": "San Carlos Centro",
+      "typing": "san carlos centro",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-san_francisco",
+      "georef_id": null,
+      "name": "San Francisco",
+      "typing": "san francisco",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-arroyito",
+      "georef_id": null,
+      "name": "Arroyito",
+      "typing": "arroyito",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-monte_cristo",
+      "georef_id": null,
+      "name": "Monte Cristo",
+      "typing": "monte cristo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-villa_carlos_paz",
+      "georef_id": null,
+      "name": "Villa Carlos Paz",
+      "typing": "villa carlos paz",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-mina_clavero",
+      "georef_id": null,
+      "name": "Mina Clavero",
+      "typing": "mina clavero",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-quines",
+      "georef_id": null,
+      "name": "Quines",
+      "typing": "quines",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-san_juan",
+      "georef_id": null,
+      "name": "San Juan",
+      "typing": "san juan",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-rio_colorado",
+      "georef_id": null,
+      "name": "Río Colorado",
+      "typing": "rio colorado",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-choele_choel",
+      "georef_id": null,
+      "name": "Choele Choel",
+      "typing": "choele choel",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-villa_regina",
+      "georef_id": null,
+      "name": "Villa Regina",
+      "typing": "villa regina",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-general_roca",
+      "georef_id": null,
+      "name": "General Roca",
+      "typing": "general roca",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-cipolletti",
+      "georef_id": null,
+      "name": "Cipolletti",
+      "typing": "cipolletti",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-neuquen",
+      "georef_id": null,
+      "name": "Neuquén",
+      "typing": "neuquen",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-plottier",
+      "georef_id": null,
+      "name": "Plottier",
+      "typing": "plottier",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-plaza_huincul",
+      "georef_id": null,
+      "name": "Plaza Huincul",
+      "typing": "plaza huincul",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-cutral_co",
+      "georef_id": null,
+      "name": "Cutral Có",
+      "typing": "cutral co",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-zapala",
+      "georef_id": null,
+      "name": "Zapala",
+      "typing": "zapala",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-valcheta",
+      "georef_id": null,
+      "name": "Valcheta",
+      "typing": "valcheta",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-ministro_ramos_mexia",
+      "georef_id": null,
+      "name": "Ministro Ramos Mexía",
+      "typing": "ministro ramos mexia",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-sierra_colorada",
+      "georef_id": null,
+      "name": "Sierra Colorada",
+      "typing": "sierra colorada",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-los_menucos",
+      "georef_id": null,
+      "name": "Los Menucos",
+      "typing": "los menucos",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-maquinchao",
+      "georef_id": null,
+      "name": "Maquinchao",
+      "typing": "maquinchao",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-ingeniero_jacobacci",
+      "georef_id": null,
+      "name": "Ingeniero Jacobacci",
+      "typing": "ingeniero jacobacci",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-dina_huapi",
+      "georef_id": null,
+      "name": "Dina Huapi",
+      "typing": "dina huapi",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-rawson",
+      "georef_id": null,
+      "name": "Rawson",
+      "typing": "rawson",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-gaiman",
+      "georef_id": null,
+      "name": "Gaiman",
+      "typing": "gaiman",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-las_plumas",
+      "georef_id": null,
+      "name": "Las Plumas",
+      "typing": "las plumas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-los_altares",
+      "georef_id": null,
+      "name": "Los Altares",
+      "typing": "los altares",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-tecka",
+      "georef_id": null,
+      "name": "Tecka",
+      "typing": "tecka",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-esquel",
+      "georef_id": null,
+      "name": "Esquel",
+      "typing": "esquel",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-rada_tilly",
+      "georef_id": null,
+      "name": "Rada Tilly",
+      "typing": "rada tilly",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-sarmiento",
+      "georef_id": null,
+      "name": "Sarmiento",
+      "typing": "sarmiento",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-rio_mayo",
+      "georef_id": null,
+      "name": "Río Mayo",
+      "typing": "rio mayo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-pigue",
+      "georef_id": null,
+      "name": "Pigüé",
+      "typing": "pigue",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-garre",
+      "georef_id": null,
+      "name": "Garré",
+      "typing": "garre",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-firmat",
+      "georef_id": null,
+      "name": "Firmat",
+      "typing": "firmat",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-casilda",
+      "georef_id": null,
+      "name": "Casilda",
+      "typing": "casilda",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-perez",
+      "georef_id": null,
+      "name": "Pérez",
+      "typing": "perez",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-san_jorge",
+      "georef_id": null,
+      "name": "San Jorge",
+      "typing": "san jorge",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-rafaela",
+      "georef_id": null,
+      "name": "Rafaela",
+      "typing": "rafaela",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-ceres",
+      "georef_id": null,
+      "name": "Ceres",
+      "typing": "ceres",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-pinto",
+      "georef_id": null,
+      "name": "Pinto",
+      "typing": "pinto",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-anatuya",
+      "georef_id": null,
+      "name": "Añatuya",
+      "typing": "anatuya",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-la_banda",
+      "georef_id": null,
+      "name": "La Banda",
+      "typing": "la banda",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-rosario_de_la_frontera",
+      "georef_id": null,
+      "name": "Rosario de la Frontera",
+      "typing": "rosario de la frontera",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-general_guemes",
+      "georef_id": null,
+      "name": "General Güemes",
+      "typing": "general guemes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-san_pedro_de_jujuy",
+      "georef_id": null,
+      "name": "San Pedro de Jujuy",
+      "typing": "san pedro de jujuy",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-libertador_general_san_martin",
+      "georef_id": null,
+      "name": "Libertador General San Martín",
+      "typing": "libertador general san martin",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-tartagal",
+      "georef_id": null,
+      "name": "Tartagal",
+      "typing": "tartagal",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-profesor_salvador_mazza",
+      "georef_id": null,
+      "name": "Profesor Salvador Mazza",
+      "typing": "profesor salvador mazza",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-jacinto_arauz",
+      "georef_id": null,
+      "name": "Jacinto Aráuz",
+      "typing": "jacinto arauz",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-general_acha",
+      "georef_id": null,
+      "name": "General Acha",
+      "typing": "general acha",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-eduardo_castex",
+      "georef_id": null,
+      "name": "Eduardo Castex",
+      "typing": "eduardo castex",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-realico",
+      "georef_id": null,
+      "name": "Realicó",
+      "typing": "realico",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-huinca_renanco",
+      "georef_id": null,
+      "name": "Huinca Renancó",
+      "typing": "huinca renanco",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-elena",
+      "georef_id": null,
+      "name": "Elena",
+      "typing": "elena",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-berrotaran",
+      "georef_id": null,
+      "name": "Berrotarán",
+      "typing": "berrotaran",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-almafuerte",
+      "georef_id": null,
+      "name": "Almafuerte",
+      "typing": "almafuerte",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-rio_tercero",
+      "georef_id": null,
+      "name": "Río Tercero",
+      "typing": "rio tercero",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-san_agustin",
+      "georef_id": null,
+      "name": "San Agustín",
+      "typing": "san agustin",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-alta_gracia",
+      "georef_id": null,
+      "name": "Alta Gracia",
+      "typing": "alta gracia",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-cosquin",
+      "georef_id": null,
+      "name": "Cosquín",
+      "typing": "cosquin",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-la_falda",
+      "georef_id": null,
+      "name": "La Falda",
+      "typing": "la falda",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-cruz_del_eje",
+      "georef_id": null,
+      "name": "Cruz del Eje",
+      "typing": "cruz del eje",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-chamical",
+      "georef_id": null,
+      "name": "Chamical",
+      "typing": "chamical",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-la_rioja",
+      "georef_id": null,
+      "name": "La Rioja",
+      "typing": "la rioja",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-san_fernando_del_valle_de_catamarca",
+      "georef_id": null,
+      "name": "San Fernando del Valle de Catamarca",
+      "typing": "san fernando del valle de catamarca",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-concepcion",
+      "georef_id": null,
+      "name": "Concepción",
+      "typing": "concepcion",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-famailla",
+      "georef_id": null,
+      "name": "Famaillá",
+      "typing": "famailla",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-cabo_virgenes",
+      "georef_id": null,
+      "name": "Cabo Vírgenes",
+      "typing": "cabo virgenes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-28_de_noviembre",
+      "georef_id": null,
+      "name": "28 de Noviembre",
+      "typing": "28 de noviembre",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-el_calafate",
+      "georef_id": null,
+      "name": "El Calafate",
+      "typing": "el calafate",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-gobernador_gregores",
+      "georef_id": null,
+      "name": "Gobernador Gregores",
+      "typing": "gobernador gregores",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-perito_moreno",
+      "georef_id": null,
+      "name": "Perito Moreno",
+      "typing": "perito moreno",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-el_bolson",
+      "georef_id": null,
+      "name": "El Bolsón",
+      "typing": "el bolson",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-san_carlos_de_bariloche",
+      "georef_id": null,
+      "name": "San Carlos de Bariloche",
+      "typing": "san carlos de bariloche",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-villa_la_angostura",
+      "georef_id": null,
+      "name": "Villa La Angostura",
+      "typing": "villa la angostura",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-san_martin_de_los_andes",
+      "georef_id": null,
+      "name": "San Martín de los Andes",
+      "typing": "san martin de los andes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-junin_de_los_andes",
+      "georef_id": null,
+      "name": "Junín de los Andes",
+      "typing": "junin de los andes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-chos_malal",
+      "georef_id": null,
+      "name": "Chos Malal",
+      "typing": "chos malal",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-malargue",
+      "georef_id": null,
+      "name": "Malargüe",
+      "typing": "malargue",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-san_rafael",
+      "georef_id": null,
+      "name": "San Rafael",
+      "typing": "san rafael",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-tunuyan",
+      "georef_id": null,
+      "name": "Tunuyán",
+      "typing": "tunuyan",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-san_jose_de_jachal",
+      "georef_id": null,
+      "name": "San José de Jáchal",
+      "typing": "san jose de jachal",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-villa_union",
+      "georef_id": null,
+      "name": "Villa Unión",
+      "typing": "villa union",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-chilecito",
+      "georef_id": null,
+      "name": "Chilecito",
+      "typing": "chilecito",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-londres",
+      "georef_id": null,
+      "name": "Londres",
+      "typing": "londres",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-belen",
+      "georef_id": null,
+      "name": "Belén",
+      "typing": "belen",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-santa_maria",
+      "georef_id": null,
+      "name": "Santa María",
+      "typing": "santa maria",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-cafayate",
+      "georef_id": null,
+      "name": "Cafayate",
+      "typing": "cafayate",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-cachi",
+      "georef_id": null,
+      "name": "Cachi",
+      "typing": "cachi",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-san_antonio_de_los_cobres",
+      "georef_id": null,
+      "name": "San Antonio de los Cobres",
+      "typing": "san antonio de los cobres",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-susques",
+      "georef_id": null,
+      "name": "Susques",
+      "typing": "susques",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-pichanal",
+      "georef_id": null,
+      "name": "Pichanal",
+      "typing": "pichanal",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-oran",
+      "georef_id": null,
+      "name": "Orán",
+      "typing": "oran",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-aguas_blancas",
+      "georef_id": null,
+      "name": "Aguas Blancas",
+      "typing": "aguas blancas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-campo_quijano",
+      "georef_id": null,
+      "name": "Campo Quijano",
+      "typing": "campo quijano",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-santa_rosa_de_tastil",
+      "georef_id": null,
+      "name": "Santa Rosa de Tastil",
+      "typing": "santa rosa de tastil",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-paso_sico",
+      "georef_id": null,
+      "name": "Paso Sico",
+      "typing": "paso sico",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-purmamarca",
+      "georef_id": null,
+      "name": "Purmamarca",
+      "typing": "purmamarca",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-paso_de_jama",
+      "georef_id": null,
+      "name": "Paso de Jama",
+      "typing": "paso de jama",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-villa_de_maria_de_rio_seco",
+      "georef_id": null,
+      "name": "Villa de María de Río Seco",
+      "typing": "villa de maria de rio seco",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-dean_funes",
+      "georef_id": null,
+      "name": "Deán Funes",
+      "typing": "dean funes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-aimogasta",
+      "georef_id": null,
+      "name": "Aimogasta",
+      "typing": "aimogasta",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-tinogasta",
+      "georef_id": null,
+      "name": "Tinogasta",
+      "typing": "tinogasta",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-fiambala",
+      "georef_id": null,
+      "name": "Fiambalá",
+      "typing": "fiambala",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-paso_de_san_francisco",
+      "georef_id": null,
+      "name": "Paso de San Francisco",
+      "typing": "paso de san francisco",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-tucuman-san_pedro_de_guasayan",
+      "georef_id": null,
+      "name": "San Pedro de Guasayán",
+      "typing": "san pedro de guasayan",
+      "lat": 0,
+      "lon": 0,
+      "province": "Tucumán",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-tucuman-banado_de_ovanta",
+      "georef_id": null,
+      "name": "Bañado de Ovanta",
+      "typing": "banado de ovanta",
+      "lat": 0,
+      "lon": 0,
+      "province": "Tucumán",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-tucuman-altos_de_san_antonio",
+      "georef_id": null,
+      "name": "Altos de San Antonio",
+      "typing": "altos de san antonio",
+      "lat": 0,
+      "lon": 0,
+      "province": "Tucumán",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-tucuman-alpachiri",
+      "georef_id": null,
+      "name": "Alpachiri",
+      "typing": "alpachiri",
+      "lat": 0,
+      "lon": 0,
+      "province": "Tucumán",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-tucuman-las_estancias",
+      "georef_id": null,
+      "name": "Las Estancias",
+      "typing": "las estancias",
+      "lat": 0,
+      "lon": 0,
+      "province": "Tucumán",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-tucuman-andalgala",
+      "georef_id": null,
+      "name": "Andalgalá",
+      "typing": "andalgala",
+      "lat": 0,
+      "lon": 0,
+      "province": "Tucumán",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-jujuy-palpala",
+      "georef_id": null,
+      "name": "Palpalá",
+      "typing": "palpala",
+      "lat": 0,
+      "lon": 0,
+      "province": "Jujuy",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-jujuy-perico",
+      "georef_id": null,
+      "name": "Perico",
+      "typing": "perico",
+      "lat": 0,
+      "lon": 0,
+      "province": "Jujuy",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-cerrillos",
+      "georef_id": null,
+      "name": "Cerrillos",
+      "typing": "cerrillos",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-el_carril",
+      "georef_id": null,
+      "name": "El Carril",
+      "typing": "el carril",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-coronel_moldes",
+      "georef_id": null,
+      "name": "Coronel Moldes",
+      "typing": "coronel moldes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-salta-talapampa",
+      "georef_id": null,
+      "name": "Talapampa",
+      "typing": "talapampa",
+      "lat": 0,
+      "lon": 0,
+      "province": "Salta",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_rioja-patquia",
+      "georef_id": null,
+      "name": "Patquía",
+      "typing": "patquia",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_rioja-nonogasta",
+      "georef_id": null,
+      "name": "Nonogasta",
+      "typing": "nonogasta",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_rioja-sanagasta",
+      "georef_id": null,
+      "name": "Sanagasta",
+      "typing": "sanagasta",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_rioja-aminga",
+      "georef_id": null,
+      "name": "Aminga",
+      "typing": "aminga",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_rioja-anillaco",
+      "georef_id": null,
+      "name": "Anillaco",
+      "typing": "anillaco",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_juan-vinchina",
+      "georef_id": null,
+      "name": "Vinchina",
+      "typing": "vinchina",
+      "lat": 0,
+      "lon": 0,
+      "province": "San Juan",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_juan-jague",
+      "georef_id": null,
+      "name": "Jagüé",
+      "typing": "jague",
+      "lat": 0,
+      "lon": 0,
+      "province": "San Juan",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_juan-paso_pircas_negras",
+      "georef_id": null,
+      "name": "Paso Pircas Negras",
+      "typing": "paso pircas negras",
+      "lat": 0,
+      "lon": 0,
+      "province": "San Juan",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-el_chacho",
+      "georef_id": null,
+      "name": "El Chacho",
+      "typing": "el chacho",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-milagro",
+      "georef_id": null,
+      "name": "Milagro",
+      "typing": "milagro",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_rioja-famatina",
+      "georef_id": null,
+      "name": "Famatina",
+      "typing": "famatina",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_rioja-campanas",
+      "georef_id": null,
+      "name": "Campanas",
+      "typing": "campanas",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_luis-ulapes",
+      "georef_id": null,
+      "name": "Ulapes",
+      "typing": "ulapes",
+      "lat": 0,
+      "lon": 0,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_luis-olta",
+      "georef_id": null,
+      "name": "Olta",
+      "typing": "olta",
+      "lat": 0,
+      "lon": 0,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_luis-casa_de_piedra",
+      "georef_id": null,
+      "name": "Casa de Piedra",
+      "typing": "casa de piedra",
+      "lat": 0,
+      "lon": 0,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-formosa-palo_santo",
+      "georef_id": null,
+      "name": "Palo Santo",
+      "typing": "palo santo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Formosa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-formosa-las_lomitas",
+      "georef_id": null,
+      "name": "Las Lomitas",
+      "typing": "las lomitas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Formosa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-formosa-ingeniero_juarez",
+      "georef_id": null,
+      "name": "Ingeniero Juárez",
+      "typing": "ingeniero juarez",
+      "lat": 0,
+      "lon": 0,
+      "province": "Formosa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-formosa-pluma_de_pato",
+      "georef_id": null,
+      "name": "Pluma de Pato",
+      "typing": "pluma de pato",
+      "lat": 0,
+      "lon": 0,
+      "province": "Formosa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-formosa-general_belgrano",
+      "georef_id": null,
+      "name": "General Belgrano",
+      "typing": "general belgrano",
+      "lat": 0,
+      "lon": 0,
+      "province": "Formosa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-formosa-villa_general_guemes",
+      "georef_id": null,
+      "name": "Villa General Güemes",
+      "typing": "villa general guemes",
+      "lat": 0,
+      "lon": 0,
+      "province": "Formosa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-formosa-posta_cambio_zalazar",
+      "georef_id": null,
+      "name": "Posta Cambio Zalazar",
+      "typing": "posta cambio zalazar",
+      "lat": 0,
+      "lon": 0,
+      "province": "Formosa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-avia_terai",
+      "georef_id": null,
+      "name": "Avia Terai",
+      "typing": "avia terai",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-charata",
+      "georef_id": null,
+      "name": "Charata",
+      "typing": "charata",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-general_pinedo",
+      "georef_id": null,
+      "name": "General Pinedo",
+      "typing": "general pinedo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-quimili",
+      "georef_id": null,
+      "name": "Quimilí",
+      "typing": "quimili",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chaco-suncho_corral",
+      "georef_id": null,
+      "name": "Suncho Corral",
+      "typing": "suncho corral",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chaco",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-tostado",
+      "georef_id": null,
+      "name": "Tostado",
+      "typing": "tostado",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-villa_angela",
+      "georef_id": null,
+      "name": "Villa Ángela",
+      "typing": "villa angela",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-castelli",
+      "georef_id": null,
+      "name": "Castelli",
+      "typing": "castelli",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-vera",
+      "georef_id": null,
+      "name": "Vera",
+      "typing": "vera",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-bandera",
+      "georef_id": null,
+      "name": "Bandera",
+      "typing": "bandera",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-misiones-san_antonio",
+      "georef_id": null,
+      "name": "San Antonio",
+      "typing": "san antonio",
+      "lat": 0,
+      "lon": 0,
+      "province": "Misiones",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-misiones-comandante_andresito",
+      "georef_id": null,
+      "name": "Comandante Andresito",
+      "typing": "comandante andresito",
+      "lat": 0,
+      "lon": 0,
+      "province": "Misiones",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-misiones-garupa",
+      "georef_id": null,
+      "name": "Garupá",
+      "typing": "garupa",
+      "lat": 0,
+      "lon": 0,
+      "province": "Misiones",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-misiones-san_jose",
+      "georef_id": null,
+      "name": "San José",
+      "typing": "san jose",
+      "lat": 0,
+      "lon": 0,
+      "province": "Misiones",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-saladas",
+      "georef_id": null,
+      "name": "Saladas",
+      "typing": "saladas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-san_roque",
+      "georef_id": null,
+      "name": "San Roque",
+      "typing": "san roque",
+      "lat": 0,
+      "lon": 0,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-san_miguel",
+      "georef_id": null,
+      "name": "San Miguel",
+      "typing": "san miguel",
+      "lat": 0,
+      "lon": 0,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-loreto",
+      "georef_id": null,
+      "name": "Loreto",
+      "typing": "loreto",
+      "lat": 0,
+      "lon": 0,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-curuzu_cuatia",
+      "georef_id": null,
+      "name": "Curuzú Cuatiá",
+      "typing": "curuzu cuatia",
+      "lat": 0,
+      "lon": 0,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-mariano_i_loza",
+      "georef_id": null,
+      "name": "Mariano I. Loza",
+      "typing": "mariano i. loza",
+      "lat": 0,
+      "lon": 0,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-chavarria",
+      "georef_id": null,
+      "name": "Chavarría",
+      "typing": "chavarria",
+      "lat": 0,
+      "lon": 0,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-9_de_julio",
+      "georef_id": null,
+      "name": "9 de Julio",
+      "typing": "9 de julio",
+      "lat": 0,
+      "lon": 0,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-federal",
+      "georef_id": null,
+      "name": "Federal",
+      "typing": "federal",
+      "lat": 0,
+      "lon": 0,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-san_jaime_de_la_frontera",
+      "georef_id": null,
+      "name": "San Jaime de la Frontera",
+      "typing": "san jaime de la frontera",
+      "lat": 0,
+      "lon": 0,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-cuatro_bocas",
+      "georef_id": null,
+      "name": "Cuatro Bocas",
+      "typing": "cuatro bocas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_rioja-chepes",
+      "georef_id": null,
+      "name": "Chepes",
+      "typing": "chepes",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_rioja-caucete",
+      "georef_id": null,
+      "name": "Caucete",
+      "typing": "caucete",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-costa_de_araujo",
+      "georef_id": null,
+      "name": "Costa de Araujo",
+      "typing": "costa de araujo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-encon",
+      "georef_id": null,
+      "name": "Encón",
+      "typing": "encon",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-pareditas",
+      "georef_id": null,
+      "name": "Pareditas",
+      "typing": "pareditas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-general_alvear",
+      "georef_id": null,
+      "name": "General Alvear",
+      "typing": "general alvear",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-carmensa",
+      "georef_id": null,
+      "name": "Carmensa",
+      "typing": "carmensa",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-santa_isabel",
+      "georef_id": null,
+      "name": "Santa Isabel",
+      "typing": "santa isabel",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-el_sosneado",
+      "georef_id": null,
+      "name": "El Sosneado",
+      "typing": "el sosneado",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-bardas_blancas",
+      "georef_id": null,
+      "name": "Bardas Blancas",
+      "typing": "bardas blancas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-paso_pehuenche",
+      "georef_id": null,
+      "name": "Paso Pehuenche",
+      "typing": "paso pehuenche",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-monte_coman",
+      "georef_id": null,
+      "name": "Monte Comán",
+      "typing": "monte coman",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-la_horqueta",
+      "georef_id": null,
+      "name": "La Horqueta",
+      "typing": "la horqueta",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-calingasta",
+      "georef_id": null,
+      "name": "Calingasta",
+      "typing": "calingasta",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-mendoza-iglesia",
+      "georef_id": null,
+      "name": "Iglesia",
+      "typing": "iglesia",
+      "lat": 0,
+      "lon": 0,
+      "province": "Mendoza",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_juan-rodeo",
+      "georef_id": null,
+      "name": "Rodeo",
+      "typing": "rodeo",
+      "lat": 0,
+      "lon": 0,
+      "province": "San Juan",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_juan-paso_de_agua_negra",
+      "georef_id": null,
+      "name": "Paso de Agua Negra",
+      "typing": "paso de agua negra",
+      "lat": 0,
+      "lon": 0,
+      "province": "San Juan",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-cinco_saltos",
+      "georef_id": null,
+      "name": "Cinco Saltos",
+      "typing": "cinco saltos",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-catriel",
+      "georef_id": null,
+      "name": "Catriel",
+      "typing": "catriel",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-25_de_mayo",
+      "georef_id": null,
+      "name": "25 de Mayo",
+      "typing": "25 de mayo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-puelen",
+      "georef_id": null,
+      "name": "Puelén",
+      "typing": "puelen",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_pampa-puelches",
+      "georef_id": null,
+      "name": "Puelches",
+      "typing": "puelches",
+      "lat": 0,
+      "lon": 0,
+      "province": "La Pampa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-las_varillas",
+      "georef_id": null,
+      "name": "Las Varillas",
+      "typing": "las varillas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-general_cabrera",
+      "georef_id": null,
+      "name": "General Cabrera",
+      "typing": "general cabrera",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-cordoba-general_deheza",
+      "georef_id": null,
+      "name": "General Deheza",
+      "typing": "general deheza",
+      "lat": 0,
+      "lon": 0,
+      "province": "Córdoba",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_fe-victoria",
+      "georef_id": null,
+      "name": "Victoria",
+      "typing": "victoria",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-alcorta",
+      "georef_id": null,
+      "name": "Alcorta",
+      "typing": "alcorta",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-bigand",
+      "georef_id": null,
+      "name": "Bigand",
+      "typing": "bigand",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-las_parejas",
+      "georef_id": null,
+      "name": "Las Parejas",
+      "typing": "las parejas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-las_rosas",
+      "georef_id": null,
+      "name": "Las Rosas",
+      "typing": "las rosas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-rojas",
+      "georef_id": null,
+      "name": "Rojas",
+      "typing": "rojas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-lincoln",
+      "georef_id": null,
+      "name": "Lincoln",
+      "typing": "lincoln",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-general_villegas",
+      "georef_id": null,
+      "name": "General Villegas",
+      "typing": "general villegas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-union",
+      "georef_id": null,
+      "name": "Unión",
+      "typing": "union",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-lobos",
+      "georef_id": null,
+      "name": "Lobos",
+      "typing": "lobos",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-roque_perez",
+      "georef_id": null,
+      "name": "Roque Pérez",
+      "typing": "roque perez",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-saladillo",
+      "georef_id": null,
+      "name": "Saladillo",
+      "typing": "saladillo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-san_carlos_de_bolivar",
+      "georef_id": null,
+      "name": "San Carlos de Bolívar",
+      "typing": "san carlos de bolivar",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-mar_del_plata",
+      "georef_id": null,
+      "name": "Mar del Plata",
+      "typing": "mar del plata",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-balcarce",
+      "georef_id": null,
+      "name": "Balcarce",
+      "typing": "balcarce",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-tandil",
+      "georef_id": null,
+      "name": "Tandil",
+      "typing": "tandil",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-olavarria",
+      "georef_id": null,
+      "name": "Olavarría",
+      "typing": "olavarria",
+      "lat": 0,
+      "lon": 0,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-neuquen-piedra_del_aguila",
+      "georef_id": null,
+      "name": "Piedra del Águila",
+      "typing": "piedra del aguila",
+      "lat": 0,
+      "lon": 0,
+      "province": "Neuquén",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-neuquen-confluencia",
+      "georef_id": null,
+      "name": "Confluencia",
+      "typing": "confluencia",
+      "lat": 0,
+      "lon": 0,
+      "province": "Neuquén",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-neuquen-las_lajas",
+      "georef_id": null,
+      "name": "Las Lajas",
+      "typing": "las lajas",
+      "lat": 0,
+      "lon": 0,
+      "province": "Neuquén",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-lamarque",
+      "georef_id": null,
+      "name": "Lamarque",
+      "typing": "lamarque",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-general_conesa",
+      "georef_id": null,
+      "name": "General Conesa",
+      "typing": "general conesa",
+      "lat": 0,
+      "lon": 0,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-trevelin",
+      "georef_id": null,
+      "name": "Trevelin",
+      "typing": "trevelin",
+      "lat": 0,
+      "lon": 0,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-jaramillo",
+      "georef_id": null,
+      "name": "Jaramillo",
+      "typing": "jaramillo",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-puerto_deseado",
+      "georef_id": null,
+      "name": "Puerto Deseado",
+      "typing": "puerto deseado",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-puerto_santa_cruz",
+      "georef_id": null,
+      "name": "Puerto Santa Cruz",
+      "typing": "puerto santa cruz",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-tres_lagos",
+      "georef_id": null,
+      "name": "Tres Lagos",
+      "typing": "tres lagos",
+      "lat": 0,
+      "lon": 0,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    }
+  ]
+}

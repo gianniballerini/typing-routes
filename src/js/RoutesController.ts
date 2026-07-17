@@ -1,4 +1,5 @@
 import type { FeatureCollection, Geometry } from 'geojson';
+import citiesData from '../assets/data/national_cities.json';
 import routesData from '../assets/data/national_routes.json';
 import routesCitiesData from '../assets/data/national_routes_cities.json';
 import geometriesData from '../assets/data/national_routes_geometries.json';
@@ -18,7 +19,17 @@ interface RawRoute {
 interface RawRouteCity {
     id: string;
     route: string;
-    cities: any[];
+    city_refs: string[];
+}
+
+interface RawCity {
+    id: string;
+    name: string;
+    typing: string;
+    lat: number;
+    lon: number;
+    province: string;
+    tier: string;
 }
 
 interface RawRouteGeometry {
@@ -37,6 +48,11 @@ interface RawRoutesData {
 interface RawRoutesCitiesData {
     total_routes: number;
     routes: RawRouteCity[];
+}
+
+interface RawCitiesData {
+    total_cities: number;
+    cities: RawCity[];
 }
 
 interface RawRoutesGeometriesData {
@@ -69,13 +85,32 @@ class RoutesController {
 
     init() {
         const routesDataTyped: RawRoutesData = routesData;
-        const citiesDataTyped: RawRoutesCitiesData = routesCitiesData;
+        const routesCitiesDataTyped: RawRoutesCitiesData = routesCitiesData;
+        const citiesDataTyped: RawCitiesData = citiesData;
         const geometriesDataTyped = geometriesData as RawRoutesGeometriesData;
 
-        // Create a map of cities by route id for quick lookup
-        const citiesMap: { [key: string]: any[] } = {};
-        for (const citiesEntry of citiesDataTyped.routes) {
-            citiesMap[citiesEntry.id] = citiesEntry.cities;
+        const sharedCitiesById: { [key: string]: RawCity } = {};
+        for (const cityEntry of citiesDataTyped.cities) {
+            if (sharedCitiesById[cityEntry.id]) {
+                console.warn(`Duplicate city id in national_cities.json: ${cityEntry.id}`);
+                continue;
+            }
+            sharedCitiesById[cityEntry.id] = cityEntry;
+        }
+
+        // Create a map of city refs by route id for quick lookup
+        const citiesMap: { [key: string]: RawCity[] } = {};
+        for (const citiesEntry of routesCitiesDataTyped.routes) {
+            const resolvedCities: RawCity[] = [];
+            for (const cityId of citiesEntry.city_refs ?? []) {
+                const rawCity = sharedCitiesById[cityId];
+                if (!rawCity) {
+                    console.warn(`Missing city reference: route ${citiesEntry.id} -> city ${cityId}`);
+                    continue;
+                }
+                resolvedCities.push(rawCity);
+            }
+            citiesMap[citiesEntry.id] = resolvedCities;
         }
 
         // Create a map of geometries by route id for quick lookup

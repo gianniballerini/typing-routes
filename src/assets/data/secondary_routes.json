@@ -1,0 +1,226 @@
+[
+  {
+    "categoria": "Región III: Mesopotamia y Noreste (100 al 139)",
+    "rutas": [
+      {
+        "numero": 101,
+        "descripcion": "Recorre el extremo norte de Misiones, atravesando el Parque Nacional Iguazú.",
+        "provincias": ["Misiones"],
+        "ciudades": ["Bernardo de Irigoyen", "San Antonio", "Comandante Andresito", "Puerto Iguazú"]
+      },
+      {
+        "numero": 105,
+        "descripcion": "Conecta la capital provincial con el sur misionero.",
+        "provincias": ["Misiones"],
+        "ciudades": ["Posadas", "Garupá", "San José", "Apóstoles"]
+      },
+      {
+        "numero": 117,
+        "descripcion": "Ruta de vital importancia comercial que conecta la RN 14 con el Puente Internacional Paso de los Libres - Uruguaiana.",
+        "provincias": ["Corrientes"],
+        "ciudades": ["Paso de los Libres"]
+      },
+      {
+        "numero": 118,
+        "descripcion": "Une diferentes localidades del norte correntino rodeando los Esteros del Iberá.",
+        "provincias": ["Corrientes"],
+        "ciudades": ["Saladas", "San Roque", "Santa Rosa", "San Miguel", "Loreto"]
+      },
+      {
+        "numero": 119,
+        "descripcion": "Eje vial del sur de Corrientes.",
+        "provincias": ["Corrientes"],
+        "ciudades": ["Curuzú Cuatiá", "Mariano I. Loza", "Mercedes"]
+      },
+      {
+        "numero": 123,
+        "descripcion": "Cruza la provincia de Corrientes en sentido este-oeste.",
+        "provincias": ["Corrientes"],
+        "ciudades": ["Mercedes", "Chavarría", "9 de Julio"]
+      },
+      {
+        "numero": 127,
+        "descripcion": "Conecta el centro de Entre Ríos con el sur de Corrientes.",
+        "provincias": ["Entre Ríos", "Corrientes"],
+        "ciudades": ["Federal", "San Jaime de la Frontera", "Cuatro Bocas"]
+      },
+      {
+        "numero": 135,
+        "descripcion": "Conecta la RN 14 con el Puente Internacional General Artigas hacia Uruguay.",
+        "provincias": ["Entre Ríos"],
+        "ciudades": ["Colón"]
+      },
+      {
+        "numero": 136,
+        "descripcion": "Llega hasta el Puente Internacional General San Martín (límite con Uruguay).",
+        "provincias": ["Entre Ríos"],
+        "ciudades": ["Gualeguaychú"]
+      }
+    ]
+  },
+  {
+    "categoria": "Región IV: Cuyo y Centro-Oeste (140 al 159)",
+    "rutas": [
+      {
+        "numero": 141,
+        "descripcion": "Conecta el sur de La Rioja con la ciudad de San Juan.",
+        "provincias": ["La Rioja", "San Juan"],
+        "ciudades": ["Chepes", "Caucete", "San Juan"]
+      },
+      {
+        "numero": 142,
+        "descripcion": "Llamada 'Ruta de los Altos Limpios', conecta Mendoza con San Juan por el noreste.",
+        "provincias": ["Mendoza", "San Juan"],
+        "ciudades": ["Costa de Araujo", "Encón"]
+      },
+      {
+        "numero": 143,
+        "descripcion": "Une el centro-sur de Mendoza con el oeste de La Pampa.",
+        "provincias": ["Mendoza", "La Pampa"],
+        "ciudades": ["Pareditas", "San Rafael", "General Alvear", "Carmensa", "Santa Isabel"]
+      },
+      {
+        "numero": 144,
+        "descripcion": "Conecta San Rafael con la RN 40 rumbo a Malargüe.",
+        "provincias": ["Mendoza"],
+        "ciudades": ["San Rafael", "El Sosneado"]
+      },
+      {
+        "numero": 145,
+        "descripcion": "Lleva desde la RN 40 hasta el Paso Internacional Pehuenche (límite con Chile).",
+        "provincias": ["Mendoza"],
+        "ciudades": ["Bardas Blancas", "Paso Pehuenche"]
+      },
+      {
+        "numero": 146,
+        "descripcion": "Une el sur de Mendoza con la capital de San Luis.",
+        "provincias": ["Mendoza", "San Luis"],
+        "ciudades": ["San Rafael", "Monte Comán", "La Horqueta", "San Luis"]
+      },
+      {
+        "numero": 149,
+        "descripcion": "Une los valles cordilleranos de Mendoza y San Juan.",
+        "provincias": ["Mendoza", "San Juan"],
+        "ciudades": ["Uspallata", "Calingasta", "Iglesia"]
+      },
+      {
+        "numero": 150,
+        "descripcion": "Eje del Corredor Bioceánico que lleva al Paso de Agua Negra (Chile).",
+        "provincias": ["San Juan"],
+        "ciudades": ["San José de Jáchal", "Rodeo", "Paso de Agua Negra"]
+      },
+      {
+        "numero": 151,
+        "descripcion": "Conecta el Alto Valle del Río Negro con el oeste pampeano.",
+        "provincias": ["Río Negro", "La Pampa"],
+        "ciudades": ["Cipolletti", "Cinco Saltos", "Catriel", "25 de Mayo", "Puelén", "Santa Isabel"]
+      },
+      {
+        "numero": 152,
+        "descripcion": "Histórica ruta de acceso a la Patagonia central.",
+        "provincias": ["La Pampa"],
+        "ciudades": ["General Acha", "Puelches", "Casa de Piedra"]
+      },
+      {
+        "numero": 158,
+        "descripcion": "Eje productivo clave del interior cordobés.",
+        "provincias": ["Córdoba"],
+        "ciudades": ["San Francisco", "Las Varillas", "Villa María", "General Cabrera", "General Deheza", "Río Cuarto"]
+      }
+    ]
+  },
+  {
+    "categoria": "Región V: Región Pampeana, Accesos y Conexiones (160 al 229)",
+    "rutas": [
+      {
+        "numero": 168,
+        "descripcion": "Une Santa Fe con el Túnel Subfluvial Raúl Uranga - Carlos Sylvestre Begnis.",
+        "provincias": ["Santa Fe", "Entre Ríos"],
+        "ciudades": ["Santa Fe", "Paraná"]
+      },
+      {
+        "numero": 174,
+        "descripcion": "Atraviesa el viaducto del Puente Rosario-Victoria sobre el Río Paraná.",
+        "provincias": ["Santa Fe", "Entre Ríos"],
+        "ciudades": ["Rosario", "Victoria"]
+      },
+      {
+        "numero": 178,
+        "descripcion": "Une el norte bonaerense con la cuenca lechera y metalmecánica de Santa Fe.",
+        "provincias": ["Buenos Aires", "Santa Fe"],
+        "ciudades": ["Pergamino", "Alcorta", "Bigand", "Las Parejas", "Las Rosas"]
+      },
+      {
+        "numero": 188,
+        "descripcion": "Extenso eje este-oeste que cruza cuatro provincias argentinas.",
+        "provincias": ["Buenos Aires", "La Pampa", "San Luis", "Mendoza"],
+        "ciudades": ["San Nicolás de los Arroyos", "Pergamino", "Rojas", "Junín", "Lincoln", "General Villegas", "Realicó", "Unión", "General Alvear"]
+      },
+      {
+        "numero": 205,
+        "descripcion": "Vía de escape de alta circulación hacia el centro de la Provincia de Buenos Aires.",
+        "provincias": ["Buenos Aires"],
+        "ciudades": ["Cañuelas", "Lobos", "Roque Pérez", "Saladillo", "San Carlos de Bolívar"]
+      },
+      {
+        "numero": 226,
+        "descripcion": "Llamada 'Ruta de los Serranos', cruza en diagonal la provincia de Buenos Aires.",
+        "provincias": ["Buenos Aires"],
+        "ciudades": ["Mar del Plata", "Balcarce", "Tandil", "Azul", "Olavarría", "San Carlos de Bolívar", "Pehuajó", "General Villegas"]
+      }
+    ]
+  },
+  {
+    "categoria": "Región VI: Patagonia Central y Austral (230 al 299)",
+    "rutas": [
+      {
+        "numero": 231,
+        "descripcion": "Lleva desde la RN 40 hasta el Paso Internacional Cardenal Samoré.",
+        "provincias": ["Neuquén"],
+        "ciudades": ["Villa La Angostura"]
+      },
+      {
+        "numero": 237,
+        "descripcion": "Ruta turística principal que conecta el centro de Neuquén con Bariloche.",
+        "provincias": ["Neuquén", "Río Negro"],
+        "ciudades": ["Arroyito", "Piedra del Águila", "Confluencia", "San Carlos de Bariloche"]
+      },
+      {
+        "numero": 242,
+        "descripcion": "Conecta la RN 40 con el Paso Internacional Pino Hachado.",
+        "provincias": ["Neuquén"],
+        "ciudades": ["Las Lajas"]
+      },
+      {
+        "numero": 250,
+        "descripcion": "Une el Valle Medio del Río Negro con la zona atlántica provincial.",
+        "provincias": ["Río Negro"],
+        "ciudades": ["Choele Choel", "Lamarque", "General Conesa"]
+      },
+      {
+        "numero": 251,
+        "descripcion": "Eje de conexión costera en el golfo de Río Negro.",
+        "provincias": ["Río Negro"],
+        "ciudades": ["General Conesa", "San Antonio Oeste"]
+      },
+      {
+        "numero": 259,
+        "descripcion": "Conecta la cordillera chubutense con el límite internacional chileno (Futaleufú).",
+        "provincias": ["Chubut"],
+        "ciudades": ["Esquel", "Trevelin"]
+      },
+      {
+        "numero": 281,
+        "descripcion": "Une la RN 3 con la localidad portuaria de Puerto Deseado.",
+        "provincias": ["Santa Cruz"],
+        "ciudades": ["Jaramillo", "Puerto Deseado"]
+      },
+      {
+        "numero": 288,
+        "descripcion": "Atraviesa transversalmente el centro de la provincia de Santa Cruz.",
+        "provincias": ["Santa Cruz"],
+        "ciudades": ["Puerto Santa Cruz", "Comandante Luis Piedrabuena", "Tres Lagos"]
+      }
+    ]
+  }
+]
