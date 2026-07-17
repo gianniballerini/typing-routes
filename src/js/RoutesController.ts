@@ -133,6 +133,7 @@ class RoutesController {
                     id,
                     route: this.routes[id]?.route_number ?? '',
                     name: this.routes[id]?.route_name ?? '',
+                    cities_count: this.routes[id]?.cities.length ?? 0,
                     visited: this.routes[id]?.visited ?? false
                 },
                 geometry

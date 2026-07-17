@@ -1,6 +1,7 @@
 import type { FeatureCollection } from 'geojson';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { MouseInfoCard } from './MouseInfoCard';
 
 class MapController {
     map: maplibregl.Map;
@@ -8,12 +9,14 @@ class MapController {
     private pendingCallbacks: Array<() => void>;
     private hoveredId: string | number | null;
     private selectedId: string | number | null;
+    private mouseInfoCard: MouseInfoCard | null;
 
     constructor() {
         this.ready = false;
         this.pendingCallbacks = [];
         this.hoveredId = null;
         this.selectedId = null;
+        this.mouseInfoCard = null;
         this.map = new maplibregl.Map({
             container: 'map', // container id
             // style: 'https://demotiles.maplibre.org/globe.json', // style URL
@@ -67,6 +70,10 @@ class MapController {
         else this.pendingCallbacks.push(cb);
     }
 
+    setMouseInfoCard(mouseInfoCard: MouseInfoCard) {
+        this.mouseInfoCard = mouseInfoCard;
+    }
+
     renderRoutes(fc: FeatureCollection) {
         this.onReady(() => {
             this.map.addSource('national-routes', {
@@ -98,14 +105,26 @@ class MapController {
             this.map.on('mousemove', 'national-routes-line', (e) => {
                 if (!e.features || e.features.length === 0) return;
                 const feature = e.features[0];
-                if (this.hoveredId === feature.id) return;
-                if (this.hoveredId !== null) {
-                    this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: false });
+                const properties = feature.properties as { name?: string; cities_count?: number } | undefined;
+                const nextHoveredId = feature.id ?? null;
+
+                if (this.hoveredId !== nextHoveredId) {
+                    if (this.hoveredId !== null) {
+                        this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: false });
+                    }
+                    this.hoveredId = nextHoveredId;
+                    if (this.hoveredId !== null) {
+                        this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: true });
+                    }
+
+                    if (this.hoveredId !== null && this.mouseInfoCard) {
+                        const routeName = String(properties?.name ?? '');
+                        const citiesCount = Number(properties?.cities_count ?? 0);
+                        this.mouseInfoCard.show(routeName, `${citiesCount} ${citiesCount === 1 ? 'city' : 'cities'}`);
+                    }
                 }
-                this.hoveredId = feature.id ?? null;
-                if (this.hoveredId !== null) {
-                    this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: true });
-                }
+
+                this.mouseInfoCard?.moveTo(e.point.x, e.point.y);
                 this.map.getCanvas().style.cursor = 'pointer';
             });
 
@@ -114,6 +133,7 @@ class MapController {
                     this.map.setFeatureState({ source: 'national-routes', id: this.hoveredId }, { hovered: false });
                 }
                 this.hoveredId = null;
+                this.mouseInfoCard?.hide();
                 this.map.getCanvas().style.cursor = '';
             });
 

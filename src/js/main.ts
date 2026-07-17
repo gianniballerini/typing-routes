@@ -1,4 +1,5 @@
 import { MapController } from './MapController';
+import { MouseInfoCard } from './MouseInfoCard';
 import { RoutesController } from './RoutesController';
 
 declare global {
@@ -9,10 +10,14 @@ declare global {
 
 class MainApplication {
     map_controller: MapController;
+    mouse_info_card: MouseInfoCard;
     routes_controller: RoutesController;
 
     constructor() {
         this.map_controller = new MapController();
+        this.mouse_info_card = new MouseInfoCard();
+        this.mouse_info_card.hide();
+        this.map_controller.setMouseInfoCard(this.mouse_info_card);
         this.map_controller.init();
         this.routes_controller = new RoutesController();
         this.routes_controller.init();

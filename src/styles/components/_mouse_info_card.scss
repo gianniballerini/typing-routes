@@ -1,0 +1,33 @@
+.mouse_info_card {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 5;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6 * $ptr;
+
+	max-width: 100 * $ptr;
+	padding: 10 * $ptr 12 * $ptr;
+	border-left: 4 * $ptr solid $flag-yellow;
+	border-radius: 5 * $ptr;
+	background: rgba(255, 255, 255, 0.92);
+	box-shadow: 0 16 * $ptr 40 * $ptr rgb(0 0 0 / 30%);
+	backdrop-filter: blur(10 * $ptr);
+	pointer-events: none;
+	transform: translate(18 * $ptr, 18 * $ptr);
+	color: rgba(0, 0, 0, 0.78);
+
+}
+
+.mouse_info_card__header {
+	font-size: 18 * $ptr;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.mouse_info_card__body {
+	font-size: 14 * $ptr;
+	line-height: 1.35;
+}
