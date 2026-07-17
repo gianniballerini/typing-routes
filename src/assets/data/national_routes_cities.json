@@ -174,8 +174,8 @@
         "ar-buenos_aires-chivilcoy",
         "ar-buenos_aires-pehuajo",
         "ar-buenos_aires-trenque_lauquen",
-        "ar-buenos_aires-catrilo",
-        "ar-buenos_aires-santa_rosa"
+        "ar-la_pampa-catrilo",
+        "ar-la_pampa-santa_rosa"
       ]
     },
     {
@@ -184,16 +184,16 @@
       "city_refs": [
         "ar-buenos_aires-lujan",
         "ar-buenos_aires-junin",
-        "ar-buenos_aires-rufino",
-        "ar-buenos_aires-laboulaye",
-        "ar-buenos_aires-vicuna_mackenna",
-        "ar-buenos_aires-villa_mercedes",
-        "ar-buenos_aires-san_luis",
-        "ar-buenos_aires-la_paz",
-        "ar-buenos_aires-san_martin",
-        "ar-buenos_aires-mendoza",
-        "ar-buenos_aires-uspallata",
-        "ar-buenos_aires-las_cuevas"
+        "ar-santa_fe-rufino",
+        "ar-cordoba-laboulaye",
+        "ar-cordoba-vicuna_mackenna",
+        "ar-san_luis-villa_mercedes",
+        "ar-san_luis-san_luis",
+        "ar-mendoza-la_paz",
+        "ar-mendoza-san_martin",
+        "ar-mendoza-mendoza",
+        "ar-mendoza-uspallata",
+        "ar-mendoza-las_cuevas"
       ]
     },
     {
@@ -203,11 +203,11 @@
         "ar-buenos_aires-pilar",
         "ar-buenos_aires-san_antonio_de_areco",
         "ar-buenos_aires-pergamino",
-        "ar-buenos_aires-venado_tuerto",
-        "ar-buenos_aires-canals",
-        "ar-buenos_aires-la_carlota",
-        "ar-buenos_aires-rio_cuarto",
-        "ar-buenos_aires-villa_mercedes"
+        "ar-santa_fe-venado_tuerto",
+        "ar-cordoba-canals",
+        "ar-cordoba-la_carlota",
+        "ar-cordoba-rio_cuarto",
+        "ar-san_luis-villa_mercedes"
       ]
     },
     {
@@ -215,32 +215,32 @@
       "route": "0009",
       "city_refs": [
         "ar-buenos_aires-san_nicolas_de_los_arroyos",
-        "ar-buenos_aires-rosario",
-        "ar-buenos_aires-carcarana",
-        "ar-buenos_aires-canada_de_gomez",
-        "ar-buenos_aires-villa_maria",
-        "ar-buenos_aires-cordoba",
-        "ar-buenos_aires-jesus_maria",
-        "ar-buenos_aires-santiago_del_estero",
-        "ar-buenos_aires-san_miguel_de_tucuman",
-        "ar-buenos_aires-metan",
-        "ar-buenos_aires-salta",
-        "ar-buenos_aires-san_salvador_de_jujuy",
-        "ar-buenos_aires-humahuaca",
-        "ar-buenos_aires-la_quiaca"
+        "ar-santa_fe-rosario",
+        "ar-santa_fe-carcarana",
+        "ar-santa_fe-canada_de_gomez",
+        "ar-cordoba-villa_maria",
+        "ar-cordoba-cordoba",
+        "ar-cordoba-jesus_maria",
+        "ar-santiago_del_estero-santiago_del_estero",
+        "ar-tucuman-san_miguel_de_tucuman",
+        "ar-salta-metan",
+        "ar-salta-salta",
+        "ar-jujuy-san_salvador_de_jujuy",
+        "ar-jujuy-humahuaca",
+        "ar-jujuy-la_quiaca"
       ]
     },
     {
       "id": "rn-0011",
       "route": "0011",
       "city_refs": [
-        "ar-buenos_aires-rosario",
+        "ar-santa_fe-rosario",
         "ar-santa_fe-san_lorenzo",
         "ar-santa_fe-santa_fe",
         "ar-santa_fe-reconquista",
-        "ar-santa_fe-resistencia",
-        "ar-santa_fe-formosa",
-        "ar-santa_fe-clorinda"
+        "ar-chaco-resistencia",
+        "ar-formosa-formosa",
+        "ar-formosa-clorinda"
       ]
     },
     {
@@ -248,82 +248,82 @@
       "route": "0012",
       "city_refs": [
         "ar-buenos_aires-zarate",
-        "ar-buenos_aires-ceibas",
-        "ar-buenos_aires-gualeguay",
-        "ar-buenos_aires-parana",
-        "ar-buenos_aires-la_paz",
-        "ar-buenos_aires-goya",
-        "ar-buenos_aires-esquina",
-        "ar-buenos_aires-corrientes",
-        "ar-buenos_aires-ituzaingo",
-        "ar-buenos_aires-posadas",
-        "ar-buenos_aires-eldorado",
-        "ar-buenos_aires-puerto_iguazu"
+        "ar-entre_rios-ceibas",
+        "ar-entre_rios-gualeguay",
+        "ar-entre_rios-parana",
+        "ar-mendoza-la_paz",
+        "ar-corrientes-goya",
+        "ar-corrientes-esquina",
+        "ar-corrientes-corrientes",
+        "ar-corrientes-ituzaingo",
+        "ar-misiones-posadas",
+        "ar-misiones-eldorado",
+        "ar-misiones-puerto_iguazu"
       ]
     },
     {
       "id": "rn-0014",
       "route": "0014",
       "city_refs": [
-        "ar-buenos_aires-ceibas",
-        "ar-buenos_aires-gualeguaychu",
-        "ar-buenos_aires-concepcion_del_uruguay",
-        "ar-buenos_aires-colon",
-        "ar-buenos_aires-concordia",
-        "ar-buenos_aires-federacion",
-        "ar-buenos_aires-paso_de_los_libres",
-        "ar-buenos_aires-santo_tome",
-        "ar-buenos_aires-apostoles",
-        "ar-buenos_aires-obera",
-        "ar-buenos_aires-san_vicente",
-        "ar-buenos_aires-bernardo_de_irigoyen"
+        "ar-entre_rios-ceibas",
+        "ar-entre_rios-gualeguaychu",
+        "ar-entre_rios-concepcion_del_uruguay",
+        "ar-entre_rios-colon",
+        "ar-entre_rios-concordia",
+        "ar-entre_rios-federacion",
+        "ar-corrientes-paso_de_los_libres",
+        "ar-corrientes-santo_tome",
+        "ar-misiones-apostoles",
+        "ar-misiones-obera",
+        "ar-misiones-san_vicente",
+        "ar-misiones-bernardo_de_irigoyen"
       ]
     },
     {
       "id": "rn-0016",
       "route": "0016",
       "city_refs": [
-        "ar-santa_fe-resistencia",
+        "ar-chaco-resistencia",
         "ar-chaco-presidencia_roque_saenz_pena",
         "ar-chaco-pampa_del_infierno",
         "ar-chaco-taco_pozo",
-        "ar-chaco-monte_quemado",
-        "ar-chaco-el_galpon",
-        "ar-buenos_aires-metan"
+        "ar-santiago_del_estero-monte_quemado",
+        "ar-salta-el_galpon",
+        "ar-salta-metan"
       ]
     },
     {
       "id": "rn-0018",
       "route": "0018",
       "city_refs": [
-        "ar-buenos_aires-parana",
+        "ar-entre_rios-parana",
         "ar-entre_rios-villaguay",
         "ar-entre_rios-san_salvador",
         "ar-entre_rios-general_campos",
-        "ar-buenos_aires-concordia"
+        "ar-entre_rios-concordia"
       ]
     },
     {
       "id": "rn-0019",
       "route": "0019",
       "city_refs": [
-        "ar-buenos_aires-santo_tome",
+        "ar-corrientes-santo_tome",
         "ar-santa_fe-san_carlos_centro",
-        "ar-santa_fe-san_francisco",
-        "ar-santa_fe-arroyito",
-        "ar-santa_fe-monte_cristo",
-        "ar-buenos_aires-cordoba"
+        "ar-cordoba-san_francisco",
+        "ar-cordoba-arroyito",
+        "ar-cordoba-monte_cristo",
+        "ar-cordoba-cordoba"
       ]
     },
     {
       "id": "rn-0020",
       "route": "0020",
       "city_refs": [
-        "ar-buenos_aires-cordoba",
+        "ar-cordoba-cordoba",
         "ar-cordoba-villa_carlos_paz",
         "ar-cordoba-mina_clavero",
-        "ar-cordoba-quines",
-        "ar-cordoba-san_juan"
+        "ar-san_luis-quines",
+        "ar-san_juan-san_juan"
       ]
     },
     {
@@ -331,16 +331,16 @@
       "route": "0022",
       "city_refs": [
         "ar-buenos_aires-bahia_blanca",
-        "ar-buenos_aires-rio_colorado",
-        "ar-buenos_aires-choele_choel",
-        "ar-buenos_aires-villa_regina",
-        "ar-buenos_aires-general_roca",
-        "ar-buenos_aires-cipolletti",
-        "ar-buenos_aires-neuquen",
-        "ar-buenos_aires-plottier",
-        "ar-buenos_aires-plaza_huincul",
-        "ar-buenos_aires-cutral_co",
-        "ar-buenos_aires-zapala"
+        "ar-rio_negro-rio_colorado",
+        "ar-rio_negro-choele_choel",
+        "ar-rio_negro-villa_regina",
+        "ar-rio_negro-general_roca",
+        "ar-rio_negro-cipolletti",
+        "ar-neuquen-neuquen",
+        "ar-neuquen-plottier",
+        "ar-neuquen-plaza_huincul",
+        "ar-neuquen-cutral_co",
+        "ar-neuquen-zapala"
       ]
     },
     {
@@ -388,32 +388,32 @@
         "ar-buenos_aires-pigue",
         "ar-buenos_aires-trenque_lauquen",
         "ar-buenos_aires-garre",
-        "ar-buenos_aires-rufino",
-        "ar-buenos_aires-venado_tuerto",
-        "ar-buenos_aires-firmat",
-        "ar-buenos_aires-casilda",
-        "ar-buenos_aires-perez",
-        "ar-buenos_aires-rosario"
+        "ar-santa_fe-rufino",
+        "ar-santa_fe-venado_tuerto",
+        "ar-santa_fe-firmat",
+        "ar-santa_fe-casilda",
+        "ar-santa_fe-perez",
+        "ar-santa_fe-rosario"
       ]
     },
     {
       "id": "rn-0034",
       "route": "0034",
       "city_refs": [
-        "ar-buenos_aires-rosario",
+        "ar-santa_fe-rosario",
         "ar-santa_fe-san_jorge",
         "ar-santa_fe-rafaela",
         "ar-santa_fe-ceres",
-        "ar-santa_fe-pinto",
-        "ar-santa_fe-anatuya",
-        "ar-santa_fe-la_banda",
-        "ar-santa_fe-rosario_de_la_frontera",
-        "ar-buenos_aires-metan",
-        "ar-santa_fe-general_guemes",
-        "ar-santa_fe-san_pedro_de_jujuy",
-        "ar-santa_fe-libertador_general_san_martin",
-        "ar-santa_fe-tartagal",
-        "ar-santa_fe-profesor_salvador_mazza"
+        "ar-santiago_del_estero-pinto",
+        "ar-santiago_del_estero-anatuya",
+        "ar-santiago_del_estero-la_banda",
+        "ar-salta-rosario_de_la_frontera",
+        "ar-salta-metan",
+        "ar-salta-general_guemes",
+        "ar-jujuy-san_pedro_de_jujuy",
+        "ar-jujuy-libertador_general_san_martin",
+        "ar-salta-tartagal",
+        "ar-salta-profesor_salvador_mazza"
       ]
     },
     {
@@ -421,28 +421,28 @@
       "route": "0035",
       "city_refs": [
         "ar-buenos_aires-bahia_blanca",
-        "ar-buenos_aires-jacinto_arauz",
-        "ar-buenos_aires-general_acha",
-        "ar-buenos_aires-santa_rosa",
-        "ar-buenos_aires-eduardo_castex",
-        "ar-buenos_aires-realico",
-        "ar-buenos_aires-huinca_renanco",
-        "ar-buenos_aires-vicuna_mackenna",
-        "ar-buenos_aires-rio_cuarto"
+        "ar-la_pampa-jacinto_arauz",
+        "ar-la_pampa-general_acha",
+        "ar-la_pampa-santa_rosa",
+        "ar-la_pampa-eduardo_castex",
+        "ar-la_pampa-realico",
+        "ar-cordoba-huinca_renanco",
+        "ar-cordoba-vicuna_mackenna",
+        "ar-cordoba-rio_cuarto"
       ]
     },
     {
       "id": "rn-0036",
       "route": "0036",
       "city_refs": [
-        "ar-buenos_aires-rio_cuarto",
+        "ar-cordoba-rio_cuarto",
         "ar-cordoba-elena",
         "ar-cordoba-berrotaran",
         "ar-cordoba-almafuerte",
         "ar-cordoba-rio_tercero",
         "ar-cordoba-san_agustin",
         "ar-cordoba-alta_gracia",
-        "ar-buenos_aires-cordoba"
+        "ar-cordoba-cordoba"
       ]
     },
     {
@@ -453,12 +453,12 @@
         "ar-cordoba-cosquin",
         "ar-cordoba-la_falda",
         "ar-cordoba-cruz_del_eje",
-        "ar-cordoba-chamical",
-        "ar-cordoba-la_rioja",
-        "ar-cordoba-san_fernando_del_valle_de_catamarca",
-        "ar-cordoba-concepcion",
-        "ar-cordoba-famailla",
-        "ar-buenos_aires-san_miguel_de_tucuman"
+        "ar-la_rioja-chamical",
+        "ar-la_rioja-la_rioja",
+        "ar-catamarca-san_fernando_del_valle_de_catamarca",
+        "ar-tucuman-concepcion",
+        "ar-tucuman-famailla",
+        "ar-tucuman-san_miguel_de_tucuman"
       ]
     },
     {
@@ -474,29 +474,29 @@
         "ar-chubut-rio_mayo",
         "ar-chubut-tecka",
         "ar-chubut-esquel",
-        "ar-santa_cruz-el_bolson",
-        "ar-santa_cruz-san_carlos_de_bariloche",
-        "ar-santa_cruz-villa_la_angostura",
-        "ar-santa_cruz-san_martin_de_los_andes",
-        "ar-santa_cruz-junin_de_los_andes",
-        "ar-buenos_aires-zapala",
-        "ar-santa_cruz-chos_malal",
-        "ar-santa_cruz-malargue",
-        "ar-santa_cruz-san_rafael",
-        "ar-santa_cruz-tunuyan",
-        "ar-buenos_aires-mendoza",
-        "ar-cordoba-san_juan",
-        "ar-santa_cruz-san_jose_de_jachal",
-        "ar-santa_cruz-villa_union",
-        "ar-santa_cruz-chilecito",
-        "ar-santa_cruz-londres",
-        "ar-santa_cruz-belen",
-        "ar-santa_cruz-santa_maria",
-        "ar-santa_cruz-cafayate",
-        "ar-santa_cruz-cachi",
-        "ar-santa_cruz-san_antonio_de_los_cobres",
-        "ar-santa_cruz-susques",
-        "ar-buenos_aires-la_quiaca"
+        "ar-rio_negro-el_bolson",
+        "ar-rio_negro-san_carlos_de_bariloche",
+        "ar-neuquen-villa_la_angostura",
+        "ar-neuquen-san_martin_de_los_andes",
+        "ar-neuquen-junin_de_los_andes",
+        "ar-neuquen-zapala",
+        "ar-neuquen-chos_malal",
+        "ar-mendoza-malargue",
+        "ar-mendoza-san_rafael",
+        "ar-mendoza-tunuyan",
+        "ar-mendoza-mendoza",
+        "ar-san_juan-san_juan",
+        "ar-san_juan-san_jose_de_jachal",
+        "ar-la_rioja-villa_union",
+        "ar-la_rioja-chilecito",
+        "ar-catamarca-londres",
+        "ar-catamarca-belen",
+        "ar-catamarca-santa_maria",
+        "ar-salta-cafayate",
+        "ar-salta-cachi",
+        "ar-salta-san_antonio_de_los_cobres",
+        "ar-jujuy-susques",
+        "ar-jujuy-la_quiaca"
       ]
     },
     {
@@ -512,10 +512,10 @@
       "id": "rn-0051",
       "route": "0051",
       "city_refs": [
-        "ar-buenos_aires-salta",
+        "ar-salta-salta",
         "ar-salta-campo_quijano",
         "ar-salta-santa_rosa_de_tastil",
-        "ar-santa_cruz-san_antonio_de_los_cobres",
+        "ar-salta-san_antonio_de_los_cobres",
         "ar-salta-paso_sico"
       ]
     },
@@ -523,9 +523,9 @@
       "id": "rn-0052",
       "route": "0052",
       "city_refs": [
-        "ar-salta-purmamarca",
-        "ar-santa_cruz-susques",
-        "ar-salta-paso_de_jama"
+        "ar-jujuy-purmamarca",
+        "ar-jujuy-susques",
+        "ar-jujuy-paso_de_jama"
       ]
     },
     {
@@ -534,37 +534,37 @@
       "city_refs": [
         "ar-cordoba-villa_de_maria_de_rio_seco",
         "ar-cordoba-dean_funes",
-        "ar-cordoba-aimogasta",
-        "ar-cordoba-tinogasta",
-        "ar-cordoba-fiambala",
-        "ar-cordoba-paso_de_san_francisco"
+        "ar-la_rioja-aimogasta",
+        "ar-catamarca-tinogasta",
+        "ar-catamarca-fiambala",
+        "ar-catamarca-paso_de_san_francisco"
       ]
     },
     {
       "id": "rn-0064",
       "route": "0064",
       "city_refs": [
-        "ar-buenos_aires-santiago_del_estero",
-        "ar-tucuman-san_pedro_de_guasayan",
-        "ar-tucuman-banado_de_ovanta",
-        "ar-tucuman-altos_de_san_antonio"
+        "ar-santiago_del_estero-santiago_del_estero",
+        "ar-santiago_del_estero-san_pedro_de_guasayan",
+        "ar-catamarca-banado_de_ovanta",
+        "ar-catamarca-altos_de_san_antonio"
       ]
     },
     {
       "id": "rn-0065",
       "route": "0065",
       "city_refs": [
-        "ar-cordoba-concepcion",
+        "ar-tucuman-concepcion",
         "ar-tucuman-alpachiri",
-        "ar-tucuman-las_estancias",
-        "ar-tucuman-andalgala"
+        "ar-catamarca-las_estancias",
+        "ar-catamarca-andalgala"
       ]
     },
     {
       "id": "rn-0066",
       "route": "0066",
       "city_refs": [
-        "ar-buenos_aires-san_salvador_de_jujuy",
+        "ar-jujuy-san_salvador_de_jujuy",
         "ar-jujuy-palpala",
         "ar-jujuy-perico"
       ]
@@ -573,12 +573,12 @@
       "id": "rn-0068",
       "route": "0068",
       "city_refs": [
-        "ar-buenos_aires-salta",
+        "ar-salta-salta",
         "ar-salta-cerrillos",
         "ar-salta-el_carril",
         "ar-salta-coronel_moldes",
         "ar-salta-talapampa",
-        "ar-santa_cruz-cafayate"
+        "ar-salta-cafayate"
       ]
     },
     {
@@ -598,22 +598,22 @@
       "id": "rn-0075",
       "route": "0075",
       "city_refs": [
-        "ar-cordoba-la_rioja",
+        "ar-la_rioja-la_rioja",
         "ar-la_rioja-sanagasta",
         "ar-la_rioja-aminga",
         "ar-la_rioja-anillaco",
-        "ar-cordoba-aimogasta"
+        "ar-la_rioja-aimogasta"
       ]
     },
     {
       "id": "rn-0076",
       "route": "0076",
       "city_refs": [
-        "ar-santa_cruz-san_jose_de_jachal",
-        "ar-santa_cruz-villa_union",
-        "ar-san_juan-vinchina",
-        "ar-san_juan-jague",
-        "ar-san_juan-paso_pircas_negras"
+        "ar-san_juan-san_jose_de_jachal",
+        "ar-la_rioja-villa_union",
+        "ar-la_rioja-vinchina",
+        "ar-la_rioja-jague",
+        "ar-la_rioja-paso_pircas_negras"
       ]
     },
     {
@@ -621,7 +621,7 @@
       "route": "0077",
       "city_refs": [
         "ar-cordoba-el_chacho",
-        "ar-cordoba-milagro"
+        "ar-la_rioja-milagro"
       ]
     },
     {
@@ -636,29 +636,29 @@
       "id": "rn-0079",
       "route": "0079",
       "city_refs": [
-        "ar-cordoba-quines",
-        "ar-san_luis-ulapes",
-        "ar-cordoba-chamical",
-        "ar-san_luis-olta",
-        "ar-san_luis-casa_de_piedra"
+        "ar-san_luis-quines",
+        "ar-la_rioja-ulapes",
+        "ar-la_rioja-chamical",
+        "ar-la_rioja-olta",
+        "ar-la_pampa-casa_de_piedra"
       ]
     },
     {
       "id": "rn-0081",
       "route": "0081",
       "city_refs": [
-        "ar-santa_fe-formosa",
+        "ar-formosa-formosa",
         "ar-formosa-palo_santo",
         "ar-formosa-las_lomitas",
         "ar-formosa-ingeniero_juarez",
-        "ar-formosa-pluma_de_pato"
+        "ar-salta-pluma_de_pato"
       ]
     },
     {
       "id": "rn-0086",
       "route": "0086",
       "city_refs": [
-        "ar-santa_fe-clorinda",
+        "ar-formosa-clorinda",
         "ar-formosa-general_belgrano",
         "ar-formosa-villa_general_guemes",
         "ar-formosa-posta_cambio_zalazar"
@@ -671,8 +671,8 @@
         "ar-chaco-avia_terai",
         "ar-chaco-charata",
         "ar-chaco-general_pinedo",
-        "ar-chaco-quimili",
-        "ar-chaco-suncho_corral"
+        "ar-santiago_del_estero-quimili",
+        "ar-santiago_del_estero-suncho_corral"
       ]
     },
     {
@@ -680,9 +680,9 @@
       "route": "0095",
       "city_refs": [
         "ar-santa_fe-tostado",
-        "ar-santa_fe-villa_angela",
+        "ar-chaco-villa_angela",
         "ar-chaco-presidencia_roque_saenz_pena",
-        "ar-santa_fe-castelli",
+        "ar-chaco-castelli",
         "ar-formosa-villa_general_guemes"
       ]
     },
@@ -693,34 +693,34 @@
         "ar-santa_fe-reconquista",
         "ar-santa_fe-vera",
         "ar-santa_fe-tostado",
-        "ar-santa_fe-bandera"
+        "ar-santiago_del_estero-bandera"
       ]
     },
     {
       "id": "rn-0101",
       "route": "0101",
       "city_refs": [
-        "ar-buenos_aires-bernardo_de_irigoyen",
+        "ar-misiones-bernardo_de_irigoyen",
         "ar-misiones-san_antonio",
         "ar-misiones-comandante_andresito",
-        "ar-buenos_aires-puerto_iguazu"
+        "ar-misiones-puerto_iguazu"
       ]
     },
     {
       "id": "rn-0105",
       "route": "0105",
       "city_refs": [
-        "ar-buenos_aires-posadas",
+        "ar-misiones-posadas",
         "ar-misiones-garupa",
         "ar-misiones-san_jose",
-        "ar-buenos_aires-apostoles"
+        "ar-misiones-apostoles"
       ]
     },
     {
       "id": "rn-0117",
       "route": "0117",
       "city_refs": [
-        "ar-buenos_aires-paso_de_los_libres"
+        "ar-corrientes-paso_de_los_libres"
       ]
     },
     {
@@ -729,7 +729,7 @@
       "city_refs": [
         "ar-corrientes-saladas",
         "ar-corrientes-san_roque",
-        "ar-buenos_aires-santa_rosa",
+        "ar-la_pampa-santa_rosa",
         "ar-corrientes-san_miguel",
         "ar-corrientes-loreto"
       ]
@@ -790,14 +790,14 @@
       "id": "rn-0135",
       "route": "0135",
       "city_refs": [
-        "ar-buenos_aires-colon"
+        "ar-entre_rios-colon"
       ]
     },
     {
       "id": "rn-0136",
       "route": "0136",
       "city_refs": [
-        "ar-buenos_aires-gualeguaychu"
+        "ar-entre_rios-gualeguaychu"
       ]
     },
     {
@@ -805,8 +805,8 @@
       "route": "0141",
       "city_refs": [
         "ar-la_rioja-chepes",
-        "ar-la_rioja-caucete",
-        "ar-cordoba-san_juan"
+        "ar-san_juan-caucete",
+        "ar-san_juan-san_juan"
       ]
     },
     {
@@ -814,7 +814,7 @@
       "route": "0142",
       "city_refs": [
         "ar-mendoza-costa_de_araujo",
-        "ar-mendoza-encon"
+        "ar-san_juan-encon"
       ]
     },
     {
@@ -822,17 +822,17 @@
       "route": "0143",
       "city_refs": [
         "ar-mendoza-pareditas",
-        "ar-santa_cruz-san_rafael",
+        "ar-mendoza-san_rafael",
         "ar-mendoza-general_alvear",
         "ar-mendoza-carmensa",
-        "ar-mendoza-santa_isabel"
+        "ar-la_pampa-santa_isabel"
       ]
     },
     {
       "id": "rn-0144",
       "route": "0144",
       "city_refs": [
-        "ar-santa_cruz-san_rafael",
+        "ar-mendoza-san_rafael",
         "ar-mendoza-el_sosneado"
       ]
     },
@@ -848,10 +848,10 @@
       "id": "rn-0146",
       "route": "0146",
       "city_refs": [
-        "ar-santa_cruz-san_rafael",
+        "ar-mendoza-san_rafael",
         "ar-mendoza-monte_coman",
         "ar-mendoza-la_horqueta",
-        "ar-buenos_aires-san_luis"
+        "ar-san_luis-san_luis"
       ]
     },
     {
@@ -868,16 +868,16 @@
       "id": "rn-0149",
       "route": "0149",
       "city_refs": [
-        "ar-buenos_aires-uspallata",
-        "ar-mendoza-calingasta",
-        "ar-mendoza-iglesia"
+        "ar-mendoza-uspallata",
+        "ar-san_juan-alingasta",
+        "ar-san_juan-iglesia"
       ]
     },
     {
       "id": "rn-0150",
       "route": "0150",
       "city_refs": [
-        "ar-santa_cruz-san_jose_de_jachal",
+        "ar-san_juan-san_jose_de_jachal",
         "ar-san_juan-rodeo",
         "ar-san_juan-paso_de_agua_negra"
       ]
@@ -886,21 +886,21 @@
       "id": "rn-0151",
       "route": "0151",
       "city_refs": [
-        "ar-buenos_aires-cipolletti",
+        "ar-rio_negro-cipolletti",
         "ar-rio_negro-cinco_saltos",
         "ar-rio_negro-catriel",
-        "ar-rio_negro-25_de_mayo",
-        "ar-rio_negro-puelen",
-        "ar-mendoza-santa_isabel"
+        "ar-la_pampa-25_de_mayo",
+        "ar-la_pampa-puelen",
+        "ar-la_pampa-santa_isabel"
       ]
     },
     {
       "id": "rn-0152",
       "route": "0152",
       "city_refs": [
-        "ar-buenos_aires-general_acha",
+        "ar-la_pampa-general_acha",
         "ar-la_pampa-puelches",
-        "ar-san_luis-casa_de_piedra"
+        "ar-la_pampa-casa_de_piedra"
       ]
     },
     {
@@ -922,12 +922,12 @@
       "id": "rn-0158",
       "route": "0158",
       "city_refs": [
-        "ar-santa_fe-san_francisco",
+        "ar-cordoba-san_francisco",
         "ar-cordoba-las_varillas",
-        "ar-buenos_aires-villa_maria",
+        "ar-cordoba-villa_maria",
         "ar-cordoba-general_cabrera",
         "ar-cordoba-general_deheza",
-        "ar-buenos_aires-rio_cuarto"
+        "ar-cordoba-rio_cuarto"
       ]
     },
     {
@@ -935,7 +935,7 @@
       "route": "0168",
       "city_refs": [
         "ar-santa_fe-santa_fe",
-        "ar-buenos_aires-parana"
+        "ar-entre_rios-parana"
       ]
     },
     {
@@ -947,8 +947,8 @@
       "id": "rn-0174",
       "route": "0174",
       "city_refs": [
-        "ar-buenos_aires-rosario",
-        "ar-santa_fe-victoria"
+        "ar-santa_fe-rosario",
+        "ar-entre_rios-victoria"
       ]
     },
     {
@@ -961,10 +961,10 @@
       "route": "0178",
       "city_refs": [
         "ar-buenos_aires-pergamino",
-        "ar-buenos_aires-alcorta",
-        "ar-buenos_aires-bigand",
-        "ar-buenos_aires-las_parejas",
-        "ar-buenos_aires-las_rosas"
+        "ar-santa_fe-alcorta",
+        "ar-santa_fe-bigand",
+        "ar-santa_fe-las_parejas",
+        "ar-santa_fe-las_rosas"
       ]
     },
     {
@@ -977,8 +977,8 @@
         "ar-buenos_aires-junin",
         "ar-buenos_aires-lincoln",
         "ar-buenos_aires-general_villegas",
-        "ar-buenos_aires-realico",
-        "ar-buenos_aires-union",
+        "ar-la_pampa-realico",
+        "ar-san_luis-union",
         "ar-mendoza-general_alvear"
       ]
     },
@@ -1026,7 +1026,7 @@
       "id": "rn-0231",
       "route": "0231",
       "city_refs": [
-        "ar-santa_cruz-villa_la_angostura"
+        "ar-neuquen-villa_la_angostura"
       ]
     },
     {
@@ -1043,10 +1043,10 @@
       "id": "rn-0237",
       "route": "0237",
       "city_refs": [
-        "ar-santa_fe-arroyito",
+        "ar-cordoba-arroyito",
         "ar-neuquen-piedra_del_aguila",
         "ar-neuquen-confluencia",
-        "ar-santa_cruz-san_carlos_de_bariloche"
+        "ar-rio_negro-san_carlos_de_bariloche"
       ]
     },
     {
@@ -1065,7 +1065,7 @@
       "id": "rn-0250",
       "route": "0250",
       "city_refs": [
-        "ar-buenos_aires-choele_choel",
+        "ar-rio_negro-choele_choel",
         "ar-rio_negro-lamarque",
         "ar-rio_negro-general_conesa"
       ]
