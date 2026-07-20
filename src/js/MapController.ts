@@ -78,6 +78,20 @@ class MapController {
         this.routeCityIdsMap = routeCityIdsMap;
     }
 
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject): void {
+        this.map.getCanvas().addEventListener(type, listener);
+    }
+
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject): void {
+        this.map.getCanvas().removeEventListener(type, listener);
+    }
+
+    private emitRouteSelected(routeId: string | null): void {
+        this.map.getCanvas().dispatchEvent(new CustomEvent('route-selected', {
+            detail: { routeId }
+        }));
+    }
+
     private clearSelectedRouteCitiesFeatureState() {
         for (const cityId of this.selectedRouteCityIds) {
             this.map.setFeatureState(
@@ -172,6 +186,17 @@ class MapController {
                 const clickedId = e.features[0].id ?? null;
                 this.selectRoute(this.selectedId === clickedId ? null : clickedId);
             });
+
+            this.map.on('click', (e) => {
+                const routeFeatures = this.map.queryRenderedFeatures(e.point, {
+                    layers: [Settings.layerIds.nationalRoutesLine]
+                });
+
+                if (routeFeatures.length > 0) return;
+                if (this.selectedId === null) return;
+
+                this.selectRoute(null);
+            });
         });
     }
 
@@ -187,6 +212,8 @@ class MapController {
             this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: routeId }, { selected: true });
             this.applySelectedRouteCitiesFeatureState();
         }
+
+        this.emitRouteSelected(routeId === null ? null : String(routeId));
     }
 
     getSelectedRouteId(): string | null {

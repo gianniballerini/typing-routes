@@ -5,6 +5,15 @@ import type { Route } from '../Route';
 class GameUiPresenter {
     private game_menu_el: HTMLElement | null;
     private game_playing_el: HTMLElement | null;
+
+    private menu_info_card_el: HTMLElement | null;
+    private menu_route_name_el: HTMLElement | null;
+    private menu_route_number_el: HTMLElement | null;
+    private menu_route_length_el: HTMLElement | null;
+    private menu_route_description_el: HTMLElement | null;
+    private menu_route_image_container_el: HTMLElement | null;
+    private menu_route_image_el: HTMLImageElement | null;
+
     private start_button_el: HTMLElement | null;
     private start_city_el: HTMLElement | null;
     private city_count_number_el: HTMLElement | null;
@@ -18,6 +27,15 @@ class GameUiPresenter {
     constructor() {
         this.game_menu_el = document.querySelector('.game-menu');
         this.game_playing_el = document.querySelector('.game-playing');
+
+        this.menu_info_card_el = document.querySelector('.game-menu__info-card');
+        this.menu_route_name_el = document.querySelector('.game-menu__route-name');
+        this.menu_route_number_el = document.querySelector('.game-menu__route-number');
+        this.menu_route_length_el = document.querySelector('.game-menu__route-length');
+        this.menu_route_description_el = document.querySelector('.game-menu__route-description');
+        this.menu_route_image_container_el = document.querySelector('.game-menu__info-card-image');
+        this.menu_route_image_el = this.menu_route_image_container_el?.querySelector('img') ?? null;
+
         this.start_button_el = document.querySelector('.game-menu__button');
         this.start_city_el = document.querySelector('.game-playing__start-city');
         this.city_count_number_el = document.querySelector('.game-playing__city-count-number');
@@ -42,6 +60,42 @@ class GameUiPresenter {
             this.renderTyping('', '');
             this.clearPlayingPanel();
         }
+    }
+
+    setMenuRoutePreview(route: Route): void {
+        const routeNumber = this.sanitizeRouteNumber(route.route_number);
+        this.renderMenuRouteImage(route.image_url);
+
+        if (this.menu_route_name_el) {
+            this.menu_route_name_el.textContent = route.full_name || route.route_name || `Ruta ${routeNumber}`;
+        }
+
+        if (this.menu_route_number_el) {
+            this.menu_route_number_el.textContent = `RN ${routeNumber}`;
+        }
+
+        if (this.menu_route_length_el) {
+            this.menu_route_length_el.textContent = `${Math.round(route.length_km)} km`;
+        }
+
+        if (this.menu_route_description_el) {
+            this.menu_route_description_el.textContent = route.description ?? '';
+        }
+
+        this.menu_info_card_el?.classList.remove('hidden');
+    }
+
+    setMenuWelcomeState(): void {
+        if (this.menu_route_name_el) this.menu_route_name_el.textContent = '';
+        if (this.menu_route_number_el) this.menu_route_number_el.textContent = '';
+        if (this.menu_route_length_el) this.menu_route_length_el.textContent = '';
+        if (this.menu_route_description_el) this.menu_route_description_el.textContent = '';
+        if (this.menu_route_image_el) {
+            this.menu_route_image_container_el?.classList.add('hidden');
+            this.menu_route_image_el?.removeAttribute('src');
+        }
+
+        this.menu_info_card_el?.classList.add('hidden');
     }
 
     renderTyping(typed: string, target: string): void {
@@ -97,6 +151,19 @@ class GameUiPresenter {
         if (this.city_count_number_el) this.city_count_number_el.textContent = '';
         if (this.end_city_el) this.end_city_el.textContent = '';
         if (this.route_name_el) this.route_name_el.textContent = '';
+    }
+
+    private renderMenuRouteImage(imageUrl: string | null): void {
+        if (!this.menu_route_image_el) return;
+
+        if (!imageUrl) {
+            this.menu_route_image_container_el?.classList.add('hidden');
+            this.menu_route_image_el?.removeAttribute('src');
+            return;
+        }
+
+        this.menu_route_image_el.src = imageUrl;
+        this.menu_route_image_container_el?.classList.remove('hidden');
     }
 }
 

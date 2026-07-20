@@ -23,6 +23,13 @@ class KeyboardInputCoordinator {
     }
 
     private handleKeydown = (event: KeyboardEvent): void => {
+        if (event.key === 'Escape') {
+            if (this.game.map_controller.getSelectedRouteId() !== null) {
+                this.game.map_controller.selectRoute(null);
+            }
+            return;
+        }
+
         if (this.game.state !== GameState.PLAYING) return;
         if (event.key.length === 1) this.game.typing_controller.handleInput(event.key);
     };

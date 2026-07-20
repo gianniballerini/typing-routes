@@ -1,6 +1,15 @@
 # the-typing-routes
 Simple juego de mecanografia usando rutas Argentinas
 
+## Possible names
+ - Enrutado
+ - MecanoArgentina
+ - Upamecano
+ - LaRutaDelTipeo
+ - TipeandoRutas
+ - Rutipeando
+ - RutaMecanografica
+
 ## Data model for cities
 
 Cities are normalized to avoid duplicate city objects across routes.
@@ -43,3 +52,13 @@ Cities are normalized to avoid duplicate city objects across routes.
 
 The order of `city_refs` defines the route traversal order.
 Use `city_meta` only for route-specific attributes that should not live in the shared catalog.
+
+### Resources referenced or used in this project
+
+- https://datos.gob.ar/dataset/transporte-rutas-nacionales
+- https://www.argentina.gob.ar/georef/referencia-completa-de-la-api
+- https://datosgobar.github.io/georef-ar-api/
+- https://apis.datos.gob.ar/georef/api/v2.0/localidades
+- https://portal-andino.datos.gob.ar/dataset/limites-entre-jurisdicciones
+- https://maplibre.org/
+- https://es.wikipedia.org/wiki/Rutas_nacionales_de_Argentina
