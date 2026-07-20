@@ -45,12 +45,14 @@ class GameUiPresenter {
     }
 
     renderTyping(typed: string, target: string): void {
-        const hasNextChar = typed.length < target.length;
+        const displayTarget = this.formatCityDisplayName(target);
+        const displayTyped = displayTarget.slice(0, typed.length);
+        const hasNextChar = displayTyped.length < displayTarget.length;
 
-        if (this.typing_ok_el) this.typing_ok_el.textContent = typed;
+        if (this.typing_ok_el) this.typing_ok_el.textContent = displayTyped;
         if (this.typing_caret_el) this.typing_caret_el.textContent = '|';
-        if (this.typing_next_char_el) this.typing_next_char_el.textContent = hasNextChar ? target.charAt(typed.length) : '';
-        if (this.typing_rest_el) this.typing_rest_el.textContent = hasNextChar ? target.slice(typed.length + 1) : '';
+        if (this.typing_next_char_el) this.typing_next_char_el.textContent = hasNextChar ? displayTarget.charAt(displayTyped.length) : '';
+        if (this.typing_rest_el) this.typing_rest_el.textContent = hasNextChar ? displayTarget.slice(displayTyped.length + 1) : '';
     }
 
     renderCurrentRouteAndCity(route: Route | null): void {
@@ -59,11 +61,11 @@ class GameUiPresenter {
         const endCity = totalCities > 0 ? route?.cities[totalCities - 1] ?? null : null;
 
         if (this.route_name_el) {
-            this.route_name_el.textContent = route ? `Ruta ${route.route_number}` : '';
+            this.route_name_el.textContent = route ? `Ruta ${this.sanitizeRouteNumber(route.route_number)}` : '';
         }
 
         if (this.start_city_el) {
-            this.start_city_el.textContent = startCity?.name ?? '';
+            this.start_city_el.textContent = this.formatCityDisplayName(startCity?.name ?? '');
         }
 
         if (this.city_count_number_el) {
@@ -71,8 +73,23 @@ class GameUiPresenter {
         }
 
         if (this.end_city_el) {
-            this.end_city_el.textContent = endCity?.name ?? '';
+            this.end_city_el.textContent = this.formatCityDisplayName(endCity?.name ?? '');
         }
+    }
+
+    private sanitizeRouteNumber(routeNumber: string): string {
+        const normalized = String(routeNumber ?? '').trim();
+        return normalized.replace(/^0+(?!$)/, '');
+    }
+
+    private formatCityDisplayName(name: string): string {
+        return String(name ?? '')
+            .split(/(\s+|-)/)
+            .map((chunk) => {
+                if (!chunk || /^\s+$/.test(chunk) || chunk === '-') return chunk;
+                return chunk.charAt(0).toLocaleUpperCase() + chunk.slice(1).toLocaleLowerCase();
+            })
+            .join('');
     }
 
     private clearPlayingPanel(): void {

@@ -135,7 +135,7 @@ class MapController {
             this.map.on('mousemove', Settings.layerIds.nationalRoutesLine, (e) => {
                 if (!e.features || e.features.length === 0) return;
                 const feature = e.features[0];
-                const properties = feature.properties as { name?: string; cities_count?: number } | undefined;
+                const properties = feature.properties as { route_display?: string; name?: string; cities_count?: number } | undefined;
                 const nextHoveredId = feature.id ?? null;
 
                 if (this.hoveredId !== nextHoveredId) {
@@ -148,9 +148,9 @@ class MapController {
                     }
 
                     if (this.hoveredId !== null && this.mouseInfoCard) {
-                        const routeName = String(properties?.name ?? '');
+                        const routeName = String(properties?.route_display ?? properties?.name ?? '');
                         const citiesCount = Number(properties?.cities_count ?? 0);
-                        this.mouseInfoCard.show(routeName, `${citiesCount} ${citiesCount === 1 ? 'city' : 'cities'}`);
+                        this.mouseInfoCard.show(routeName, `${citiesCount} ${citiesCount === 1 ? 'ciudad' : 'ciudades'}`);
                     }
                 }
 

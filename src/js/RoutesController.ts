@@ -73,6 +73,11 @@ class RoutesController {
         this.routeCityIdsMap = {};
     }
 
+    private sanitizeRouteNumber(routeNumber: string): string {
+        const normalized = String(routeNumber ?? '').trim();
+        return normalized.replace(/^0+(?!$)/, '');
+    }
+
     private toCity(raw: any): City {
         const city = new City();
         city.id = String(raw?.id ?? '');
@@ -171,6 +176,7 @@ class RoutesController {
                 properties: {
                     id,
                     route: this.routes[id]?.route_number ?? '',
+                    route_display: `Ruta ${this.sanitizeRouteNumber(this.routes[id]?.route_number ?? '')}`,
                     name: this.routes[id]?.route_name ?? '',
                     cities_count: this.routes[id]?.cities.length ?? 0,
                     visited: this.routes[id]?.visited ?? false
