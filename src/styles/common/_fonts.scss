@@ -33,3 +33,21 @@ $noto-sans-font: 'Noto Sans';
   font-weight: 600;
   font-display: swap;
 }
+
+$arimo-font: 'Arimo';
+
+@font-face{
+  font-family: $arimo-font;
+  src: url('/fonts/arimo/arimo-regular.woff2') format('woff2');
+
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face{
+  font-family: $arimo-font;
+  src: url('/fonts/arimo/arimo-bold.woff2') format('woff2');
+
+  font-weight: 600;
+  font-display: swap;
+}

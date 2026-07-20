@@ -1,12 +1,29 @@
 .game-playing.hidden
     .game-playing__top
         .game-playing__info-card
-            span.game-playing__start-city
+            .game-playing__info-group
+                .game-playing__bubble
+                    | inicio
+                span.game-playing__start-city
             .game-playing__city-count
-                .game-playing__horizontal-line
                 .game-playing__city-count-number
-            span.game-playing__end-city
+                .game-playing__horizontal-line
+            .game-playing__info-group
+                .game-playing__bubble
+                    | destino
+                span.game-playing__end-city
     .game-playing__bottom
+        .game-playing__user-stats
+            .game-playing__stats-cities
+                span.game-playing__cities-completed
+                span /
+                span.game-playing__cities-remaining
+            .game-playing__stats-combo
+                span.game-playing__combo-number
+                span Combo
+            .game-playing__stats-wpm
+                span.game-playing__wpm-number
+                span WPM
         .game-playing__typing-card
             .game-playing__typing-card-top
                 .game-playing__typing

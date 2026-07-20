@@ -2,6 +2,11 @@ import type { GameStateValue } from '../GameState';
 import { GameState } from '../GameState';
 import type { Route } from '../Route';
 
+interface MenuRouteRecord {
+    bestCombo: number;
+    bestWpm: number;
+}
+
 class GameUiPresenter {
     private game_menu_el: HTMLElement | null;
     private game_playing_el: HTMLElement | null;
@@ -11,6 +16,8 @@ class GameUiPresenter {
     private menu_route_number_el: HTMLElement | null;
     private menu_route_length_el: HTMLElement | null;
     private menu_route_description_el: HTMLElement | null;
+    private menu_route_record_combo_el: HTMLElement | null;
+    private menu_route_record_wpm_el: HTMLElement | null;
     private menu_route_image_container_el: HTMLElement | null;
     private menu_route_image_el: HTMLImageElement | null;
 
@@ -23,6 +30,10 @@ class GameUiPresenter {
     private typing_next_char_el: HTMLElement | null;
     private typing_rest_el: HTMLElement | null;
     private route_name_el: HTMLElement | null;
+    private cities_completed_el: HTMLElement | null;
+    private cities_remaining_el: HTMLElement | null;
+    private combo_number_el: HTMLElement | null;
+    private wpm_number_el: HTMLElement | null;
 
     constructor() {
         this.game_menu_el = document.querySelector('.game-menu');
@@ -33,6 +44,8 @@ class GameUiPresenter {
         this.menu_route_number_el = document.querySelector('.game-menu__route-number');
         this.menu_route_length_el = document.querySelector('.game-menu__route-length');
         this.menu_route_description_el = document.querySelector('.game-menu__route-description');
+        this.menu_route_record_combo_el = document.querySelector('.game-menu__route-record-combo');
+        this.menu_route_record_wpm_el = document.querySelector('.game-menu__route-record-wpm');
         this.menu_route_image_container_el = document.querySelector('.game-menu__info-card-image');
         this.menu_route_image_el = this.menu_route_image_container_el?.querySelector('img') ?? null;
 
@@ -45,6 +58,10 @@ class GameUiPresenter {
         this.typing_next_char_el = document.querySelector('.game-playing__typing-next-char');
         this.typing_rest_el = document.querySelector('.game-playing__typing-rest');
         this.route_name_el = document.querySelector('.game-playing__route-name');
+        this.cities_completed_el = document.querySelector('.game-playing__cities-completed');
+        this.cities_remaining_el = document.querySelector('.game-playing__cities-remaining');
+        this.combo_number_el = document.querySelector('.game-playing__combo-number');
+        this.wpm_number_el = document.querySelector('.game-playing__wpm-number');
     }
 
     onStartRequested(handler: () => void): void {
@@ -62,7 +79,7 @@ class GameUiPresenter {
         }
     }
 
-    setMenuRoutePreview(route: Route): void {
+    setMenuRoutePreview(route: Route, record: MenuRouteRecord | null = null): void {
         const routeNumber = this.sanitizeRouteNumber(route.route_number);
         this.renderMenuRouteImage(route.image_url);
 
@@ -82,6 +99,8 @@ class GameUiPresenter {
             this.menu_route_description_el.textContent = route.description ?? '';
         }
 
+        this.renderMenuRouteRecord(record);
+
         this.menu_info_card_el?.classList.remove('hidden');
     }
 
@@ -90,6 +109,8 @@ class GameUiPresenter {
         if (this.menu_route_number_el) this.menu_route_number_el.textContent = '';
         if (this.menu_route_length_el) this.menu_route_length_el.textContent = '';
         if (this.menu_route_description_el) this.menu_route_description_el.textContent = '';
+        if (this.menu_route_record_combo_el) this.menu_route_record_combo_el.textContent = '--';
+        if (this.menu_route_record_wpm_el) this.menu_route_record_wpm_el.textContent = '--';
         if (this.menu_route_image_el) {
             this.menu_route_image_container_el?.classList.add('hidden');
             this.menu_route_image_el?.removeAttribute('src');
@@ -131,6 +152,13 @@ class GameUiPresenter {
         }
     }
 
+    renderRunStats(citiesCompleted: number, citiesRemaining: number, combo: number, wpm: number): void {
+        if (this.cities_completed_el) this.cities_completed_el.textContent = `${Math.max(0, citiesCompleted)}`;
+        if (this.cities_remaining_el) this.cities_remaining_el.textContent = `${Math.max(0, citiesRemaining)}`;
+        if (this.combo_number_el) this.combo_number_el.textContent = `${Math.max(0, Math.round(combo))}`;
+        if (this.wpm_number_el) this.wpm_number_el.textContent = `${Math.max(0, Math.round(wpm))}`;
+    }
+
     private sanitizeRouteNumber(routeNumber: string): string {
         const normalized = String(routeNumber ?? '').trim();
         return normalized.replace(/^0+(?!$)/, '');
@@ -151,6 +179,17 @@ class GameUiPresenter {
         if (this.city_count_number_el) this.city_count_number_el.textContent = '';
         if (this.end_city_el) this.end_city_el.textContent = '';
         if (this.route_name_el) this.route_name_el.textContent = '';
+        this.renderRunStats(0, 0, 0, 0);
+    }
+
+    private renderMenuRouteRecord(record: MenuRouteRecord | null): void {
+        if (this.menu_route_record_combo_el) {
+            this.menu_route_record_combo_el.textContent = record ? `${Math.max(0, Math.round(record.bestCombo))}` : '--';
+        }
+
+        if (this.menu_route_record_wpm_el) {
+            this.menu_route_record_wpm_el.textContent = record ? `${Math.max(0, Math.round(record.bestWpm))}` : '--';
+        }
     }
 
     private renderMenuRouteImage(imageUrl: string | null): void {
@@ -168,3 +207,5 @@ class GameUiPresenter {
 }
 
 export { GameUiPresenter };
+export type { MenuRouteRecord };
+

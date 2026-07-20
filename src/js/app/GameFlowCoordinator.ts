@@ -1,5 +1,6 @@
 import type { Geometry } from 'geojson';
 import { Game } from '../Game';
+import { GameState } from '../GameState';
 import { MapController } from '../MapController';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';
@@ -8,6 +9,17 @@ import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
 import { UserStatsStorage } from './UserStatsStorage';
+
+interface ActiveRunStats {
+    routeId: string;
+    startedAtMs: number;
+    correctCharsTyped: number;
+    currentCombo: number;
+    bestCombo: number;
+    citiesCompleted: number;
+    citiesRemaining: number;
+    lastTypedLength: number;
+}
 
 class GameFlowCoordinator {
     private game: Game;
@@ -18,6 +30,7 @@ class GameFlowCoordinator {
     private user_stats_storage: UserStatsStorage;
     private routeMetrics: RouteMetrics | null;
     private snappedCityPoints: SnappedRoutePoint[];
+    private activeRunStats: ActiveRunStats | null;
 
     constructor(
         game: Game,
@@ -35,6 +48,7 @@ class GameFlowCoordinator {
         this.user_stats_storage = user_stats_storage;
         this.routeMetrics = null;
         this.snappedCityPoints = [];
+        this.activeRunStats = null;
     }
 
     init(): void {
@@ -47,6 +61,7 @@ class GameFlowCoordinator {
 
         this.game.typing_controller.addEventListener('target-set', this.handleTypingTargetSet as EventListener);
         this.game.typing_controller.addEventListener('progress', this.handleTypingProgress as EventListener);
+        this.game.typing_controller.addEventListener('mistake', this.handleTypingMistake as EventListener);
 
         this.ui_presenter.renderState(this.game.state);
         this.refreshMenuFromSelectedRoute();
@@ -61,6 +76,7 @@ class GameFlowCoordinator {
 
         this.game.selectRoute(selectedRouteId);
         this.initializeRouteSnappingData(selectedRouteId);
+        this.initializeRunStats(selectedRouteId);
 
         const firstCityCoordinate = this.getCurrentSnappedCityCoordinate();
         if (firstCityCoordinate) {
@@ -77,6 +93,17 @@ class GameFlowCoordinator {
     private handleCityVisited = (event: Event): void => {
         const customEvent = event as CustomEvent<{ cityId: string }>;
         this.setCityVisited(customEvent.detail.cityId, true);
+
+        if (this.activeRunStats) {
+            this.activeRunStats.citiesCompleted += 1;
+            this.activeRunStats.citiesRemaining = Math.max(0, this.activeRunStats.citiesRemaining - 1);
+            this.ui_presenter.renderRunStats(
+                this.activeRunStats.citiesCompleted,
+                this.activeRunStats.citiesRemaining,
+                this.activeRunStats.currentCombo,
+                this.calculateCurrentWpm(this.activeRunStats)
+            );
+        }
 
         const changed = this.user_stats.markCityCompleted(customEvent.detail.cityId);
         if (changed) this.user_stats_storage.save(this.user_stats);
@@ -99,7 +126,8 @@ class GameFlowCoordinator {
         const selectedRoute = routeId ? this.routes_controller.routes[routeId] ?? null : null;
 
         if (selectedRoute && routeId) {
-            this.ui_presenter.setMenuRoutePreview(selectedRoute);
+            const routeRecord = this.user_stats.getRouteRecord(routeId);
+            this.ui_presenter.setMenuRoutePreview(selectedRoute, routeRecord);
 
             const geometry = this.routes_controller.getGeometryById(routeId);
             const routeStartCoordinate = this.getRouteStartCoordinate(geometry);
@@ -145,12 +173,20 @@ class GameFlowCoordinator {
         return null;
     }
 
-    private handleStateChange = (): void => {
+    private handleStateChange = (event: Event): void => {
+        const customEvent = event as CustomEvent<{ from: string; to: string }>;
+        const leavingPlaying = customEvent.detail.from === GameState.PLAYING && customEvent.detail.to === GameState.MENU;
+        if (leavingPlaying) {
+            this.finalizeRunStats();
+        }
+
         this.ui_presenter.renderState(this.game.state);
     };
 
     private handleTypingTargetSet = (event: Event): void => {
         const customEvent = event as CustomEvent<{ target: string }>;
+        if (this.activeRunStats) this.activeRunStats.lastTypedLength = 0;
+
         this.ui_presenter.renderTyping('', customEvent.detail.target);
         this.ui_presenter.renderCurrentRouteAndCity(this.game.current_route);
         this.updateProgressMarkerForTyping('', customEvent.detail.target);
@@ -158,8 +194,40 @@ class GameFlowCoordinator {
 
     private handleTypingProgress = (event: Event): void => {
         const customEvent = event as CustomEvent<{ typed: string; target: string }>;
+
+        if (this.activeRunStats) {
+            const typedLength = customEvent.detail.typed.length;
+            const delta = Math.max(0, typedLength - this.activeRunStats.lastTypedLength);
+
+            if (delta > 0) {
+                this.activeRunStats.correctCharsTyped += delta;
+                this.activeRunStats.currentCombo += delta;
+                this.activeRunStats.bestCombo = Math.max(this.activeRunStats.bestCombo, this.activeRunStats.currentCombo);
+            }
+
+            this.activeRunStats.lastTypedLength = typedLength;
+            this.ui_presenter.renderRunStats(
+                this.activeRunStats.citiesCompleted,
+                this.activeRunStats.citiesRemaining,
+                this.activeRunStats.currentCombo,
+                this.calculateCurrentWpm(this.activeRunStats)
+            );
+        }
+
         this.ui_presenter.renderTyping(customEvent.detail.typed, customEvent.detail.target);
         this.updateProgressMarkerForTyping(customEvent.detail.typed, customEvent.detail.target);
+    };
+
+    private handleTypingMistake = (): void => {
+        if (!this.activeRunStats) return;
+
+        this.activeRunStats.currentCombo = 0;
+        this.ui_presenter.renderRunStats(
+            this.activeRunStats.citiesCompleted,
+            this.activeRunStats.citiesRemaining,
+            this.activeRunStats.currentCombo,
+            this.calculateCurrentWpm(this.activeRunStats)
+        );
     };
 
     private initializeRouteSnappingData(routeId: string): void {
@@ -262,12 +330,48 @@ class GameFlowCoordinator {
         const selectedRouteId = this.map_controller.getSelectedRouteId();
         const selectedRoute = selectedRouteId ? this.routes_controller.routes[selectedRouteId] ?? null : null;
 
-        if (selectedRoute) {
-            this.ui_presenter.setMenuRoutePreview(selectedRoute);
+        if (selectedRoute && selectedRouteId) {
+            const routeRecord = this.user_stats.getRouteRecord(selectedRouteId);
+            this.ui_presenter.setMenuRoutePreview(selectedRoute, routeRecord);
             return;
         }
 
         this.ui_presenter.setMenuWelcomeState();
+    }
+
+    private initializeRunStats(routeId: string): void {
+        const route = this.game.current_route;
+        const totalCities = route?.cities.length ?? 0;
+
+        this.activeRunStats = {
+            routeId,
+            startedAtMs: Date.now(),
+            correctCharsTyped: 0,
+            currentCombo: 0,
+            bestCombo: 0,
+            citiesCompleted: 0,
+            citiesRemaining: totalCities,
+            lastTypedLength: 0
+        };
+
+        this.ui_presenter.renderRunStats(0, totalCities, 0, 0);
+    }
+
+    private finalizeRunStats(): void {
+        const runStats = this.activeRunStats;
+        if (!runStats) return;
+
+        const bestWpmForRun = this.calculateCurrentWpm(runStats);
+        const changed = this.user_stats.updateRouteRecord(runStats.routeId, runStats.bestCombo, bestWpmForRun);
+        if (changed) this.user_stats_storage.save(this.user_stats);
+
+        this.activeRunStats = null;
+    }
+
+    private calculateCurrentWpm(runStats: ActiveRunStats): number {
+        const elapsedMinutes = (Date.now() - runStats.startedAtMs) / 60000;
+        if (elapsedMinutes <= 0) return 0;
+        return (runStats.correctCharsTyped / 5) / elapsedMinutes;
     }
 }
 

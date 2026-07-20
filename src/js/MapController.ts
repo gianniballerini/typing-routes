@@ -376,6 +376,16 @@ class MapController {
             });
         });
     }
+
+    resetToCountryView(): void {
+        this.onReady(() => {
+            this.map.easeTo({
+                center: [Settings.center[0], Settings.center[1]],
+                zoom: Settings.initialZoom,
+                duration: 280
+            });
+        });
+    }
 }
 
 export { MapController };
