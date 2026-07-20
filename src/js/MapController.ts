@@ -4,6 +4,20 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { MouseInfoCard } from './MouseInfoCard';
 import { Settings } from './Settings';
 
+type ProgressMarkerFeatureCollection = {
+    type: 'FeatureCollection';
+    features: Array<{
+        type: 'Feature';
+        geometry: {
+            type: 'Point';
+            coordinates: [number, number];
+        };
+        properties: {
+            visible: boolean;
+        };
+    }>;
+};
+
 class MapController {
     map: maplibregl.Map;
     private ready: boolean;
@@ -248,7 +262,66 @@ class MapController {
                     'circle-stroke-color': Settings.cityCircle.stroke.color
                 }
             });
+
+            this.renderProgressMarker();
         });
+    }
+
+    private createProgressMarkerData(coordinates: [number, number], visible: boolean): ProgressMarkerFeatureCollection {
+        return {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates
+                    },
+                    properties: {
+                        visible
+                    }
+                }
+            ]
+        };
+    }
+
+    private renderProgressMarker(): void {
+        if (this.map.getSource(Settings.sourceIds.progressMarker)) return;
+
+        this.map.addSource(Settings.sourceIds.progressMarker, {
+            type: 'geojson',
+            data: this.createProgressMarkerData([Settings.center[0], Settings.center[1]], false)
+        });
+
+        this.map.addLayer({
+            id: Settings.layerIds.progressMarkerSquare,
+            type: 'circle',
+            source: Settings.sourceIds.progressMarker,
+            paint: {
+                'circle-radius': Settings.progressMarker.size,
+                'circle-color': Settings.progressMarker.color,
+                'circle-opacity': [
+                    'case',
+                    ['get', 'visible'],
+                    Settings.progressMarker.opacity,
+                    0
+                ],
+                'circle-stroke-width': Settings.progressMarker.strokeWidth,
+                'circle-stroke-color': Settings.progressMarker.strokeColor
+            }
+        });
+    }
+
+    setProgressMarkerCoordinate(coordinates: [number, number], visible = true): void {
+        const source = this.map.getSource(Settings.sourceIds.progressMarker) as maplibregl.GeoJSONSource;
+        if (!source) return;
+        source.setData(this.createProgressMarkerData(coordinates, visible));
+    }
+
+    hideProgressMarker(): void {
+        const source = this.map.getSource(Settings.sourceIds.progressMarker) as maplibregl.GeoJSONSource;
+        if (!source) return;
+        source.setData(this.createProgressMarkerData([Settings.center[0], Settings.center[1]], false));
     }
 
     updateCities(fc: FeatureCollection) {

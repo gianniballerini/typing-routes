@@ -14,13 +14,15 @@ class Settings
     this.sourceIds = {
       openmaptiles: 'openmaptiles',
       nationalRoutes: 'national-routes',
-      cities: 'cities'
+      cities: 'cities',
+      progressMarker: 'progress-marker'
     };
 
     this.layerIds = {
       argentinaLimits: 'argentina-limits',
       nationalRoutesLine: 'national-routes-line',
-      citiesCircle: 'cities-circle'
+      citiesCircle: 'cities-circle',
+      progressMarkerSquare: 'progress-marker-square'
     };
 
     this.argentinaBorder = {
@@ -64,6 +66,14 @@ class Settings
 
     this.routeSelection = {
       flyToZoom: 6
+    };
+
+    this.progressMarker = {
+      size: 10,
+      color: '#E88D00',
+      opacity: 0.9,
+      strokeColor: '#ffffff',
+      strokeWidth: 1
     };
   }
 }

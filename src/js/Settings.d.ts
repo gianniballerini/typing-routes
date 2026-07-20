@@ -8,11 +8,13 @@ export interface SettingsShape {
     openmaptiles: string;
     nationalRoutes: string;
     cities: string;
+    progressMarker: string;
   };
   layerIds: {
     argentinaLimits: string;
     nationalRoutesLine: string;
     citiesCircle: string;
+    progressMarkerSquare: string;
   };
   argentinaBorder: {
     color: string;
@@ -52,6 +54,13 @@ export interface SettingsShape {
   };
   routeSelection: {
     flyToZoom: number;
+  };
+  progressMarker: {
+    size: number;
+    color: string;
+    opacity: number;
+    strokeColor: string;
+    strokeWidth: number;
   };
 }
 

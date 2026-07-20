@@ -4,12 +4,16 @@ import { MapController } from '../MapController';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
+import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
+import { buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
 
 class GameFlowCoordinator {
     private game: Game;
     private routes_controller: RoutesController;
     private map_controller: MapController;
     private ui_presenter: GameUiPresenter;
+    private routeMetrics: RouteMetrics | null;
+    private snappedCityPoints: SnappedRoutePoint[];
 
     constructor(
         game: Game,
@@ -21,6 +25,8 @@ class GameFlowCoordinator {
         this.routes_controller = routes_controller;
         this.map_controller = map_controller;
         this.ui_presenter = ui_presenter;
+        this.routeMetrics = null;
+        this.snappedCityPoints = [];
     }
 
     init(): void {
@@ -46,7 +52,18 @@ class GameFlowCoordinator {
         }
 
         this.game.selectRoute(selectedRouteId);
+        this.initializeRouteSnappingData(selectedRouteId);
+
+        const firstCityCoordinate = this.getCurrentSnappedCityCoordinate();
+        if (firstCityCoordinate) {
+            this.map_controller.flyToCoordinate(firstCityCoordinate, Settings.routeSelection.flyToZoom);
+        }
+
         this.game.start();
+
+        if (firstCityCoordinate) {
+            this.map_controller.setProgressMarkerCoordinate(firstCityCoordinate, true);
+        }
     };
 
     private handleCityVisited = (event: Event): void => {
@@ -74,10 +91,16 @@ class GameFlowCoordinator {
             if (routeStartCoordinate) {
                 this.map_controller.flyToCoordinate(routeStartCoordinate, Settings.routeSelection.flyToZoom);
             }
+            this.routeMetrics = null;
+            this.snappedCityPoints = [];
+            this.map_controller.hideProgressMarker();
             return;
         }
 
         this.ui_presenter.setMenuWelcomeState();
+        this.routeMetrics = null;
+        this.snappedCityPoints = [];
+        this.map_controller.hideProgressMarker();
     };
 
     private getRouteStartCoordinate(geometry: Geometry | undefined): [number, number] | null {
@@ -115,12 +138,85 @@ class GameFlowCoordinator {
         const customEvent = event as CustomEvent<{ target: string }>;
         this.ui_presenter.renderTyping('', customEvent.detail.target);
         this.ui_presenter.renderCurrentRouteAndCity(this.game.current_route);
+        this.updateProgressMarkerForTyping('', customEvent.detail.target);
     };
 
     private handleTypingProgress = (event: Event): void => {
         const customEvent = event as CustomEvent<{ typed: string; target: string }>;
         this.ui_presenter.renderTyping(customEvent.detail.typed, customEvent.detail.target);
+        this.updateProgressMarkerForTyping(customEvent.detail.typed, customEvent.detail.target);
     };
+
+    private initializeRouteSnappingData(routeId: string): void {
+        const route = this.game.current_route;
+        const geometry = this.routes_controller.getGeometryById(routeId);
+        const metrics = buildRouteMetrics(geometry);
+
+        if (!route || !metrics) {
+            this.routeMetrics = null;
+            this.snappedCityPoints = [];
+            return;
+        }
+
+        this.routeMetrics = metrics;
+        this.snappedCityPoints = route.cities.map((city) => projectPointOnRoute([city.lon, city.lat], metrics));
+    }
+
+    private getCurrentSnappedCityCoordinate(): [number, number] | null {
+        const route = this.game.current_route;
+        if (!route) return null;
+
+        const snappedPoint = this.snappedCityPoints[this.game.current_city_index];
+        if (snappedPoint) return snappedPoint.coordinate;
+
+        const city = route.cities[this.game.current_city_index];
+        if (!city) return null;
+
+        if (!Number.isFinite(city.lon) || !Number.isFinite(city.lat)) return null;
+        return [city.lon, city.lat];
+    }
+
+    private updateProgressMarkerForTyping(typed: string, target: string): void {
+        const route = this.game.current_route;
+        if (!route || route.cities.length === 0) {
+            this.map_controller.hideProgressMarker();
+            return;
+        }
+
+        const cities = route.cities;
+        const currentIndex = this.game.current_city_index;
+        const currentCity = cities[currentIndex];
+        if (!currentCity) {
+            this.map_controller.hideProgressMarker();
+            return;
+        }
+
+        const currentSnapped = this.snappedCityPoints[currentIndex];
+        const currentCoordinate: [number, number] = currentSnapped
+            ? currentSnapped.coordinate
+            : [currentCity.lon, currentCity.lat];
+
+        // First city stays pinned; remaining cities move from previous to current.
+        if (currentIndex === 0 || cities.length === 1) {
+            this.map_controller.setProgressMarkerCoordinate(currentCoordinate, true);
+            return;
+        }
+
+        const previousSnapped = this.snappedCityPoints[currentIndex - 1];
+        if (!previousSnapped || !currentSnapped || !this.routeMetrics) {
+            this.map_controller.setProgressMarkerCoordinate(currentCoordinate, true);
+            return;
+        }
+
+        const ratioRaw = target.length > 0 ? typed.length / target.length : 0;
+        const ratio = Math.max(0, Math.min(1, ratioRaw));
+
+        const distanceAlongRoute = previousSnapped.distanceAlongRoute
+            + (currentSnapped.distanceAlongRoute - previousSnapped.distanceAlongRoute) * ratio;
+
+        const coordinateOnRoute = interpolateOnRoute(this.routeMetrics, distanceAlongRoute);
+        this.map_controller.setProgressMarkerCoordinate(coordinateOnRoute, true);
+    }
 
     private setRouteVisited(routeId: string, visited: boolean): void {
         const routesFc = this.routes_controller.setRouteVisited(routeId, visited);
