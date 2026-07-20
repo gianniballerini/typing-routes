@@ -26,7 +26,13 @@ class KeyboardInputCoordinator {
         if (event.key === 'Escape') {
             if (this.game.map_controller.getSelectedRouteId() !== null) {
                 this.game.map_controller.selectRoute(null);
+                return;
             }
+
+            if (this.game.state === GameState.PLAYING) {
+                this.game.returnToMenu();
+            }
+
             return;
         }
 

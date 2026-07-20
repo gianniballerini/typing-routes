@@ -1,6 +1,8 @@
+import type { Geometry } from 'geojson';
 import { Game } from '../Game';
 import { MapController } from '../MapController';
 import { RoutesController } from '../RoutesController';
+import { Settings } from '../Settings';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
 
 class GameFlowCoordinator {
@@ -64,13 +66,46 @@ class GameFlowCoordinator {
         const routeId = customEvent.detail.routeId;
         const selectedRoute = routeId ? this.routes_controller.routes[routeId] ?? null : null;
 
-        if (selectedRoute) {
+        if (selectedRoute && routeId) {
             this.ui_presenter.setMenuRoutePreview(selectedRoute);
+
+            const geometry = this.routes_controller.getGeometryById(routeId);
+            const routeStartCoordinate = this.getRouteStartCoordinate(geometry);
+            if (routeStartCoordinate) {
+                this.map_controller.flyToCoordinate(routeStartCoordinate, Settings.routeSelection.flyToZoom);
+            }
             return;
         }
 
         this.ui_presenter.setMenuWelcomeState();
     };
+
+    private getRouteStartCoordinate(geometry: Geometry | undefined): [number, number] | null {
+        if (!geometry) return null;
+
+        if (geometry.type === 'LineString') {
+            const firstPoint = geometry.coordinates[0];
+            if (!firstPoint || firstPoint.length < 2) return null;
+
+            const lon = Number(firstPoint[0]);
+            const lat = Number(firstPoint[1]);
+            if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
+            return [lon, lat];
+        }
+
+        if (geometry.type === 'MultiLineString') {
+            const firstSegment = geometry.coordinates[0];
+            const firstPoint = firstSegment?.[0];
+            if (!firstPoint || firstPoint.length < 2) return null;
+
+            const lon = Number(firstPoint[0]);
+            const lat = Number(firstPoint[1]);
+            if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
+            return [lon, lat];
+        }
+
+        return null;
+    }
 
     private handleStateChange = (): void => {
         this.ui_presenter.renderState(this.game.state);

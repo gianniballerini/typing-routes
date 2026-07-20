@@ -61,6 +61,10 @@ class Settings
         color: '#ffffff'
       }
     };
+
+    this.routeSelection = {
+      flyToZoom: 6
+    };
   }
 }
 

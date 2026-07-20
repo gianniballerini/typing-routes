@@ -274,6 +274,20 @@ class MapController {
         // MapLibre GeoJSONSource has no per-feature patch API and requires setData
         // with a full FeatureCollection replacement. State ownership stays upstream.
     }
+
+    flyToCoordinate(center: [number, number], zoom?: number): void {
+        this.onReady(() => {
+            if (!Array.isArray(center) || center.length !== 2) return;
+
+            const [lon, lat] = center;
+            if (!Number.isFinite(lon) || !Number.isFinite(lat)) return;
+
+            this.map.flyTo({
+                center: [lon, lat],
+                ...(typeof zoom === 'number' ? { zoom } : {})
+            });
+        });
+    }
 }
 
 export { MapController };

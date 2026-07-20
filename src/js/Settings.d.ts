@@ -50,6 +50,9 @@ export interface SettingsShape {
       color: string;
     };
   };
+  routeSelection: {
+    flyToZoom: number;
+  };
 }
 
 export const Settings: SettingsShape;
