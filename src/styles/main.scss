@@ -1,6 +1,12 @@
 @import 'common/mixins';
 @import 'common/colors';
 @import 'common/common';
+@import 'common/button';
+@import 'common/section';
+
+@import 'components/mouse_info_card';
+@import 'components/game_menu';
+@import 'components/game_playing';
 
 @import 'map/map';
-@import 'components/mouse_info_card'
+

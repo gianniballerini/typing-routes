@@ -1,0 +1,182 @@
+.game-playing {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    z-index: 1;
+
+    top: 0;
+    left: 0;
+
+
+    display: flex;
+    flex-direction: column;
+}
+    .game-playing__top {
+        width: 100%;
+        height: 50%;
+
+        display: flex;
+        justify-content: center;
+        padding-top: 30 * $ptr;
+
+    }
+
+    .game-playing__bottom {
+
+        width: 100%;
+        height: 50%;
+
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        padding-bottom: 30 * $ptr;
+    }
+
+
+    .game-playing__info-card {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+
+        column-gap: 20 * $ptr;
+
+        min-width: 500 * $ptr;
+        height: 100 * $ptr;
+        background-color: $white;
+
+        border-radius: 10 * $ptr;
+        padding: 10 * $ptr 20 * $ptr;
+
+        box-shadow: 0 0 20 * $ptr rgba($black, 0.5);
+
+        color: $black;
+        border: 2 * $ptr solid $black;
+    }
+
+        .game-playing__start-city, .game-playing__end-city {
+            font-size: 20 * $ptr;
+            font-weight: bold;
+        }
+
+        .game-playing__city-count {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            row-gap: 5 * $ptr;
+
+        }
+
+            .game-playing__horizontal-line {
+                width: 100%;
+                height: 4 * $ptr;
+                border-radius: 2 * $ptr;
+
+                background-color: $flag-light-blue;
+            }
+
+            .game-playing__city-count-number {
+                color: rgba($light-gray, 0.8);
+                font-weight: bold;
+                font-size: 16 * $ptr;
+            }
+
+    .game-playing__typing-card {
+        width: 500 * $ptr;
+        height: 150 * $ptr;
+
+        border-radius: 10 * $ptr;
+
+        box-shadow: 0 0 20 * $ptr rgba($black, 0.5);
+
+        background-color: $white;
+
+        display: flex;
+        flex-direction: column;
+
+        overflow: hidden;
+    }
+
+    .game-playing__typing-card-top {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-size: 30 * $ptr;
+    }
+
+        .game-playing__typing {
+            display: inline-flex;
+            align-items: baseline;
+            font-size: 25 * $ptr;
+            letter-spacing: 2 * $ptr;
+            color: $black;
+            white-space: nowrap;
+        }
+
+            .game-playing__typing-ok {
+                color: $black, 0.45;
+            }
+
+            .game-playing__typing-caret {
+                display: inline-block;
+                color: $flag-light-blue;
+                animation: typing-caret-blink 1s steps(1) infinite;
+            }
+
+            .game-playing__typing-next-char {
+                color: $light-gray;
+            }
+
+            .game-playing__typing-rest {
+                color: $light-gray;
+            }
+
+        input.game-playing__typing-word {
+            font-size: 30 * $ptr;
+            // letter-spacing: 4 * $ptr;
+            color: $black;
+            width: fit-content;
+
+            &::placeholder {
+                color: $light-gray;
+                opacity: 0.5;
+            }
+        }
+
+    .game-playing__typing-card-bottom {
+        background-color: $flag-light-blue;
+        height: 40 * $ptr;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .game-playing__route-name {
+            font-size: 16 * $ptr;
+            color: $black;
+            padding: 2 * $ptr 10 * $ptr;
+
+            width: fit-content;
+
+            border: 3 * $ptr solid rgba($flag-light-blue, 0.5);
+            border-radius: 30 * $ptr;
+
+            background-color: $white;
+        }
+
+@keyframes typing-caret-blink {
+    0%, 49% {
+        opacity: 1;
+    }
+
+    50%, 100% {
+        opacity: 0;
+    }
+}
+

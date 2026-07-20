@@ -1,0 +1,55 @@
+.button {
+    @include user-select('none');
+    cursor: pointer;
+
+    position: relative;
+
+    &.disabled {
+        opacity: 0.6;
+        pointer-events: none;
+        filter: grayscale(1);
+    }
+
+    &.loading {
+        opacity: 0.6;
+        pointer-events: none;
+
+        &::before{
+            display: block;
+
+            width: 20 * $ptr;
+            height: 20 * $ptr;
+
+            background-size: contain;
+            background-image: url('/images/common/loading.gif');
+            background-repeat: no-repeat;
+            content: '';
+        }
+    }
+
+    &--primary, &--secondary, &--tertiary, &--primary-img, &--secondary-img, &--golden {
+        display: flex;
+
+        justify-content: center;
+
+        padding: 15 * $ptr 48 * $ptr;
+
+        font-size: 15 * $ptr;
+
+        // font-family: $unbounded-font;
+
+        letter-spacing: 0.5;
+
+        text-align: center;
+
+        border-radius: 10 * $ptr;
+    }
+
+    &--primary {
+
+    }
+
+    &--secondary {
+
+    }
+}

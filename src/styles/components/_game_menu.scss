@@ -1,0 +1,33 @@
+.game-menu {
+    width: 100dvw;
+    height: 100dvh;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    z-index: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    pointer-events: none;
+}
+
+    .game-menu__button {
+        width: fit-content;
+        padding: 10 * $ptr 15 * $ptr;
+        border-radius: 20 * $ptr;
+        border: 1px solid $gray;
+
+        color: $black;
+        font-size: 20 * $ptr;
+        font-weight: 600;
+
+        pointer-events: auto;
+
+        &:hover {
+            background-color: rgba($gray, 0.1);
+        }
+    }

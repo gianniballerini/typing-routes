@@ -1,0 +1,31 @@
+import { Game } from '../Game';
+import { GameState } from '../GameState';
+
+class KeyboardInputCoordinator {
+    private game: Game;
+    private bound: boolean;
+
+    constructor(game: Game) {
+        this.game = game;
+        this.bound = false;
+    }
+
+    bind(): void {
+        if (this.bound) return;
+        window.addEventListener('keydown', this.handleKeydown);
+        this.bound = true;
+    }
+
+    unbind(): void {
+        if (!this.bound) return;
+        window.removeEventListener('keydown', this.handleKeydown);
+        this.bound = false;
+    }
+
+    private handleKeydown = (event: KeyboardEvent): void => {
+        if (this.game.state !== GameState.PLAYING) return;
+        if (event.key.length === 1) this.game.typing_controller.handleInput(event.key);
+    };
+}
+
+export { KeyboardInputCoordinator };

@@ -1,6 +1,10 @@
+import { Game } from './Game';
 import { MapController } from './MapController';
 import { MouseInfoCard } from './MouseInfoCard';
 import { RoutesController } from './RoutesController';
+import { GameFlowCoordinator } from './app/GameFlowCoordinator';
+import { KeyboardInputCoordinator } from './input/KeyboardInputCoordinator';
+import { GameUiPresenter } from './ui/GameUiPresenter';
 
 declare global {
     interface Window {
@@ -12,6 +16,10 @@ class MainApplication {
     map_controller: MapController;
     mouse_info_card: MouseInfoCard;
     routes_controller: RoutesController;
+    game: Game;
+    ui_presenter: GameUiPresenter;
+    keyboard_input_coordinator: KeyboardInputCoordinator;
+    game_flow_coordinator: GameFlowCoordinator;
 
     constructor() {
         this.map_controller = new MapController();
@@ -28,14 +36,19 @@ class MainApplication {
 
         const citiesFc = this.routes_controller.getCitiesFeatureCollection();
         this.map_controller.renderCities(citiesFc);
-    }
 
-    setRouteVisited(routeId: string, visited: boolean) {
-        const routesFc = this.routes_controller.setRouteVisited(routeId, visited);
-        this.map_controller.updateRoutes(routesFc);
+        this.game = new Game(this.routes_controller, this.map_controller);
+        this.ui_presenter = new GameUiPresenter();
+        this.keyboard_input_coordinator = new KeyboardInputCoordinator(this.game);
+        this.game_flow_coordinator = new GameFlowCoordinator(
+            this.game,
+            this.routes_controller,
+            this.map_controller,
+            this.ui_presenter
+        );
 
-        const citiesFc = this.routes_controller.getCitiesFeatureCollection();
-        this.map_controller.updateCities(citiesFc);
+        this.game_flow_coordinator.init();
+        this.keyboard_input_coordinator.bind();
     }
 }
 

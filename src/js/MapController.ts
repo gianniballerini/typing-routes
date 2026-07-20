@@ -189,6 +189,11 @@ class MapController {
         }
     }
 
+    getSelectedRouteId(): string | null {
+        if (this.selectedId === null) return null;
+        return String(this.selectedId);
+    }
+
     renderCities(fc: FeatureCollection) {
         this.onReady(() => {
             this.map.addSource(Settings.sourceIds.cities, {
