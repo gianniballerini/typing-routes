@@ -1,5 +1,5 @@
-import { UserStats } from '../UserStats';
 import type { UserStatsSnapshot } from '../UserStats';
+import { UserStats } from '../UserStats';
 
 const USER_STATS_STORAGE_KEY = 'typing-routes.user-stats.v1';
 const USER_STATS_VERSION = 1;
@@ -64,5 +64,4 @@ class UserStatsStorage {
     }
 }
 
-export { UserStatsStorage };
-export { USER_STATS_STORAGE_KEY };
+export { USER_STATS_STORAGE_KEY, UserStatsStorage };

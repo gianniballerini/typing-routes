@@ -1,10 +1,10 @@
+import { GameFlowCoordinator } from './app/GameFlowCoordinator';
+import { UserStatsStorage } from './app/UserStatsStorage';
 import { Game } from './Game';
+import { KeyboardInputCoordinator } from './input/KeyboardInputCoordinator';
 import { MapController } from './MapController';
 import { MouseInfoCard } from './MouseInfoCard';
 import { RoutesController } from './RoutesController';
-import { GameFlowCoordinator } from './app/GameFlowCoordinator';
-import { UserStatsStorage } from './app/UserStatsStorage';
-import { KeyboardInputCoordinator } from './input/KeyboardInputCoordinator';
 import { GameUiPresenter } from './ui/GameUiPresenter';
 import { UserStats } from './UserStats';
 
