@@ -68,7 +68,7 @@ class RoutesController {
     routes: { [key: string]: Route };
     private geometriesMap: { [key: string]: Geometry };
     private routeCityIdsMap: { [key: string]: string[] };
-    private routeImageUrlCache: { [key: string]: Promise<string | null> };
+    private routeImageUrlCache: { [key: string]: Promise<string | null> | undefined };
 
     constructor() {
         this.routes = {};
