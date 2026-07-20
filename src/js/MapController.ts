@@ -361,6 +361,21 @@ class MapController {
             });
         });
     }
+
+    jumpToCoordinate(center: [number, number], zoom?: number): void {
+        this.onReady(() => {
+            if (!Array.isArray(center) || center.length !== 2) return;
+
+            const [lon, lat] = center;
+            if (!Number.isFinite(lon) || !Number.isFinite(lat)) return;
+
+            this.map.easeTo({
+                center: [lon, lat],
+                ...(typeof zoom === 'number' ? { zoom } : {}),
+                duration: 180
+            });
+        });
+    }
 }
 
 export { MapController };

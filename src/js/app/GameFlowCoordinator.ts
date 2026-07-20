@@ -62,7 +62,7 @@ class GameFlowCoordinator {
         this.game.start();
 
         if (firstCityCoordinate) {
-            this.map_controller.setProgressMarkerCoordinate(firstCityCoordinate, true);
+            this.setProgressMarkerAndFollowCamera(firstCityCoordinate);
         }
     };
 
@@ -198,13 +198,13 @@ class GameFlowCoordinator {
 
         // First city stays pinned; remaining cities move from previous to current.
         if (currentIndex === 0 || cities.length === 1) {
-            this.map_controller.setProgressMarkerCoordinate(currentCoordinate, true);
+            this.setProgressMarkerAndFollowCamera(currentCoordinate);
             return;
         }
 
         const previousSnapped = this.snappedCityPoints[currentIndex - 1];
         if (!previousSnapped || !currentSnapped || !this.routeMetrics) {
-            this.map_controller.setProgressMarkerCoordinate(currentCoordinate, true);
+            this.setProgressMarkerAndFollowCamera(currentCoordinate);
             return;
         }
 
@@ -215,7 +215,12 @@ class GameFlowCoordinator {
             + (currentSnapped.distanceAlongRoute - previousSnapped.distanceAlongRoute) * ratio;
 
         const coordinateOnRoute = interpolateOnRoute(this.routeMetrics, distanceAlongRoute);
-        this.map_controller.setProgressMarkerCoordinate(coordinateOnRoute, true);
+        this.setProgressMarkerAndFollowCamera(coordinateOnRoute);
+    }
+
+    private setProgressMarkerAndFollowCamera(coordinate: [number, number]): void {
+        this.map_controller.setProgressMarkerCoordinate(coordinate, true);
+        this.map_controller.jumpToCoordinate(coordinate);
     }
 
     private setRouteVisited(routeId: string, visited: boolean): void {
