@@ -3,8 +3,10 @@ import { MapController } from './MapController';
 import { MouseInfoCard } from './MouseInfoCard';
 import { RoutesController } from './RoutesController';
 import { GameFlowCoordinator } from './app/GameFlowCoordinator';
+import { UserStatsStorage } from './app/UserStatsStorage';
 import { KeyboardInputCoordinator } from './input/KeyboardInputCoordinator';
 import { GameUiPresenter } from './ui/GameUiPresenter';
+import { UserStats } from './UserStats';
 
 declare global {
     interface Window {
@@ -20,6 +22,8 @@ class MainApplication {
     ui_presenter: GameUiPresenter;
     keyboard_input_coordinator: KeyboardInputCoordinator;
     game_flow_coordinator: GameFlowCoordinator;
+    user_stats_storage: UserStatsStorage;
+    user_stats: UserStats;
 
     constructor() {
         this.map_controller = new MapController();
@@ -29,6 +33,9 @@ class MainApplication {
         this.map_controller.init();
         this.routes_controller = new RoutesController();
         this.routes_controller.init();
+        this.user_stats_storage = new UserStatsStorage();
+        this.user_stats = this.user_stats_storage.load();
+        this.applySavedUserProgress();
         this.map_controller.setRouteCityIdsMap(this.routes_controller.getRouteCityIdsMap());
 
         const fc = this.routes_controller.getRoutesFeatureCollection();
@@ -44,11 +51,23 @@ class MainApplication {
             this.game,
             this.routes_controller,
             this.map_controller,
-            this.ui_presenter
+            this.ui_presenter,
+            this.user_stats,
+            this.user_stats_storage
         );
 
         this.game_flow_coordinator.init();
         this.keyboard_input_coordinator.bind();
+    }
+
+    private applySavedUserProgress(): void {
+        for (const route of Object.values(this.routes_controller.routes)) {
+            route.visited = this.user_stats.hasCompletedRoute(route.route_id);
+
+            for (const city of route.cities) {
+                city.visited = this.user_stats.hasCompletedCity(city.id);
+            }
+        }
     }
 }
 

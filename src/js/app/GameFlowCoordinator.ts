@@ -4,14 +4,18 @@ import { MapController } from '../MapController';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
+import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
+import { UserStatsStorage } from './UserStatsStorage';
 
 class GameFlowCoordinator {
     private game: Game;
     private routes_controller: RoutesController;
     private map_controller: MapController;
     private ui_presenter: GameUiPresenter;
+    private user_stats: UserStats;
+    private user_stats_storage: UserStatsStorage;
     private routeMetrics: RouteMetrics | null;
     private snappedCityPoints: SnappedRoutePoint[];
 
@@ -19,12 +23,16 @@ class GameFlowCoordinator {
         game: Game,
         routes_controller: RoutesController,
         map_controller: MapController,
-        ui_presenter: GameUiPresenter
+        ui_presenter: GameUiPresenter,
+        user_stats: UserStats,
+        user_stats_storage: UserStatsStorage
     ) {
         this.game = game;
         this.routes_controller = routes_controller;
         this.map_controller = map_controller;
         this.ui_presenter = ui_presenter;
+        this.user_stats = user_stats;
+        this.user_stats_storage = user_stats_storage;
         this.routeMetrics = null;
         this.snappedCityPoints = [];
     }
@@ -69,11 +77,18 @@ class GameFlowCoordinator {
     private handleCityVisited = (event: Event): void => {
         const customEvent = event as CustomEvent<{ cityId: string }>;
         this.setCityVisited(customEvent.detail.cityId, true);
+
+        const changed = this.user_stats.markCityCompleted(customEvent.detail.cityId);
+        if (changed) this.user_stats_storage.save(this.user_stats);
     };
 
     private handleRouteComplete = (event: Event): void => {
         const customEvent = event as CustomEvent<{ routeId: string }>;
         this.setRouteVisited(customEvent.detail.routeId, true);
+
+        const changed = this.user_stats.markRouteCompleted(customEvent.detail.routeId);
+        if (changed) this.user_stats_storage.save(this.user_stats);
+
         this.map_controller.selectRoute(null);
         console.log(`Route complete: ${customEvent.detail.routeId}`);
     };
