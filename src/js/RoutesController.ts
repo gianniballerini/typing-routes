@@ -11,9 +11,11 @@ interface RawRoute {
     id: string;
     route: string;
     name: string;
+    full_name: string;
     sentido: string;
     length_km: number;
     tipo_calzada: string;
+    description?: string;
 }
 
 interface RawRouteCity {
@@ -66,11 +68,36 @@ class RoutesController {
     routes: { [key: string]: Route };
     private geometriesMap: { [key: string]: Geometry };
     private routeCityIdsMap: { [key: string]: string[] };
+    private routeImageUrlCache: { [key: string]: Promise<string | null> };
 
     constructor() {
         this.routes = {};
         this.geometriesMap = {};
         this.routeCityIdsMap = {};
+        this.routeImageUrlCache = {};
+    }
+
+    private sanitizeRouteNumber(routeNumber: string): string {
+        const normalized = String(routeNumber ?? '').trim();
+        return normalized.replace(/^0+(?!$)/, '');
+    }
+
+    private resolveRouteImageUrl(routeNumber: string): Promise<string | null> {
+        const sanitizedRouteNumber = this.sanitizeRouteNumber(routeNumber);
+        if (!sanitizedRouteNumber) return Promise.resolve(null);
+
+        const imagePath = `/images/routes/RN${sanitizedRouteNumber}.webp`;
+        const cacheKey = imagePath;
+        if (this.routeImageUrlCache[cacheKey]) return this.routeImageUrlCache[cacheKey];
+
+        this.routeImageUrlCache[cacheKey] = new Promise((resolve) => {
+            const imageProbe = new Image();
+            imageProbe.onload = () => resolve(imagePath);
+            imageProbe.onerror = () => resolve(null);
+            imageProbe.src = imagePath;
+        });
+
+        return this.routeImageUrlCache[cacheKey];
     }
 
     private toCity(raw: any): City {
@@ -126,14 +153,24 @@ class RoutesController {
             route.route_id = routeEntry.id;
             route.route_number = routeEntry.route;
             route.route_name = routeEntry.name;
+            route.full_name = routeEntry.full_name;
             route.direction = routeEntry.sentido;
             route.length_km = routeEntry.length_km;
             route.road_type = routeEntry.tipo_calzada;
+            route.description = routeEntry.description ?? '';
 
             // Assign cities from cities data
             if (citiesMap[routeEntry.id]) {
                 route.cities = citiesMap[routeEntry.id].map((rawCity) => this.toCity(rawCity));
             }
+
+            this.resolveRouteImageUrl(route.route_number)
+                .then((imageUrl) => {
+                    route.image_url = imageUrl;
+                })
+                .catch(() => {
+                    route.image_url = null;
+                });
 
             this.routeCityIdsMap[routeEntry.id] = route.cities.map((city) => city.id);
 
@@ -171,6 +208,7 @@ class RoutesController {
                 properties: {
                     id,
                     route: this.routes[id]?.route_number ?? '',
+                    route_display: `Ruta ${this.sanitizeRouteNumber(this.routes[id]?.route_number ?? '')}`,
                     name: this.routes[id]?.route_name ?? '',
                     cities_count: this.routes[id]?.cities.length ?? 0,
                     visited: this.routes[id]?.visited ?? false

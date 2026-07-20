@@ -7,10 +7,11 @@
       "id": "rn-0001",
       "route": "0001",
       "name": "RN 0001",
-      "full_name": "Ruta Nacional 1",
+      "full_name": "Autopista Dr. Ricardo Balbín",
       "sentido": "A",
       "length_km": 53.42,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 1, también llamada Autopista Dr. Ricardo Balbín, conecta la Ciudad de Buenos Aires con La Plata, en la provincia de Buenos Aires. Tiene 50 kilómetros de largo y funciona como una vía rápida para unir estas dos importantes ciudades argentinas."
     },
     {
       "id": "rn-0003",
@@ -19,775 +20,968 @@
       "full_name": "Comandante Luis Piedrabuena",
       "sentido": "A",
       "length_km": 3079.16,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 3 es una carretera de 3.079 kilómetros que une la Provincia de Buenos Aires con Tierra del Fuego, en el extremo sur de Argentina. Es famosa por cruzar la Patagonia y llegar hasta el 'Fin del Mundo'"
     },
     {
       "id": "rn-0005",
       "route": "0005",
       "name": "RN 0005",
+      "full_name": "Ingeniero Pedro Petriz",
       "sentido": "A",
       "length_km": 606.65,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 5 une Buenos Aires con La Pampa a lo largo de 545 km. Eje agrícola vital, conecta Luján con Santa Rosa, hilvanando pueblos productivos e historias del corazón pampeano argentino."
     },
     {
       "id": "rn-0007",
       "route": "0007",
       "name": "RN 0007",
+      "full_name": "Carretera Libertador General San Martín",
       "sentido": "A",
       "length_km": 1236.86,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 7 atraviesa Argentina de este a oeste. Une Buenos Aires con Mendoza y el límite con Chile a lo largo de 1224 km, siendo el corredor bioceánico más clave de la producción del país."
     },
     {
       "id": "rn-0008",
       "route": "0008",
       "name": "RN 0008",
+      "full_name": "Ruta Nacional 8",
       "sentido": "A",
       "length_km": 726.86,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 8 conecta Buenos Aires con San Luis a lo largo de 695 km. Une Pilar con Villa Mercedes, atravesando el núcleo agropecuario de Córdoba y Santa Fe como un eje logístico esencial."
     },
     {
       "id": "rn-0009",
       "route": "0009",
       "name": "RN 0009",
+      "full_name": "Ruta Nacional 9",
       "sentido": "A",
       "length_km": 1975.46,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 9 es el gran eje histórico de Argentina. Une Buenos Aires con la frontera de Bolivia a lo largo de 1.967 km, conectando Rosario, Córdoba, Tucumán y Jujuy en un vital corredor productivo."
     },
     {
       "id": "rn-0011",
       "route": "0011",
       "name": "RN 0011",
+      "full_name": "Carretera Juan de Garay",
       "sentido": "A",
       "length_km": 1294.17,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 11 bordea el río Paraná a lo largo de 983 km. Une Rosario con Clorinda en la frontera de Paraguay, atravesando Santa Fe, Chaco y Formosa como un eje vital de integración regional."
     },
     {
       "id": "rn-0012",
       "route": "0012",
       "name": "RN 0012",
+      "full_name": "David Della Chiesa",
       "sentido": "A",
       "length_km": 1641.76,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 12 une Buenos Aires con Misiones a lo largo de 1580 km. Cruza la Mesopotamia argentina desde Zárate hasta Puerto Iguazú, siendo el corredor ecológico y comercial del Litoral."
     },
     {
       "id": "rn-0014",
       "route": "0014",
       "name": "RN 0014",
+      "full_name": "José Gervasio Artigas",
       "sentido": "A",
       "length_km": 1127.42,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 14 corre paralela al río Uruguay a lo largo de 1127 km. Une Entre Ríos con Misiones hasta la frontera con Brasil, consolidándose como la gran \"Ruta del Mercosur\" y eje del Litoral."
     },
     {
       "id": "rn-0016",
       "route": "0016",
       "name": "RN 0016",
+      "full_name": "Gobernador Anselmo Zoilo Duca y Nicolás Avellaneda.",
       "sentido": "A",
       "length_km": 707.25,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 16 cruza el Gran Chaco a lo largo de 707 km. Une Corrientes y Resistencia con San José de Metán en Salta, actuando como el corredor bioceánico del norte argentino y el Mercosur."
     },
     {
       "id": "rn-0018",
       "route": "0018",
       "name": "RN 0018",
+      "full_name": "Ruta Nacional 18",
       "sentido": "A",
       "length_km": 241.3,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera asfaltada de 227 km que atraviesa Entre Ríos de oeste a este. Une San Benito, cerca de Paraná, con la RN 14 cerca de Concordia. Se encuentra en proceso de transformación en autovía."
     },
     {
       "id": "rn-0019",
       "route": "0019",
       "name": "RN 0019",
+      "full_name": "Ruta Nacional 19",
       "sentido": "A",
       "length_km": 337.17,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera asfaltada que vincula las capitales de Córdoba y Santa Fe en un recorrido de 137 km. Es parte del corredor bioceánico central, conectando el túnel subfluvial con la red troncal este-oeste."
     },
     {
       "id": "rn-0020",
       "route": "0020",
       "name": "RN 0020",
+      "full_name": "Ruta Nacional 20",
       "sentido": "A",
       "length_km": 580.78,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera pavimentada de 582 km que une Córdoba con San Juan pasando por San Luis. Conocida como Ruta Domingo Faustino Sarmiento, conecta el centro del país con la región cuyana."
     },
     {
       "id": "rn-0022",
       "route": "0022",
       "name": "RN 0022",
+      "full_name": "Ceferino Namuncurá",
       "sentido": "A",
       "length_km": 1404.49,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera asfaltada de 685 km que atraviesa Buenos Aires, La Pampa, Río Negro y Neuquén. Es el principal acceso a la región patagónica, conectando Bahía Blanca con Zapala y la RN 40."
     },
     {
       "id": "rn-0023",
       "route": "0023",
       "name": "RN 0023",
+      "full_name": "Perito Moreno",
       "sentido": "A",
       "length_km": 599.11,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera de 605 km que recorre Río Negro de este a oeste, desde la costa atlántica hasta la cordillera. Conocida como la Línea Sur, conecta la RN 3 con la RN 40 en Dina Huapi."
     },
     {
       "id": "rn-0025",
       "route": "0025",
       "name": "RN 0025",
+      "full_name": "Ruta Nacional 25",
       "sentido": "A",
       "length_km": 528.25,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera pavimentada de 534 km que recorre el centro de Chubut. Une Rawson con Tecka, cruzando la meseta patagónica y pasando por localidades como Gaiman y Los Altares."
     },
     {
       "id": "rn-0026",
       "route": "0026",
       "name": "RN 0026",
+      "full_name": "Ruta Nacional 26",
       "sentido": "A",
       "length_km": 209.92,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera pavimentada de 210 km que recorre el sur de Chubut. Atraviesa la meseta patagónica desde Comodoro Rivadavia hasta el empalme con la RN 40, pasando por Sarmiento."
     },
     {
       "id": "rn-0033",
       "route": "0033",
       "name": "RN 0033",
+      "full_name": "Ruta del Desierto Dr. Adolfo Alsina",
       "sentido": "A",
       "length_km": 794.55,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera asfaltada que atraviesa Buenos Aires sin pasar por el AMBA. Une los puertos de Rosario y Bahía Blanca, siendo una columna vertebral del transporte de cargas del centro del país."
     },
     {
       "id": "rn-0034",
       "route": "0034",
       "name": "RN 0034",
+      "full_name": "Carretera General Martín Miguel de Güemes",
       "sentido": "A",
       "length_km": 1488.4,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Importante carretera asfaltada que recorre el norte argentino de norte a sur. Atraviesa provincias como Salta, Tucumán, Santiago del Estero, Santa Fe y Buenos Aires."
     },
     {
       "id": "rn-0035",
       "route": "0035",
       "name": "RN 0035",
+      "full_name": "Doctor René Favaloro",
       "sentido": "A",
       "length_km": 709.55,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera asfaltada que une Santa Fe con Córdoba. Es un corredor estratégico que conecta la región pampeana con el centro del país, facilitando el transporte de producciones agropecuarias."
     },
     {
       "id": "rn-0036",
       "route": "0036",
       "name": "RN 0036",
+      "full_name": "Ruta Nacional 36",
       "sentido": "A",
       "length_km": 813.12,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Autovía de 217 km que une Córdoba con Río Cuarto en la provincia homónima. Es el principal acceso al sur cordobés, pasando por Alcira Gigena, Berrotarán y Almafuerte."
     },
     {
       "id": "rn-0038",
       "route": "0038",
       "name": "RN 0038",
+      "full_name": "Monseñor Angelelli",
       "sentido": "A",
       "length_km": 806.81,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Carretera pavimentada que une Córdoba con Tucumán atravesando La Rioja y Catamarca. Conocida como Ruta Monseñor Angelelli, conecta el Valle de Punilla con el noroeste argentino."
     },
     {
       "id": "rn-0040",
       "route": "0040",
       "name": "RN 0040",
+      "full_name": "Libertador General Don José de San Martín",
       "sentido": "A",
       "length_km": 5080.16,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La carretera más emblemática de Argentina, con más de 5.000 km que recorren el oeste del país. Atraviesa 20 provincias desde La Quiaca hasta Cabo Vírgenes, pasando por los Andes y la Patagonia."
     },
     {
       "id": "rn-0050",
       "route": "0050",
       "name": "RN 0050",
+      "full_name": "Ruta Nacional 50",
       "sentido": "A",
       "length_km": 71.1,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 50 es una carretera pavimentada de 71 kilómetros que conecta la ciudad de Pichanal con el puente internacional sobre el Río Bermejo, frontera natural con Bolivia. El camino se encuentra en el Departamento Orán, al norte de la provincia de Salta y ha sido asfaltado desde Pichanal hasta Oran."
     },
     {
       "id": "rn-0051",
       "route": "0051",
       "name": "RN 0051",
+      "full_name": "Ruta Nacional 0051",
       "sentido": "A",
       "length_km": 289.1,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 51 es una carretera argentina pavimentada que se encuentra en el oeste de la Provincia de Salta y sudoeste de la Provincia de Jujuy. Tiene un recorrido de 283 km y une la rotonda del Aeropuerto con el Paso Sico, a 4092 m s.n.m., en el límite con Chile."
     },
     {
       "id": "rn-0052",
       "route": "0052",
       "name": "RN 0052",
+      "full_name": "Ruta Nacional 0052",
       "sentido": "A",
       "length_km": 257.06,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La ruta nacional 52 une la Ruta Nacional 9 en Purmamarca con el Paso de Jama, a 4230 m s. n. m., en la frontera con Chile. El camino es parte del Eje del Capricornio, definido por IIRSA para unir Argentina con Chile, Paraguay y Brasil. La ruta ha sido pavimentada y mejorada en varias etapas, incluyendo la construcción de un nuevo tramo en 2005."
     },
     {
       "id": "rn-0060",
       "route": "0060",
       "name": "RN 0060",
+      "full_name": "Ruta Nacional 0060",
       "sentido": "A",
       "length_km": 1569.39,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 60 es una carretera pavimentada que conecta las provincias de Córdoba, Catamarca y La Rioja. Con un recorrido de 794 km, esta ruta nacional es utilizada por vehículos de gran porte y mercadería en su trayecto hacia el norte de la República Argentina y Bolivia."
     },
     {
       "id": "rn-0064",
       "route": "0064",
       "name": "RN 0064",
+      "full_name": "Ruta Nacional 0064",
       "sentido": "A",
       "length_km": 164.02,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 64 es una carretera argentina pavimentada que se extiende desde el sur de Tucumán, pasa por Catamarca y se encuentra en el centro-oeste de la Provincia de Santiago del Estero. Tiene un recorrido de 164 kilómetros asfaltados que une la esquina de Avenida Aristóbulo del Valle y Avenida Bolivia (ex-Ruta Nacional 34) en la ciudad de La Banda y la Ruta Nacional 38 en las cercanías de la pequeña localidad de Rumi Punco. Fue diseñada sobre un antiguo camino de tierra que fue pavimentado en 1946 y convertido en ruta asfaltada en su totalidad en 1952."
     },
     {
       "id": "rn-0065",
       "route": "0065",
       "name": "RN 0065",
+      "full_name": "Ruta Nacional 0065",
       "sentido": "A",
       "length_km": 47.85,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 65 es una ruta que une Concepción en Tucumán con el límite con la provincia de Catamarca, pasando por la Cuesta del Clavillo y el Parque nacional Aconquija. Ha sufrido cambios en su recorrido y denominación a lo largo del tiempo, incluyendo una transferencia de jurisdicción entre la provincia de Tucumán y Vialidad Nacional."
     },
     {
       "id": "rn-0066",
       "route": "0066",
       "name": "RN 0066",
+      "full_name": "Ruta Nacional 0066",
       "sentido": "A",
       "length_km": 37.97,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 66 es una carretera pavimentada en el sudeste de la Provincia de Jujuy, que se extiende sobre un recorrido de 38 km desde San Salvador de Jujuy hasta la confluencia con la Ruta Nacional 34. La ruta comienza como autopista entre el empalme con la Ruta Nacional 9 y el aeropuerto Horacio Guzmán, antes de cambiar su rumbo hacia el este y seguir un recorrido alternativo hasta llegar a su finalización."
     },
     {
       "id": "rn-0068",
       "route": "0068",
       "name": "RN 0068",
+      "full_name": "Ruta Nacional 0068",
       "sentido": "A",
       "length_km": 176.03,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 68 es una carretera argentina asfaltada que se encuentra en el sur de la Provincia de Salta, uniendo las ciudades de Cafayate y Salta en un recorrido de 183 km. Pasa por la Quebrada de las Conchas, donde se pueden apreciar curiosas formaciones montañosas. La ruta también cruza varios departamentos y localidades, incluyendo Cafayate, La Viña, Coronel Moldes, El Carril, La Merced, Cerrillos y Salta."
     },
     {
       "id": "rn-0073",
       "route": "0073",
       "name": "RN 0073",
+      "full_name": "Ruta Nacional 0073",
       "sentido": "A",
       "length_km": 78.71,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Ruta Nacional 73: carretera asfaltada que recorre Salta en el noroeste argentino. Conecta localidades de la región andina, facilitando el acceso a zonas productivas y comunidades del norte salteño."
     },
     {
       "id": "rn-0074",
       "route": "0074",
       "name": "RN 0074",
+      "full_name": "Ruta Nacional 0074",
       "sentido": "A",
       "length_km": 1198.3,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 74 es una carretera argentina pavimentada que une las localidades de Patquía y Nonogasta en un recorrido de 113 km, extendiéndose por el valle limitado por la Sierra de Velasco al este y la Sierra de Sañogasta al oeste. Fue inaugurada el 4 de julio de 1950 y se mantiene bajo la modalidad de contratos de recuperación y mantenimiento."
     },
     {
       "id": "rn-0075",
       "route": "0075",
       "name": "RN 0075",
+      "full_name": "Ruta Nacional 0075",
       "sentido": "A",
       "length_km": 122.9,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 75 es una carretera argentina asfaltada que une las ciudades de La Rioja y Aimogasta en un recorrido de 129 km. Fue creada mediante el Decreto Nacional 1595 de 1979 y pasó a jurisdicción provincial antes de regresar a la nacionalidad en 1990. El tramo entre Villa Sanagasta y Pinchas se pavimentó entre 1993 y 1997, y en 2014 se inauguró la extensión hasta el tramo Las Padercitas-Dique Los Sauces."
     },
     {
       "id": "rn-0076",
       "route": "0076",
       "name": "RN 0076",
+      "full_name": "Ruta Nacional 0076",
       "sentido": "A",
       "length_km": 377.21,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 76 es una carretera argentina que se localiza en el oeste de la Provincia de La Rioja. Conecta la Ruta Nacional 150 con el paso montañoso internacional Pircas Negras, situado a una altitud de 4165 m s. n. m., pasando por el interior de la Reserva Provincial Laguna Brava y el parque nacional Talampaya."
     },
     {
       "id": "rn-0077",
       "route": "0077",
       "name": "RN 0077",
+      "full_name": "Ruta Nacional 0077",
       "sentido": "A",
       "length_km": 101.95,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 77 es una carretera pavimentada que une el pueblo de Desiderio Tello con el empalme con la Ruta Nacional 38, uniendo las provincias de La Rioja y Córdoba. Tiene una longitud de 102 km y su recorrido pasa por varios departamentos y localidades en ambas provincias."
     },
     {
       "id": "rn-0078",
       "route": "0078",
       "name": "RN 0078",
+      "full_name": "Ruta Nacional 0078",
       "sentido": "A",
       "length_km": 81.15,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 78 es una carretera pavimentada en el norte de la Provincia de La Rioja, Argentina. Originalmente era un tramo de la Ruta Nacional 40, pero a través del Decreto Nacional 1595 en 1979, se intercambiaron caminos y se le dio la misma denominación a las nuevas rutas provinciales. En 1997, se cambió la denominación a Ruta Nacional 78 después de un convenio entre la Dirección Nacional de Vialidad y la Provincia de La Rioja. La carretera fue pavimentada al norte de Famatina en 2007."
     },
     {
       "id": "rn-0079",
       "route": "0079",
       "name": "RN 0079",
+      "full_name": "Ruta Nacional 0079",
       "sentido": "A",
       "length_km": 368.36,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 79 es una carretera argentina pavimentada que une la ciudad de Quines, San Luis con la localidad de Casa de Piedra, Catamarca. El recorrido de la ruta es de 367 kilómetros y se encuentra en el norte de la Provincia de San Luis, el este de la Provincia de La Rioja y el sur de la Provincia de Catamarca."
     },
     {
       "id": "rn-0081",
       "route": "0081",
       "name": "RN 0081",
+      "full_name": "Ruta Nacional 0081",
       "sentido": "A",
       "length_km": 1863.44,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La ruta nacional 81 es una carretera argentina que tiene una extensión total de 680 km y fue completamente asfaltada y finalizada el 13 de marzo de 2008. Atraviesa la Provincia de Formosa y finaliza en el este de la Provincia de Salta, uniendo diferentes localidades y departamentos."
     },
     {
       "id": "rn-0086",
       "route": "0086",
       "name": "RN 0086",
+      "full_name": "Ruta Nacional 0086",
       "sentido": "A",
       "length_km": 2017.87,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 86 es una carretera parcialmente asfaltada que se encuentra en el norte de la Provincia de Formosa y parte de la Provincia de Salta. El camino tiene un recorrido de 521 km, donde el tramo entre Clorinda y General Manuel Belgrano está asfaltado, mientras que hacia el noroeste es de tierra. Luego de un tramo de interrupción, la ruta continúa en el noreste de la Provincia de Salta, entre Tonono y Tartagal, en un tramo de 35 km de tierra."
     },
     {
       "id": "rn-0089",
       "route": "0089",
       "name": "RN 0089",
+      "full_name": "Ruta Nacional 0089",
       "sentido": "A",
       "length_km": 523.59,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Es una carretera argentina pavimentada que se encuentra en el sur de la Provincia del Chaco y el centro-este de la Provincia de Santiago del Estero. Conecta la Ruta Nacional 16 en Avia Terai con la Ruta Nacional 34 en Taboada, recorriendo 348 kilómetros."
     },
     {
       "id": "rn-0095",
       "route": "0095",
       "name": "RN 0095",
+      "full_name": "Ruta Nacional 0095",
       "sentido": "A",
       "length_km": 1410.39,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 95 es una carretera argentina pavimentada que une las provincias argentinas de Santa Fe, Chaco y Formosa. Tiene un recorrido de 675 kilómetros y conecta las ciudades de Ceres y Villa General Güemes."
     },
     {
       "id": "rn-0098",
       "route": "0098",
       "name": "RN 0098",
+      "full_name": "Ruta Nacional 0098",
       "sentido": "A",
       "length_km": 284.73,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 98 es una carretera asfaltada argentina que une las ciudades de Vera y Pinto en el norte de la Provincia de Santa Fe y el este de la Provincia de Santiago del Estero. Con un recorrido de 286 kilómetros, este camino es importante para conectar estas dos regiones."
     },
     {
       "id": "rn-0101",
       "route": "0101",
       "name": "RN 0101",
+      "full_name": "Ruta Nacional 0101",
       "sentido": "A",
       "length_km": 139.12,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Es una carretera que nace en Bernardo de Irigoyen, Misiones, y culmina en el parque nacional Iguazú, en cercanías de las cataratas de igual nombre. Con un tramo asfaltado de 91 km y ripio de 44 km, bordea la frontera argentino-brasileña y atravesa los departamentos misioneros de General Manuel Belgrano e Iguazú."
     },
     {
       "id": "rn-0105",
       "route": "0105",
       "name": "RN 0105",
+      "full_name": "Ruta Nacional 0105",
       "sentido": "A",
       "length_km": 34.8,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 105 es una carretera argentina pavimentada que se encuentra en el sudoeste de la Provincia de Misiones, con un recorrido de 46 km desde el Puente Internacional 'San Roque González de Santa Cruz' hasta la Ruta Nacional 14. Fue construida entre 1953 y 1954 durante la gobernación de Juan Filomeno Velazco y actualmente se encuentra en construcción una segunda calzada para convertirla en su totalidad en autovía."
     },
     {
       "id": "rn-0117",
       "route": "0117",
       "name": "RN 0117",
+      "full_name": "Ruta Nacional 0117",
       "sentido": "A",
       "length_km": 12.88,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 117 es una carretera argentina que se encuentra en el departamento Paso de los Libres, en la provincia de Corrientes. Tiene una longitud de 12,9 km y es una ruta asfaltada con luminarias. La construcción de la ruta asfaltada fue terminada en 1951 y en 1990 se concesionó con cobro de peaje las rutas más transitadas del país."
     },
     {
       "id": "rn-0118",
       "route": "0118",
       "name": "RN 0118",
+      "full_name": "Ruta Nacional 0118",
       "sentido": "A",
       "length_km": 196.06,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 118 es una carretera pavimentada que se encuentra en el noroeste de la provincia de Corrientes, Argentina. Tiene un recorrido de 196 km desde la intersección con la Ruta Nacional 12 y la Ruta Provincial 27 hasta el paraje Vallejos Cué. Pasa por varios departamentos y localidades en la provincia, incluyendo Saladas, Santa Rosa, Concepción, San Miguel y Loreto."
     },
     {
       "id": "rn-0119",
       "route": "0119",
       "name": "RN 0119",
+      "full_name": "Ruta Nacional 0119",
       "sentido": "A",
       "length_km": 109.38,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 119 es una carretera argentina pavimentada que se encuentra en el centro-sur de la provincia de Corrientes, extendiéndose sobre un recorrido de 109 km desde la intersección de las Rutas Nacionales 14 y 127 hasta la Ruta Nacional 123. La ruta pasa por los departamentos de Monte Caseros, Curuzú Cuatiá y Mercedes, atravesando ciudades como Mariano I. Loza y Mercedes."
     },
     {
       "id": "rn-0120",
       "route": "0120",
       "name": "RN 0120",
+      "full_name": "Ruta Nacional 0120",
       "sentido": "A",
       "length_km": 57.51,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Es una carretera asfaltada argentina que se encuentra en el noreste de la provincia de Corrientes, con un recorrido de 58 km desde el empalme con la Ruta Nacional 14 hasta el empalme con la Ruta Nacional 12. Antiguamente fue conocida como la Ruta Provincial 38 y pasó a jurisdicción nacional mediante convenio en 1997."
     },
     {
       "id": "rn-0121",
       "route": "0121",
       "name": "RN 0121",
+      "full_name": "Ruta Nacional 0121",
       "sentido": "A",
       "length_km": 8.34,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 121 es una carretera argentina de 8,3 km que une el 'km 683' de la Ruta Nacional 14 con el Puente de la Integración sobre el río Uruguay y conduce a São Borja. Fue construida por Mercovia en 1997 y posee una concesión de 25 años."
     },
     {
       "id": "rn-0122",
       "route": "0122",
       "name": "RN 0122",
+      "full_name": "Ruta Nacional 0122",
       "sentido": "A",
       "length_km": 5.94,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 122 es una carretera argentina que se encuentra al este de la provincia de Corrientes, conectando la ruta nacional 14 en el km 551 con la ciudad de Yapeyú, junto al río Uruguay. Mide 6 kilómetros asfaltados y une la ruta nacional 14 con la ciudad de Yapeyú."
     },
     {
       "id": "rn-0123",
       "route": "0123",
       "name": "RN 0123",
+      "full_name": "Ruta Nacional 0123",
       "sentido": "A",
       "length_km": 214.14,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 123 es una carretera argentina que se encuentra en el centro-sur de la Provincia de Corrientes. Con un recorrido de 214 kilómetros asfaltados, une la Ruta Provincial 27 con la Ruta Nacional 14, pasando por departamentos como Bella Vista, San Roque y Mercedes."
     },
     {
       "id": "rn-0127",
       "route": "0127",
       "name": "RN 0127",
+      "full_name": "Ruta Nacional 0127",
       "sentido": "A",
       "length_km": 325.35,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 127 es una carretera asfaltada argentina que une las provincias de Entre Ríos y Corrientes. Con un recorrido total de 260 km, se inicia en el km 497 de la Ruta Nacional 12 y termina en la intersección con las rutas nacionales 14 y 119 en Cuatro Bocas. Fue reasfaltada en 2011 con una inversión superior a los 250 millones de pesos."
     },
     {
       "id": "rn-0130",
       "route": "0130",
       "name": "RN 0130",
+      "full_name": "Ruta Nacional 0130",
       "sentido": "A",
       "length_km": 82.27,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 130 es una carretera asfaltada argentina que se encuentra en el centro-este de la Provincia de Entre Ríos. Con un recorrido de 82 kilómetros, une la ciudad de Colón con Villaguay, pasando por la ciudad de Villa Elisa y otros lugares del departamento de Uruguay."
     },
     {
       "id": "rn-0131",
       "route": "0131",
       "name": "RN 0131",
+      "full_name": "Ruta Nacional 0131",
       "sentido": "A",
       "length_km": 40.92,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Es una carretera argentina asfaltada que se encuentra en el centro-oeste de la Provincia de Entre Ríos. Con un recorrido de 41 kilómetros, une el puerto de Diamante con la Ruta Nacional 12 cerca de Crespo. Fue asfaltada en 2011 y ampliada con una inversión superior a los 5 millones de pesos."
     },
     {
       "id": "rn-0135",
       "route": "0135",
       "name": "RN 0135",
+      "full_name": "Ruta Nacional 0135",
       "sentido": "A",
       "length_km": 14.58,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 135 es una carretera argentina que une el kilómetro 151 de la Ruta Nacional 14 con el Puente General Artigas sobre el río Uruguay. Tiene un recorrido de 14,6 km asfaltados y pasa por el departamento Colón en la provincia de Entre Ríos. Ofrece servicios como estaciones de servicio y tiene un peaje exclusivamente del lado uruguayo para el uso del puente y control de migraciones y aduana."
     },
     {
       "id": "rn-0136",
       "route": "0136",
       "name": "RN 0136",
+      "full_name": "Ruta Nacional 0136",
       "sentido": "A",
       "length_km": 42.86,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 136 es una carretera argentina que se encuentra en el departamento de Gualeguaychú, en el centro-este de la provincia de Entre Ríos. La traza tiene 33,9 kilómetros asfaltados y une la ruta provincial 20 con el Puente Libertador General San Martín sobre el río Uruguay."
     },
     {
       "id": "rn-0141",
       "route": "0141",
       "name": "RN 0141",
+      "full_name": "Ruta Nacional 0141",
       "sentido": "A",
       "length_km": 203.51,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 141 es una carretera argentina pavimentada que conecta la Ruta Nacional 79 en La Rioja con la Ruta Nacional 20 en San Juan. Tiene un recorrido de 204 km y pasa por localidades como Chepes, Vallecito y Caucete. También es conocida como antigua traza de la ruta que se extendía desde el límite interprovincial entre San Juan y Mendoza hasta el empalme con la Ruta Nacional 150 en Las Flores."
     },
     {
       "id": "rn-0142",
       "route": "0142",
       "name": "RN 0142",
+      "full_name": "Ruta Nacional 0142",
       "sentido": "A",
       "length_km": 112.5,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La ruta nacional 142 es una carretera argentina asfaltada que se encuentra en el norte de la Provincia de Mendoza y el sur de la Provincia de San Juan. Tiene un recorrido de 77 km y une la calle Corindu de la localidad de Ingeniero Gustavo André con la Ruta Nacional 20 en la localidad de El Encón, permitiendo llegar a diversos circuitos turísticos, incluyendo la reserva Natural y Cultural Bosques Telteca."
     },
     {
       "id": "rn-0143",
       "route": "0143",
       "name": "RN 0143",
+      "full_name": "Ruta Nacional 0143",
       "sentido": "A",
       "length_km": 629.77,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 143 es una carretera argentina que une la Ruta Nacional 152 en el km 72 y la Ruta Nacional 40 en Pareditas. Tiene un recorrido de 629 kilómetros, siendo 304 km en la provincia de La Pampa y 325 km en la provincia de Mendoza. El camino es de tierra entre el km 56 y el empalme con la Ruta Nacional 151, pero el resto está asfaltado."
     },
     {
       "id": "rn-0144",
       "route": "0144",
       "name": "RN 0144",
+      "full_name": "Ruta Nacional 0144",
       "sentido": "A",
       "length_km": 794.75,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 144 es una carretera argentina asfaltada que se encuentra en el Departamento San Rafael, centro-oeste de la Provincia de Mendoza. Tiene un recorrido de 132 kilómetros desde km 663 hasta km 795 y une la Ruta Nacional 143 con la Ruta Nacional 40."
     },
     {
       "id": "rn-0145",
       "route": "0145",
       "name": "RN 0145",
+      "full_name": "Ruta Nacional 0145",
       "sentido": "A",
       "length_km": 75.73,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 145 es una carretera argentina asfaltada desde 2015 que se encuentra en el Departamento Malargüe, en la Provincia de Mendoza. Con un recorrido de 76 kilómetros, une la Ruta Nacional 40 en Bardas Blancas con el paso montañoso internacional Pehuenche a 2553 metros sobre el nivel del mar, en la frontera chilena. El camino forma parte del Corredor Mercosur-Chile y es parte de un eje de integración en Argentina."
     },
     {
       "id": "rn-0146",
       "route": "0146",
       "name": "RN 0146",
+      "full_name": "Ruta Nacional 0146",
       "sentido": "A",
       "length_km": 395.11,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 146 es una carretera argentina que se extiende por las provincias de San Luis y Mendoza, con un recorrido total de 395 kilómetros. Comunica la RN 20 a nivel del km 286 en Luján con la RN 143 en San Rafael. El tramo de 221 kilómetros en San Luis conecta las localidades de Luján, San Francisco del Monte de Oro, Toro Negro, San Luis y Beazley, mientras que el tramo de 174 kilómetros en Mendoza conecta Monte Comán, Goudge y San Rafael. La ruta fue modificada en la década de 1970 y se pavimentó completamente en la década de 1980."
     },
     {
       "id": "rn-0147",
       "route": "0147",
       "name": "RN 0147",
+      "full_name": "Ruta Nacional 0147",
       "sentido": "A",
       "length_km": 933.84,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 147 es una carretera argentina asfaltada que se encuentra en el noroeste de la Provincia de San Luis, con un recorrido de 128 kilómetros que une la Avenida Parque Gobernador José Santos Ortiz con la Ruta Nacional 20. La ruta pasa por varias localidades, incluyendo la ciudad de San Luis y los pueblos de San Antonio y La Chañarienta. Antiguamente, esta ruta se extendía entre San Luis y Caucete, pero actualmente el tramo de 180 km entre La Chañarienta y Caucete pertenece a la R.N. 20."
     },
     {
       "id": "rn-0148",
       "route": "0148",
       "name": "RN 0148",
+      "full_name": "Ruta Nacional 0148",
       "sentido": "A",
       "length_km": 996.42,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 148 es una carretera breve ubicada en la región central de Argentina, con una extensión aproximada de 40 km que discurren desde el kilómetro 925 hasta el kilómetro 966. La ruta no atravesa ninguna población y se encuentra localizada en el extremo sur del Valle de San Javier o Traslasierra, en la Provincia de Córdoba."
     },
     {
       "id": "rn-0149",
       "route": "0149",
       "name": "RN 0149",
+      "full_name": "Ruta Nacional 0149",
       "sentido": "A",
       "length_km": 345.99,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 149 es una carretera argentina que se encuentra en el noroeste de la Provincia de Mendoza y el sudoeste de la Provincia de San Juan. Con un recorrido de 346 km, une la Ruta Nacional 7 en Uspallata con la Ruta Nacional 150 en Las Flores, pasando por parques nacionales y formando parte del corredor minero. La ruta ha sufrido cambios históricos y trabajos de pavimentación y mejora a lo largo de los años."
     },
     {
       "id": "rn-0150",
       "route": "0150",
       "name": "RN 0150",
+      "full_name": "Ruta Nacional 0150",
       "sentido": "A",
       "length_km": 385.77,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 150 es una carretera argentina pavimentada que se localiza en el sur de la Provincia de La Rioja y el centro norte de la Provincia de San Juan. Conecta el km 356 de la Ruta Nacional 38, localizado en las afueras de la localidad riojana de Patquía, con el paso montañoso internacional Agua Negra, a 4779 m s. n. m., localizado en la frontera chilena. La ruta es parte del futuro corredor bioceánico que conectaría el centro de Argentina con los puertos del Pacífico y el Atlántico."
     },
     {
       "id": "rn-0151",
       "route": "0151",
       "name": "RN 0151",
+      "full_name": "Ruta Nacional 0151",
       "sentido": "A",
       "length_km": 315.7,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 151 es una carretera argentina que se encuentra en el norte de la Provincia de Río Negro y el oeste de la Provincia de La Pampa. Con un recorrido de 315 kilómetros pavimentados, une la rotonda de la ciudad de Cipolletti con el empalme con la Ruta Nacional 143 a 21 km del pueblo de Santa Isabel."
     },
     {
       "id": "rn-0152",
       "route": "0152",
       "name": "RN 0152",
+      "full_name": "Ruta Nacional 0152",
       "sentido": "A",
       "length_km": 289.9,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 152 es una carretera argentina que se encuentra en el sur de la Provincia de La Pampa, uniendo el km 249 de la Ruta Nacional 35 y la localidad de Casa de Piedra, junto al río Colorado. Tiene una extensión de 290 km y es parte del camino más corto para acceder desde Buenos Aires al Alto Valle del Río Negro y las ciudades de Neuquén y Bariloche. La ruta pasa por el parque nacional Lihué Calel y su estado actualmente es deteriorado, con ondulaciones en la calzada y baches profundos, lo que afecta la transitabilidad y seguridad vial."
     },
     {
       "id": "rn-0153",
       "route": "0153",
       "name": "RN 0153",
+      "full_name": "Ruta Nacional 0153",
       "sentido": "A",
       "length_km": 153.5,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 153 es una carretera argentina que une la Ruta Nacional 40 en Media Agua, San Juan, con la Ruta Nacional 149 en el límite interprovincial. Tiene un recorrido de 109 kilómetros y se encuentra en estado intransitable principalmente en la Provincia de Mendoza, aunque el tramo sanjuanino fue pavimentado en 2014."
     },
     {
       "id": "rn-0154",
       "route": "0154",
       "name": "RN 0154",
+      "full_name": "Ruta Nacional 0154",
       "sentido": "A",
       "length_km": 136.48,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 154 es una carretera asfaltada que se encuentra en el este de la Provincia de La Pampa, uniéndose con la Ruta Nacional 35 y la Ruta Nacional 22. Esta ruta de 136 km no pasa por ninguna población, excepto La Adela. Después de décadas, fue finalmente asfaltado en 2014."
     },
     {
       "id": "rn-0157",
       "route": "0157",
       "name": "RN 0157",
+      "full_name": "Ruta Nacional 0157",
       "sentido": "A",
       "length_km": 1250.25,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 157 es una carretera argentina que se encuentra en el sudeste de la Provincia de Catamarca, el oeste de la Provincia de Santiago del Estero y el sudeste de la Provincia de Tucumán. Con un recorrido de 310 kilómetros asfaltados, une la Ruta Nacional 60 con el puente sobre el Canal Sur en la ciudad de San Miguel de Tucumán."
     },
     {
       "id": "rn-0158",
       "route": "0158",
       "name": "RN 0158",
+      "full_name": "Ruta Nacional 0158",
       "sentido": "A",
       "length_km": 285.31,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Es una carretera argentina que se encuentra en el centro-este de la provincia de Córdoba, con un recorrido de 285 km desde San Francisco hasta Río Cuarto. Forma parte del Corredor Mercosur-Chile y es importante para la integración en Argentina."
     },
     {
       "id": "rn-0168",
       "route": "0168",
       "name": "RN 0168",
+      "full_name": "Ruta Nacional 0168",
       "sentido": "A",
       "length_km": 17.12,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 168 es una breve autopista argentina localizada en el este de la Provincia de Santa Fe, que se extiende desde la intersección con la RN 11 hasta la intersección con la RN 12. Atraviesa las islas La Guardia, Cañas, El Timbó y Santa Cándida y es parte del Corredor Bioceánico Central. Con una longitud de solo 35 km, es una de las rutas nacionales más cortas del país."
     },
     {
       "id": "rn-0173",
       "route": "0173",
       "name": "RN 0173",
+      "full_name": "Ruta Nacional 0173",
       "sentido": "A",
       "length_km": 5.68,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 173 es una carretera argentina de tierra que se encuentra al este de la provincia de Santa Fe. Esta ruta de 5,7 kilómetros une la Ruta Nacional 11 con el paraje Puerto Aragón en el Departamento San Jerónimo."
     },
     {
       "id": "rn-0174",
       "route": "0174",
       "name": "RN 0174",
+      "full_name": "Ruta Nacional 0174",
       "sentido": "A",
       "length_km": 59.43,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 174 es una carretera argentina que une las provincias de Santa Fe y Entre Ríos, recorriendo 60 km desde Rosario hasta Victoria. La ruta se abrió al tránsito en 2003 después de un costo de 385 millones de dólares y fue premiada como la Obra Vial del año 2003."
     },
     {
       "id": "rn-0175",
       "route": "0175",
       "name": "RN 0175",
+      "full_name": "Ruta Nacional 0175",
       "sentido": "A",
       "length_km": 3.06,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 175 es una carretera asfaltada que se encuentra en el Departamento San Lorenzo, al este de la provincia de Santa Fe, conectando la Ruta Nacional 11 con el pueblo de Puerto General San Martín. Es considerada como una de las rutas nacionales más cortas de Argentina, con un recorrido de apenas 3 kilómetros."
     },
     {
       "id": "rn-0178",
       "route": "0178",
       "name": "RN 0178",
+      "full_name": "Ruta Nacional 0178",
       "sentido": "A",
       "length_km": 245.7,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 178 es una carretera argentina que conecta Pergamino con Las Rosas, pasando por las provincias de Buenos Aires y Santa Fe. Con un recorrido de 206 km, la ruta comienza en el empalme con las rutas nacionales 8 y 188 en Pergamino y finaliza en el empalme con la Ruta Provincial 65 en Las Rosas."
     },
     {
       "id": "rn-0188",
       "route": "0188",
       "name": "RN 0188",
+      "full_name": "Ruta Nacional 0188",
       "sentido": "A",
       "length_km": 1025.71,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 188 es una carretera argentina que tiene su kilómetro 0 en el puerto fluvial de San Nicolás de los Arroyos, provincia de Buenos Aires, y finaliza en la ciudad de General Alvear, provincia de Mendoza. La ruta conecta cuatro provincias argentinas: Buenos Aires, La Pampa, San Luis y Mendoza, con un recorrido total de 803 km pavimentados."
     },
     {
       "id": "rn-0193",
       "route": "0193",
       "name": "RN 0193",
+      "full_name": "Ruta Nacional 0193",
       "sentido": "A",
       "length_km": 35.32,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 193 es una carretera argentina asfaltada que une la ciudad de Zárate con el pueblo de Solís, en un recorrido de 31 km. Comienza en el puente sobre la Ruta Nacional 9 y finaliza en el empalme con la Ruta Nacional 8. Originalmente extendía 56 km, pero en la década de 2000 se redujo su tramo nororiental a una ruta provincial."
     },
     {
       "id": "rn-0205",
       "route": "0205",
       "name": "RN 0205",
+      "full_name": "Ruta Nacional 0205",
       "sentido": "A",
       "length_km": 317.41,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 205 es una carretera pavimentada de 317 km que discurre del noreste al centro de la Provincia de Buenos Aires, Argentina. El recorrido entre Ezeiza y Cañuelas se conoce como Autopista Ezeiza-Cañuelas. El resto de la ruta tiene un carril por mano. La RN 205 constituye una vía fundamental para el traslado de productos agrícola-ganaderos desde las cercanías del Río Matanza hacia la zona metropolitana sur."
     },
     {
       "id": "rn-0226",
       "route": "0226",
       "name": "RN 0226",
+      "full_name": "Ruta Nacional 0226",
       "sentido": "A",
       "length_km": 623.02,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 226 es una carretera argentina pavimentada de 623 km de largo que corre del sudeste al noroeste de la Provincia de Buenos Aires, desde Mar del Plata hasta General Villegas. En gran parte de su trayecto bordea las Sierras de Tandilia, en toda la extensión de la cadena. El recorrido comprende ciudades como Mar del Plata, Balcarce, Tandil, Azul y General Villegas, y cruces con otras rutas provinciales, nacionales y ferrocarriles."
     },
     {
       "id": "rn-0228",
       "route": "0228",
       "name": "RN 0228",
+      "full_name": "Ruta Nacional 0228",
       "sentido": "A",
       "length_km": 139.67,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 228 es una carretera asfaltada que une la ciudad de Necochea, en el sur de la provincia de Buenos Aires, con la ciudad de Tres Arroyos. Mide 140 km y está completamente asfaltada. En 2014 se realizaron mejoras en la ruta, incluyendo la construcción de acceso para caminos secundarios y la repavimentación de algunas áreas."
     },
     {
       "id": "rn-0229",
       "route": "0229",
       "name": "RN 0229",
+      "full_name": "Ruta Nacional 0229",
       "sentido": "A",
       "length_km": 30.19,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "Ruta Nacional 229: carretera que recorre Buenos Aires en la región pampeana. Conecta localidades del interior provincial, facilitando el acceso a zonas productivas y comunidades de la región."
     },
     {
       "id": "rn-0231",
       "route": "0231",
       "name": "RN 0231",
+      "full_name": "Ruta Nacional 0231",
       "sentido": "A",
       "length_km": 31.47,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 231 es una carretera argentina pavimentada de 105 km que une la Ruta Nacional 40 con el paso internacional Cardenal Samoré en el límite con Chile. El camino forma parte del Eje del Sur y recorre la Provincia del Neuquén antes de continuar en Chile como Ruta CH-215 y luego como ruta U-40 hasta el Océano Pacífico."
     },
     {
       "id": "rn-0232",
       "route": "0232",
       "name": "RN 0232",
+      "full_name": "Ruta Nacional 0232",
       "sentido": "A",
       "length_km": 115.49,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 232 es una carretera argentina pavimentada que se encuentra en el norte de la Provincia de Río Negro y el sur de la Provincia de La Pampa, uniendo la Ruta Nacional 152 y el empalme con la Ruta Nacional 22 en la localidad de Chelforó. Fue inaugurada el 12 de octubre de 1951. También es notable por haber sido parte de la Ruta Nacional 152 hasta 1999 y volver a ser una ruta nacional después de un convenio entre el gobierno nacional y provincial en 2009."
     },
     {
       "id": "rn-0234",
       "route": "0234",
       "name": "RN 0234",
+      "full_name": "Ruta Nacional 0234",
       "sentido": "A",
       "length_km": 57.44,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 234 es una carretera asfaltada argentina de 57 km que se extiende entre la Ruta Nacional 40 en La Rinconada y la Ruta Nacional 237. Comienza en el sur de la Provincia del Neuquén y cruza departamentos sin poblaciones. Originalmente, la ruta comenzaba en Neuquén hasta Auquincó y luego se redujo a un tramo de 29 km que une Neuquén con Barda del Medio. En 2004 se pavimentó un tercer tramo de 26 km entre Villa Traful y Lago Villarino, incorporado posteriormente en 2012 a la RN Nº40."
     },
     {
       "id": "rn-0237",
       "route": "0237",
       "name": "RN 0237",
+      "full_name": "Ruta Nacional 0237",
       "sentido": "A",
       "length_km": 1630.52,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 237 es una carretera argentina asfaltada que se encuentra en el este de la provincia del Neuquén, uniendo la Ruta Nacional 22 con la Ruta Nacional 40 en las cercanías del lago Nahuel Huapi. Tiene una extensión de 361 km y es paralela al río Limay. Su recorrido incluye localidades como Arroyito, Villa El Chocón, Picún Leufú, Piedra del Águila y Confluencia."
     },
     {
       "id": "rn-0242",
       "route": "0242",
       "name": "RN 0242",
+      "full_name": "Ruta Nacional 0242",
       "sentido": "A",
       "length_km": 58.84,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 242 es una carretera asfaltada de 60 kilómetros que conecta la Ruta Nacional 40 con el Paso de Pino Hachado en la frontera con Chile, formando parte del Eje del Sur. Originalmente se construyó entre 1951 y 1953 como una ruta de ripio que pasaba por varias localidades en la Provincia de Río Negro antes de ser modificada y habilitada al tránsito en 1969."
     },
     {
       "id": "rn-0249",
       "route": "0249",
       "name": "RN 0249",
+      "full_name": "Ruta Nacional 0249",
       "sentido": "A",
       "length_km": 670.55,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 249 es una carretera asfaltada de 20 km que conecta el caserío Bajo Hondo con la ciudad de Punta Alta, en el partido de Coronel de Marina Leonardo Rosales, provincia de Buenos Aires. Comienza en el empalme con la Ruta Nacional 3 y finaliza en Punta Alta."
     },
     {
       "id": "rn-0250",
       "route": "0250",
       "name": "RN 0250",
+      "full_name": "Ruta Nacional 0250",
       "sentido": "A",
       "length_km": 287.48,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 250 es una carretera argentina asfaltada que une el kilómetro 1.009 de la Ruta Nacional 3 con el km 997 de la Ruta Nacional 22 en la ciudad de Choele Choel, recorriendo 287 kilómetros por la Provincia de Río Negro. Es el camino más directo para acceder a Neuquén desde Viedma y corre en la margen derecha del Río Negro, excepto en el último kilómetro donde cruza un puente que conecta con Choele Choel."
     },
     {
       "id": "rn-0251",
       "route": "0251",
       "name": "RN 0251",
+      "full_name": "Ruta Nacional 0251",
       "sentido": "A",
       "length_km": 204.45,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 251 es una carretera asfaltada de 204 km en el este de la Provincia de Río Negro, que une la Ruta Nacional 22 con la Ruta Nacional 3. Esta ruta permite un acceso directo desde las poblaciones del este patagónico con Santa Rosa, Córdoba y demás ciudades del centro argentino sin pasar por la Provincia de Buenos Aires."
     },
     {
       "id": "rn-0252",
       "route": "0252",
       "name": "RN 0252",
+      "full_name": "Ruta Nacional 0252",
       "sentido": "A",
       "length_km": 9.51,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 252 es una carretera asfaltada de 6 km que se encuentra en el partido de Bahía Blanca, Provincia de Buenos Aires. Comienza en el empalme con la Ruta Nacional 3 y finaliza en el puerto de Ingeniero White. La ruta no tiene cabinas de peaje y es gestionada por la empresa Rutas al Sur desde 2003."
     },
     {
       "id": "rn-0259",
       "route": "0259",
       "name": "RN 0259",
+      "full_name": "Ruta Nacional 0259",
       "sentido": "A",
       "length_km": 75.74,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 259 es una carretera argentina que se encuentra en el noroeste de la provincia del Chubut, uniendo la Ruta Nacional 40 con el Paso internacional Río Futaleufú. Tiene una longitud de 75 km y está parcialmente asfaltada entre la ruta 40 y Trevelín, pero la mayor parte del camino es de ripio. La ruta también pasa cerca del parque nacional Los Alerces y continúa en Chile como Ruta CH-231."
     },
     {
       "id": "rn-0260",
       "route": "0260",
       "name": "RN 0260",
+      "full_name": "Ruta Nacional 0260",
       "sentido": "A",
       "length_km": 105.45,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 260 es una carretera argentina que conecta la Ruta Nacional 40 con el paso internacional Huemules, a 650 m s. n. m., en la frontera con Chile. Con un recorrido de 107 km, une dos puntos importantes del país: Río Mayo y el paso internacional con Chile."
     },
     {
       "id": "rn-0281",
       "route": "0281",
       "name": "RN 0281",
+      "full_name": "Ruta Nacional 0281",
       "sentido": "A",
       "length_km": 516.6,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 281 es una carretera argentina asfaltada que conecta la ciudad de Puerto Deseado con el km 1995 de la Ruta Nacional 3, ubicada en el noreste de la Provincia de Santa Cruz. Fue construida en 1954 y discurre prácticamente en paralelo a las vías del Ferrocarril Patagónico que unía las localidades de Puerto Deseado y Las Heras."
     },
     {
       "id": "rn-0288",
       "route": "0288",
       "name": "RN 0288",
+      "full_name": "Ruta Nacional 0288",
       "sentido": "A",
       "length_km": 272.68,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 288 es una carretera argentina de 272 kilómetros que une el puerto de Punta Quilla con la Ruta Nacional 40 en las cercanías del pueblo Tres Lagos. Fue construida entre 1952 y 1953 y se encuentra en el centro de la Provincia de Santa Cruz, pasando por localidades como Puerto Santa Cruz, Comandante Luis Piedrabuena y Tres Lagos."
     },
     {
       "id": "rn-0293",
       "route": "0293",
       "name": "RN 0293",
+      "full_name": "Ruta Nacional 0293",
       "sentido": "A",
       "length_km": 9.94,
-      "tipo_calzada": "P"
+      "tipo_calzada": "P",
+      "description": "La Ruta Nacional 293 es una carretera argentina de ripio que se encuentra en el Departamento Güer Aike, en el sudoeste de la Provincia de Santa Cruz. Con un recorrido de 10 kilómetros, une la Ruta Nacional 40 con el paso internacional Laurita - Casas Viejas, a 90 m s. n. m., en la frontera con Chile."
     }
   ]
 }

@@ -2,15 +2,23 @@
     .game-menu__top
         .game-menu__welcome
             span.game-menu__welcome-title
-                .game-menu__welcome-title--1 Macano
-                .game-menu__welcome-title--2 A
-                .game-menu__welcome-title--1 rgentina
+                .game-menu__welcome-title--1 Argen
+                .game-menu__welcome-title--2 T
+                .game-menu__welcome-title--1 ipeando
             span.game-menu__welcome-description Dominá el teclado recorriendo las rutas nacionales de Argentina: desde La Quiaca hasta Ushuaia, pasando por más de 500 ciudades reales. Un juego de mecanografía gratuito donde tu avance se guarda solo para que veas cómo avanzás y mejoras kilómetro a kilómetro.
-        .game-menu__info-card
+        .game-menu__info-card.hidden
             .game-menu__info-card-top
+                .game-menu__info-card-image.image
+                    img(src="#")
+                .game-menu__route-sign
+                    .game-menu__route-sign-top
+                        span.game-menu__route-number
+                    .game-menu__route-sign-bottom
+                        span.game-menu__route-length
+
+            .game-menu__info-card-bottom
                 span.game-menu__route-name
-                span.game-menu__route-length
                 .game-menu__route-description
+                .button.game-menu__button
+                    | Empezar
     .game-menu__bottom
-        .button.game-menu__button
-            | Start

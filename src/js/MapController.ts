@@ -78,6 +78,20 @@ class MapController {
         this.routeCityIdsMap = routeCityIdsMap;
     }
 
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject): void {
+        this.map.getCanvas().addEventListener(type, listener);
+    }
+
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject): void {
+        this.map.getCanvas().removeEventListener(type, listener);
+    }
+
+    private emitRouteSelected(routeId: string | null): void {
+        this.map.getCanvas().dispatchEvent(new CustomEvent('route-selected', {
+            detail: { routeId }
+        }));
+    }
+
     private clearSelectedRouteCitiesFeatureState() {
         for (const cityId of this.selectedRouteCityIds) {
             this.map.setFeatureState(
@@ -135,7 +149,7 @@ class MapController {
             this.map.on('mousemove', Settings.layerIds.nationalRoutesLine, (e) => {
                 if (!e.features || e.features.length === 0) return;
                 const feature = e.features[0];
-                const properties = feature.properties as { name?: string; cities_count?: number } | undefined;
+                const properties = feature.properties as { route_display?: string; name?: string; cities_count?: number } | undefined;
                 const nextHoveredId = feature.id ?? null;
 
                 if (this.hoveredId !== nextHoveredId) {
@@ -148,9 +162,9 @@ class MapController {
                     }
 
                     if (this.hoveredId !== null && this.mouseInfoCard) {
-                        const routeName = String(properties?.name ?? '');
+                        const routeName = String(properties?.route_display ?? properties?.name ?? '');
                         const citiesCount = Number(properties?.cities_count ?? 0);
-                        this.mouseInfoCard.show(routeName, `${citiesCount} ${citiesCount === 1 ? 'city' : 'cities'}`);
+                        this.mouseInfoCard.show(routeName, `${citiesCount} ${citiesCount === 1 ? 'ciudad' : 'ciudades'}`);
                     }
                 }
 
@@ -172,6 +186,17 @@ class MapController {
                 const clickedId = e.features[0].id ?? null;
                 this.selectRoute(this.selectedId === clickedId ? null : clickedId);
             });
+
+            this.map.on('click', (e) => {
+                const routeFeatures = this.map.queryRenderedFeatures(e.point, {
+                    layers: [Settings.layerIds.nationalRoutesLine]
+                });
+
+                if (routeFeatures.length > 0) return;
+                if (this.selectedId === null) return;
+
+                this.selectRoute(null);
+            });
         });
     }
 
@@ -187,6 +212,8 @@ class MapController {
             this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: routeId }, { selected: true });
             this.applySelectedRouteCitiesFeatureState();
         }
+
+        this.emitRouteSelected(routeId === null ? null : String(routeId));
     }
 
     getSelectedRouteId(): string | null {

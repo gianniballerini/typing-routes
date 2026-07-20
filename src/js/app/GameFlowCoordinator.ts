@@ -23,6 +23,7 @@ class GameFlowCoordinator {
 
     init(): void {
         this.ui_presenter.onStartRequested(this.handleStartRequested);
+        this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
 
         this.game.addEventListener('city-visited', this.handleCityVisited as EventListener);
         this.game.addEventListener('route-complete', this.handleRouteComplete as EventListener);
@@ -32,6 +33,7 @@ class GameFlowCoordinator {
         this.game.typing_controller.addEventListener('progress', this.handleTypingProgress as EventListener);
 
         this.ui_presenter.renderState(this.game.state);
+        this.refreshMenuFromSelectedRoute();
     }
 
     private handleStartRequested = (): void => {
@@ -55,6 +57,19 @@ class GameFlowCoordinator {
         this.setRouteVisited(customEvent.detail.routeId, true);
         this.map_controller.selectRoute(null);
         console.log(`Route complete: ${customEvent.detail.routeId}`);
+    };
+
+    private handleRouteSelected = (event: Event): void => {
+        const customEvent = event as CustomEvent<{ routeId: string | null }>;
+        const routeId = customEvent.detail.routeId;
+        const selectedRoute = routeId ? this.routes_controller.routes[routeId] ?? null : null;
+
+        if (selectedRoute) {
+            this.ui_presenter.setMenuRoutePreview(selectedRoute);
+            return;
+        }
+
+        this.ui_presenter.setMenuWelcomeState();
     };
 
     private handleStateChange = (): void => {
@@ -90,6 +105,18 @@ class GameFlowCoordinator {
             this.map_controller.updateCities(citiesFc);
             return;
         }
+    }
+
+    private refreshMenuFromSelectedRoute(): void {
+        const selectedRouteId = this.map_controller.getSelectedRouteId();
+        const selectedRoute = selectedRouteId ? this.routes_controller.routes[selectedRouteId] ?? null : null;
+
+        if (selectedRoute) {
+            this.ui_presenter.setMenuRoutePreview(selectedRoute);
+            return;
+        }
+
+        this.ui_presenter.setMenuWelcomeState();
     }
 }
 

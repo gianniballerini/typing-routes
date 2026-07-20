@@ -123,8 +123,11 @@
             }
 
             .game-playing__typing-caret {
-                display: inline-block;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 color: $flag-light-blue;
+                width: 2 * $ptr;
                 animation: typing-caret-blink 1s steps(1) infinite;
             }
 
@@ -138,7 +141,6 @@
 
         input.game-playing__typing-word {
             font-size: 30 * $ptr;
-            // letter-spacing: 4 * $ptr;
             color: $black;
             width: fit-content;
 
