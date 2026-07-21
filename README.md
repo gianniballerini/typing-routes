@@ -1,14 +1,9 @@
-# the-typing-routes
-Simple juego de mecanografia usando rutas Argentinas
+# Tipeando
+Simple juego de mecanografia usando rutas Nacionales Argentinas.
 
-## Possible names
- - Enrutado
- - MecanoArgentina
- - Upamecano
- - LaRutaDelTipeo
- - TipeandoRutas
- - Rutipeando
- - RutaMecanografica
+Una manera de practicar mecanografía mientras se aprenden algunos datos geográficos de Argentina.
+
+> **Tipear:**  Adaptación del verbo inglés type, usada en gran parte de América con el sentido de 'escribir utilizando un teclado'
 
 ## Data model for cities
 
