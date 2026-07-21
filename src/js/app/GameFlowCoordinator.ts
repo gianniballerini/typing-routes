@@ -53,6 +53,7 @@ class GameFlowCoordinator {
 
     init(): void {
         this.ui_presenter.onStartRequested(this.handleStartRequested);
+        this.ui_presenter.onCloseRequested(this.handleCloseRequested);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
 
         this.game.addEventListener('city-visited', this.handleCityVisited as EventListener);
@@ -141,9 +142,14 @@ class GameFlowCoordinator {
         }
 
         this.ui_presenter.setMenuWelcomeState();
+        this.map_controller.resetToCountryView();
         this.routeMetrics = null;
         this.snappedCityPoints = [];
         this.map_controller.hideProgressMarker();
+    };
+
+    private handleCloseRequested = (): void => {
+        this.map_controller.selectRoute(null);
     };
 
     private getRouteStartCoordinate(geometry: Geometry | undefined): [number, number] | null {

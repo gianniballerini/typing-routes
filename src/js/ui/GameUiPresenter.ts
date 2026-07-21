@@ -10,16 +10,19 @@ interface MenuRouteRecord {
 class GameUiPresenter {
     private game_menu_el: HTMLElement | null;
     private game_playing_el: HTMLElement | null;
+    private menu_info_card_close_button_el: HTMLElement | null;
 
     private menu_info_card_el: HTMLElement | null;
     private menu_route_name_el: HTMLElement | null;
     private menu_route_number_el: HTMLElement | null;
     private menu_route_length_el: HTMLElement | null;
     private menu_route_description_el: HTMLElement | null;
+    private menu_welcome_description_el: HTMLElement | null;
     private menu_route_record_combo_el: HTMLElement | null;
     private menu_route_record_wpm_el: HTMLElement | null;
     private menu_route_image_container_el: HTMLElement | null;
     private menu_route_image_el: HTMLImageElement | null;
+    private closeRequestedHandler: (() => void) | null;
 
     private start_button_el: HTMLElement | null;
     private start_city_el: HTMLElement | null;
@@ -40,10 +43,15 @@ class GameUiPresenter {
         this.game_playing_el = document.querySelector('.game-playing');
 
         this.menu_info_card_el = document.querySelector('.game-menu__info-card');
+        this.menu_info_card_close_button_el = document.querySelector('.game-menu__info-card-close');
+        this.closeRequestedHandler = null;
+        this.menu_info_card_close_button_el?.addEventListener('click', this.handleCloseButtonClick);
+
         this.menu_route_name_el = document.querySelector('.game-menu__route-name');
         this.menu_route_number_el = document.querySelector('.game-menu__route-number');
         this.menu_route_length_el = document.querySelector('.game-menu__route-length');
         this.menu_route_description_el = document.querySelector('.game-menu__route-description');
+        this.menu_welcome_description_el = document.querySelector('.game-menu__welcome-description');
         this.menu_route_record_combo_el = document.querySelector('.game-menu__route-record-combo');
         this.menu_route_record_wpm_el = document.querySelector('.game-menu__route-record-wpm');
         this.menu_route_image_container_el = document.querySelector('.game-menu__info-card-image');
@@ -67,6 +75,19 @@ class GameUiPresenter {
     onStartRequested(handler: () => void): void {
         this.start_button_el?.addEventListener('click', handler);
     }
+
+    onCloseRequested(handler: () => void): void {
+        this.closeRequestedHandler = handler;
+    }
+
+    private handleCloseButtonClick = (): void => {
+        if (this.closeRequestedHandler) {
+            this.closeRequestedHandler();
+            return;
+        }
+
+        this.setMenuWelcomeState();
+    };
 
     renderState(state: GameStateValue): void {
         const showMenu = state === GameState.MENU;
@@ -99,6 +120,8 @@ class GameUiPresenter {
             this.menu_route_description_el.textContent = route.description ?? '';
         }
 
+        this.menu_welcome_description_el?.classList.add('hidden');
+
         this.renderMenuRouteRecord(record);
 
         this.menu_info_card_el?.classList.remove('hidden');
@@ -115,6 +138,8 @@ class GameUiPresenter {
             this.menu_route_image_container_el?.classList.add('hidden');
             this.menu_route_image_el?.removeAttribute('src');
         }
+
+        this.menu_welcome_description_el?.classList.remove('hidden');
 
         this.menu_info_card_el?.classList.add('hidden');
     }
