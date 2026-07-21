@@ -5,7 +5,7 @@ class Settings
     this.center = [-63.6167, -38.4161];
     this.initialZoom = 1;
     this.minZoom = 1;
-    this.maxZoom = 7;
+    this.maxZoom = 9;
     this.maxBounds = [
       [-90.0, -57.0],
       [-40.0, -20.0]
@@ -65,7 +65,9 @@ class Settings
     };
 
     this.routeSelection = {
-      flyToZoom: 6
+      flyToZoom: 6,
+      veryShortRouteThresholdKm: 120,
+      veryShortRouteZoom: 30
     };
 
     this.progressMarker = {

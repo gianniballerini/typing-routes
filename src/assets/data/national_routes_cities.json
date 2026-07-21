@@ -1,5 +1,5 @@
 {
-  "total_routes": 98,
+  "total_routes": 96,
   "routes": [
     {
       "id": "rn-0001",
@@ -47,123 +47,7 @@
         "ar-tierra_del_fuego-tolhuin",
         "ar-tierra_del_fuego-ushuaia",
         "ar-tierra_del_fuego-lapataia"
-      ],
-      "city_meta": {
-        "rn3-001": {
-          "order": 1,
-          "km_mark": 0
-        },
-        "rn3-002": {
-          "order": 2,
-          "km_mark": 65
-        },
-        "rn3-003": {
-          "order": 3,
-          "km_mark": 110
-        },
-        "rn3-004": {
-          "order": 4,
-          "km_mark": 175
-        },
-        "rn3-005": {
-          "order": 5,
-          "km_mark": 300
-        },
-        "rn3-006": {
-          "order": 6,
-          "km_mark": 400
-        },
-        "rn3-007": {
-          "order": 7,
-          "km_mark": 500
-        },
-        "rn3-008": {
-          "order": 8,
-          "km_mark": 690
-        },
-        "rn3-009": {
-          "order": 9,
-          "km_mark": 940
-        },
-        "rn3-010": {
-          "order": 10,
-          "km_mark": 945
-        },
-        "rn3-011": {
-          "order": 11,
-          "km_mark": 1100
-        },
-        "rn3-012": {
-          "order": 12,
-          "km_mark": 1115
-        },
-        "rn3-013": {
-          "order": 13,
-          "km_mark": 1230
-        },
-        "rn3-014": {
-          "order": 14,
-          "km_mark": 1360
-        },
-        "rn3-015": {
-          "order": 15,
-          "km_mark": null
-        },
-        "rn3-016": {
-          "order": 16,
-          "km_mark": 1425
-        },
-        "rn3-017": {
-          "order": 17,
-          "km_mark": 1700
-        },
-        "rn3-018": {
-          "order": 18,
-          "km_mark": 1890
-        },
-        "rn3-019": {
-          "order": 19,
-          "km_mark": 1960
-        },
-        "rn3-020": {
-          "order": 20,
-          "km_mark": 2280
-        },
-        "rn3-021": {
-          "order": 21,
-          "km_mark": 2440
-        },
-        "rn3-022": {
-          "order": 22,
-          "km_mark": 2612
-        },
-        "rn3-023": {
-          "order": 23,
-          "km_mark": 2674,
-          "ferry_crossing": true,
-          "note": "Route interrupted; requires ferry crossing through Chilean territory (Punta Delgada / Primera Angostura) before re-entering Argentina at San Sebastián"
-        },
-        "rn3-024": {
-          "order": 24,
-          "km_mark": 2760
-        },
-        "rn3-025": {
-          "order": 25,
-          "km_mark": 2830
-        },
-        "rn3-026": {
-          "order": 26,
-          "km_mark": 2960
-        },
-        "rn3-027": {
-          "order": 27,
-          "km_mark": 3045
-        },
-        "rn3-028": {
-          "order": 28,
-          "km_mark": 3079
-        }
-      }
+      ]
     },
     {
       "id": "rn-0005",
@@ -584,7 +468,9 @@
     {
       "id": "rn-0073",
       "route": "0073",
-      "city_refs": []
+      "city_refs": [
+        "ar-la_rioja-pampa_de_la_viuda"
+      ]
     },
     {
       "id": "rn-0074",
@@ -746,17 +632,25 @@
     {
       "id": "rn-0120",
       "route": "0120",
-      "city_refs": []
+      "city_refs": [
+        "ar-corrientes-puerto_valle"
+      ]
     },
     {
       "id": "rn-0121",
       "route": "0121",
-      "city_refs": []
+      "city_refs": [
+        "ar-corrientes-santo_tome",
+        "ar-corrientes-hormiguero",
+        "ar-corrientes-puente_internacional_de_la_inegracion"
+      ]
     },
     {
       "id": "rn-0122",
       "route": "0122",
-      "city_refs": []
+      "city_refs": [
+        "ar-corrientes-yapeyu"
+      ]
     },
     {
       "id": "rn-0123",
@@ -779,12 +673,22 @@
     {
       "id": "rn-0130",
       "route": "0130",
-      "city_refs": []
+      "city_refs": [
+        "ar-entre_rios-colon",
+        "ar-entre_rios-san_jose",
+        "ar-entre_rios-villa_elisa",
+        "ar-entre_rios-ingeniero_miguel_sajaroff",
+        "ar-entre_rios-villaguay"
+      ]
     },
     {
       "id": "rn-0131",
       "route": "0131",
-      "city_refs": []
+      "city_refs": [
+        "ar-entre_rios-diamanta",
+        "ar-entre_rios-villa_libertador_san_martin",
+        "ar-entre_rios-villa_crespo"
+      ]
     },
     {
       "id": "rn-0135",
@@ -857,12 +761,23 @@
     {
       "id": "rn-0147",
       "route": "0147",
-      "city_refs": []
+      "city_refs": [
+        "ar-san_luis-san_luis",
+        "ar-san_luis-san_geronimo",
+        "ar-san_luis-parque_nacional_sierras_de_las_quijadas"
+      ]
     },
     {
       "id": "rn-0148",
       "route": "0148",
-      "city_refs": []
+      "city_refs": [
+        "ar-san_luis-villa_mercedes",
+        "ar-san_luis-san_jose_del_morro",
+        "ar-san_luis-naschel",
+        "ar-san_luis-tilisarao",
+        "ar-san_luis-santa_rosa_del_conlara",
+        "ar-san_luis-villa_dolores"
+      ]
     },
     {
       "id": "rn-0149",
@@ -906,17 +821,32 @@
     {
       "id": "rn-0153",
       "route": "0153",
-      "city_refs": []
+      "city_refs": [
+        "ar-san_juan-pedernal",
+        "ar-san_juan-los_berros",
+        "ar-san_juan-media_agua"
+      ]
     },
     {
       "id": "rn-0154",
       "route": "0154",
-      "city_refs": []
+      "city_refs": [
+        "ar-la_pampa-hucal",
+        "ar-la_pampa-la_adela"
+      ]
     },
     {
       "id": "rn-0157",
       "route": "0157",
-      "city_refs": []
+      "city_refs": [
+        "ar-tucuman-san_miguel_de_tucuman",
+        "ar-tucuman-bella_vista",
+        "ar-tucuman-simoca",
+        "ar-santiago_del_estero-san_pedro_de_guasayan",
+        "ar-santiago_del_estero-frias",
+        "ar-santiago_del_estero-san_antonio_de_la_paz",
+        "ar-santiago_del_estero-recreo"
+      ]
     },
     {
       "id": "rn-0158",
@@ -939,22 +869,12 @@
       ]
     },
     {
-      "id": "rn-0173",
-      "route": "0173",
-      "city_refs": []
-    },
-    {
       "id": "rn-0174",
       "route": "0174",
       "city_refs": [
         "ar-santa_fe-rosario",
         "ar-entre_rios-victoria"
       ]
-    },
-    {
-      "id": "rn-0175",
-      "route": "0175",
-      "city_refs": []
     },
     {
       "id": "rn-0178",
@@ -985,7 +905,13 @@
     {
       "id": "rn-0193",
       "route": "0193",
-      "city_refs": []
+      "city_refs": [
+        "ar-buenos_aires-zarate",
+        "ar-buenos_aires-escalada",
+        "ar-buenos_aires-chenaut",
+        "ar-buenos_aires-diego_gaynor",
+        "ar-buenos_aires-solis"
+      ]
     },
     {
       "id": "rn-0205",
@@ -1015,12 +941,20 @@
     {
       "id": "rn-0228",
       "route": "0228",
-      "city_refs": []
+      "city_refs": [
+        "ar-buenos_aires-tres_arroyos",
+        "ar-buenos_aires-energia",
+        "ar-buenos_aires-necochea"
+      ]
     },
     {
       "id": "rn-0229",
       "route": "0229",
-      "city_refs": []
+      "city_refs": [
+        "ar-buenos_aires-bahia_blanca-villa_general_arias",
+        "ar-buenos_aires-bahia_blanca-villa_maio",
+        "ar-buenos_aires-bahia_blanca-punta_alta"
+      ]
     },
     {
       "id": "rn-0231",
@@ -1032,12 +966,19 @@
     {
       "id": "rn-0232",
       "route": "0232",
-      "city_refs": []
+      "city_refs": [
+        "ar-la_pampa-puelches",
+        "ar-rio_negro-gobernador_duval",
+        "ar-rio_negro-chelforo"
+      ]
     },
     {
       "id": "rn-0234",
       "route": "0234",
-      "city_refs": []
+      "city_refs": [
+        "ar-neuquen-puente_colon_cura",
+        "ar-neuquen-la_rinconada"
+      ]
     },
     {
       "id": "rn-0237",
@@ -1059,7 +1000,10 @@
     {
       "id": "rn-0249",
       "route": "0249",
-      "city_refs": []
+      "city_refs": [
+        "ar-buenos_aires-bahia_blanca-bajo_hondo",
+        "ar-buenos_aires-bahia_blanca-punta_alta"
+      ]
     },
     {
       "id": "rn-0250",
@@ -1081,7 +1025,10 @@
     {
       "id": "rn-0252",
       "route": "0252",
-      "city_refs": []
+      "city_refs": [
+        "ar-buenos_aires-bahia_blanca-saladero",
+        "ar-buenos_aires-bahia_blanca-ingeniero_white"
+      ]
     },
     {
       "id": "rn-0259",
@@ -1094,7 +1041,11 @@
     {
       "id": "rn-0260",
       "route": "0260",
-      "city_refs": []
+      "city_refs": [
+        "ar-chubut-lago_blanco",
+        "ar-chubut-estancia_valle_huemules",
+        "ar-chubut-paso_fronterizo_integrado_huemules"
+      ]
     },
     {
       "id": "rn-0281",
@@ -1116,7 +1067,10 @@
     {
       "id": "rn-0293",
       "route": "0293",
-      "city_refs": []
+      "city_refs": [
+        "ar-santa_cruz-rospentek",
+        "ar-santa_cruz-paso_laurita_casas_viejas"
+      ]
     }
   ]
 }

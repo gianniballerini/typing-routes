@@ -1,5 +1,5 @@
 {
-  "total_cities": 328,
+  "total_cities": 377,
   "id_scheme": "ar-<province_slug>-<city_slug> — stable identity, independent of any route. georef_id is a placeholder for the official Georef API locality code (apis.datos.gob.ar/georef), to be filled in when cross-referencing the full national dataset.",
   "cities": [
     {
@@ -73,6 +73,26 @@
       "tier": "medium"
     },
     {
+      "id": "ar-buenos_aires-energia",
+      "georef_id": null,
+      "name": "Énergía",
+      "typing": "energia",
+      "lat": -38.555,
+      "lon": -59.359,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-necochea",
+      "georef_id": null,
+      "name": "Necochea",
+      "typing": "necochea",
+      "lat": -38.5325,
+      "lon": -58.7678,
+      "province": "Buenos Aires",
+      "tier": "medium"
+    },
+    {
       "id": "ar-buenos_aires-bahia_blanca",
       "georef_id": null,
       "name": "Bahía Blanca",
@@ -81,6 +101,66 @@
       "lon": -62.2724,
       "province": "Buenos Aires",
       "tier": "major"
+    },
+    {
+      "id": "ar-buenos_aires-bahia_blanca-ingeniero_white",
+      "georef_id": null,
+      "name": "Ingeniero White",
+      "typing": "ingeniero white",
+      "lat": -38.7833,
+      "lon": -62.2667,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-bahia_blanca-saladero",
+      "georef_id": null,
+      "name": "Saladero",
+      "typing": "saladero",
+      "lat": -38.7167,
+      "lon": -62.25,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-bahia_blanca-bajo_hondo",
+      "georef_id": null,
+      "name": "Bajo Hondo",
+      "typing": "bajo hondo",
+      "lat": -38.76,
+      "lon": -61.91,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-bahia_blanca-punta_alta",
+      "georef_id": null,
+      "name": "Punta Alta",
+      "typing": "punta alta",
+      "lat": -38.88,
+      "lon": -62.08,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-bahia_blanca-villa_general_arias",
+      "georef_id": null,
+      "name": "Villa General Arias",
+      "typing": "villa general arias",
+      "lat": -38.85,
+      "lon": -62.05,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-bahia_blanca-villa_maio",
+      "georef_id": null,
+      "name": "Villa Maio",
+      "typing": "villa maio",
+      "lat": -38.86,
+      "lon": -62.06,
+      "province": "Buenos Aires",
+      "tier": "minor"
     },
     {
       "id": "ar-buenos_aires-carmen_de_patagones",
@@ -183,6 +263,36 @@
       "tier": "major"
     },
     {
+      "id": "ar-chubut-lago_blanco",
+      "georef_id": null,
+      "name": "Lago Blanco",
+      "typing": "lago blanco",
+      "lat": -45.93,
+      "lon": -71.26,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-estancia_valle_huemules",
+      "georef_id": null,
+      "name": "Estancia Valle Huemules",
+      "typing": "estancia valle huemules",
+      "lat": -45.95,
+      "lon": -71.51,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-chubut-paso_fronterizo_integrado_huemules",
+      "georef_id": null,
+      "name": "Paso Fronterizo Integrado Huemules (Argentina-Chile)",
+      "typing": "paso fronterizo huemules",
+      "lat": -45.90,
+      "lon": -71.67,
+      "province": "Chubut",
+      "tier": "minor"
+    },
+    {
       "id": "ar-santa_cruz-caleta_olivia",
       "georef_id": null,
       "name": "Caleta Olivia",
@@ -223,6 +333,27 @@
       "tier": "major"
     },
     {
+      "id": "ar-santa_cruz-rospentek",
+      "georef_id": null,
+      "name": "Rospentek",
+      "typing": "rospentek",
+      "lat": -51.66,
+      "lon": -72.14,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santa_cruz-paso_laurita_casas_viejas",
+      "georef_id": null,
+      "name": "Paso Laurita Casas Viejas",
+      "typing": "paso laurita casas viejas",
+      "lat": -51.68,
+      "lon": -72.29,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
+
       "id": "xx-ferry-estrecho_de_magallanes",
       "georef_id": null,
       "name": "Cruce Estrecho de Magallanes (ferry, vía Chile)",
@@ -473,6 +604,76 @@
       "tier": "medium"
     },
     {
+      "id": "ar-san_luis-san_geronimo",
+      "georef_id": null,
+      "name": "San Gerónimo",
+      "typing": "san geronimo",
+      "lat": -33.13,
+      "lon": -66.52,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_luis-parque_nacional_sierras_de_las_quijadas",
+      "georef_id": null,
+      "name": "Parque Nacional Sierras de las Quijadas",
+      "typing": "parque nacional sierras de las quijadas",
+      "lat": -32.46,
+      "lon": -66.96,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_luis-san_jose_del_morro",
+      "georef_id": null,
+      "name": "San José del Morro",
+      "typing": "san jose del morro",
+      "lat": -33.5167,
+      "lon": -65.9333,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_luis-naschel",
+      "georef_id": null,
+      "name": "Naschel",
+      "typing": "naschel",
+      "lat": -33.5167,
+      "lon": -65.9333,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_luis-tilisarao",
+      "georef_id": null,
+      "name": "Tilisarao",
+      "typing": "tilisarao",
+      "lat": -33.5167,
+      "lon": -65.9333,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_luis-santa_rosa_del_conlara",
+      "georef_id": null,
+      "name": "Santa Rosa del Conlara",
+      "typing": "santa rosa del conlara",
+      "lat": -33.5167,
+      "lon": -65.9333,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_luis-villa_dolores",
+      "georef_id": null,
+      "name": "Villa Dolores",
+      "typing": "villa dolores",
+      "lat": -33.5167,
+      "lon": -65.9333,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
       "id": "ar-mendoza-la_paz",
       "georef_id": null,
       "name": "La Paz",
@@ -683,6 +884,26 @@
       "tier": "major"
     },
     {
+      "id": "ar-tucuman-bella_vista",
+      "georef_id": null,
+      "name": "Bella Vista",
+      "typing": "bella vista",
+      "lat": -27.02,
+      "lon": -65.30,
+      "province": "Tucumán",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-tucuman-simoca",
+      "georef_id": null,
+      "name": "Simoca",
+      "typing": "simoca",
+      "lat": -27.26,
+      "lon": -65.34,
+      "province": "Tucumán",
+      "tier": "minor"
+    },
+    {
       "id": "ar-salta-metan",
       "georef_id": null,
       "name": "Metán",
@@ -801,6 +1022,46 @@
       "lon": -59.0244,
       "province": "Buenos Aires",
       "tier": "medium"
+    },
+    {
+      "id": "ar-buenos_aires-escalada",
+      "georef_id": null,
+      "name": "Escalada",
+      "typing": "escalada",
+      "lat": -34.154,
+      "lon": -59.116,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-chenaut",
+      "georef_id": null,
+      "name": "Chenaut",
+      "typing": "chenaut",
+      "lat": -34.231,
+      "lon": -59.205,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-diego_gaynor",
+      "georef_id": null,
+      "name": "Diego Gaynor",
+      "typing": "diego gaynor",
+      "lat": -34.2871,
+      "lon": -59.2281,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-buenos_aires-solis",
+      "georef_id": null,
+      "name": "Solís",
+      "typing": "solis",
+      "lat": -34.299,
+      "lon": -59.321,
+      "province": "Buenos Aires",
+      "tier": "minor"
     },
     {
       "id": "ar-entre_rios-ceibas",
@@ -973,6 +1234,36 @@
       "tier": "minor"
     },
     {
+      "id": "ar-corrientes-hormiguero",
+      "georef_id": null,
+      "name": "Hormiguero",
+      "typing": "hormiguero",
+      "lat": -28.59,
+      "lon": -56.03,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-puente_internacional_de_la_inegracion",
+      "georef_id": null,
+      "name": "Puente Internacional de la Integración",
+      "typing": "puente internacional de la integracion",
+      "lat": -28.60,
+      "lon": -56.03,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-corrientes-yapeyu",
+      "georef_id": null,
+      "name": "Yapeyú",
+      "typing": "yapeyu",
+      "lat": -29.4658,
+      "lon": -56.817,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
       "id": "ar-misiones-apostoles",
       "georef_id": null,
       "name": "Apóstoles",
@@ -1069,6 +1360,66 @@
       "typing": "villaguay",
       "lat": -31.8656,
       "lon": -59.0269,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-san_jose",
+      "georef_id": null,
+      "name": "San José",
+      "typing": "san jose",
+      "lat": -32.20,
+      "lon": -58.21,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-villa_elisa",
+      "georef_id": null,
+      "name": "Villa Elisa",
+      "typing": "villa elisa",
+      "lat": -32.16,
+      "lon": -58.41,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-ingeniero_miguel_sajaroff",
+      "georef_id": null,
+      "name": "Ingeniero Miguel Sajaroff",
+      "typing": "ingeniero miguel sajaroff",
+      "lat": -31.95,
+      "lon": -58.85,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-diamanta",
+      "georef_id": null,
+      "name": "Diamante",
+      "typing": "diamante",
+      "lat": -32.0667,
+      "lon": -60.6167,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-villa_libertador_san_martin",
+      "georef_id": null,
+      "name": "Libertador San Martín",
+      "typing": "libertador san martin",
+      "lat": -32.07,
+      "lon": -60.45,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-entre_rios-villa_crespo",
+      "georef_id": null,
+      "name": "Villa Crespo",
+      "typing": "villa crespo",
+      "lat": -32.04,
+      "lon": -60.30,
       "province": "Entre Ríos",
       "tier": "minor"
     },
@@ -1171,6 +1522,36 @@
       "lon": -68.5364,
       "province": "San Juan",
       "tier": "major"
+    },
+    {
+      "id": "ar-san_juan-pedernal",
+      "georef_id": null,
+      "name": "Pedernal",
+      "typing": "pedernal",
+      "lat": -31.99,
+      "lon": -68.76,
+      "province": "San Juan",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_juan-los_berros",
+      "georef_id": null,
+      "name": "Los Berros",
+      "typing": "los berros",
+      "lat": -31.9528,
+      "lon": -68.6547,
+      "province": "San Juan",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-san_juan-media_agua",
+      "georef_id": null,
+      "name": "Media Agua",
+      "typing": "media agua",
+      "lat": -31.9795,
+      "lon": -68.4405,
+      "province": "San Juan",
+      "tier": "minor"
     },
     {
       "id": "ar-rio_negro-rio_colorado",
@@ -1603,6 +1984,26 @@
       "tier": "minor"
     },
     {
+      "id": "ar-la_pampa-la_adela",
+      "georef_id": null,
+      "name": "La Adela",
+      "typing": "la adela",
+      "lat": -38.96,
+      "lon": -64.07,
+      "province": "La Pampa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-la_pampa-hucal",
+      "georef_id": null,
+      "name": "Hucal",
+      "typing": "hucal",
+      "lat": -37.79,
+      "lon": -64.0231,
+      "province": "La Pampa",
+      "tier": "minor"
+    },
+    {
       "id": "ar-la_pampa-jacinto_arauz",
       "georef_id": null,
       "name": "Jacinto Aráuz",
@@ -1763,6 +2164,16 @@
       "tier": "major"
     },
     {
+      "id": "ar-la_rioja-pampa_de_la_viuda",
+      "georef_id": null,
+      "name": "Pampa de la Viuda",
+      "typing": "pampa de la viuda",
+      "lat": -29.2956,
+      "lon": -67.1379,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
       "id": "ar-catamarca-san_fernando_del_valle_de_catamarca",
       "georef_id": null,
       "name": "San Fernando del Valle de Catamarca",
@@ -1891,6 +2302,26 @@
       "lon": -71.0694,
       "province": "Neuquén",
       "tier": "minor"
+    },
+    {
+      "id": "ar-neuquen-puente_colon_cura",
+      "georef_id": null,
+      "name": "Puente Colon Curá",
+      "typing": "puente colon cura",
+      "lat": -40.436,
+      "lon": -70.65,
+      "province": "Neuquén",
+      "tier": "bridge"
+    },
+    {
+      "id": "ar-neuquen-la_rinconada",
+      "georef_id": null,
+      "name": "La Rinconada",
+      "typing": "la rinconada",
+      "lat": -39.99,
+      "lon": -70.83,
+      "province": "Neuquén",
+      "tier": "bridge"
     },
     {
       "id": "ar-neuquen-chos_malal",
@@ -2179,6 +2610,36 @@
       "typing": "san pedro de guasayan",
       "lat": -27.9544,
       "lon": -65.1542,
+      "province": "Santiago del Estero",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santiago_del_estero-frias",
+      "georef_id": null,
+      "name": "Frías",
+      "typing": "frias",
+      "lat": -28.62,
+      "lon": -65.12,
+      "province": "Santiago del Estero",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santiago_del_estero-san_antonio_de_la_paz",
+      "georef_id": null,
+      "name": "San Antonio de la Paz",
+      "typing": "san antonio de la paz",
+      "lat": -28.93,
+      "lon": -65.09,
+      "province": "Santiago del Estero",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-santiago_del_estero-recreo",
+      "georef_id": null,
+      "name": "Recreo",
+      "typing": "recreo",
+      "lat": -29.27,
+      "lon": -65.05,
       "province": "Santiago del Estero",
       "tier": "minor"
     },
@@ -2653,6 +3114,16 @@
       "tier": "minor"
     },
     {
+      "id": "ar-corrientes-puerto_valle",
+      "georef_id": null,
+      "name": "Puerto Valle",
+      "typing": "puerto valle",
+      "lat": -27.61,
+      "lon": -56.40,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
       "id": "ar-corrientes-saladas",
       "georef_id": null,
       "name": "Saladas",
@@ -2980,6 +3451,26 @@
       "lat": -38.1442,
       "lon": -65.9142,
       "province": "La Pampa",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-gobernador_duval",
+      "georef_id": null,
+      "name": "Gobernador Duval",
+      "typing": "gobernador duval",
+      "lat": -38.7413,
+      "lon": -66.4350,
+      "province": "Río Negro",
+      "tier": "minor"
+    },
+    {
+      "id": "ar-rio_negro-chelforo",
+      "georef_id": null,
+      "name": "Chelforo",
+      "typing": "chelforo",
+      "lat": -38.1442,
+      "lon": -65.9142,
+      "province": "Río Negro",
       "tier": "minor"
     },
     {

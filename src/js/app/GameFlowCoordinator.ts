@@ -82,13 +82,18 @@ class GameFlowCoordinator {
             return;
         }
 
+        const selectedRoute = this.routes_controller.routes[selectedRouteId] ?? null;
+
         this.game.selectRoute(selectedRouteId);
         this.initializeRouteSnappingData(selectedRouteId);
         this.initializeRunStats(selectedRouteId);
 
         const firstCityCoordinate = this.getCurrentSnappedCityCoordinate();
         if (firstCityCoordinate) {
-            this.map_controller.flyToCoordinate(firstCityCoordinate, Settings.routeSelection.flyToZoom);
+            this.map_controller.flyToCoordinate(
+                firstCityCoordinate,
+                this.getRouteSelectionZoom(selectedRoute?.length_km)
+            );
         }
 
         this.game.start();
@@ -142,7 +147,10 @@ class GameFlowCoordinator {
             const geometry = this.routes_controller.getGeometryById(routeId);
             const routeStartCoordinate = this.getRouteStartCoordinate(geometry);
             if (routeStartCoordinate) {
-                this.map_controller.flyToCoordinate(routeStartCoordinate, Settings.routeSelection.flyToZoom);
+                this.map_controller.flyToCoordinate(
+                    routeStartCoordinate,
+                    this.getRouteSelectionZoom(selectedRoute.length_km)
+                );
             }
             this.routeMetrics = null;
             this.snappedCityPoints = [];
@@ -160,6 +168,15 @@ class GameFlowCoordinator {
     private handleCloseRequested = (): void => {
         this.map_controller.selectRoute(null);
     };
+
+    private getRouteSelectionZoom(routeLengthKm: number | undefined): number {
+        const defaultZoom = Settings.routeSelection.flyToZoom;
+        if (typeof routeLengthKm !== 'number' || !Number.isFinite(routeLengthKm)) return defaultZoom;
+
+        return routeLengthKm <= Settings.routeSelection.veryShortRouteThresholdKm
+            ? Math.min(Settings.maxZoom, Settings.routeSelection.veryShortRouteZoom)
+            : defaultZoom;
+    }
 
     private getRouteStartCoordinate(geometry: Geometry | undefined): [number, number] | null {
         if (!geometry) return null;

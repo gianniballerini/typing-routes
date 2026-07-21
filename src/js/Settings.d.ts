@@ -54,6 +54,8 @@ export interface SettingsShape {
   };
   routeSelection: {
     flyToZoom: number;
+    veryShortRouteThresholdKm: number;
+    veryShortRouteZoom: number;
   };
   progressMarker: {
     size: number;
