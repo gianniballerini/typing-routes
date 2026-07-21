@@ -11,6 +11,7 @@
                 svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x")
                     path( d="M18 6 6 18")
                     path( d="m6 6 12 12")
+            span.game-menu__route-name
             .game-menu__info-card-top
                 .game-menu__info-card-image.image
                     img(src="#")
@@ -21,16 +22,22 @@
                         span.game-menu__route-length
 
             .game-menu__info-card-bottom
-                span.game-menu__route-name
                 .game-menu__route-description
                 .game-menu__route-record
-                    span.game-menu__route-record-title Record
                     .game-menu__route-record-values
-                        span.game-menu__route-record-combo --
-                        span Combo
-                        span /
-                        span.game-menu__route-record-wpm --
-                        span WPM
+                        span.game-menu__route-record-title Records
+                        .game-menu__route-record-group
+                            span Combo
+                            span.game-menu__route-record-combo --
+                        .game-menu__route-record-group
+                            span WPM
+                            span.game-menu__route-record-wpm --
+                        .game-menu__route-record-group
+                            span Tiempo
+                            span.game-menu__route-record-time --:--
+                        .game-menu__route-record-group
+                            span Errores
+                            span.game-menu__route-record-mistakes --
                 .button.game-menu__button
                     | Empezar
     .game-menu__bottom

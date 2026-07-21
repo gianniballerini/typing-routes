@@ -5,6 +5,7 @@ import { MapController } from '../MapController';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
+import { ModalController } from '../ui/ModalController';
 import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
@@ -14,6 +15,7 @@ interface ActiveRunStats {
     routeId: string;
     startedAtMs: number;
     correctCharsTyped: number;
+    mistakes: number;
     currentCombo: number;
     bestCombo: number;
     citiesCompleted: number;
@@ -26,17 +28,20 @@ class GameFlowCoordinator {
     private routes_controller: RoutesController;
     private map_controller: MapController;
     private ui_presenter: GameUiPresenter;
+    private modal_controller: ModalController;
     private user_stats: UserStats;
     private user_stats_storage: UserStatsStorage;
     private routeMetrics: RouteMetrics | null;
     private snappedCityPoints: SnappedRoutePoint[];
     private activeRunStats: ActiveRunStats | null;
+    private completedRouteForCurrentRunId: string | null;
 
     constructor(
         game: Game,
         routes_controller: RoutesController,
         map_controller: MapController,
         ui_presenter: GameUiPresenter,
+        modal_controller: ModalController,
         user_stats: UserStats,
         user_stats_storage: UserStatsStorage
     ) {
@@ -44,11 +49,13 @@ class GameFlowCoordinator {
         this.routes_controller = routes_controller;
         this.map_controller = map_controller;
         this.ui_presenter = ui_presenter;
+        this.modal_controller = modal_controller;
         this.user_stats = user_stats;
         this.user_stats_storage = user_stats_storage;
         this.routeMetrics = null;
         this.snappedCityPoints = [];
         this.activeRunStats = null;
+        this.completedRouteForCurrentRunId = null;
     }
 
     init(): void {
@@ -113,6 +120,7 @@ class GameFlowCoordinator {
     private handleRouteComplete = (event: Event): void => {
         const customEvent = event as CustomEvent<{ routeId: string }>;
         this.setRouteVisited(customEvent.detail.routeId, true);
+        this.completedRouteForCurrentRunId = customEvent.detail.routeId;
 
         const changed = this.user_stats.markRouteCompleted(customEvent.detail.routeId);
         if (changed) this.user_stats_storage.save(this.user_stats);
@@ -227,6 +235,7 @@ class GameFlowCoordinator {
     private handleTypingMistake = (): void => {
         if (!this.activeRunStats) return;
 
+        this.activeRunStats.mistakes += 1;
         this.activeRunStats.currentCombo = 0;
         this.ui_presenter.renderRunStats(
             this.activeRunStats.citiesCompleted,
@@ -353,6 +362,7 @@ class GameFlowCoordinator {
             routeId,
             startedAtMs: Date.now(),
             correctCharsTyped: 0,
+            mistakes: 0,
             currentCombo: 0,
             bestCombo: 0,
             citiesCompleted: 0,
@@ -367,17 +377,56 @@ class GameFlowCoordinator {
         const runStats = this.activeRunStats;
         if (!runStats) return;
 
+        const elapsedMs = Math.max(0, Date.now() - runStats.startedAtMs);
         const bestWpmForRun = this.calculateCurrentWpm(runStats);
-        const changed = this.user_stats.updateRouteRecord(runStats.routeId, runStats.bestCombo, bestWpmForRun);
+        const previousRecord = this.user_stats.getRouteRecord(runStats.routeId);
+        const isNewComboRecord = runStats.bestCombo > (previousRecord?.bestCombo ?? 0);
+        const isNewWpmRecord = bestWpmForRun > (previousRecord?.bestWpm ?? 0);
+        const changed = this.user_stats.updateRouteRecord(
+            runStats.routeId,
+            runStats.bestCombo,
+            bestWpmForRun,
+            elapsedMs,
+            runStats.mistakes
+        );
         if (changed) this.user_stats_storage.save(this.user_stats);
 
+        if (this.completedRouteForCurrentRunId === runStats.routeId) {
+            const route = this.routes_controller.routes[runStats.routeId];
+            const totalCities = runStats.citiesCompleted + runStats.citiesRemaining;
+
+            this.modal_controller.showRouteComplete({
+                routeTitle: this.buildRouteTitle(route?.full_name, route?.route_name, route?.route_number),
+                combo: runStats.bestCombo,
+                wpm: bestWpmForRun,
+                isNewComboRecord,
+                isNewWpmRecord,
+                elapsedMs,
+                citiesCompleted: runStats.citiesCompleted,
+                citiesTotal: totalCities,
+                mistakes: runStats.mistakes
+            });
+        }
+
         this.activeRunStats = null;
+        this.completedRouteForCurrentRunId = null;
     }
 
     private calculateCurrentWpm(runStats: ActiveRunStats): number {
         const elapsedMinutes = (Date.now() - runStats.startedAtMs) / 60000;
         if (elapsedMinutes <= 0) return 0;
         return (runStats.correctCharsTyped / 5) / elapsedMinutes;
+    }
+
+    private buildRouteTitle(fullName?: string, routeName?: string, routeNumber?: string): string {
+        if (fullName && fullName.trim().length > 0) return fullName;
+        if (routeName && routeName.trim().length > 0) return routeName;
+        if (routeNumber && routeNumber.trim().length > 0) {
+            const normalizedRouteNumber = routeNumber.trim().replace(/^0+(?!$)/, '');
+            return `Ruta ${normalizedRouteNumber}`;
+        }
+
+        return 'Ruta';
     }
 }
 

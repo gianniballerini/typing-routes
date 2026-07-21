@@ -106,6 +106,16 @@ class UserStatsStorage {
         if ((candidate.bestCombo ?? 0) < 0) return false;
         if ((candidate.bestWpm ?? 0) < 0) return false;
 
+        const hasValidElapsed = candidate.bestElapsedMs === undefined
+            || candidate.bestElapsedMs === null
+            || (Number.isFinite(candidate.bestElapsedMs) && candidate.bestElapsedMs >= 0);
+
+        const hasValidMistakes = candidate.fewestMistakes === undefined
+            || candidate.fewestMistakes === null
+            || (Number.isFinite(candidate.fewestMistakes) && candidate.fewestMistakes >= 0);
+
+        if (!hasValidElapsed || !hasValidMistakes) return false;
+
         return true;
     }
 }

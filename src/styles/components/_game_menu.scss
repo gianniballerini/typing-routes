@@ -77,7 +77,7 @@
 
             padding: 30 * $ptr;
 
-            row-gap: 40 * $ptr;
+            row-gap: 20 * $ptr;
 
             background: $white;
             border-radius: 10 * $ptr;
@@ -127,8 +127,7 @@
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
-                width: 100%;
-                row-gap: 10 * $ptr;
+                column-gap: 10 * $ptr;
             }
 
                 .game-menu__info-card-image {
@@ -150,36 +149,6 @@
                     font-family: $arimo-font;
                     text-transform: uppercase;
                 }
-
-                .game-menu__route-description {
-                    font-size: 16 * $ptr;
-                    font-weight: 400;
-                    font-style: italic;
-                    color: $light-gray;
-                }
-
-                .game-menu__route-record {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    row-gap: 4 * $ptr;
-                }
-
-                    .game-menu__route-record-title {
-                        font-size: 12 * $ptr;
-                        text-transform: uppercase;
-                        color: rgba($black, 0.7);
-                        letter-spacing: 1 * $ptr;
-                    }
-
-                    .game-menu__route-record-values {
-                        display: inline-flex;
-                        align-items: center;
-                        column-gap: 5 * $ptr;
-                        font-size: 15 * $ptr;
-                        font-weight: 600;
-                        color: $black;
-                    }
 
                 .game-menu__route-sign {
                     display: flex;
@@ -216,6 +185,77 @@
 
                         padding: 5 * $ptr 10 * $ptr;
                     }
+
+                .game-menu__route-description {
+                    font-size: 16 * $ptr;
+                    font-weight: 400;
+                    font-style: italic;
+                    color: $light-gray;
+                }
+
+                .game-menu__route-record {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    row-gap: 4 * $ptr;
+
+                    width: 100%;
+
+                    color: $white;
+                }
+
+                    .game-menu__route-record-title {
+                        font-size: 22 * $ptr;
+                        text-transform: uppercase;
+                        font-weight: 400;
+                        letter-spacing: 1 * $ptr;
+                    }
+
+                    .game-menu__route-record-values {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        row-gap: 5 * $ptr;
+
+                        width: 100%;
+                        border-radius: 10 * $ptr;
+
+                        background-color: $signs-green;
+
+                        font-size: 15 * $ptr;
+
+                        padding: 20 * $ptr;
+
+                        position: relative;
+
+                        box-shadow: 0px 4px 4px rgba($black, 0.25);
+
+                        &::before {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+
+                            width: calc(100% - 8 * $ptr);
+                            height: calc(100% - 8 * $ptr);
+
+                            border-radius: 10 * $ptr;
+
+                            transform: translate(4 * $ptr, 4 * $ptr);
+
+                            border: 2 * $ptr solid $white;
+                        }
+                    }
+
+                        .game-menu__route-record-group {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            justify-content: space-between;
+                            column-gap: 5 * $ptr;
+
+                            width: 100%;
+                        }
 
             .game-menu__info-card-bottom {
                 display: flex;

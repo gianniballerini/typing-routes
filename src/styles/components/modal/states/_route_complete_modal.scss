@@ -1,0 +1,98 @@
+.route-complete-modal {
+	width: min(560 * $ptr, 100%);
+    font-family: $arimo-font;
+}
+
+.route-complete-modal__content {
+	background: $signs-green;
+	border-radius: 16 * $ptr;
+	box-shadow: 0 14 * $ptr 48 * $ptr rgba(0, 0, 0, 0.35);
+
+	color: $white;
+
+	display: flex;
+	flex-direction: column;
+	gap: 18 * $ptr;
+
+	padding: 22 * $ptr;
+
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: calc(100% - 20 * $ptr);
+        height: calc(100% - 20 * $ptr);
+
+        border-radius: 10 * $ptr;
+
+        transform: translate(10 * $ptr, 10 * $ptr);
+
+        border: 3 * $ptr solid $white;
+    }
+}
+
+.route-complete-modal__top {
+	display: flex;
+	flex-direction: column;
+	gap: 16 * $ptr;
+}
+
+.route-complete-modal__title {
+	text-align: center;
+}
+
+.route-complete-modal__title-text {
+	font-size: 36 * $ptr;
+	line-height: 1;
+    text-transform: uppercase;
+}
+
+.route-complete-modal__stats {
+	display: flex;
+    flex-direction: column;
+}
+
+.route-complete-modal__stat {
+	display: flex;
+	flex-direction: row-reverse;
+    justify-content: space-between;
+	gap: 2 * $ptr;
+
+	padding: 10 * $ptr 12 * $ptr;
+}
+
+.route-complete-modal__stat-value {
+	font-size: 26 * $ptr;
+}
+
+.route-complete-modal__stat-label {
+	font-size: 26 * $ptr;
+	text-transform: uppercase;
+}
+
+.route-complete-modal__bottom {
+	display: flex;
+	justify-content: center;
+}
+
+.route-complete-modal__button {
+	border: 1px solid $white;
+    border-radius: 10 * $ptr;
+    width: fit-content;
+    align-self: center;
+
+    padding: 5 * $ptr 10 * $ptr;
+
+    text-align: center;
+    font-size: 20 * $ptr;
+
+    text-transform: uppercase;
+
+    &:hover {
+        background-color: rgba($white, 0.2);
+    }
+}

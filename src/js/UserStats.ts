@@ -8,6 +8,8 @@ interface UserStatsSnapshot {
 interface RouteRecordSnapshot {
     bestCombo: number;
     bestWpm: number;
+    bestElapsedMs: number | null;
+    fewestMistakes: number | null;
 }
 
 class UserStats {
@@ -25,13 +27,15 @@ class UserStats {
         this.routeRecords = new Map(
             Object.entries(routeRecords).map(([routeId, record]) => [routeId, {
                 bestCombo: this.sanitizeMetric(record.bestCombo),
-                bestWpm: this.sanitizeMetric(record.bestWpm)
+                bestWpm: this.sanitizeMetric(record.bestWpm),
+                bestElapsedMs: this.sanitizeOptionalMetric(record.bestElapsedMs),
+                fewestMistakes: this.sanitizeOptionalMetric(record.fewestMistakes)
             }])
         );
     }
 
     static fromSnapshot(snapshot: UserStatsSnapshot): UserStats {
-        return new UserStats(snapshot.completedCityIds, snapshot.completedRouteIds);
+        return new UserStats(snapshot.completedCityIds, snapshot.completedRouteIds, snapshot.routeRecords);
     }
 
     markCityCompleted(cityId: string): boolean {
@@ -68,24 +72,46 @@ class UserStats {
 
         return {
             bestCombo: record.bestCombo,
-            bestWpm: record.bestWpm
+            bestWpm: record.bestWpm,
+            bestElapsedMs: record.bestElapsedMs,
+            fewestMistakes: record.fewestMistakes
         };
     }
 
-    updateRouteRecord(routeId: string, bestComboForRun: number, bestWpmForRun: number): boolean {
+    updateRouteRecord(
+        routeId: string,
+        bestComboForRun: number,
+        bestWpmForRun: number,
+        elapsedMsForRun: number,
+        mistakesForRun: number
+    ): boolean {
         const normalizedCombo = this.sanitizeMetric(bestComboForRun);
         const normalizedWpm = this.sanitizeMetric(bestWpmForRun);
+        const normalizedElapsedMs = this.sanitizeMetric(elapsedMsForRun);
+        const normalizedMistakes = this.sanitizeMetric(mistakesForRun);
         const currentRecord = this.routeRecords.get(routeId);
+
+        const nextBestElapsedMs = currentRecord?.bestElapsedMs == null
+            ? normalizedElapsedMs
+            : Math.min(currentRecord.bestElapsedMs, normalizedElapsedMs);
+
+        const nextFewestMistakes = currentRecord?.fewestMistakes == null
+            ? normalizedMistakes
+            : Math.min(currentRecord.fewestMistakes, normalizedMistakes);
 
         const nextRecord: RouteRecordSnapshot = {
             bestCombo: Math.max(currentRecord?.bestCombo ?? 0, normalizedCombo),
-            bestWpm: Math.max(currentRecord?.bestWpm ?? 0, normalizedWpm)
+            bestWpm: Math.max(currentRecord?.bestWpm ?? 0, normalizedWpm),
+            bestElapsedMs: nextBestElapsedMs,
+            fewestMistakes: nextFewestMistakes
         };
 
         if (
             currentRecord
             && currentRecord.bestCombo === nextRecord.bestCombo
             && currentRecord.bestWpm === nextRecord.bestWpm
+            && currentRecord.bestElapsedMs === nextRecord.bestElapsedMs
+            && currentRecord.fewestMistakes === nextRecord.fewestMistakes
         ) {
             return false;
         }
@@ -105,6 +131,12 @@ class UserStats {
 
     private sanitizeMetric(value: number): number {
         if (!Number.isFinite(value)) return 0;
+        return Math.max(0, value);
+    }
+
+    private sanitizeOptionalMetric(value: number | null | undefined): number | null {
+        if (value === null || value === undefined) return null;
+        if (!Number.isFinite(value)) return null;
         return Math.max(0, value);
     }
 }

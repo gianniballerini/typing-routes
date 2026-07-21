@@ -5,6 +5,8 @@ import type { Route } from '../Route';
 interface MenuRouteRecord {
     bestCombo: number;
     bestWpm: number;
+    bestElapsedMs: number | null;
+    fewestMistakes: number | null;
 }
 
 class GameUiPresenter {
@@ -20,6 +22,8 @@ class GameUiPresenter {
     private menu_welcome_description_el: HTMLElement | null;
     private menu_route_record_combo_el: HTMLElement | null;
     private menu_route_record_wpm_el: HTMLElement | null;
+    private menu_route_record_time_el: HTMLElement | null;
+    private menu_route_record_mistakes_el: HTMLElement | null;
     private menu_route_image_container_el: HTMLElement | null;
     private menu_route_image_el: HTMLImageElement | null;
     private closeRequestedHandler: (() => void) | null;
@@ -54,6 +58,8 @@ class GameUiPresenter {
         this.menu_welcome_description_el = document.querySelector('.game-menu__welcome-description');
         this.menu_route_record_combo_el = document.querySelector('.game-menu__route-record-combo');
         this.menu_route_record_wpm_el = document.querySelector('.game-menu__route-record-wpm');
+        this.menu_route_record_time_el = document.querySelector('.game-menu__route-record-time');
+        this.menu_route_record_mistakes_el = document.querySelector('.game-menu__route-record-mistakes');
         this.menu_route_image_container_el = document.querySelector('.game-menu__info-card-image');
         this.menu_route_image_el = this.menu_route_image_container_el?.querySelector('img') ?? null;
 
@@ -134,6 +140,8 @@ class GameUiPresenter {
         if (this.menu_route_description_el) this.menu_route_description_el.textContent = '';
         if (this.menu_route_record_combo_el) this.menu_route_record_combo_el.textContent = '--';
         if (this.menu_route_record_wpm_el) this.menu_route_record_wpm_el.textContent = '--';
+        if (this.menu_route_record_time_el) this.menu_route_record_time_el.textContent = '--:--';
+        if (this.menu_route_record_mistakes_el) this.menu_route_record_mistakes_el.textContent = '--';
         if (this.menu_route_image_el) {
             this.menu_route_image_container_el?.classList.add('hidden');
             this.menu_route_image_el?.removeAttribute('src');
@@ -215,6 +223,26 @@ class GameUiPresenter {
         if (this.menu_route_record_wpm_el) {
             this.menu_route_record_wpm_el.textContent = record ? `${Math.max(0, Math.round(record.bestWpm))}` : '--';
         }
+
+        if (this.menu_route_record_time_el) {
+            this.menu_route_record_time_el.textContent = record?.bestElapsedMs == null
+                ? '--:--'
+                : this.formatElapsedTime(record.bestElapsedMs);
+        }
+
+        if (this.menu_route_record_mistakes_el) {
+            this.menu_route_record_mistakes_el.textContent = record?.fewestMistakes == null
+                ? '--'
+                : `${Math.max(0, Math.round(record.fewestMistakes))}`;
+        }
+    }
+
+    private formatElapsedTime(elapsedMs: number): string {
+        const safeElapsedMs = Number.isFinite(elapsedMs) ? Math.max(0, elapsedMs) : 0;
+        const totalSeconds = Math.floor(safeElapsedMs / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }
 
     private renderMenuRouteImage(imageUrl: string | null): void {
