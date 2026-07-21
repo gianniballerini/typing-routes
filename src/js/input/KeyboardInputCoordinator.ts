@@ -38,6 +38,19 @@ class KeyboardInputCoordinator {
         }
 
         if (this.game.state !== GameState.PLAYING) return;
+
+        // Typing input is handled via the focused hidden input's `input` event.
+        // Skip keydown character forwarding when focus is inside editable elements
+        // to avoid duplicate processing and inflated mistake counts.
+        const activeElement = document.activeElement;
+        if (
+            activeElement instanceof HTMLInputElement
+            || activeElement instanceof HTMLTextAreaElement
+            || (activeElement instanceof HTMLElement && activeElement.isContentEditable)
+        ) {
+            return;
+        }
+
         if (event.key.length === 1) this.game.typing_controller.handleInput(event.key);
     };
 }
