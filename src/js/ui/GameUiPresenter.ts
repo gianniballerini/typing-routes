@@ -185,9 +185,9 @@ class GameUiPresenter {
         }
     }
 
-    renderRunStats(citiesCompleted: number, citiesRemaining: number, combo: number, wpm: number): void {
+    renderRunStats(citiesCompleted: number, citiesTotal: number, combo: number, wpm: number): void {
         if (this.cities_completed_el) this.cities_completed_el.textContent = `${Math.max(0, citiesCompleted)}`;
-        if (this.cities_remaining_el) this.cities_remaining_el.textContent = `${Math.max(0, citiesRemaining)}`;
+        if (this.cities_remaining_el) this.cities_remaining_el.textContent = `${Math.max(0, citiesTotal)}`;
         if (this.combo_number_el) this.combo_number_el.textContent = `${Math.max(0, Math.round(combo))}`;
         if (this.wpm_number_el) this.wpm_number_el.textContent = `${Math.max(0, Math.round(wpm))}`;
     }

@@ -105,9 +105,10 @@ class GameFlowCoordinator {
         if (this.activeRunStats) {
             this.activeRunStats.citiesCompleted += 1;
             this.activeRunStats.citiesRemaining = Math.max(0, this.activeRunStats.citiesRemaining - 1);
+            const totalCities = this.activeRunStats.citiesCompleted + this.activeRunStats.citiesRemaining;
             this.ui_presenter.renderRunStats(
                 this.activeRunStats.citiesCompleted,
-                this.activeRunStats.citiesRemaining,
+                totalCities,
                 this.activeRunStats.currentCombo,
                 this.calculateCurrentWpm(this.activeRunStats)
             );
@@ -220,9 +221,10 @@ class GameFlowCoordinator {
             }
 
             this.activeRunStats.lastTypedLength = typedLength;
+            const totalCities = this.activeRunStats.citiesCompleted + this.activeRunStats.citiesRemaining;
             this.ui_presenter.renderRunStats(
                 this.activeRunStats.citiesCompleted,
-                this.activeRunStats.citiesRemaining,
+                totalCities,
                 this.activeRunStats.currentCombo,
                 this.calculateCurrentWpm(this.activeRunStats)
             );
@@ -237,9 +239,10 @@ class GameFlowCoordinator {
 
         this.activeRunStats.mistakes += 1;
         this.activeRunStats.currentCombo = 0;
+        const totalCities = this.activeRunStats.citiesCompleted + this.activeRunStats.citiesRemaining;
         this.ui_presenter.renderRunStats(
             this.activeRunStats.citiesCompleted,
-            this.activeRunStats.citiesRemaining,
+            totalCities,
             this.activeRunStats.currentCombo,
             this.calculateCurrentWpm(this.activeRunStats)
         );
