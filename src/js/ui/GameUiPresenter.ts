@@ -33,7 +33,6 @@ class GameUiPresenter {
     private city_count_number_el: HTMLElement | null;
     private end_city_el: HTMLElement | null;
     private typing_ok_el: HTMLElement | null;
-    private typing_caret_el: HTMLElement | null;
     private typing_next_char_el: HTMLElement | null;
     private typing_rest_el: HTMLElement | null;
     private route_name_el: HTMLElement | null;
@@ -68,7 +67,6 @@ class GameUiPresenter {
         this.city_count_number_el = document.querySelector('.game-playing__city-count-number');
         this.end_city_el = document.querySelector('.game-playing__end-city');
         this.typing_ok_el = document.querySelector('.game-playing__typing-ok');
-        this.typing_caret_el = document.querySelector('.game-playing__typing-caret');
         this.typing_next_char_el = document.querySelector('.game-playing__typing-next-char');
         this.typing_rest_el = document.querySelector('.game-playing__typing-rest');
         this.route_name_el = document.querySelector('.game-playing__route-name');
