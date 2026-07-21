@@ -41,23 +41,49 @@
 
         z-index: 2;
 
-        background: $white;
-        border-radius: 30 * $ptr;
+        background: $signs-blue;
+        border-radius: 10 * $ptr;
         box-shadow: 0 3 * $ptr 5 * $ptr rgba($black, 0.5);
 
-        color: $black;
+        font-family: $arimo-font;
+        text-transform: uppercase;
+        color: $white;
 
         display: flex;
         flex-direction: row;
         justify-content: space-around;
         align-items: center;
+
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: calc(100% - 8 * $ptr);
+            height: calc(100% - 8 * $ptr);
+
+            border-radius: 10 * $ptr;
+
+            transform: translate(4 * $ptr, 4 * $ptr);
+
+            border: 2 * $ptr solid $white;
+        }
     }
-        .game-playing__stats-cities {}
+        .game-playing__stats-cities, .game-playing__stats-combo, .game-playing__stats-wpm {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            column-gap: 5 * $ptr;
+        }
             .game-playing__cities-completed {}
             .game-playing__cities-remaining {}
-        .game-playing__stats-combo {}
             .game-playing__combo-number {}
-        .game-playing__stats-wpm {}
+
             .game-playing__wpm-number {}
 
 
@@ -166,19 +192,37 @@
             }
 
     .game-playing__typing-card {
-        width: 500 * $ptr;
+        min-width: 500 * $ptr;
         height: 100 * $ptr;
 
         border-radius: 10 * $ptr;
         // border: 2 * $ptr solid $signs-green;
         box-shadow: 0 0 10 * $ptr rgba($signs-green, 0.5);
 
-        background-color: $white;
+        background-color: $signs-green;
 
         display: flex;
         flex-direction: column;
 
         overflow: hidden;
+
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: calc(100% - 8 * $ptr);
+            height: calc(100% - 8 * $ptr);
+
+            border-radius: 10 * $ptr;
+
+            transform: translate(4 * $ptr, 4 * $ptr);
+
+            border: 2 * $ptr solid $white;
+        }
     }
 
     .game-playing__typing-card-top {
@@ -191,33 +235,38 @@
     }
 
         .game-playing__typing {
-            display: inline-flex;
-            align-items: baseline;
+            display: flex;
+            align-items: center;
+
             font-size: 25 * $ptr;
             letter-spacing: 2 * $ptr;
-            color: $black;
+            color: $white;
+            text-transform: uppercase;
+
             white-space: nowrap;
         }
 
             .game-playing__typing-ok {
-                color: $black, 0.45;
             }
 
             .game-playing__typing-caret {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: $flag-light-blue;
+                // margin: 0 1 * $ptr;
+
+                background-color: $white;
                 width: 2 * $ptr;
+                height: 30 * $ptr;
                 animation: typing-caret-blink 1s steps(1) infinite;
             }
 
             .game-playing__typing-next-char {
-                color: $light-gray;
+                color: rgba($white, 0.5);
             }
 
             .game-playing__typing-rest {
-                color: $light-gray;
+                color: rgba($white, 0.5);
             }
 
         input.game-playing__typing-word {
@@ -239,9 +288,12 @@
         color: $white;
         letter-spacing: 1 * $ptr;
 
+        width: 90%;
+        align-self: center;
 
-        background-color: $signs-green;
         height: 40 * $ptr;
+
+        border-top: 2 * $ptr solid rgba($white, 0.5);
 
         display: flex;
         justify-content: center;

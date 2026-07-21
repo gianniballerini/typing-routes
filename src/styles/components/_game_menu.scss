@@ -91,29 +91,25 @@
         }
 
             .game-menu__info-card-close {
-                // position: absolute;
-                // top: 10 * $ptr;
-                // left: -10 * $ptr;
-
                 align-self: flex-start;
 
                 width: 40 * $ptr;
                 height: 40 * $ptr;
 
-                padding: 5 * $ptr;
+                // padding: 5 * $ptr;
 
-                border-radius: 10 * $ptr;
-                border-left: 2 * $ptr solid $flag-light-blue;
-                box-shadow: 0px 4px 4px rgba($flag-light-blue, 0.25);
+                // border-radius: 10 * $ptr;
+                // border-left: 2 * $ptr solid $flag-light-blue;
+                // box-shadow: 0px 4px 4px rgba($flag-light-blue, 0.25);
 
                 color: $black;
                 pointer-events: auto;
 
-                background-color: $white;
+                // background-color: $white;
 
                 &:hover {
                     transform: scale(1.05);
-                    box-shadow: 0px 6px 6px rgba($flag-yellow, 0.35);
+                    // box-shadow: 0px 6px 6px rgba($flag-yellow, 0.35);
                 }
 
                 svg {

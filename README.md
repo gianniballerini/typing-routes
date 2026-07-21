@@ -60,13 +60,10 @@ Use `city_meta` only for route-specific attributes that should not live in the s
 
 
 ### To Do
+ - Mobile friendly
  - Fix spacing of letters in the typing area
  - Add congratulations for long routes and fun facts
  - Add achievements board, a sign with stickers for each route completed and km traveled
- - Remove no city routes from the list
  - Add spaces to typing and move the caret when typing a space
  - Add difficulty with Capitalization and accents
- - San Fernando del Valle de Catamarca is so long it does not fit in the typing area
- - 9 de Julio has no space between 9 and de
- - Check all city names for accuracy and typos
  - Add leaderboard with top scores and fastest times per route

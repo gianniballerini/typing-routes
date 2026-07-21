@@ -156,11 +156,12 @@ class GameUiPresenter {
         const displayTarget = this.formatCityDisplayName(target);
         const displayTyped = displayTarget.slice(0, typed.length);
         const hasNextChar = displayTyped.length < displayTarget.length;
+        const nextChar = hasNextChar ? displayTarget.charAt(displayTyped.length) : '';
+        const restText = hasNextChar ? displayTarget.slice(displayTyped.length + 1) : '';
 
-        if (this.typing_ok_el) this.typing_ok_el.textContent = displayTyped;
-        if (this.typing_caret_el) this.typing_caret_el.textContent = '|';
-        if (this.typing_next_char_el) this.typing_next_char_el.textContent = hasNextChar ? displayTarget.charAt(displayTyped.length) : '';
-        if (this.typing_rest_el) this.typing_rest_el.textContent = hasNextChar ? displayTarget.slice(displayTyped.length + 1) : '';
+        if (this.typing_ok_el) this.typing_ok_el.textContent = this.toTypingDisplayText(displayTyped);
+        if (this.typing_next_char_el) this.typing_next_char_el.textContent = this.toTypingDisplayText(nextChar);
+        if (this.typing_rest_el) this.typing_rest_el.textContent = this.toTypingDisplayText(restText);
     }
 
     renderCurrentRouteAndCity(route: Route | null): void {
@@ -205,6 +206,10 @@ class GameUiPresenter {
                 return chunk.charAt(0).toLocaleUpperCase() + chunk.slice(1).toLocaleLowerCase();
             })
             .join('');
+    }
+
+    private toTypingDisplayText(text: string): string {
+        return text.replace(/ /g, '\u00A0');
     }
 
     private clearPlayingPanel(): void {

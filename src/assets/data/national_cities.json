@@ -2218,8 +2218,8 @@
       "georef_id": null,
       "name": "28 de Noviembre",
       "typing": "28 de noviembre",
-      "lat": -51.6506,
-      "lon": -69.2311,
+      "lat": -51.5839,
+      "lon": -72.2149,
       "province": "Santa Cruz",
       "tier": "minor"
     },
@@ -2898,8 +2898,8 @@
       "georef_id": null,
       "name": "Casa de Piedra",
       "typing": "casa de piedra",
-      "lat": -38.1542,
-      "lon": -67.1542,
+      "lat": -29.6037,
+      "lon": -65.5201,
       "province": "La Pampa",
       "tier": "minor"
     },

@@ -14,7 +14,6 @@ class TypingController extends EventTarget {
         this.target = text;
         this.typed = '';
         this.active = true;
-        this.autoCompleteSpaces();
         this.dispatchEvent(new CustomEvent('target-set', { detail: { target: text } }));
 
         if (this.typed.length > 0) {
@@ -31,7 +30,6 @@ class TypingController extends EventTarget {
         const matchesExpected = char.toLocaleLowerCase() === expectedChar.toLocaleLowerCase();
         if (matchesExpected) {
             this.typed += expectedChar;
-            this.autoCompleteSpaces();
             this.dispatchEvent(new CustomEvent('progress', {
                 detail: { typed: this.typed, target: this.target }
             }));
@@ -51,12 +49,6 @@ class TypingController extends EventTarget {
     reset(): void {
         this.typed = '';
         this.active = false;
-    }
-
-    private autoCompleteSpaces(): void {
-        while (this.typed.length < this.target.length && this.target[this.typed.length] === ' ') {
-            this.typed += ' ';
-        }
     }
 }
 

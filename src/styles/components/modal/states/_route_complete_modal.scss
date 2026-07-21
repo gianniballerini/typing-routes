@@ -80,12 +80,12 @@
 }
 
 .route-complete-modal__button {
-	border: 1px solid $white;
-    border-radius: 10 * $ptr;
-    width: fit-content;
+	// border: 1px solid $white;
+    // border-radius: 10 * $ptr;
     align-self: center;
 
-    padding: 5 * $ptr 10 * $ptr;
+    height: 50 * $ptr;
+    width: 50 * $ptr;
 
     text-align: center;
     font-size: 20 * $ptr;
@@ -94,5 +94,10 @@
 
     &:hover {
         background-color: rgba($white, 0.2);
+    }
+
+    svg {
+        width: 100%;
+        height: 100%;
     }
 }
