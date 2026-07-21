@@ -61,6 +61,7 @@ class GameFlowCoordinator {
     init(): void {
         this.ui_presenter.onStartRequested(this.handleStartRequested);
         this.ui_presenter.onCloseRequested(this.handleCloseRequested);
+        this.ui_presenter.onTypingInput(this.handleTypingInput);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
 
         this.game.addEventListener('city-visited', this.handleCityVisited as EventListener);
@@ -97,6 +98,7 @@ class GameFlowCoordinator {
         }
 
         this.game.start();
+        this.ui_presenter.focusTypingInput();
 
         if (firstCityCoordinate) {
             this.setProgressMarkerAndFollowCamera(firstCityCoordinate);
@@ -169,6 +171,15 @@ class GameFlowCoordinator {
         this.map_controller.selectRoute(null);
     };
 
+    private handleTypingInput = (inputText: string): void => {
+        if (this.game.state !== GameState.PLAYING) return;
+
+        for (const char of inputText) {
+            if (char === '\n' || char === '\r') continue;
+            this.game.typing_controller.handleInput(char);
+        }
+    };
+
     private getRouteSelectionZoom(routeLengthKm: number | undefined): number {
         const defaultZoom = Settings.routeSelection.flyToZoom;
         if (typeof routeLengthKm !== 'number' || !Number.isFinite(routeLengthKm)) return defaultZoom;
@@ -207,8 +218,14 @@ class GameFlowCoordinator {
 
     private handleStateChange = (event: Event): void => {
         const customEvent = event as CustomEvent<{ from: string; to: string }>;
+        const enteringPlaying = customEvent.detail.from === GameState.MENU && customEvent.detail.to === GameState.PLAYING;
         const leavingPlaying = customEvent.detail.from === GameState.PLAYING && customEvent.detail.to === GameState.MENU;
+        if (enteringPlaying) {
+            this.ui_presenter.focusTypingInput();
+        }
+
         if (leavingPlaying) {
+            this.ui_presenter.blurTypingInput();
             this.finalizeRunStats();
         }
 

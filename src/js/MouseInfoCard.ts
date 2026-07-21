@@ -3,6 +3,7 @@ class MouseInfoCard
   container: HTMLElement;
   header: HTMLElement;
   body: HTMLElement;
+  private enabled: boolean;
   private offsetX: number;
   private offsetY: number;
 
@@ -26,8 +27,22 @@ class MouseInfoCard
     this.container = container;
     this.header = header;
     this.body = body;
+    this.enabled = this.detectDesktopHoverCapability();
     this.offsetX = 18;
     this.offsetY = 18;
+
+    if (!this.enabled) {
+      this.hide();
+    }
+  }
+
+  private detectDesktopHoverCapability(): boolean
+  {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return true;
+    }
+
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   }
 
   hide()
@@ -37,6 +52,8 @@ class MouseInfoCard
 
   show(header: string, body: string)
   {
+    if (!this.enabled) return;
+
     this.header.textContent = header;
     this.body.textContent = body;
     this.container.classList.remove('hidden');
@@ -44,6 +61,7 @@ class MouseInfoCard
 
   moveTo(x: number, y: number)
   {
+    if (!this.enabled) return;
     this.container.style.transform = `translate(${x + this.offsetX}px, ${y + this.offsetY}px)`;
   }
 }

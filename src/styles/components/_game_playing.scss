@@ -1,7 +1,7 @@
 .game-playing {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 100dvh;
 
     z-index: 1;
 
@@ -12,6 +12,36 @@
     display: flex;
     flex-direction: column;
 }
+
+.game-playing.keyboard-open {
+    justify-content: flex-start;
+}
+
+.game-playing.keyboard-open .game-playing__top,
+.game-playing.keyboard-open .game-playing__info-card {
+    display: none;
+}
+
+.game-playing.keyboard-open .game-playing__bottom {
+    height: 100%;
+    justify-content: flex-start;
+    padding-top: 16 * $ptr;
+    padding-bottom: calc(12 * $ptr + env(safe-area-inset-bottom));
+}
+
+    .game-playing__keyboard-focus-target {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        pointer-events: none;
+    }
+
     .game-playing__top {
         width: 100%;
         height: 50%;
@@ -95,7 +125,9 @@
 
         column-gap: 20 * $ptr;
 
-        min-width: 500 * $ptr;
+        min-width: 0;
+        width: min(500 * $ptr, calc(100dvw - 24 * $ptr));
+        max-width: calc(100dvw - 24 * $ptr);
         height: fit-content;
 
         background: $signs-green;
@@ -192,7 +224,9 @@
             }
 
     .game-playing__typing-card {
-        min-width: 500 * $ptr;
+        min-width: 0;
+        width: min(500 * $ptr, calc(100dvw - 24 * $ptr));
+        max-width: calc(100dvw - 24 * $ptr);
         height: 100 * $ptr;
 
         border-radius: 10 * $ptr;
