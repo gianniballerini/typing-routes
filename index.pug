@@ -6,6 +6,10 @@ html()
     meta(name="viewport", content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0")
     include src/views/meta
 
+    link(rel="preload", href="/fonts/noto-sans-mono/noto-sans-mono_regular.woff2", as="font", crossorigin)
+    link(rel="preload", href="/fonts/noto-sans-mono/noto-sans-mono_bold.woff2", as="font", crossorigin)
+    link(rel="preload", href="/fonts/milonga/milonga_regular.woff2", as="font", crossorigin)
+
     link(href='/src/styles/main.scss', rel="stylesheet")
 
   body
