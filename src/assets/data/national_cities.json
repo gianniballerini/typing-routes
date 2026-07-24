@@ -658,8 +658,8 @@
       "georef_id": null,
       "name": "Santa Rosa del Conlara",
       "typing": "santa rosa del conlara",
-      "lat": -33.5167,
-      "lon": -65.9333,
+      "lat": -32.3431,
+      "lon": -65.1990,
       "province": "San Luis",
       "tier": "minor"
     },
@@ -668,8 +668,8 @@
       "georef_id": null,
       "name": "Villa Dolores",
       "typing": "villa dolores",
-      "lat": -33.5167,
-      "lon": -65.9333,
+      "lat": -31.9500,
+      "lon": -65.1621,
       "province": "San Luis",
       "tier": "minor"
     },

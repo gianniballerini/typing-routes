@@ -771,10 +771,6 @@
       "id": "rn-0148",
       "route": "0148",
       "city_refs": [
-        "ar-san_luis-villa_mercedes",
-        "ar-san_luis-san_jose_del_morro",
-        "ar-san_luis-naschel",
-        "ar-san_luis-tilisarao",
         "ar-san_luis-santa_rosa_del_conlara",
         "ar-san_luis-villa_dolores"
       ]
