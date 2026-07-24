@@ -1,7 +1,16 @@
-import { readFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
-import pug from 'pug'
-import { defineConfig, type Plugin } from 'vite'
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import pug from 'pug';
+import { defineConfig, type Plugin } from 'vite';
+
+const useHttps = process.env.VITE_USE_HTTPS === 'true';
+const certKeyPath = resolve(process.cwd(), 'certificates', 'localhost-key.pem')
+const certPath = resolve(process.cwd(), 'certificates', 'localhost.pem')
+const hasHttpsCertificates = existsSync(certKeyPath) && existsSync(certPath)
+
+if (useHttps && !hasHttpsCertificates) {
+  console.warn('[vite] VITE_USE_HTTPS=true but certificates are missing. Starting in HTTP mode.')
+}
 
 const PUG_MARKER_RE =
   /<template\s+data-type=["']pug["']\s+data-src=["']([^"']+)["']\s*><\/template>/i
@@ -65,4 +74,13 @@ function pugHtmlTemplate(): Plugin {
 
 export default defineConfig({
   plugins: [pugHtmlTemplate()],
+  server: {
+    https: useHttps && hasHttpsCertificates
+      ? {
+        key: readFileSync(certKeyPath),
+        cert: readFileSync(certPath)
+      }
+      : false,
+    host: true // allows external access
+  }
 })
