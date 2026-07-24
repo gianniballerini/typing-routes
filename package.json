@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite --port 1234",
+    "start-vite-ssl": "VITE_USE_HTTPS=true vite --port 443",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -16,6 +17,7 @@
     "vite": "^8.1.1"
   },
   "dependencies": {
+    "html-to-image": "^1.11.13",
     "maplibre-gl": "^5.24.0"
   }
 }

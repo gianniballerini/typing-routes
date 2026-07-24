@@ -1,3 +1,5 @@
+import { copyElementImageToClipboard, shareElementAsImage } from './../utils/ShareUtils';
+
 interface RouteCompleteModalPayload {
 	routeTitle: string;
 	combo: number;
@@ -11,6 +13,7 @@ interface RouteCompleteModalPayload {
 }
 
 class ModalController {
+	private route_name: string;
 	private rootEl: HTMLElement | null;
 	private routeCompleteEl: HTMLElement | null;
 	private routeCompleteTitleEl: HTMLElement | null;
@@ -20,9 +23,15 @@ class ModalController {
 	private routeCompleteCitiesEl: HTMLElement | null;
 	private routeCompleteMistakesEl: HTMLElement | null;
 	private routeCompleteCloseButtonEl: HTMLElement | null;
+
+	private routeCompleteShareButtonEl: HTMLElement | null;
+	private routeCompleteShareButtonTextEl: HTMLElement | null;
+
 	private escapeBound: boolean;
 
 	constructor() {
+		this.route_name = '';
+
 		this.rootEl = document.querySelector('.modal');
 		this.routeCompleteEl = document.querySelector('.route-complete-modal');
 		this.routeCompleteTitleEl = document.querySelector('.route-complete-modal__title-text');
@@ -34,11 +43,16 @@ class ModalController {
 		this.routeCompleteCloseButtonEl = document.querySelector('.route-complete-modal__button');
 		this.escapeBound = false;
 
+		this.routeCompleteShareButtonEl = document.querySelector('.route-complete-modal__share-button');
+		this.routeCompleteShareButtonTextEl = document.querySelector('.route-complete-modal__button-text');
+
 		this.routeCompleteCloseButtonEl?.addEventListener('click', this.hide);
+		this.routeCompleteShareButtonEl?.addEventListener('click', this.share);
 	}
 
 	showRouteComplete(payload: RouteCompleteModalPayload): void {
-		const title = payload.routeTitle ? payload.routeTitle : 'Ruta completada';
+		this.route_name = payload.routeTitle || 'Ruta completada';
+		const title = this.route_name;
 		const safeCombo = this.toRoundedNonNegativeInteger(payload.combo);
 		const safeWpm = this.toRoundedNonNegativeInteger(payload.wpm);
 		const comboLabel = this.withNewRecordPrefix(safeCombo, Boolean(payload.isNewComboRecord));
@@ -63,6 +77,41 @@ class ModalController {
 		this.rootEl?.classList.add('hidden');
 		this.unbindEscapeKey();
 	};
+
+	private share = async (): Promise<void> => {
+		if (this.routeCompleteEl) {
+			this.routeCompleteShareButtonEl?.classList.add('hidden');
+			this.routeCompleteCloseButtonEl?.classList.add('hidden');
+			try {
+				await copyElementImageToClipboard(this.routeCompleteEl);
+				// await shareElementAsImage(this.routeCompleteEl, `Record - ${this.route_name}.png`);
+			}
+			catch (error) {
+				try {
+					await shareElementAsImage(this.routeCompleteEl, `Record - ${this.route_name}.png`);
+				} catch (error) {
+					console.error('Failed to share element as image:', error);
+				}
+			}
+			finally {
+				this.routeCompleteShareButtonEl?.classList.remove('hidden');
+				this.routeCompleteCloseButtonEl?.classList.remove('hidden');
+				this.show_copy_success_message();
+			}
+		}
+	};
+
+	show_copy_success_message(): void {
+		if (this.routeCompleteShareButtonTextEl) {
+			const originalText = this.routeCompleteShareButtonTextEl.textContent;
+			this.routeCompleteShareButtonTextEl.textContent = 'Copied!';
+			setTimeout(() => {
+				if (this.routeCompleteShareButtonTextEl) {
+					this.routeCompleteShareButtonTextEl.textContent = originalText;
+				}
+			}, 2000);
+		}
+	}
 
 	isOpen(): boolean {
 		return Boolean(this.rootEl && !this.rootEl.classList.contains('hidden'));

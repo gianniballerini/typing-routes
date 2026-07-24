@@ -3,6 +3,11 @@
         .route-complete-modal__top
             .route-complete-modal__title
                 span.route-complete-modal__title-text Ruta completada
+            .button.route-complete-modal__button
+                svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x")
+                    path( d="M18 6 6 18")
+                    path( d="m6 6 12 12")
+        .route-complete-modal__bottom
             .route-complete-modal__stats
                 .route-complete-modal__stat
                     span.route-complete-modal__stat-value.route-complete-modal__stat-value--combo 0
@@ -19,8 +24,13 @@
                 .route-complete-modal__stat
                     span.route-complete-modal__stat-value.route-complete-modal__stat-value--mistakes 0
                     span.route-complete-modal__stat-label Errores
-        .route-complete-modal__bottom
-            .button.route-complete-modal__button
-                svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x")
-                    path( d="M18 6 6 18")
-                    path( d="m6 6 12 12")
+            .button.route-complete-modal__share-button
+                .route-complete-modal__button-icon
+                    svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2-icon lucide-share-2")
+                        circle(cx="18" cy="5" r="3")
+                        circle(cx="6" cy="12" r="3")
+                        circle(cx="18" cy="19" r="3")
+                        line(x1="8.59" x2="15.42" y1="13.51" y2="17.49")
+                        line(x1="15.41" x2="8.59" y1="6.51" y2="10.49")
+                .route-complete-modal__button-text
+                    | Compartir
