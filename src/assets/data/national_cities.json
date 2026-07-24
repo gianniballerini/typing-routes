@@ -13,6 +13,16 @@
       "tier": "major"
     },
     {
+      "id": "ar-buenos_aires-moreno",
+      "georef_id": null,
+      "name": "Moreno",
+      "typing": "moreno",
+      "lat": -34.63519,
+      "lon": -58.78799,
+      "province": "Buenos Aires",
+      "tier": "minor"
+    },
+    {
       "id": "ar-buenos_aires-canuelas",
       "georef_id": null,
       "name": "Cañuelas",
@@ -75,7 +85,7 @@
     {
       "id": "ar-buenos_aires-energia",
       "georef_id": null,
-      "name": "Énergía",
+      "name": "Energía",
       "typing": "energia",
       "lat": -38.555,
       "lon": -59.359,

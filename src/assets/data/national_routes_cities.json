@@ -66,6 +66,8 @@
       "id": "rn-0007",
       "route": "0007",
       "city_refs": [
+        "ar-caba-ciudad_autonoma_buenos_aires",
+        "ar-buenos_aires-moreno",
         "ar-buenos_aires-lujan",
         "ar-buenos_aires-junin",
         "ar-santa_fe-rufino",
