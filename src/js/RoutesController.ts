@@ -68,18 +68,24 @@ class RoutesController {
     routes: { [key: string]: Route };
     private geometriesMap: { [key: string]: Geometry };
     private routeCityIdsMap: { [key: string]: string[] };
+    private cityRoutesMap: { [key: string]: Array<{ id: string; displayName: string }> };
     private routeImageUrlCache: { [key: string]: Promise<string | null> | undefined };
 
     constructor() {
         this.routes = {};
         this.geometriesMap = {};
         this.routeCityIdsMap = {};
+        this.cityRoutesMap = {};
         this.routeImageUrlCache = {};
     }
 
     private sanitizeRouteNumber(routeNumber: string): string {
         const normalized = String(routeNumber ?? '').trim();
         return normalized.replace(/^0+(?!$)/, '');
+    }
+
+    private formatRouteDisplayName(routeNumber: string): string {
+        return `RN${this.sanitizeRouteNumber(routeNumber)}`;
     }
 
     private resolveRouteImageUrl(routeNumber: string): Promise<string | null> {
@@ -174,6 +180,15 @@ class RoutesController {
 
             this.routeCityIdsMap[routeEntry.id] = route.cities.map((city) => city.id);
 
+            const routeDisplayName = this.formatRouteDisplayName(route.route_number);
+            for (const city of route.cities) {
+                if (!this.cityRoutesMap[city.id]) this.cityRoutesMap[city.id] = [];
+                this.cityRoutesMap[city.id].push({
+                    id: route.route_id,
+                    displayName: routeDisplayName
+                });
+            }
+
             this.routes[routeEntry.id] = route;
         }
 
@@ -208,7 +223,7 @@ class RoutesController {
                 properties: {
                     id,
                     route: this.routes[id]?.route_number ?? '',
-                    route_display: `Ruta ${this.sanitizeRouteNumber(this.routes[id]?.route_number ?? '')}`,
+                    route_display: this.formatRouteDisplayName(this.routes[id]?.route_number ?? ''),
                     name: this.routes[id]?.route_name ?? '',
                     cities_count: this.routes[id]?.cities.length ?? 0,
                     visited: this.routes[id]?.visited ?? false
@@ -226,6 +241,15 @@ class RoutesController {
     getRouteCityIdsMap(): { [key: string]: string[] } {
         return Object.fromEntries(
             Object.entries(this.routeCityIdsMap).map(([routeId, cityIds]) => [routeId, [...cityIds]])
+        );
+    }
+
+    getCityRoutesMap(): { [key: string]: Array<{ id: string; displayName: string }> } {
+        return Object.fromEntries(
+            Object.entries(this.cityRoutesMap).map(([cityId, routes]) => [
+                cityId,
+                routes.map((route) => ({ ...route }))
+            ])
         );
     }
 

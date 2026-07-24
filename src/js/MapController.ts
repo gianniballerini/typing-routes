@@ -25,6 +25,7 @@ class MapController {
     private hoveredId: string | number | null;
     private selectedId: string | number | null;
     private routeCityIdsMap: { [key: string]: string[] };
+    private cityRoutesMap: { [key: string]: Array<{ id: string; displayName: string }> };
     private selectedRouteCityIds: string[];
     private mouseInfoCard: MouseInfoCard | null;
 
@@ -34,6 +35,7 @@ class MapController {
         this.hoveredId = null;
         this.selectedId = null;
         this.routeCityIdsMap = {};
+        this.cityRoutesMap = {};
         this.selectedRouteCityIds = [];
         this.mouseInfoCard = null;
         this.map = new maplibregl.Map({
@@ -92,6 +94,10 @@ class MapController {
         this.routeCityIdsMap = routeCityIdsMap;
     }
 
+    setCityRoutesMap(cityRoutesMap: { [key: string]: Array<{ id: string; displayName: string }> }) {
+        this.cityRoutesMap = cityRoutesMap;
+    }
+
     addEventListener(type: string, listener: EventListenerOrEventListenerObject): void {
         this.map.getCanvas().addEventListener(type, listener);
     }
@@ -104,6 +110,28 @@ class MapController {
         this.map.getCanvas().dispatchEvent(new CustomEvent('route-selected', {
             detail: { routeId }
         }));
+    }
+
+    private emitCitySelected(cityId: string, cityName: string): void {
+        const connectedRoutes = this.cityRoutesMap[cityId] ?? [];
+        this.map.getCanvas().dispatchEvent(new CustomEvent('city-selected', {
+            detail: {
+                cityId,
+                cityName,
+                routeIds: connectedRoutes.map((route) => route.id),
+                routeDisplayNames: connectedRoutes.map((route) => route.displayName)
+            }
+        }));
+    }
+
+    private buildConnectedRoutesTooltip(routeDisplayNames: string[]): string {
+        if (routeDisplayNames.length === 0) return 'Sin rutas conectadas';
+        if (routeDisplayNames.length <= 3) return `Conecta con ${routeDisplayNames.join(', ')}`;
+
+        const maxVisible = 3;
+        const visibleRoutes = routeDisplayNames.slice(0, maxVisible).join(', ');
+        const remainingCount = routeDisplayNames.length - maxVisible;
+        return `Conecta con ${visibleRoutes} +${remainingCount}`;
     }
 
     private clearSelectedRouteCitiesFeatureState() {
@@ -207,6 +235,15 @@ class MapController {
                 });
 
                 if (routeFeatures.length > 0) return;
+
+                const hasCitiesLayer = !!this.map.getLayer(Settings.layerIds.citiesCircle);
+                if (hasCitiesLayer) {
+                    const cityFeatures = this.map.queryRenderedFeatures(e.point, {
+                        layers: [Settings.layerIds.citiesCircle]
+                    });
+                    if (cityFeatures.length > 0) return;
+                }
+
                 if (this.selectedId === null) return;
 
                 this.selectRoute(null);
@@ -261,6 +298,40 @@ class MapController {
                     'circle-stroke-width': Settings.cityCircle.stroke.width,
                     'circle-stroke-color': Settings.cityCircle.stroke.color
                 }
+            });
+
+            this.map.on('mousemove', Settings.layerIds.citiesCircle, (e) => {
+                if (!e.features || e.features.length === 0) return;
+
+                const feature = e.features[0];
+                const properties = feature.properties as { id?: string; name?: string } | undefined;
+                const cityId = String(feature.id ?? properties?.id ?? '');
+                const cityName = String(properties?.name ?? '');
+
+                if (this.mouseInfoCard && cityId && cityName) {
+                    const connectedRoutes = this.cityRoutesMap[cityId] ?? [];
+                    const routeDisplayNames = connectedRoutes.map((route) => route.displayName);
+                    this.mouseInfoCard.show(cityName, this.buildConnectedRoutesTooltip(routeDisplayNames), 'city');
+                }
+
+                this.mouseInfoCard?.moveTo(e.point.x, e.point.y);
+                this.map.getCanvas().style.cursor = 'pointer';
+            });
+
+            this.map.on('mouseleave', Settings.layerIds.citiesCircle, () => {
+                this.mouseInfoCard?.hide();
+                this.map.getCanvas().style.cursor = '';
+            });
+
+            this.map.on('click', Settings.layerIds.citiesCircle, (e) => {
+                if (!e.features || e.features.length === 0) return;
+                const feature = e.features[0];
+                const properties = feature.properties as { id?: string; name?: string } | undefined;
+                const cityId = String(feature.id ?? properties?.id ?? '');
+                const cityName = String(properties?.name ?? '');
+                if (!cityId || !cityName) return;
+
+                this.emitCitySelected(cityId, cityName);
             });
 
             this.renderProgressMarker();

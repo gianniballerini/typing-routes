@@ -50,10 +50,16 @@ class MouseInfoCard
     this.container.classList.add('hidden');
   }
 
-  show(header: string, body: string)
+  show(header: string, body: string, variant: 'route' | 'city' = 'route')
   {
     if (!this.enabled) return;
 
+    this.container.classList.toggle('mouse_info_card--city', variant === 'city');
+    this.container.classList.toggle('mouse_info_card--route', variant === 'route');
+    this.header.classList.toggle('mouse_info_card__header--city', variant === 'city');
+    this.header.classList.toggle('mouse_info_card__header--route', variant === 'route');
+    this.body.classList.toggle('mouse_info_card__body--city', variant === 'city');
+    this.body.classList.toggle('mouse_info_card__body--route', variant === 'route');
     this.header.textContent = header;
     this.body.textContent = body;
     this.container.classList.remove('hidden');

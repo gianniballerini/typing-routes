@@ -17,6 +17,28 @@
 
 	box-shadow: 0px 4px 4px rgba($black, 0.25);
 
+
+	&--city {
+		max-width: 150 * $ptr;
+		background-color: $signs-green;
+
+		padding: 10 * $ptr;
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+
+			width: calc(100% - 8 * $ptr);
+			height: calc(100% - 8 * $ptr);
+
+			border-radius: 10 * $ptr;
+
+			transform: translate(4 * $ptr, 4 * $ptr);
+
+			border: 2 * $ptr solid $white;
+		}
+	}
 }
 
 .mouse_info_card__header {
@@ -28,6 +50,12 @@
 	width: 100%;
 
 	padding: 2 * $ptr 5 * $ptr;
+
+	&--city {
+		background-color: transparent;
+		font-weight: 600;
+		letter-spacing: 1 * $ptr;
+	}
 }
 
 .mouse_info_card__body {
@@ -41,4 +69,11 @@
 	text-transform: uppercase;
 
 	padding: 5 * $ptr 10 * $ptr;
+
+	&--city {
+		background-color: transparent;
+		font-weight: 400;
+		font-size: 14 * $ptr;
+		color: $white;
+	}
 }

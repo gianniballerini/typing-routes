@@ -43,6 +43,7 @@ class MainApplication {
         this.applySavedUserProgress();
         this.loading_manager.setProgress(25);
         this.map_controller.setRouteCityIdsMap(this.routes_controller.getRouteCityIdsMap());
+        this.map_controller.setCityRoutesMap(this.routes_controller.getCityRoutesMap());
 
         const fc = this.routes_controller.getRoutesFeatureCollection();
         this.map_controller.renderRoutes(fc);
