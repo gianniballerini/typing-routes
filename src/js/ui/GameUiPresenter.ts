@@ -4,7 +4,9 @@ import type { Route } from '../Route';
 
 interface MenuRouteRecord {
     bestCombo: number;
-    bestWpm: number;
+    bestGrossWpm: number | null;
+    bestNetWpm: number | null;
+    bestAccuracy: number | null;
     bestElapsedMs: number | null;
     fewestMistakes: number | null;
 }
@@ -24,7 +26,9 @@ class GameUiPresenter {
     private menu_route_description_el: HTMLElement | null;
     private menu_welcome_description_el: HTMLElement | null;
     private menu_route_record_combo_el: HTMLElement | null;
-    private menu_route_record_wpm_el: HTMLElement | null;
+    private menu_route_record_gross_wpm_el: HTMLElement | null;
+    private menu_route_record_net_wpm_el: HTMLElement | null;
+    private menu_route_record_accuracy_el: HTMLElement | null;
     private menu_route_record_time_el: HTMLElement | null;
     private menu_route_record_mistakes_el: HTMLElement | null;
     private menu_route_image_container_el: HTMLElement | null;
@@ -42,7 +46,9 @@ class GameUiPresenter {
     private cities_completed_el: HTMLElement | null;
     private cities_remaining_el: HTMLElement | null;
     private combo_number_el: HTMLElement | null;
-    private wpm_number_el: HTMLElement | null;
+    private gross_wpm_number_el: HTMLElement | null;
+    private net_wpm_number_el: HTMLElement | null;
+    private accuracy_number_el: HTMLElement | null;
     private typingInputHandler: ((inputText: string) => void) | null;
 
     constructor() {
@@ -69,7 +75,9 @@ class GameUiPresenter {
         this.menu_route_description_el = document.querySelector('.game-menu__route-description');
         this.menu_welcome_description_el = document.querySelector('.game-menu__welcome-description');
         this.menu_route_record_combo_el = document.querySelector('.game-menu__route-record-combo');
-        this.menu_route_record_wpm_el = document.querySelector('.game-menu__route-record-wpm');
+        this.menu_route_record_gross_wpm_el = document.querySelector('.game-menu__route-record-gross-wpm');
+        this.menu_route_record_net_wpm_el = document.querySelector('.game-menu__route-record-net-wpm');
+        this.menu_route_record_accuracy_el = document.querySelector('.game-menu__route-record-accuracy');
         this.menu_route_record_time_el = document.querySelector('.game-menu__route-record-time');
         this.menu_route_record_mistakes_el = document.querySelector('.game-menu__route-record-mistakes');
         this.menu_route_image_container_el = document.querySelector('.game-menu__info-card-image');
@@ -86,7 +94,9 @@ class GameUiPresenter {
         this.cities_completed_el = document.querySelector('.game-playing__cities-completed');
         this.cities_remaining_el = document.querySelector('.game-playing__cities-remaining');
         this.combo_number_el = document.querySelector('.game-playing__combo-number');
-        this.wpm_number_el = document.querySelector('.game-playing__wpm-number');
+        this.gross_wpm_number_el = document.querySelector('.game-playing__gross-wpm-number');
+        this.net_wpm_number_el = document.querySelector('.game-playing__net-wpm-number');
+        this.accuracy_number_el = document.querySelector('.game-playing__accuracy-number');
         this.typingInputHandler = null;
     }
 
@@ -243,7 +253,9 @@ class GameUiPresenter {
         if (this.menu_route_length_el) this.menu_route_length_el.textContent = '';
         if (this.menu_route_description_el) this.menu_route_description_el.textContent = '';
         if (this.menu_route_record_combo_el) this.menu_route_record_combo_el.textContent = '--';
-        if (this.menu_route_record_wpm_el) this.menu_route_record_wpm_el.textContent = '--';
+        if (this.menu_route_record_gross_wpm_el) this.menu_route_record_gross_wpm_el.textContent = '--';
+        if (this.menu_route_record_net_wpm_el) this.menu_route_record_net_wpm_el.textContent = '--';
+        if (this.menu_route_record_accuracy_el) this.menu_route_record_accuracy_el.textContent = '--';
         if (this.menu_route_record_time_el) this.menu_route_record_time_el.textContent = '--:--';
         if (this.menu_route_record_mistakes_el) this.menu_route_record_mistakes_el.textContent = '--';
         if (this.menu_route_image_el) {
@@ -290,11 +302,20 @@ class GameUiPresenter {
         }
     }
 
-    renderRunStats(citiesCompleted: number, citiesTotal: number, combo: number, wpm: number): void {
+    renderRunStats(
+        citiesCompleted: number,
+        citiesTotal: number,
+        combo: number,
+        grossWpm: number,
+        netWpm: number,
+        accuracy: number
+    ): void {
         if (this.cities_completed_el) this.cities_completed_el.textContent = `${Math.max(0, citiesCompleted)}`;
         if (this.cities_remaining_el) this.cities_remaining_el.textContent = `${Math.max(0, citiesTotal)}`;
         if (this.combo_number_el) this.combo_number_el.textContent = `${Math.max(0, Math.round(combo))}`;
-        if (this.wpm_number_el) this.wpm_number_el.textContent = `${Math.max(0, Math.round(wpm))}`;
+        if (this.gross_wpm_number_el) this.gross_wpm_number_el.textContent = this.formatOneDecimal(grossWpm);
+        if (this.net_wpm_number_el) this.net_wpm_number_el.textContent = this.formatOneDecimal(netWpm);
+        if (this.accuracy_number_el) this.accuracy_number_el.textContent = `${this.formatOneDecimal(accuracy)}%`;
     }
 
     private sanitizeRouteNumber(routeNumber: string): string {
@@ -321,7 +342,7 @@ class GameUiPresenter {
         if (this.city_count_number_el) this.city_count_number_el.textContent = '';
         if (this.end_city_el) this.end_city_el.textContent = '';
         if (this.route_name_el) this.route_name_el.textContent = '';
-        this.renderRunStats(0, 0, 0, 0);
+        this.renderRunStats(0, 0, 0, 0, 0, 100);
     }
 
     private renderMenuRouteRecord(record: MenuRouteRecord | null): void {
@@ -329,8 +350,17 @@ class GameUiPresenter {
             this.menu_route_record_combo_el.textContent = record ? `${Math.max(0, Math.round(record.bestCombo))}` : '--';
         }
 
-        if (this.menu_route_record_wpm_el) {
-            this.menu_route_record_wpm_el.textContent = record ? `${Math.max(0, Math.round(record.bestWpm))}` : '--';
+        if (this.menu_route_record_gross_wpm_el) {
+            this.menu_route_record_gross_wpm_el.textContent = this.formatOptionalOneDecimal(record?.bestGrossWpm);
+        }
+
+        if (this.menu_route_record_net_wpm_el) {
+            this.menu_route_record_net_wpm_el.textContent = this.formatOptionalOneDecimal(record?.bestNetWpm);
+        }
+
+        if (this.menu_route_record_accuracy_el) {
+            const formattedAccuracy = this.formatOptionalOneDecimal(record?.bestAccuracy);
+            this.menu_route_record_accuracy_el.textContent = formattedAccuracy === '--' ? '--' : `${formattedAccuracy}%`;
         }
 
         if (this.menu_route_record_time_el) {
@@ -352,6 +382,16 @@ class GameUiPresenter {
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
         return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    private formatOneDecimal(value: number): string {
+        const safeValue = Number.isFinite(value) ? Math.max(0, value) : 0;
+        return safeValue.toFixed(1);
+    }
+
+    private formatOptionalOneDecimal(value: number | null | undefined): string {
+        if (value == null) return '--';
+        return this.formatOneDecimal(value);
     }
 
     private renderMenuRouteImage(imageUrl: string | null): void {

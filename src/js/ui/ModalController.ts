@@ -3,9 +3,13 @@ import { copyElementImageToClipboard, shareElementAsImage } from './../utils/Sha
 interface RouteCompleteModalPayload {
 	routeTitle: string;
 	combo: number;
-	wpm: number;
+	grossWpm: number;
+	netWpm: number;
+	accuracy: number;
 	isNewComboRecord?: boolean;
-	isNewWpmRecord?: boolean;
+	isNewGrossWpmRecord?: boolean;
+	isNewNetWpmRecord?: boolean;
+	isNewAccuracyRecord?: boolean;
 	elapsedMs: number;
 	citiesCompleted: number;
 	citiesTotal: number;
@@ -18,7 +22,9 @@ class ModalController {
 	private routeCompleteEl: HTMLElement | null;
 	private routeCompleteTitleEl: HTMLElement | null;
 	private routeCompleteComboEl: HTMLElement | null;
-	private routeCompleteWpmEl: HTMLElement | null;
+	private routeCompleteGrossWpmEl: HTMLElement | null;
+	private routeCompleteNetWpmEl: HTMLElement | null;
+	private routeCompleteAccuracyEl: HTMLElement | null;
 	private routeCompleteElapsedEl: HTMLElement | null;
 	private routeCompleteCitiesEl: HTMLElement | null;
 	private routeCompleteMistakesEl: HTMLElement | null;
@@ -36,7 +42,9 @@ class ModalController {
 		this.routeCompleteEl = document.querySelector('.route-complete-modal');
 		this.routeCompleteTitleEl = document.querySelector('.route-complete-modal__title-text');
 		this.routeCompleteComboEl = document.querySelector('.route-complete-modal__stat-value--combo');
-		this.routeCompleteWpmEl = document.querySelector('.route-complete-modal__stat-value--wpm');
+		this.routeCompleteGrossWpmEl = document.querySelector('.route-complete-modal__stat-value--gross-wpm');
+		this.routeCompleteNetWpmEl = document.querySelector('.route-complete-modal__stat-value--net-wpm');
+		this.routeCompleteAccuracyEl = document.querySelector('.route-complete-modal__stat-value--accuracy');
 		this.routeCompleteElapsedEl = document.querySelector('.route-complete-modal__stat-value--elapsed');
 		this.routeCompleteCitiesEl = document.querySelector('.route-complete-modal__stat-value--cities');
 		this.routeCompleteMistakesEl = document.querySelector('.route-complete-modal__stat-value--mistakes');
@@ -54,15 +62,21 @@ class ModalController {
 		this.route_name = payload.routeTitle || 'Ruta completada';
 		const title = this.route_name;
 		const safeCombo = this.toRoundedNonNegativeInteger(payload.combo);
-		const safeWpm = this.toRoundedNonNegativeInteger(payload.wpm);
+		const safeGrossWpm = this.toOneDecimalNonNegative(payload.grossWpm);
+		const safeNetWpm = this.toOneDecimalNonNegative(payload.netWpm);
+		const safeAccuracy = this.toOneDecimalNonNegative(payload.accuracy);
 		const comboLabel = this.withNewRecordPrefix(safeCombo, Boolean(payload.isNewComboRecord));
-		const wpmLabel = this.withNewRecordPrefix(safeWpm, Boolean(payload.isNewWpmRecord));
+		const grossWpmLabel = this.withNewRecordPrefix(safeGrossWpm, Boolean(payload.isNewGrossWpmRecord));
+		const netWpmLabel = this.withNewRecordPrefix(safeNetWpm, Boolean(payload.isNewNetWpmRecord));
+		const accuracyLabel = this.withNewRecordPrefix(`${safeAccuracy}%`, Boolean(payload.isNewAccuracyRecord));
 		const safeCitiesTotal = this.toRoundedNonNegativeInteger(payload.citiesTotal);
 		const safeMistakes = this.toRoundedNonNegativeInteger(payload.mistakes);
 
 		if (this.routeCompleteTitleEl) this.routeCompleteTitleEl.textContent = title;
 		if (this.routeCompleteComboEl) this.routeCompleteComboEl.textContent = comboLabel;
-		if (this.routeCompleteWpmEl) this.routeCompleteWpmEl.textContent = wpmLabel;
+		if (this.routeCompleteGrossWpmEl) this.routeCompleteGrossWpmEl.textContent = grossWpmLabel;
+		if (this.routeCompleteNetWpmEl) this.routeCompleteNetWpmEl.textContent = netWpmLabel;
+		if (this.routeCompleteAccuracyEl) this.routeCompleteAccuracyEl.textContent = accuracyLabel;
 		if (this.routeCompleteElapsedEl) this.routeCompleteElapsedEl.textContent = this.formatElapsedTime(payload.elapsedMs);
 		if (this.routeCompleteCitiesEl) this.routeCompleteCitiesEl.textContent = `${safeCitiesTotal}`;
 		if (this.routeCompleteMistakesEl) this.routeCompleteMistakesEl.textContent = `${safeMistakes}`;
@@ -142,7 +156,12 @@ class ModalController {
 		return Math.max(0, Math.round(value));
 	}
 
-	private withNewRecordPrefix(value: number, isNewRecord: boolean): string {
+	private toOneDecimalNonNegative(value: number): string {
+		const safeValue = Number.isFinite(value) ? Math.max(0, value) : 0;
+		return safeValue.toFixed(1);
+	}
+
+	private withNewRecordPrefix(value: string | number, isNewRecord: boolean): string {
 		const baseValue = `${value}`;
 		if (!isNewRecord) return baseValue;
 		return `(new record) ${baseValue}`;

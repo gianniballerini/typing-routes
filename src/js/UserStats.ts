@@ -7,7 +7,9 @@ interface UserStatsSnapshot {
 
 interface RouteRecordSnapshot {
     bestCombo: number;
-    bestWpm: number;
+    bestGrossWpm: number | null;
+    bestNetWpm: number | null;
+    bestAccuracy: number | null;
     bestElapsedMs: number | null;
     fewestMistakes: number | null;
 }
@@ -27,7 +29,9 @@ class UserStats {
         this.routeRecords = new Map(
             Object.entries(routeRecords).map(([routeId, record]) => [routeId, {
                 bestCombo: this.sanitizeMetric(record.bestCombo),
-                bestWpm: this.sanitizeMetric(record.bestWpm),
+                bestGrossWpm: this.sanitizeOptionalMetric(record.bestGrossWpm),
+                bestNetWpm: this.sanitizeOptionalMetric(record.bestNetWpm),
+                bestAccuracy: this.sanitizeOptionalMetric(record.bestAccuracy),
                 bestElapsedMs: this.sanitizeOptionalMetric(record.bestElapsedMs),
                 fewestMistakes: this.sanitizeOptionalMetric(record.fewestMistakes)
             }])
@@ -72,7 +76,9 @@ class UserStats {
 
         return {
             bestCombo: record.bestCombo,
-            bestWpm: record.bestWpm,
+            bestGrossWpm: record.bestGrossWpm,
+            bestNetWpm: record.bestNetWpm,
+            bestAccuracy: record.bestAccuracy,
             bestElapsedMs: record.bestElapsedMs,
             fewestMistakes: record.fewestMistakes
         };
@@ -81,15 +87,31 @@ class UserStats {
     updateRouteRecord(
         routeId: string,
         bestComboForRun: number,
-        bestWpmForRun: number,
+        bestGrossWpmForRun: number,
+        bestNetWpmForRun: number,
+        bestAccuracyForRun: number,
         elapsedMsForRun: number,
         mistakesForRun: number
     ): boolean {
         const normalizedCombo = this.sanitizeMetric(bestComboForRun);
-        const normalizedWpm = this.sanitizeMetric(bestWpmForRun);
+        const normalizedGrossWpm = this.sanitizeMetric(bestGrossWpmForRun);
+        const normalizedNetWpm = this.sanitizeMetric(bestNetWpmForRun);
+        const normalizedAccuracy = this.sanitizeMetric(bestAccuracyForRun);
         const normalizedElapsedMs = this.sanitizeMetric(elapsedMsForRun);
         const normalizedMistakes = this.sanitizeMetric(mistakesForRun);
         const currentRecord = this.routeRecords.get(routeId);
+
+        const nextBestGrossWpm = currentRecord?.bestGrossWpm == null
+            ? normalizedGrossWpm
+            : Math.max(currentRecord.bestGrossWpm, normalizedGrossWpm);
+
+        const nextBestNetWpm = currentRecord?.bestNetWpm == null
+            ? normalizedNetWpm
+            : Math.max(currentRecord.bestNetWpm, normalizedNetWpm);
+
+        const nextBestAccuracy = currentRecord?.bestAccuracy == null
+            ? normalizedAccuracy
+            : Math.max(currentRecord.bestAccuracy, normalizedAccuracy);
 
         const nextBestElapsedMs = currentRecord?.bestElapsedMs == null
             ? normalizedElapsedMs
@@ -101,7 +123,9 @@ class UserStats {
 
         const nextRecord: RouteRecordSnapshot = {
             bestCombo: Math.max(currentRecord?.bestCombo ?? 0, normalizedCombo),
-            bestWpm: Math.max(currentRecord?.bestWpm ?? 0, normalizedWpm),
+            bestGrossWpm: nextBestGrossWpm,
+            bestNetWpm: nextBestNetWpm,
+            bestAccuracy: nextBestAccuracy,
             bestElapsedMs: nextBestElapsedMs,
             fewestMistakes: nextFewestMistakes
         };
@@ -109,7 +133,9 @@ class UserStats {
         if (
             currentRecord
             && currentRecord.bestCombo === nextRecord.bestCombo
-            && currentRecord.bestWpm === nextRecord.bestWpm
+            && currentRecord.bestGrossWpm === nextRecord.bestGrossWpm
+            && currentRecord.bestNetWpm === nextRecord.bestNetWpm
+            && currentRecord.bestAccuracy === nextRecord.bestAccuracy
             && currentRecord.bestElapsedMs === nextRecord.bestElapsedMs
             && currentRecord.fewestMistakes === nextRecord.fewestMistakes
         ) {
@@ -122,7 +148,7 @@ class UserStats {
 
     toSnapshot(): UserStatsSnapshot {
         return {
-            version: 2,
+            version: 3,
             completedCityIds: [...this.completedCityIds],
             completedRouteIds: [...this.completedRouteIds],
             routeRecords: Object.fromEntries(this.routeRecords)

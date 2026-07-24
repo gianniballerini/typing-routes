@@ -23,6 +23,13 @@ interface ActiveRunStats {
     lastTypedLength: number;
 }
 
+interface CalculatedRunMetrics {
+    elapsedMs: number;
+    grossWpm: number;
+    netWpm: number;
+    accuracy: number;
+}
+
 class GameFlowCoordinator {
     private game: Game;
     private routes_controller: RoutesController;
@@ -112,13 +119,7 @@ class GameFlowCoordinator {
         if (this.activeRunStats) {
             this.activeRunStats.citiesCompleted += 1;
             this.activeRunStats.citiesRemaining = Math.max(0, this.activeRunStats.citiesRemaining - 1);
-            const totalCities = this.activeRunStats.citiesCompleted + this.activeRunStats.citiesRemaining;
-            this.ui_presenter.renderRunStats(
-                this.activeRunStats.citiesCompleted,
-                totalCities,
-                this.activeRunStats.currentCombo,
-                this.calculateCurrentWpm(this.activeRunStats)
-            );
+            this.renderActiveRunStats(this.activeRunStats);
         }
 
         const changed = this.user_stats.markCityCompleted(customEvent.detail.cityId);
@@ -255,13 +256,7 @@ class GameFlowCoordinator {
             }
 
             this.activeRunStats.lastTypedLength = typedLength;
-            const totalCities = this.activeRunStats.citiesCompleted + this.activeRunStats.citiesRemaining;
-            this.ui_presenter.renderRunStats(
-                this.activeRunStats.citiesCompleted,
-                totalCities,
-                this.activeRunStats.currentCombo,
-                this.calculateCurrentWpm(this.activeRunStats)
-            );
+            this.renderActiveRunStats(this.activeRunStats);
         }
 
         this.ui_presenter.renderTyping(customEvent.detail.typed, customEvent.detail.target);
@@ -273,13 +268,7 @@ class GameFlowCoordinator {
 
         this.activeRunStats.mistakes += 1;
         this.activeRunStats.currentCombo = 0;
-        const totalCities = this.activeRunStats.citiesCompleted + this.activeRunStats.citiesRemaining;
-        this.ui_presenter.renderRunStats(
-            this.activeRunStats.citiesCompleted,
-            totalCities,
-            this.activeRunStats.currentCombo,
-            this.calculateCurrentWpm(this.activeRunStats)
-        );
+        this.renderActiveRunStats(this.activeRunStats);
     };
 
     private initializeRouteSnappingData(routeId: string): void {
@@ -414,23 +403,26 @@ class GameFlowCoordinator {
             lastTypedLength: 0
         };
 
-        this.ui_presenter.renderRunStats(0, totalCities, 0, 0);
+        this.ui_presenter.renderRunStats(0, totalCities, 0, 0, 0, 100);
     }
 
     private finalizeRunStats(): void {
         const runStats = this.activeRunStats;
         if (!runStats) return;
 
-        const elapsedMs = Math.max(0, Date.now() - runStats.startedAtMs);
-        const bestWpmForRun = this.calculateCurrentWpm(runStats);
+        const calculatedMetrics = this.calculateRunMetrics(runStats);
         const previousRecord = this.user_stats.getRouteRecord(runStats.routeId);
         const isNewComboRecord = runStats.bestCombo > (previousRecord?.bestCombo ?? 0);
-        const isNewWpmRecord = bestWpmForRun > (previousRecord?.bestWpm ?? 0);
+        const isNewGrossWpmRecord = this.isNewOptionalMetricRecord(calculatedMetrics.grossWpm, previousRecord?.bestGrossWpm);
+        const isNewNetWpmRecord = this.isNewOptionalMetricRecord(calculatedMetrics.netWpm, previousRecord?.bestNetWpm);
+        const isNewAccuracyRecord = this.isNewOptionalMetricRecord(calculatedMetrics.accuracy, previousRecord?.bestAccuracy);
         const changed = this.user_stats.updateRouteRecord(
             runStats.routeId,
             runStats.bestCombo,
-            bestWpmForRun,
-            elapsedMs,
+            calculatedMetrics.grossWpm,
+            calculatedMetrics.netWpm,
+            calculatedMetrics.accuracy,
+            calculatedMetrics.elapsedMs,
             runStats.mistakes
         );
         if (changed) this.user_stats_storage.save(this.user_stats);
@@ -442,10 +434,14 @@ class GameFlowCoordinator {
             this.modal_controller.showRouteComplete({
                 routeTitle: this.buildRouteTitle(route?.full_name, route?.route_name, route?.route_number),
                 combo: runStats.bestCombo,
-                wpm: bestWpmForRun,
+                grossWpm: calculatedMetrics.grossWpm,
+                netWpm: calculatedMetrics.netWpm,
+                accuracy: calculatedMetrics.accuracy,
                 isNewComboRecord,
-                isNewWpmRecord,
-                elapsedMs,
+                isNewGrossWpmRecord,
+                isNewNetWpmRecord,
+                isNewAccuracyRecord,
+                elapsedMs: calculatedMetrics.elapsedMs,
                 citiesCompleted: runStats.citiesCompleted,
                 citiesTotal: totalCities,
                 mistakes: runStats.mistakes
@@ -456,10 +452,58 @@ class GameFlowCoordinator {
         this.completedRouteForCurrentRunId = null;
     }
 
-    private calculateCurrentWpm(runStats: ActiveRunStats): number {
-        const elapsedMinutes = (Date.now() - runStats.startedAtMs) / 60000;
+    private renderActiveRunStats(runStats: ActiveRunStats): void {
+        const calculatedMetrics = this.calculateRunMetrics(runStats);
+        const totalCities = runStats.citiesCompleted + runStats.citiesRemaining;
+
+        this.ui_presenter.renderRunStats(
+            runStats.citiesCompleted,
+            totalCities,
+            runStats.currentCombo,
+            calculatedMetrics.grossWpm,
+            calculatedMetrics.netWpm,
+            calculatedMetrics.accuracy
+        );
+    }
+
+    private calculateRunMetrics(runStats: ActiveRunStats): CalculatedRunMetrics {
+        const elapsedMs = Math.max(0, Date.now() - runStats.startedAtMs);
+        return {
+            elapsedMs,
+            grossWpm: this.calculateGrossWpm(runStats, elapsedMs),
+            netWpm: this.calculateNetWpm(runStats, elapsedMs),
+            accuracy: this.calculateAccuracy(runStats)
+        };
+    }
+
+    private calculateGrossWpm(runStats: ActiveRunStats, elapsedMs: number): number {
+        const elapsedMinutes = elapsedMs / 60000;
         if (elapsedMinutes <= 0) return 0;
-        return (runStats.correctCharsTyped / 5) / elapsedMinutes;
+
+        const totalCharsAttempted = runStats.correctCharsTyped + runStats.mistakes;
+        return (totalCharsAttempted / 5) / elapsedMinutes;
+    }
+
+    private calculateNetWpm(runStats: ActiveRunStats, elapsedMs: number): number {
+        const elapsedMinutes = elapsedMs / 60000;
+        if (elapsedMinutes <= 0) return 0;
+
+        const correctWords = runStats.correctCharsTyped / 5;
+        const errorPenaltyWords = runStats.mistakes / 5;
+        const netWords = Math.max(0, correctWords - errorPenaltyWords);
+        return netWords / elapsedMinutes;
+    }
+
+    private calculateAccuracy(runStats: ActiveRunStats): number {
+        const totalKeystrokes = runStats.correctCharsTyped + runStats.mistakes;
+        if (totalKeystrokes === 0) return 100;
+
+        return (runStats.correctCharsTyped / totalKeystrokes) * 100;
+    }
+
+    private isNewOptionalMetricRecord(value: number, previousValue: number | null | undefined): boolean {
+        if (previousValue == null) return true;
+        return value > previousValue;
     }
 
     private buildRouteTitle(fullName?: string, routeName?: string, routeNumber?: string): string {

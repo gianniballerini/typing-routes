@@ -3714,6 +3714,16 @@
       "tier": "minor"
     },
     {
+      "id": "ar-neuquen-paso_de_pino_hachado",
+      "georef_id": null,
+      "name": "Paso de Pino Hachado",
+      "typing": "paso de pino hachado",
+      "lat": -38.6677,
+      "lon": -70.8396,
+      "province": "Neuquén",
+      "tier": "minor"
+    },
+    {
       "id": "ar-rio_negro-lamarque",
       "georef_id": null,
       "name": "Lamarque",
