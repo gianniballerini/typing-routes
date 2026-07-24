@@ -1,0 +1,28 @@
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #101722;
+    color: $white;
+
+    // GSAP will handle the exit, no CSS transition needed
+    will-change: transform, clip-path, opacity;
+}
+
+.loading-screen__value {
+    font-family: $noto-sans-font;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    will-change: transform;
+}
+
+.home.home--loading {
+    visibility: hidden;
+    pointer-events: none;
+}

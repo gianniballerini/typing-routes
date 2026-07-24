@@ -4,30 +4,41 @@
 	left: 0;
 	z-index: 5;
 
-    display: flex;
-    flex-direction: column;
-    gap: 6 * $ptr;
-
-	max-width: 150 * $ptr;
-	padding: 10 * $ptr 12 * $ptr;
-	border-left: 4 * $ptr solid $flag-yellow;
-	border-radius: 5 * $ptr;
-	background: rgba(255, 255, 255, 0.92);
-	box-shadow: 0 16 * $ptr 40 * $ptr rgb(0 0 0 / 30%);
-	backdrop-filter: blur(10 * $ptr);
-	pointer-events: none;
 	transform: translate(18 * $ptr, 18 * $ptr);
-	color: rgba(0, 0, 0, 0.78);
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	border-radius: 10 * $ptr;
+	overflow: hidden;
+	text-align: center;
+
+	box-shadow: 0px 4px 4px rgba($black, 0.25);
 
 }
 
 .mouse_info_card__header {
-	font-size: 18 * $ptr;
-	font-weight: 700;
-	line-height: 1.2;
+	text-transform: uppercase;
+	background-color: $black;
+	color: $white;
+	font-size: 16 * $ptr;
+
+	width: 100%;
+
+	padding: 2 * $ptr 5 * $ptr;
 }
 
 .mouse_info_card__body {
-	font-size: 14 * $ptr;
-	line-height: 1.35;
+	background-color: $white;
+	color: $black;
+	font-size: 16 * $ptr;
+
+	min-height: 30 * $ptr;
+
+	font-weight: 600;
+	text-transform: uppercase;
+
+	padding: 5 * $ptr 10 * $ptr;
 }

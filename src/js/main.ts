@@ -2,6 +2,7 @@ import { GameFlowCoordinator } from './app/GameFlowCoordinator';
 import { UserStatsStorage } from './app/UserStatsStorage';
 import { Game } from './Game';
 import { KeyboardInputCoordinator } from './input/KeyboardInputCoordinator';
+import { LoadingManager } from './LoadingManager';
 import { MapController } from './MapController';
 import { MouseInfoCard } from './MouseInfoCard';
 import { RoutesController } from './RoutesController';
@@ -26,8 +27,10 @@ class MainApplication {
     game_flow_coordinator: GameFlowCoordinator;
     user_stats_storage: UserStatsStorage;
     user_stats: UserStats;
+    private readonly loading_manager: LoadingManager;
 
     constructor() {
+        this.loading_manager = new LoadingManager();
         this.map_controller = new MapController();
         this.mouse_info_card = new MouseInfoCard();
         this.mouse_info_card.hide();
@@ -38,6 +41,7 @@ class MainApplication {
         this.user_stats_storage = new UserStatsStorage();
         this.user_stats = this.user_stats_storage.load();
         this.applySavedUserProgress();
+        this.loading_manager.setProgress(25);
         this.map_controller.setRouteCityIdsMap(this.routes_controller.getRouteCityIdsMap());
 
         const fc = this.routes_controller.getRoutesFeatureCollection();
@@ -62,6 +66,11 @@ class MainApplication {
 
         this.game_flow_coordinator.init();
         this.keyboard_input_coordinator.bind();
+        this.loading_manager.setProgress(60);
+
+        this.map_controller.onReady(() => {
+            this.loading_manager.complete();
+        });
     }
 
     private applySavedUserProgress(): void {
