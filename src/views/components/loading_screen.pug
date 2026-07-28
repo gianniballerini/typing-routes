@@ -1,2 +1,17 @@
 .loading-screen
-    .loading-screen__value 0
+    .loading-screen__background
+        svg.loading-screen__transition(viewBox='0 0 100 100', preserveAspectRatio='none', aria-hidden='true')
+            path.loading-screen__transition-base(d='M 0 0 V 100 Q 50 100 100 100 V 0 z')
+            path#loading-screen-wave.loading-screen__transition-path(d='M 0 0 V 100 Q 50 100 100 100 V 0 z')
+
+    .loading-screen__content
+        .loading-screen__title
+            span.loading-screen__title-part--1 Tipe
+            span.loading-screen__title-part--2 A
+            span.loading-screen__title-part--1 ndo
+        p.loading-screen__welcome Dominá el teclado recorriendo las rutas nacionales de Argentina: desde La Quiaca hasta Ushuaia, pasando por 96 Rutas Nacionales y 377 localidades reales. Un juego de mecanografía gratuito donde tu avance se guarda solo para que veas cómo avanzás y mejoras kilómetro a kilómetro.
+        p.loading-screen__cta(aria-hidden='true') Click para empezar
+
+        .loading-screen__progress
+            span.loading-screen__value 0
+            span.loading-screen__unit %
