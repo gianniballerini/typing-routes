@@ -1,28 +1,28 @@
-import gsap from 'gsap';
-import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
-
-gsap.registerPlugin(MorphSVGPlugin);
+import { GsapManager } from './app/GsapManager';
 
 class LoadingManager {
+    // Loading is over long before the intro is, so the counter is deliberately
+    // slow: each reported step crawls, and the final run to 100 is stretched to
+    // land with the last word of the welcome text.
+    private static readonly PROGRESS_STEP_DURATION = 1.2;
+    private static readonly PROGRESS_COMPLETE_MIN_DURATION = 0.6;
+
     private readonly loadingElement: HTMLElement | null;
     private readonly contentElement: HTMLElement | null;
     private readonly valueElement: HTMLElement | null;
+    private readonly progressElement: HTMLElement | null;
     private readonly ctaElement: HTMLElement | null;
     private readonly transitionPathElement: SVGPathElement;
     private readonly transitionBaseElement: SVGPathElement | null;
     private readonly homeElement: HTMLElement | null;
+    private readonly titleElement: HTMLElement | null;
+    private readonly welcomeElement: HTMLElement | null;
 
     private progress = { value: 0 };
-    private tween: gsap.core.Tween | null = null;
-    private exitTimeline: gsap.core.Timeline | null = null;
     private readyToStart = false;
     private exitStarted = false;
-
-    // Three states of the same curve, sharing a command structure so MorphSVG maps
-    // point-to-point: full cover -> sagging bulge -> collapsed against the top edge.
-    private readonly revealPathCovered = 'M 0 0 V 100 Q 50 100 100 100 V 0 z';
-    private readonly revealPathBulge = 'M 0 0 V 50 Q 50 100 100 50 V 0 z';
-    private readonly revealPathGone = 'M 0 0 V 0 Q 50 0 100 0 V 0 z';
+    private introFinished = false;
+    private progressFinished = false;
 
     private readonly handleStartClick = (): void => {
         if (!this.readyToStart || this.exitStarted) return;
@@ -32,35 +32,48 @@ class LoadingManager {
     constructor() {
         this.loadingElement = document.querySelector('.loading-screen');
         this.contentElement = document.querySelector('.loading-screen__content');
+        this.titleElement = document.querySelector('.loading-screen__title');
+        this.welcomeElement = document.querySelector('.loading-screen__welcome');
         this.valueElement = document.querySelector('.loading-screen__value');
+        this.progressElement = document.querySelector('.loading-screen__progress');
         this.ctaElement = document.querySelector('.loading-screen__cta');
         this.transitionPathElement = document.querySelector('.loading-screen__transition-path') || document.createElementNS('http://www.w3.org/2000/svg', 'path');
         this.transitionBaseElement = document.querySelector('.loading-screen__transition-base');
         this.homeElement = document.querySelector('.home');
 
-        this.transitionPathElement.setAttribute('d', this.revealPathCovered);
-        this.transitionBaseElement?.setAttribute('d', this.revealPathCovered);
+        this.transitionPathElement.setAttribute('d', GsapManager.loadingPathCovered);
+        this.transitionBaseElement?.setAttribute('d', GsapManager.loadingPathCovered);
 
         this.setProgress(0, true);
+        this.init();
+    }
+
+    init(): void {
+        GsapManager.playLoadingIntro(
+            { title: this.titleElement, welcome: this.welcomeElement },
+            () => {
+                this.introFinished = true;
+                this.tryUnlockStart();
+            }
+        );
     }
 
     setProgress(value: number, immediate = false): void {
         const target = Math.max(0, Math.min(100, value));
 
         if (immediate) {
-            this.tween?.kill();
+            GsapManager.killLoadingProgress();
             this.progress.value = target;
             this.render();
             return;
         }
 
-        this.tween = gsap.to(this.progress, {
-            value: target,
-            duration: 0.4,
-            ease: 'power3.out',
-            overwrite: true,
-            onUpdate: () => this.render(),
-        });
+        GsapManager.tweenLoadingProgress(
+            this.progress,
+            target,
+            LoadingManager.PROGRESS_STEP_DURATION,
+            () => this.render()
+        );
     }
 
     private render(): void {
@@ -69,15 +82,27 @@ class LoadingManager {
     }
 
     complete(): void {
-        this.tween?.kill();
-        this.tween = gsap.to(this.progress, {
-            value: 100,
-            duration: 0.4,
-            ease: 'power3.out',
-            overwrite: true,
-            onUpdate: () => this.render(),
-            onComplete: () => this.unlockStart(),
-        });
+        const duration = Math.max(
+            LoadingManager.PROGRESS_COMPLETE_MIN_DURATION,
+            GsapManager.getLoadingIntroRemaining()
+        );
+
+        GsapManager.tweenLoadingProgress(
+            this.progress,
+            100,
+            duration,
+            () => this.render(),
+            () => {
+                this.progressFinished = true;
+                this.tryUnlockStart();
+            }
+        );
+    }
+
+    // Both the counter and the intro have to land before the screen invites a click.
+    private tryUnlockStart(): void {
+        if (!this.introFinished || !this.progressFinished || this.readyToStart) return;
+        this.unlockStart();
     }
 
     private unlockStart(): void {
@@ -93,6 +118,8 @@ class LoadingManager {
         this.ctaElement.classList.add('loading-screen__cta--visible');
         this.ctaElement.setAttribute('aria-hidden', 'false');
         this.loadingElement.addEventListener('click', this.handleStartClick);
+
+        GsapManager.disappearWithSwell(this.progressElement as HTMLElement);
     }
 
     private playExitAnimation(): void {
@@ -102,50 +129,13 @@ class LoadingManager {
         this.readyToStart = false;
         this.loadingElement.removeEventListener('click', this.handleStartClick);
 
-        this.tween?.kill();
-        this.exitTimeline?.kill();
-
         this.loadingElement.classList.add('loading-screen--exiting');
 
-        // No `overwrite` here: each path gets two chained morphs, and overwrite: true
-        // would make the second one kill the first the moment it is created.
-        this.exitTimeline = gsap.timeline({
-            onComplete: () => this.finishLoadingScreen(),
-        });
-
-        // The sheet leaves upward in two beats: it accelerates away while its bottom
-        // edge sags into a curve (power2.in), then that curve flattens out against the
-        // top as it settles (power2.out). The dark layer trails the gradient one so a
-        // shadow band follows the coloured edge instead of everything cross-fading.
-        this.exitTimeline
-            .to(this.contentElement, {
-                autoAlpha: 0,
-                y: -24,
-                duration: 0.3,
-                ease: 'power2.in',
-            }, 0)
-            .to(this.transitionPathElement, {
-                morphSVG: this.revealPathBulge,
-                duration: 0.4,
-                ease: 'power2.in',
-            }, 0.08)
-            .to(this.transitionPathElement, {
-                morphSVG: this.revealPathGone,
-                duration: 0.36,
-                ease: 'power2.out',
-            }, 0.48)
-            .to(this.transitionBaseElement, {
-                morphSVG: this.revealPathBulge,
-                duration: 0.4,
-                ease: 'power2.in',
-            }, 0.16)
-            .to(this.transitionBaseElement, {
-                morphSVG: this.revealPathGone,
-                duration: 0.36,
-                ease: 'power2.out',
-            }, 0.56)
-            ;
-
+        GsapManager.playLoadingExit({
+            content: this.contentElement,
+            transitionPath: this.transitionPathElement,
+            transitionBase: this.transitionBaseElement,
+        }, () => this.finishLoadingScreen());
     }
 
     private finishLoadingScreen(): void {
