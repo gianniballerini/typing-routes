@@ -13,7 +13,9 @@ export interface SettingsShape {
   layerIds: {
     argentinaLimits: string;
     nationalRoutesLine: string;
+    nationalRoutesHitbox: string;
     citiesCircle: string;
+    citiesCircleHitbox: string;
     progressMarkerSquare: string;
   };
   argentinaBorder: {
@@ -34,6 +36,17 @@ export interface SettingsShape {
       maxZoom: number;
       maxWidth: number;
     };
+    hitWidthByZoom: {
+      minZoom: number;
+      minWidth: number;
+      maxZoom: number;
+      maxWidth: number;
+    };
+    hitboxDebug: {
+      visible: boolean;
+      color: string;
+      opacity: number;
+    };
   };
   cityCircle: {
     radiusByZoom: {
@@ -41,6 +54,20 @@ export interface SettingsShape {
       minRadius: number;
       maxZoom: number;
       maxRadius: number;
+    };
+    hitRadiusByZoom: {
+      minZoom: number;
+      minRadius: number;
+      maxZoom: number;
+      maxRadius: number;
+    };
+    hitboxDebug: {
+      visible: boolean;
+      color: string;
+      opacity: number;
+      strokeColor: string;
+      strokeOpacity: number;
+      strokeWidth: number;
     };
     colors: {
       default: string;

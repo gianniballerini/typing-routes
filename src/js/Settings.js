@@ -21,7 +21,9 @@ class Settings
     this.layerIds = {
       argentinaLimits: 'argentina-limits',
       nationalRoutesLine: 'national-routes-line',
+      nationalRoutesHitbox: 'national-routes-hitbox',
       citiesCircle: 'cities-circle',
+      citiesCircleHitbox: 'cities-circle-hitbox',
       progressMarkerSquare: 'progress-marker-square'
     };
 
@@ -43,6 +45,17 @@ class Settings
         minWidth: 2.4,
         maxZoom: 7,
         maxWidth: 8
+      },
+      hitWidthByZoom: {
+        minZoom: 3,
+        minWidth: 8,
+        maxZoom: 7,
+        maxWidth: 18
+      },
+      hitboxDebug: {
+        visible: false,
+        color: '#00bcd4',
+        opacity: 0.28
       }
     };
 
@@ -52,6 +65,21 @@ class Settings
         minRadius: 2,
         maxZoom: 7,
         maxRadius: 6
+      },
+      hitRadiusByZoom: {
+        minZoom: 3,
+        minRadius: 7,
+        maxZoom: 7,
+        maxRadius: 13
+      },
+      hitboxDebug: {
+        // Toggle to visualize city interaction hotspots.
+        visible: false,
+        color: '#ff0066',
+        opacity: 0.2,
+        strokeColor: '#ffffff',
+        strokeOpacity: 0.8,
+        strokeWidth: 1
       },
       colors: {
         default: '#cccccc',

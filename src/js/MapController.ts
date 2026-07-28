@@ -28,6 +28,7 @@ class MapController {
     private cityRoutesMap: { [key: string]: Array<{ id: string; displayName: string }> };
     private selectedRouteCityIds: string[];
     private mouseInfoCard: MouseInfoCard | null;
+    private hoveredCityId: string | null;
 
     constructor() {
         this.ready = false;
@@ -38,6 +39,7 @@ class MapController {
         this.cityRoutesMap = {};
         this.selectedRouteCityIds = [];
         this.mouseInfoCard = null;
+        this.hoveredCityId = null;
         this.map = new maplibregl.Map({
             container: 'map', // container id
             // style: 'https://demotiles.maplibre.org/globe.json', // style URL
@@ -96,6 +98,38 @@ class MapController {
 
     setCityRoutesMap(cityRoutesMap: { [key: string]: Array<{ id: string; displayName: string }> }) {
         this.cityRoutesMap = cityRoutesMap;
+    }
+
+    setHitboxVisibility(visible: boolean): void {
+        this.onReady(() => {
+            const hasCityLayer = !!this.map.getLayer(Settings.layerIds.citiesCircleHitbox);
+            if (hasCityLayer) {
+                this.map.setPaintProperty(
+                    Settings.layerIds.citiesCircleHitbox,
+                    'circle-opacity',
+                    visible ? Settings.cityCircle.hitboxDebug.opacity : 0.01
+                );
+                this.map.setPaintProperty(
+                    Settings.layerIds.citiesCircleHitbox,
+                    'circle-stroke-width',
+                    visible ? Settings.cityCircle.hitboxDebug.strokeWidth : 0
+                );
+                this.map.setPaintProperty(
+                    Settings.layerIds.citiesCircleHitbox,
+                    'circle-stroke-opacity',
+                    visible ? Settings.cityCircle.hitboxDebug.strokeOpacity : 0
+                );
+            }
+
+            const hasRouteLayer = !!this.map.getLayer(Settings.layerIds.nationalRoutesHitbox);
+            if (hasRouteLayer) {
+                this.map.setPaintProperty(
+                    Settings.layerIds.nationalRoutesHitbox,
+                    'line-opacity',
+                    visible ? Settings.routeLine.hitboxDebug.opacity : 0.01
+                );
+            }
+        });
     }
 
     addEventListener(type: string, listener: EventListenerOrEventListenerObject): void {
@@ -188,11 +222,47 @@ class MapController {
                 }
             });
 
-            this.map.on('mousemove', Settings.layerIds.nationalRoutesLine, (e) => {
+            this.map.addLayer({
+                id: Settings.layerIds.nationalRoutesHitbox,
+                type: 'line',
+                source: Settings.sourceIds.nationalRoutes,
+                paint: {
+                    'line-width': [
+                        'interpolate', ['linear'], ['zoom'],
+                        Settings.routeLine.hitWidthByZoom.minZoom, Settings.routeLine.hitWidthByZoom.minWidth,
+                        Settings.routeLine.hitWidthByZoom.maxZoom, Settings.routeLine.hitWidthByZoom.maxWidth
+                    ],
+                    // Transparent interaction-only layer to make route hover/click easier.
+                    'line-color': Settings.routeLine.hitboxDebug.color,
+                    'line-opacity': Settings.routeLine.hitboxDebug.visible
+                        ? Settings.routeLine.hitboxDebug.opacity
+                        : 0.01
+                }
+            });
+
+            this.map.on('mousemove', Settings.layerIds.nationalRoutesHitbox, (e) => {
                 if (!e.features || e.features.length === 0) return;
+
+                const hasCitiesHitboxLayer = !!this.map.getLayer(Settings.layerIds.citiesCircleHitbox);
+                if (hasCitiesHitboxLayer) {
+                    const cityFeatures = this.map.queryRenderedFeatures(e.point, {
+                        layers: [Settings.layerIds.citiesCircleHitbox]
+                    });
+
+                    if (cityFeatures.length > 0) {
+                        if (this.hoveredId !== null) {
+                            this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: this.hoveredId }, { hovered: false });
+                            this.hoveredId = null;
+                        }
+                        return;
+                    }
+                }
+
                 const feature = e.features[0];
                 const properties = feature.properties as { route_display?: string; name?: string; cities_count?: number } | undefined;
                 const nextHoveredId = feature.id ?? null;
+
+                this.map.getCanvas().style.cursor = 'pointer';
 
                 if (this.hoveredId !== nextHoveredId) {
                     if (this.hoveredId !== null) {
@@ -206,24 +276,30 @@ class MapController {
                     if (this.hoveredId !== null && this.mouseInfoCard) {
                         const routeName = String(properties?.route_display ?? properties?.name ?? '');
                         const citiesCount = Number(properties?.cities_count ?? 0);
-                        this.mouseInfoCard.show(routeName, `${citiesCount} ${citiesCount === 1 ? 'ciudad' : 'ciudades'}`);
+                        this.mouseInfoCard.show(
+                            routeName,
+                            `${citiesCount} ${citiesCount === 1 ? 'ciudad' : 'ciudades'}`,
+                            'route',
+                            e.point.x + 10,
+                            e.point.y + 10
+                        );
                     }
                 }
-
-                this.mouseInfoCard?.moveTo(e.point.x, e.point.y);
-                this.map.getCanvas().style.cursor = 'pointer';
             });
 
-            this.map.on('mouseleave', Settings.layerIds.nationalRoutesLine, () => {
+            this.map.on('mouseleave', Settings.layerIds.nationalRoutesHitbox, () => {
                 if (this.hoveredId !== null) {
                     this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: this.hoveredId }, { hovered: false });
                 }
                 this.hoveredId = null;
-                this.mouseInfoCard?.hide();
-                this.map.getCanvas().style.cursor = '';
+
+                if (this.hoveredCityId === null) {
+                    this.mouseInfoCard?.hide();
+                    this.map.getCanvas().style.cursor = '';
+                }
             });
 
-            this.map.on('click', Settings.layerIds.nationalRoutesLine, (e) => {
+            this.map.on('click', Settings.layerIds.nationalRoutesHitbox, (e) => {
                 if (!e.features || e.features.length === 0) return;
                 const clickedId = e.features[0].id ?? null;
                 this.selectRoute(this.selectedId === clickedId ? null : clickedId);
@@ -231,15 +307,15 @@ class MapController {
 
             this.map.on('click', (e) => {
                 const routeFeatures = this.map.queryRenderedFeatures(e.point, {
-                    layers: [Settings.layerIds.nationalRoutesLine]
+                    layers: [Settings.layerIds.nationalRoutesHitbox]
                 });
 
                 if (routeFeatures.length > 0) return;
 
-                const hasCitiesLayer = !!this.map.getLayer(Settings.layerIds.citiesCircle);
+                const hasCitiesLayer = !!this.map.getLayer(Settings.layerIds.citiesCircleHitbox);
                 if (hasCitiesLayer) {
                     const cityFeatures = this.map.queryRenderedFeatures(e.point, {
-                        layers: [Settings.layerIds.citiesCircle]
+                        layers: [Settings.layerIds.citiesCircleHitbox]
                     });
                     if (cityFeatures.length > 0) return;
                 }
@@ -300,7 +376,32 @@ class MapController {
                 }
             });
 
-            this.map.on('mousemove', Settings.layerIds.citiesCircle, (e) => {
+            this.map.addLayer({
+                id: Settings.layerIds.citiesCircleHitbox,
+                type: 'circle',
+                source: Settings.sourceIds.cities,
+                paint: {
+                    'circle-radius': [
+                        'interpolate', ['linear'], ['zoom'],
+                        Settings.cityCircle.hitRadiusByZoom.minZoom, Settings.cityCircle.hitRadiusByZoom.minRadius,
+                        Settings.cityCircle.hitRadiusByZoom.maxZoom, Settings.cityCircle.hitRadiusByZoom.maxRadius
+                    ],
+                    // Interaction layer that can also be toggled visible for debugging.
+                    'circle-color': Settings.cityCircle.hitboxDebug.color,
+                    'circle-opacity': Settings.cityCircle.hitboxDebug.visible
+                        ? Settings.cityCircle.hitboxDebug.opacity
+                        : 0.01,
+                    'circle-stroke-width': Settings.cityCircle.hitboxDebug.visible
+                        ? Settings.cityCircle.hitboxDebug.strokeWidth
+                        : 0,
+                    'circle-stroke-color': Settings.cityCircle.hitboxDebug.strokeColor,
+                    'circle-stroke-opacity': Settings.cityCircle.hitboxDebug.visible
+                        ? Settings.cityCircle.hitboxDebug.strokeOpacity
+                        : 0
+                }
+            });
+
+            this.map.on('mousemove', Settings.layerIds.citiesCircleHitbox, (e) => {
                 if (!e.features || e.features.length === 0) return;
 
                 const feature = e.features[0];
@@ -308,22 +409,42 @@ class MapController {
                 const cityId = String(feature.id ?? properties?.id ?? '');
                 const cityName = String(properties?.name ?? '');
 
-                if (this.mouseInfoCard && cityId && cityName) {
-                    const connectedRoutes = this.cityRoutesMap[cityId] ?? [];
-                    const routeDisplayNames = connectedRoutes.map((route) => route.displayName);
-                    this.mouseInfoCard.show(cityName, this.buildConnectedRoutesTooltip(routeDisplayNames), 'city');
+                if (this.hoveredId !== null) {
+                    this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: this.hoveredId }, { hovered: false });
+                    this.hoveredId = null;
                 }
 
-                this.mouseInfoCard?.moveTo(e.point.x, e.point.y);
+                if (this.mouseInfoCard && cityId && cityName) {
+                    if (this.hoveredCityId === cityId) {
+                        this.mouseInfoCard.moveTo(e.point.x + 10, e.point.y + 10);
+                        this.map.getCanvas().style.cursor = 'pointer';
+                        return;
+                    }
+
+                    this.hoveredCityId = cityId;
+                    const connectedRoutes = this.cityRoutesMap[cityId] ?? [];
+                    const routeDisplayNames = connectedRoutes.map((route) => route.displayName);
+                    this.mouseInfoCard.show(
+                        cityName,
+                        this.buildConnectedRoutesTooltip(routeDisplayNames),
+                        'city',
+                        e.point.x + 10,
+                        e.point.y + 10
+                    );
+                }
                 this.map.getCanvas().style.cursor = 'pointer';
             });
 
-            this.map.on('mouseleave', Settings.layerIds.citiesCircle, () => {
-                this.mouseInfoCard?.hide();
-                this.map.getCanvas().style.cursor = '';
+            this.map.on('mouseleave', Settings.layerIds.citiesCircleHitbox, () => {
+                this.hoveredCityId = null;
+
+                if (this.hoveredId === null) {
+                    this.mouseInfoCard?.hide();
+                    this.map.getCanvas().style.cursor = '';
+                }
             });
 
-            this.map.on('click', Settings.layerIds.citiesCircle, (e) => {
+            this.map.on('click', Settings.layerIds.citiesCircleHitbox, (e) => {
                 if (!e.features || e.features.length === 0) return;
                 const feature = e.features[0];
                 const properties = feature.properties as { id?: string; name?: string } | undefined;

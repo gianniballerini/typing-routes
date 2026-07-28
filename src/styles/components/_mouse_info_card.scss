@@ -17,6 +17,10 @@
 
 	box-shadow: 0px 4px 4px rgba($black, 0.25);
 
+	pointer-events: none;
+
+	opacity: 0;
+
 
 	&--city {
 		max-width: 150 * $ptr;

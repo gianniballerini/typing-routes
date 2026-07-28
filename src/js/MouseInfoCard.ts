@@ -1,11 +1,11 @@
+import gsap from 'gsap';
+
 class MouseInfoCard
 {
   container: HTMLElement;
   header: HTMLElement;
   body: HTMLElement;
   private enabled: boolean;
-  private offsetX: number;
-  private offsetY: number;
 
   constructor()
   {
@@ -28,8 +28,6 @@ class MouseInfoCard
     this.header = header;
     this.body = body;
     this.enabled = this.detectDesktopHoverCapability();
-    this.offsetX = 18;
-    this.offsetY = 18;
 
     if (!this.enabled) {
       this.hide();
@@ -47,10 +45,10 @@ class MouseInfoCard
 
   hide()
   {
-    this.container.classList.add('hidden');
+    this.hideBubble(this.container);
   }
 
-  show(header: string, body: string, variant: 'route' | 'city' = 'route')
+  show(header: string, body: string, variant: 'route' | 'city' = 'route', x: number, y: number)
   {
     if (!this.enabled) return;
 
@@ -62,13 +60,47 @@ class MouseInfoCard
     this.body.classList.toggle('mouse_info_card__body--route', variant === 'route');
     this.header.textContent = header;
     this.body.textContent = body;
-    this.container.classList.remove('hidden');
+
+    this.showBubble(this.container, x, y);
   }
 
   moveTo(x: number, y: number)
   {
     if (!this.enabled) return;
-    this.container.style.transform = `translate(${x + this.offsetX}px, ${y + this.offsetY}px)`;
+    gsap.set(this.container, { x, y });
+  }
+
+  showBubble(bubbleEl: HTMLElement, x: number, y: number) {
+    gsap.set(bubbleEl, { x, y });
+    gsap.timeline()
+      .fromTo(bubbleEl,
+        { opacity: 0, scaleX: 0.5, scaleY: 0.3 },
+        { opacity: 1, scaleX: 1.1, scaleY: 0.9, duration: 0.15, ease: "power1.out" }
+      )
+      .to(bubbleEl, { scaleX: 1, scaleY: 1, duration: 0.15, ease: "power1.out" });
+    // gsap.fromTo(bubbleEl,
+    //   {
+    //     opacity: 0,
+    //     scale: 0.3,
+    //     transformOrigin: "0% 0%"
+    //   },
+    //   {
+    //     opacity: 1,
+    //     scale: 1,
+    //     duration: 0.35,
+    //     ease: "back.out(1.7)"
+    //   }
+    // );
+  }
+
+  hideBubble(bubbleEl: HTMLElement  ) {
+    gsap.killTweensOf(bubbleEl);
+    gsap.to(bubbleEl, {
+      opacity: 0,
+      scale: 0.3,
+      duration: 0.2,
+      ease: "power2.in"
+    });
   }
 }
 

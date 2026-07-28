@@ -1,3 +1,4 @@
+import { DebugPaneController } from './app/DebugPaneController';
 import { GameFlowCoordinator } from './app/GameFlowCoordinator';
 import { UserStatsStorage } from './app/UserStatsStorage';
 import { Game } from './Game';
@@ -67,6 +68,11 @@ class MainApplication {
 
         this.game_flow_coordinator.init();
         this.keyboard_input_coordinator.bind();
+
+        if (import.meta.env.DEV) {
+            new DebugPaneController(this.map_controller).init();
+        }
+
         this.loading_manager.setProgress(60);
 
         this.map_controller.onReady(() => {
