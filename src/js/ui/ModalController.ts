@@ -10,6 +10,7 @@ interface RouteCompleteModalPayload {
 	isNewGrossWpmRecord?: boolean;
 	isNewNetWpmRecord?: boolean;
 	isNewAccuracyRecord?: boolean;
+	isNewTimeRecord?: boolean;
 	elapsedMs: number;
 	citiesCompleted: number;
 	citiesTotal: number;
@@ -69,6 +70,10 @@ class ModalController {
 		const grossWpmLabel = this.withNewRecordPrefix(safeGrossWpm, Boolean(payload.isNewGrossWpmRecord));
 		const netWpmLabel = this.withNewRecordPrefix(safeNetWpm, Boolean(payload.isNewNetWpmRecord));
 		const accuracyLabel = this.withNewRecordPrefix(`${safeAccuracy}%`, Boolean(payload.isNewAccuracyRecord));
+		const elapsedLabel = this.withNewRecordPrefix(
+			this.formatElapsedTime(payload.elapsedMs),
+			Boolean(payload.isNewTimeRecord)
+		);
 		const safeCitiesTotal = this.toRoundedNonNegativeInteger(payload.citiesTotal);
 		const safeMistakes = this.toRoundedNonNegativeInteger(payload.mistakes);
 
@@ -77,7 +82,7 @@ class ModalController {
 		if (this.routeCompleteGrossWpmEl) this.routeCompleteGrossWpmEl.textContent = grossWpmLabel;
 		if (this.routeCompleteNetWpmEl) this.routeCompleteNetWpmEl.textContent = netWpmLabel;
 		if (this.routeCompleteAccuracyEl) this.routeCompleteAccuracyEl.textContent = accuracyLabel;
-		if (this.routeCompleteElapsedEl) this.routeCompleteElapsedEl.textContent = this.formatElapsedTime(payload.elapsedMs);
+		if (this.routeCompleteElapsedEl) this.routeCompleteElapsedEl.textContent = elapsedLabel;
 		if (this.routeCompleteCitiesEl) this.routeCompleteCitiesEl.textContent = `${safeCitiesTotal}`;
 		if (this.routeCompleteMistakesEl) this.routeCompleteMistakesEl.textContent = `${safeMistakes}`;
 

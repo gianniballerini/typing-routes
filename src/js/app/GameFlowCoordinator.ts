@@ -42,6 +42,7 @@ class GameFlowCoordinator {
     private snappedCityPoints: SnappedRoutePoint[];
     private activeRunStats: ActiveRunStats | null;
     private completedRouteForCurrentRunId: string | null;
+    private timerFrameHandle: number | null;
 
     constructor(
         game: Game,
@@ -63,11 +64,13 @@ class GameFlowCoordinator {
         this.snappedCityPoints = [];
         this.activeRunStats = null;
         this.completedRouteForCurrentRunId = null;
+        this.timerFrameHandle = null;
     }
 
     init(): void {
         this.ui_presenter.onStartRequested(this.handleStartRequested);
         this.ui_presenter.onCloseRequested(this.handleCloseRequested);
+        this.ui_presenter.onQuitRequested(this.handleQuitRequested);
         this.ui_presenter.onTypingInput(this.handleTypingInput);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
 
@@ -111,6 +114,22 @@ class GameFlowCoordinator {
             this.setProgressMarkerAndFollowCamera(initialRunCoordinate);
         }
     };
+
+    private handleQuitRequested = (): void => {
+        this.quitActiveRun();
+    };
+
+    /**
+     * Abandons the current run and returns to the map. Mirrors the route-complete
+     * teardown ordering (deselect first, then leave PLAYING), but leaves
+     * `completedRouteForCurrentRunId` null so no record is stored and no modal shows.
+     */
+    quitActiveRun(): void {
+        if (this.game.state !== GameState.PLAYING) return;
+
+        this.map_controller.selectRoute(null);
+        this.game.returnToMenu();
+    }
 
     private handleCityVisited = (event: Event): void => {
         const customEvent = event as CustomEvent<{ cityId: string }>;
@@ -405,11 +424,45 @@ class GameFlowCoordinator {
         };
 
         this.ui_presenter.renderRunStats(0, totalCities, 0, 0, 0, 100);
+        this.ui_presenter.renderElapsedTime(0);
+        this.startRunTimer();
     }
+
+    private startRunTimer(): void {
+        this.stopRunTimer();
+        this.timerFrameHandle = requestAnimationFrame(this.handleTimerFrame);
+    }
+
+    private stopRunTimer(): void {
+        if (this.timerFrameHandle === null) return;
+
+        cancelAnimationFrame(this.timerFrameHandle);
+        this.timerFrameHandle = null;
+    }
+
+    private handleTimerFrame = (): void => {
+        const runStats = this.activeRunStats;
+        if (!runStats) {
+            this.timerFrameHandle = null;
+            return;
+        }
+
+        this.ui_presenter.renderElapsedTime(Date.now() - runStats.startedAtMs);
+        this.timerFrameHandle = requestAnimationFrame(this.handleTimerFrame);
+    };
 
     private finalizeRunStats(): void {
         const runStats = this.activeRunStats;
+        const completedRouteId = this.completedRouteForCurrentRunId;
+
+        this.stopRunTimer();
+        this.activeRunStats = null;
+        this.completedRouteForCurrentRunId = null;
+
         if (!runStats) return;
+        // Abandoned run: no record is stored (a partial run would set a bogus best time)
+        // and no completion modal is shown.
+        if (completedRouteId !== runStats.routeId) return;
 
         const calculatedMetrics = this.calculateRunMetrics(runStats);
         const previousRecord = this.user_stats.getRouteRecord(runStats.routeId);
@@ -417,6 +470,7 @@ class GameFlowCoordinator {
         const isNewGrossWpmRecord = this.isNewOptionalMetricRecord(calculatedMetrics.grossWpm, previousRecord?.bestGrossWpm);
         const isNewNetWpmRecord = this.isNewOptionalMetricRecord(calculatedMetrics.netWpm, previousRecord?.bestNetWpm);
         const isNewAccuracyRecord = this.isNewOptionalMetricRecord(calculatedMetrics.accuracy, previousRecord?.bestAccuracy);
+        const isNewTimeRecord = this.isNewLowerIsBetterRecord(calculatedMetrics.elapsedMs, previousRecord?.bestElapsedMs);
         const changed = this.user_stats.updateRouteRecord(
             runStats.routeId,
             runStats.bestCombo,
@@ -428,29 +482,25 @@ class GameFlowCoordinator {
         );
         if (changed) this.user_stats_storage.save(this.user_stats);
 
-        if (this.completedRouteForCurrentRunId === runStats.routeId) {
-            const route = this.routes_controller.routes[runStats.routeId];
-            const totalCities = runStats.citiesCompleted + runStats.citiesRemaining;
+        const route = this.routes_controller.routes[runStats.routeId];
+        const totalCities = runStats.citiesCompleted + runStats.citiesRemaining;
 
-            this.modal_controller.showRouteComplete({
-                routeTitle: this.buildRouteTitle(route?.full_name, route?.route_name, route?.route_number),
-                combo: runStats.bestCombo,
-                grossWpm: calculatedMetrics.grossWpm,
-                netWpm: calculatedMetrics.netWpm,
-                accuracy: calculatedMetrics.accuracy,
-                isNewComboRecord,
-                isNewGrossWpmRecord,
-                isNewNetWpmRecord,
-                isNewAccuracyRecord,
-                elapsedMs: calculatedMetrics.elapsedMs,
-                citiesCompleted: runStats.citiesCompleted,
-                citiesTotal: totalCities,
-                mistakes: runStats.mistakes
-            });
-        }
-
-        this.activeRunStats = null;
-        this.completedRouteForCurrentRunId = null;
+        this.modal_controller.showRouteComplete({
+            routeTitle: this.buildRouteTitle(route?.full_name, route?.route_name, route?.route_number),
+            combo: runStats.bestCombo,
+            grossWpm: calculatedMetrics.grossWpm,
+            netWpm: calculatedMetrics.netWpm,
+            accuracy: calculatedMetrics.accuracy,
+            isNewComboRecord,
+            isNewGrossWpmRecord,
+            isNewNetWpmRecord,
+            isNewAccuracyRecord,
+            isNewTimeRecord,
+            elapsedMs: calculatedMetrics.elapsedMs,
+            citiesCompleted: runStats.citiesCompleted,
+            citiesTotal: totalCities,
+            mistakes: runStats.mistakes
+        });
     }
 
     private renderActiveRunStats(runStats: ActiveRunStats): void {
@@ -505,6 +555,11 @@ class GameFlowCoordinator {
     private isNewOptionalMetricRecord(value: number, previousValue: number | null | undefined): boolean {
         if (previousValue == null) return true;
         return value > previousValue;
+    }
+
+    private isNewLowerIsBetterRecord(value: number, previousValue: number | null | undefined): boolean {
+        if (previousValue == null) return true;
+        return value < previousValue;
     }
 
     private buildRouteTitle(fullName?: string, routeName?: string, routeNumber?: string): string {

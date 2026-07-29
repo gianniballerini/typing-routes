@@ -51,7 +51,6 @@ class MainApplication {
         this.game = new Game(this.routes_controller, this.map_controller);
         this.ui_presenter = new GameUiPresenter();
         this.modal_controller = new ModalController();
-        this.keyboard_input_coordinator = new KeyboardInputCoordinator(this.game);
         this.game_flow_coordinator = new GameFlowCoordinator(
             this.game,
             this.routes_controller,
@@ -60,6 +59,10 @@ class MainApplication {
             this.modal_controller,
             this.user_stats,
             this.user_stats_storage
+        );
+        this.keyboard_input_coordinator = new KeyboardInputCoordinator(
+            this.game,
+            () => this.game_flow_coordinator.quitActiveRun()
         );
 
         this.game_flow_coordinator.init();

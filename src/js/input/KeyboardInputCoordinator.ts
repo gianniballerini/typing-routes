@@ -3,10 +3,12 @@ import { GameState } from '../GameState';
 
 class KeyboardInputCoordinator {
     private game: Game;
+    private onQuitRun: () => void;
     private bound: boolean;
 
-    constructor(game: Game) {
+    constructor(game: Game, onQuitRun: () => void) {
         this.game = game;
+        this.onQuitRun = onQuitRun;
         this.bound = false;
     }
 
@@ -24,14 +26,16 @@ class KeyboardInputCoordinator {
 
     private handleKeydown = (event: KeyboardEvent): void => {
         if (event.key === 'Escape') {
-            if (this.game.map_controller.getSelectedRouteId() !== null) {
-                this.game.map_controller.selectRoute(null);
-                this.game.map_controller.resetToCountryView();
+            // During a run the route is still selected, so quitting has to win over
+            // the deselect branch or Escape would need two presses to leave the run.
+            if (this.game.state === GameState.PLAYING) {
+                this.onQuitRun();
                 return;
             }
 
-            if (this.game.state === GameState.PLAYING) {
-                this.game.returnToMenu();
+            if (this.game.map_controller.getSelectedRouteId() !== null) {
+                this.game.map_controller.selectRoute(null);
+                this.game.map_controller.resetToCountryView();
             }
 
             return;

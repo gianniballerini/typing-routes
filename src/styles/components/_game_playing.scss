@@ -42,15 +42,83 @@
         pointer-events: none;
     }
 
+    .game-playing__quit {
+        position: absolute;
+        top: calc(16 * $ptr + env(safe-area-inset-top));
+        left: 16 * $ptr;
+
+        z-index: 3;
+
+        height: 40 * $ptr;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        column-gap: 6 * $ptr;
+
+        padding: 0 12 * $ptr 0 8 * $ptr;
+
+        background: $signs-blue;
+        border-radius: 10 * $ptr;
+        box-shadow: 0 3 * $ptr 5 * $ptr rgba($black, 0.5);
+
+        font-family: $arimo-font;
+        font-size: 14 * $ptr;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: $white;
+
+        pointer-events: auto;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        svg {
+            width: 20 * $ptr;
+            height: 20 * $ptr;
+        }
+    }
+
     .game-playing__top {
         width: 100%;
         height: 50%;
 
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        row-gap: 16 * $ptr;
         padding-top: 30 * $ptr;
 
     }
+
+    .game-playing__timer {
+        z-index: 2;
+
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        column-gap: 4 * $ptr;
+
+        padding: 6 * $ptr 16 * $ptr;
+
+        background: $signs-blue;
+        border-radius: 10 * $ptr;
+        box-shadow: 0 3 * $ptr 5 * $ptr rgba($black, 0.5);
+
+        font-family: $arimo-font;
+        font-weight: bold;
+        font-size: 26 * $ptr;
+        // Keeps the sign from twitching as the digits change width.
+        font-variant-numeric: tabular-nums;
+        color: $white;
+    }
+
+        .game-playing__timer-milliseconds {
+            font-size: 18 * $ptr;
+            opacity: 0.75;
+        }
 
     .game-playing__bottom {
 

@@ -49,6 +49,10 @@ class GameUiPresenter {
     private gross_wpm_number_el: HTMLElement | null;
     private net_wpm_number_el: HTMLElement | null;
     private accuracy_number_el: HTMLElement | null;
+    private timer_number_el: HTMLElement | null;
+    private timer_milliseconds_el: HTMLElement | null;
+    private quit_button_el: HTMLElement | null;
+    private quitRequestedHandler: (() => void) | null;
     private typingInputHandler: ((inputText: string) => void) | null;
 
     constructor() {
@@ -97,7 +101,13 @@ class GameUiPresenter {
         this.gross_wpm_number_el = document.querySelector('.game-playing__gross-wpm-number');
         this.net_wpm_number_el = document.querySelector('.game-playing__net-wpm-number');
         this.accuracy_number_el = document.querySelector('.game-playing__accuracy-number');
+        this.timer_number_el = document.querySelector('.game-playing__timer-number');
+        this.timer_milliseconds_el = document.querySelector('.game-playing__timer-milliseconds');
+        this.quit_button_el = document.querySelector('.game-playing__quit');
+        this.quitRequestedHandler = null;
+        this.quit_button_el?.addEventListener('click', this.handleQuitButtonClick);
         this.typingInputHandler = null;
+        this.renderElapsedTime(0);
     }
 
     onStartRequested(handler: () => void): void {
@@ -106,6 +116,10 @@ class GameUiPresenter {
 
     onCloseRequested(handler: () => void): void {
         this.closeRequestedHandler = handler;
+    }
+
+    onQuitRequested(handler: () => void): void {
+        this.quitRequestedHandler = handler;
     }
 
     onTypingInput(handler: (inputText: string) => void): void {
@@ -125,9 +139,18 @@ class GameUiPresenter {
         this.clearKeyboardOpenState();
     }
 
-    private handlePlayingPointerDown = (): void => {
+    private handlePlayingPointerDown = (event: PointerEvent): void => {
         if (this.game_playing_el?.classList.contains('hidden')) return;
+
+        // The quit button leaves the run: refocusing here would reopen the mobile keyboard.
+        const target = event.target;
+        if (target instanceof Element && target.closest('.game-playing__quit')) return;
+
         this.focusTypingInput();
+    };
+
+    private handleQuitButtonClick = (): void => {
+        this.quitRequestedHandler?.();
     };
 
     private handleTypingInputFocus = (): void => {
@@ -318,6 +341,19 @@ class GameUiPresenter {
         if (this.accuracy_number_el) this.accuracy_number_el.textContent = `${this.formatOneDecimal(accuracy)}%`;
     }
 
+    renderElapsedTime(elapsedMs: number): void {
+        const safeElapsedMs = Number.isFinite(elapsedMs) ? Math.max(0, elapsedMs) : 0;
+
+        if (this.timer_number_el) {
+            this.timer_number_el.textContent = this.formatElapsedTime(safeElapsedMs);
+        }
+
+        if (this.timer_milliseconds_el) {
+            const centiseconds = Math.floor((safeElapsedMs % 1000) / 10);
+            this.timer_milliseconds_el.textContent = String(centiseconds).padStart(2, '0');
+        }
+    }
+
     private sanitizeRouteNumber(routeNumber: string): string {
         const normalized = String(routeNumber ?? '').trim();
         return normalized.replace(/^0+(?!$)/, '');
@@ -343,6 +379,7 @@ class GameUiPresenter {
         if (this.end_city_el) this.end_city_el.textContent = '';
         if (this.route_name_el) this.route_name_el.textContent = '';
         this.renderRunStats(0, 0, 0, 0, 0, 100);
+        this.renderElapsedTime(0);
     }
 
     private renderMenuRouteRecord(record: MenuRouteRecord | null): void {
