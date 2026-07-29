@@ -152,3 +152,33 @@ export const interpolateOnRoute = (
     const lastSegment = routeMetrics.segments[routeMetrics.segments.length - 1];
     return lastSegment.end;
 };
+
+// Roughly 5 km in degrees: wide enough that consecutive short segments don't make
+// the heading jitter, short enough to still follow real curves.
+const BEARING_SAMPLE_DISTANCE = 0.05;
+
+/**
+ * Heading (degrees clockwise from north, screen space) of the route at a given
+ * distance along it. Returns null when the direction can't be determined.
+ */
+export const bearingOnRoute = (
+    routeMetrics: RouteMetrics,
+    distanceAlongRoute: number,
+    sampleDistance: number = BEARING_SAMPLE_DISTANCE
+): number | null => {
+    if (routeMetrics.segments.length === 0 || routeMetrics.totalLength <= 0) return null;
+
+    const clampedDistance = clamp(distanceAlongRoute, 0, routeMetrics.totalLength);
+    const halfWindow = Math.min(sampleDistance, routeMetrics.totalLength / 2);
+
+    const from = interpolateOnRoute(routeMetrics, clampedDistance - halfWindow);
+    const to = interpolateOnRoute(routeMetrics, clampedDistance + halfWindow);
+
+    // Mercator stretches latitude by 1/cos(lat), so undo it to get the on-screen angle.
+    const cosLatitude = Math.max(Math.cos(((from[1] + to[1]) / 2) * Math.PI / 180), 1e-6);
+    const dx = to[0] - from[0];
+    const dy = (to[1] - from[1]) / cosLatitude;
+    if (dx === 0 && dy === 0) return null;
+
+    return (Math.atan2(dx, dy) * 180 / Math.PI + 360) % 360;
+};

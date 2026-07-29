@@ -24,7 +24,7 @@ class Settings
       nationalRoutesHitbox: 'national-routes-hitbox',
       citiesCircle: 'cities-circle',
       citiesCircleHitbox: 'cities-circle-hitbox',
-      progressMarkerSquare: 'progress-marker-square'
+      progressMarkerIcon: 'progress-marker-icon'
     };
 
     this.argentinaBorder = {
@@ -99,11 +99,22 @@ class Settings
     };
 
     this.progressMarker = {
-      size: 10,
-      color: '#E88D00',
-      opacity: 0.9,
+      iconId: 'progress-marker-car',
+      // Car length in px (the sprite points north and is rotated by the route heading).
+      size: 26,
+      color: '#FFB81C',
+      roofColor: '#cf7d09',
+      glassColor: '#2A3440',
+      lightColor: '#FFF3D6',
+      opacity: 0.95,
       strokeColor: '#ffffff',
-      strokeWidth: 1
+      strokeWidth: 1,
+      sizeByZoom: {
+        minZoom: 4,
+        minSize: 1.2,
+        maxZoom: 9,
+        maxSize: 2
+      }
     };
   }
 }

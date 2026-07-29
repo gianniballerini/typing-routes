@@ -8,7 +8,7 @@ import { GameUiPresenter } from '../ui/GameUiPresenter';
 import { ModalController } from '../ui/ModalController';
 import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
-import { buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
+import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
 import { UserStatsStorage } from './UserStatsStorage';
 
 interface ActiveRunStats {
@@ -346,11 +346,12 @@ class GameFlowCoordinator {
             + (currentSnapped.distanceAlongRoute - segmentStartDistance) * ratio;
 
         const coordinateOnRoute = interpolateOnRoute(this.routeMetrics, distanceAlongRoute);
-        this.setProgressMarkerAndFollowCamera(coordinateOnRoute);
+        const headingOnRoute = bearingOnRoute(this.routeMetrics, distanceAlongRoute);
+        this.setProgressMarkerAndFollowCamera(coordinateOnRoute, headingOnRoute ?? undefined);
     }
 
-    private setProgressMarkerAndFollowCamera(coordinate: [number, number]): void {
-        this.map_controller.setProgressMarkerCoordinate(coordinate, true);
+    private setProgressMarkerAndFollowCamera(coordinate: [number, number], bearing?: number): void {
+        this.map_controller.setProgressMarkerCoordinate(coordinate, true, bearing);
         this.map_controller.jumpToCoordinate(coordinate);
     }
 

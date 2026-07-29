@@ -3,6 +3,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { MouseInfoCard } from './MouseInfoCard';
 import { Settings } from './Settings';
+import { createCarMarkerIcon } from './utils/CarMarkerIcon';
 
 type ProgressMarkerFeatureCollection = {
     type: 'FeatureCollection';
@@ -14,6 +15,7 @@ type ProgressMarkerFeatureCollection = {
         };
         properties: {
             visible: boolean;
+            bearing: number;
         };
     }>;
 };
@@ -29,6 +31,7 @@ class MapController {
     private selectedRouteCityIds: string[];
     private mouseInfoCard: MouseInfoCard | null;
     private hoveredCityId: string | null;
+    private progressMarkerBearing: number;
 
     constructor() {
         this.ready = false;
@@ -40,6 +43,7 @@ class MapController {
         this.selectedRouteCityIds = [];
         this.mouseInfoCard = null;
         this.hoveredCityId = null;
+        this.progressMarkerBearing = 0;
         this.map = new maplibregl.Map({
             container: 'map', // container id
             // style: 'https://demotiles.maplibre.org/globe.json', // style URL
@@ -459,7 +463,11 @@ class MapController {
         });
     }
 
-    private createProgressMarkerData(coordinates: [number, number], visible: boolean): ProgressMarkerFeatureCollection {
+    private createProgressMarkerData(
+        coordinates: [number, number],
+        visible: boolean,
+        bearing: number
+    ): ProgressMarkerFeatureCollection {
         return {
             type: 'FeatureCollection',
             features: [
@@ -470,11 +478,35 @@ class MapController {
                         coordinates
                     },
                     properties: {
-                        visible
+                        visible,
+                        bearing
                     }
                 }
             ]
         };
+    }
+
+    private addProgressMarkerIcon(): boolean {
+        if (this.map.hasImage(Settings.progressMarker.iconId)) return true;
+
+        const icon = createCarMarkerIcon({
+            length: Settings.progressMarker.size,
+            bodyColor: Settings.progressMarker.color,
+            roofColor: Settings.progressMarker.roofColor,
+            glassColor: Settings.progressMarker.glassColor,
+            lightColor: Settings.progressMarker.lightColor,
+            strokeColor: Settings.progressMarker.strokeColor,
+            strokeWidth: Settings.progressMarker.strokeWidth
+        });
+        if (!icon) return false;
+
+        this.map.addImage(
+            Settings.progressMarker.iconId,
+            { width: icon.width, height: icon.height, data: icon.data },
+            { pixelRatio: icon.pixelRatio }
+        );
+
+        return true;
     }
 
     private renderProgressMarker(): void {
@@ -482,38 +514,72 @@ class MapController {
 
         this.map.addSource(Settings.sourceIds.progressMarker, {
             type: 'geojson',
-            data: this.createProgressMarkerData([Settings.center[0], Settings.center[1]], false)
+            data: this.createProgressMarkerData([Settings.center[0], Settings.center[1]], false, 0)
         });
 
+        const hasIcon = this.addProgressMarkerIcon();
+
+        if (!hasIcon) {
+            // Canvas unavailable: fall back to a plain dot so progress stays visible.
+            this.map.addLayer({
+                id: Settings.layerIds.progressMarkerIcon,
+                type: 'circle',
+                source: Settings.sourceIds.progressMarker,
+                paint: {
+                    'circle-radius': Settings.progressMarker.size / 2,
+                    'circle-color': Settings.progressMarker.color,
+                    'circle-opacity': ['case', ['get', 'visible'], Settings.progressMarker.opacity, 0],
+                    'circle-stroke-width': Settings.progressMarker.strokeWidth,
+                    'circle-stroke-color': Settings.progressMarker.strokeColor
+                }
+            });
+            return;
+        }
+
         this.map.addLayer({
-            id: Settings.layerIds.progressMarkerSquare,
-            type: 'circle',
+            id: Settings.layerIds.progressMarkerIcon,
+            type: 'symbol',
             source: Settings.sourceIds.progressMarker,
+            layout: {
+                'icon-image': Settings.progressMarker.iconId,
+                'icon-rotate': ['get', 'bearing'],
+                'icon-rotation-alignment': 'map',
+                'icon-allow-overlap': true,
+                'icon-ignore-placement': true,
+                'icon-size': [
+                    'interpolate',
+                    ['linear'],
+                    ['zoom'],
+                    Settings.progressMarker.sizeByZoom.minZoom,
+                    Settings.progressMarker.sizeByZoom.minSize,
+                    Settings.progressMarker.sizeByZoom.maxZoom,
+                    Settings.progressMarker.sizeByZoom.maxSize
+                ]
+            },
             paint: {
-                'circle-radius': Settings.progressMarker.size,
-                'circle-color': Settings.progressMarker.color,
-                'circle-opacity': [
-                    'case',
-                    ['get', 'visible'],
-                    Settings.progressMarker.opacity,
-                    0
-                ],
-                'circle-stroke-width': Settings.progressMarker.strokeWidth,
-                'circle-stroke-color': Settings.progressMarker.strokeColor
+                'icon-opacity': ['case', ['get', 'visible'], Settings.progressMarker.opacity, 0]
             }
         });
     }
 
-    setProgressMarkerCoordinate(coordinates: [number, number], visible = true): void {
+    setProgressMarkerCoordinate(coordinates: [number, number], visible = true, bearing?: number): void {
         const source = this.map.getSource(Settings.sourceIds.progressMarker) as maplibregl.GeoJSONSource;
         if (!source) return;
-        source.setData(this.createProgressMarkerData(coordinates, visible));
+
+        // Keep the last known heading when the caller has no direction to report.
+        if (typeof bearing === 'number' && Number.isFinite(bearing)) {
+            this.progressMarkerBearing = bearing;
+        }
+
+        source.setData(this.createProgressMarkerData(coordinates, visible, this.progressMarkerBearing));
     }
 
     hideProgressMarker(): void {
         const source = this.map.getSource(Settings.sourceIds.progressMarker) as maplibregl.GeoJSONSource;
         if (!source) return;
-        source.setData(this.createProgressMarkerData([Settings.center[0], Settings.center[1]], false));
+        source.setData(
+            this.createProgressMarkerData([Settings.center[0], Settings.center[1]], false, this.progressMarkerBearing)
+        );
     }
 
     updateCities(fc: FeatureCollection) {

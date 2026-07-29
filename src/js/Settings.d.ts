@@ -16,7 +16,7 @@ export interface SettingsShape {
     nationalRoutesHitbox: string;
     citiesCircle: string;
     citiesCircleHitbox: string;
-    progressMarkerSquare: string;
+    progressMarkerIcon: string;
   };
   argentinaBorder: {
     color: string;
@@ -85,11 +85,21 @@ export interface SettingsShape {
     veryShortRouteZoom: number;
   };
   progressMarker: {
+    iconId: string;
     size: number;
     color: string;
+    roofColor: string;
+    glassColor: string;
+    lightColor: string;
     opacity: number;
     strokeColor: string;
     strokeWidth: number;
+    sizeByZoom: {
+      minZoom: number;
+      minSize: number;
+      maxZoom: number;
+      maxSize: number;
+    };
   };
 }
 
