@@ -288,21 +288,20 @@
                 width: fit-content;
                 padding: 10 * $ptr 15 * $ptr;
                 border-radius: 10 * $ptr;
-                border-left: 1px solid $flag-light-blue;
-                box-shadow: 0px 4px 4px rgba($flag-light-blue, 0.25);
+                box-shadow: 0px 4px 4px rgba($black, 0.5);
 
-                color: $black;
+                color: $white;
                 font-size: 20 * $ptr;
                 font-weight: 600;
                 text-transform: uppercase;
 
                 pointer-events: auto;
 
-                background-color: $white;
+                background-color: $argentina-dark-gray;
 
                 &:hover {
-                    transform: scale(1.05);
-                    box-shadow: 0px 6px 6px rgba($flag-yellow, 0.35);
+                    // transform: scale(1.05);
+                    // box-shadow: 0px 6px 6px rgba($flag-yellow, 0.35);
                 }
             }
 

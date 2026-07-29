@@ -58,7 +58,7 @@
 
         padding: 0 12 * $ptr 0 8 * $ptr;
 
-        background: $signs-blue;
+        background: $dark-gray;
         border-radius: 10 * $ptr;
         box-shadow: 0 3 * $ptr 5 * $ptr rgba($black, 0.5);
 
@@ -103,7 +103,7 @@
 
         padding: 6 * $ptr 16 * $ptr;
 
-        background: $signs-blue;
+        background: $dark-gray;
         border-radius: 10 * $ptr;
         box-shadow: 0 3 * $ptr 5 * $ptr rgba($black, 0.5);
 
@@ -140,7 +140,7 @@
 
         z-index: 2;
 
-        background: $signs-blue;
+        background: $dark-gray;
         border-radius: 10 * $ptr;
         box-shadow: 0 3 * $ptr 5 * $ptr rgba($black, 0.5);
 
@@ -311,7 +311,7 @@
 
         border-radius: 10 * $ptr;
         // border: 2 * $ptr solid $signs-green;
-        box-shadow: 0 0 10 * $ptr rgba($signs-green, 0.5);
+        box-shadow: 0 0 10 * $ptr rgba($black, 0.5);
 
         background-color: $signs-green;
 
