@@ -46,10 +46,12 @@
                 font-weight: 600;
                 letter-spacing: 3 * $ptr;
 
-                background: $argentina-dark-gray;
+                background: $argentina-celeste;
                 padding: 10 * $ptr 30 * $ptr;
 
                 box-shadow: 0px 4px 4px rgba($black, 0.25);
+
+                text-shadow: 0px 4px 4px rgba($black, 0.25);
 
                 &--1 {
                     color: $white;
@@ -87,6 +89,7 @@
             align-items: center;
 
             text-align: center;
+            color: $black;
 
             padding: 30 * $ptr;
 
@@ -156,7 +159,7 @@
 
                 .game-menu__route-name {
                     font-size: 30 * $ptr;
-                    font-weight: 400;
+                    font-weight: 600;
 
                     font-family: $arimo-font;
                     text-transform: uppercase;
