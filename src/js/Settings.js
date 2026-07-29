@@ -28,7 +28,7 @@ class Settings
     };
 
     this.argentinaBorder = {
-      color: '#32323222',
+      color: '#e1e1e184',
       width: 2
     };
 

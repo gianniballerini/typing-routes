@@ -48,6 +48,10 @@ class MouseInfoCard
     GsapManager.hideBubble(this.container);
   }
 
+  private sanitizeRouteNumber(routeNumber: string): string {
+      return routeNumber.replace(/([A-Za-z]+)(\d+)/g, '$1 $2');
+  }
+
   show(header: string, body: string, variant: 'route' | 'city' = 'route', x: number, y: number)
   {
     if (!this.enabled) return;
@@ -58,7 +62,7 @@ class MouseInfoCard
     this.header.classList.toggle('mouse_info_card__header--route', variant === 'route');
     this.body.classList.toggle('mouse_info_card__body--city', variant === 'city');
     this.body.classList.toggle('mouse_info_card__body--route', variant === 'route');
-    this.header.textContent = header;
+    this.header.textContent = variant === 'route' ? this.sanitizeRouteNumber(header) : header;
     this.body.textContent = body;
 
     GsapManager.showBubble(this.container, x, y);
