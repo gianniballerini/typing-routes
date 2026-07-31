@@ -257,7 +257,7 @@ class GameFlowCoordinator {
         if (this.activeRunStats) this.activeRunStats.lastTypedLength = 0;
 
         this.ui_presenter.renderTyping('', customEvent.detail.target);
-        this.ui_presenter.renderCurrentRouteAndCity(this.game.current_route);
+        this.ui_presenter.renderCurrentRouteAndCity(this.game.current_route, this.game.current_city_index);
         this.updateProgressMarkerForTyping('', customEvent.detail.target);
     };
 

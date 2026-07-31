@@ -36,9 +36,9 @@ class GameUiPresenter {
     private closeRequestedHandler: (() => void) | null;
 
     private start_button_el: HTMLElement | null;
-    private start_city_el: HTMLElement | null;
-    private city_count_number_el: HTMLElement | null;
-    private end_city_el: HTMLElement | null;
+    private typing_el: HTMLElement | null;
+    private typing_prev_city_el: HTMLElement | null;
+    private typing_next_city_el: HTMLElement | null;
     private typing_ok_el: HTMLElement | null;
     private typing_next_char_el: HTMLElement | null;
     private typing_rest_el: HTMLElement | null;
@@ -88,9 +88,9 @@ class GameUiPresenter {
         this.menu_route_image_el = this.menu_route_image_container_el?.querySelector('img') ?? null;
 
         this.start_button_el = document.querySelector('.game-menu__button');
-        this.start_city_el = document.querySelector('.game-playing__start-city');
-        this.city_count_number_el = document.querySelector('.game-playing__city-count-number');
-        this.end_city_el = document.querySelector('.game-playing__end-city');
+        this.typing_el = document.querySelector('.game-playing__typing');
+        this.typing_prev_city_el = document.querySelector('.game-playing__typing-prev-city');
+        this.typing_next_city_el = document.querySelector('.game-playing__typing-next-city');
         this.typing_ok_el = document.querySelector('.game-playing__typing-ok');
         this.typing_next_char_el = document.querySelector('.game-playing__typing-next-char');
         this.typing_rest_el = document.querySelector('.game-playing__typing-rest');
@@ -268,9 +268,56 @@ class GameUiPresenter {
         this.renderMenuRouteRecord(record);
 
         this.menu_info_card_el?.classList.remove('hidden');
+
+        this.playMenuInfoCardAnimation('game-menu__info-card--slap');
+    }
+
+    // The card lands with `--slap` and is picked back up with `--lift`; both are
+    // one-shot classes, and starting either one cancels the other.
+    private playMenuInfoCardAnimation(modifierClass: string, onEnd?: () => void): void {
+        const el = this.menu_info_card_el;
+        if (!el) return;
+
+        el.classList.remove('game-menu__info-card--slap', 'game-menu__info-card--lift');
+        // Forces a reflow so the animation restarts on every open and close
+        // instead of only playing the first time the class lands.
+        void el.offsetWidth;
+        el.classList.add(modifierClass);
+
+        el.addEventListener(
+            'animationend',
+            () => {
+                el.classList.remove(modifierClass);
+                onEnd?.();
+            },
+            { once: true }
+        );
     }
 
     setMenuWelcomeState(): void {
+        this.menu_welcome_description_el?.classList.remove('hidden');
+
+        // Nothing to lift if the card was already closed — otherwise the
+        // animation would flash it back into view on its way out.
+        const cardWasVisible = this.menu_info_card_el?.classList.contains('hidden') === false;
+
+        this.menu_info_card_el?.classList.add('hidden');
+
+        if (!cardWasVisible) {
+            this.menu_info_card_el?.classList.remove('game-menu__info-card--slap');
+            this.clearMenuRoutePreview();
+            return;
+        }
+
+        // The sheet keeps its content until it is off the screen, so it doesn't
+        // blank out halfway through being picked up.
+        this.playMenuInfoCardAnimation(
+            'game-menu__info-card--lift',
+            () => this.clearMenuRoutePreview()
+        );
+    }
+
+    private clearMenuRoutePreview(): void {
         if (this.menu_route_name_el) this.menu_route_name_el.textContent = '';
         if (this.menu_route_number_el) this.menu_route_number_el.textContent = '';
         if (this.menu_route_length_el) this.menu_route_length_el.textContent = '';
@@ -285,10 +332,6 @@ class GameUiPresenter {
             this.menu_route_image_container_el?.classList.add('hidden');
             this.menu_route_image_el?.removeAttribute('src');
         }
-
-        this.menu_welcome_description_el?.classList.remove('hidden');
-
-        this.menu_info_card_el?.classList.add('hidden');
     }
 
     renderTyping(typed: string, target: string): void {
@@ -303,26 +346,33 @@ class GameUiPresenter {
         if (this.typing_rest_el) this.typing_rest_el.textContent = this.toTypingDisplayText(restText);
     }
 
-    renderCurrentRouteAndCity(route: Route | null): void {
-        const totalCities = route?.cities.length ?? 0;
-        const startCity = totalCities > 0 ? route?.cities[0] ?? null : null;
-        const endCity = totalCities > 0 ? route?.cities[totalCities - 1] ?? null : null;
-
+    renderCurrentRouteAndCity(route: Route | null, cityIndex: number): void {
         if (this.route_name_el) {
             this.route_name_el.textContent = route ? `Ruta ${this.sanitizeRouteNumber(route.route_number)}` : '';
         }
 
-        if (this.start_city_el) {
-            this.start_city_el.textContent = this.formatCityDisplayName(startCity?.name ?? '');
-        }
+        // Empty at the ends of the route: no previous city on the first, none after the last.
+        this.renderCityLabel(this.typing_prev_city_el, route?.cities[cityIndex - 1]?.name ?? '');
+        this.renderCityLabel(this.typing_next_city_el, route?.cities[cityIndex + 1]?.name ?? '');
 
-        if (this.city_count_number_el) {
-            this.city_count_number_el.textContent = totalCities > 0 ? `${totalCities} Ciudades` : '';
-        }
+        this.playTypingEnterAnimation();
+    }
 
-        if (this.end_city_el) {
-            this.end_city_el.textContent = this.formatCityDisplayName(endCity?.name ?? '');
-        }
+    private playTypingEnterAnimation(): void {
+        const el = this.typing_el;
+        if (!el) return;
+
+        el.classList.remove('game-playing__typing--enter');
+        // Forces a reflow so the animation restarts on every city instead of
+        // only playing the first time the class lands.
+        void el.offsetWidth;
+        el.classList.add('game-playing__typing--enter');
+
+        el.addEventListener(
+            'animationend',
+            () => el.classList.remove('game-playing__typing--enter'),
+            { once: true }
+        );
     }
 
     renderRunStats(
@@ -369,14 +419,35 @@ class GameUiPresenter {
             .join('');
     }
 
+    private renderCityLabel(el: HTMLElement | null, name: string): void {
+        if (!el) return;
+
+        const full_name = this.formatCityDisplayName(name);
+        const display_name = this.truncateCityDisplayName(full_name);
+
+        el.textContent = display_name;
+
+        // tooltip only when the name is actually cut off
+        if (display_name === full_name) {
+            el.removeAttribute('title');
+        } else {
+            el.setAttribute('title', full_name);
+        }
+    }
+
+    private truncateCityDisplayName(name: string, max_characters: number = 15): string {
+        const normalized = String(name ?? '');
+        if (normalized.length <= max_characters) return normalized;
+        return `${normalized.slice(0, max_characters).trimEnd()}…`;
+    }
+
     private toTypingDisplayText(text: string): string {
         return text.replace(/ /g, '\u00A0');
     }
 
     private clearPlayingPanel(): void {
-        if (this.start_city_el) this.start_city_el.textContent = '';
-        if (this.city_count_number_el) this.city_count_number_el.textContent = '';
-        if (this.end_city_el) this.end_city_el.textContent = '';
+        this.renderCityLabel(this.typing_prev_city_el, '');
+        this.renderCityLabel(this.typing_next_city_el, '');
         if (this.route_name_el) this.route_name_el.textContent = '';
         this.renderRunStats(0, 0, 0, 0, 0, 100);
         this.renderElapsedTime(0);

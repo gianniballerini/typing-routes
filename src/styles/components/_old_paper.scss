@@ -1,0 +1,242 @@
+// ============================================================
+// Block: old-paper
+// Aged parchment / antique map surface. Entirely generated —
+// no image assets, no required markup (the texture lives in the
+// block's own background plus its two pseudo elements).
+//
+// Usage (BEM mix — add the block next to the consumer's element):
+//   .my-panel.old-paper.old-paper--deckled.old-paper--folded
+//
+// Modifiers:
+//   --deckled  torn edges + shadow that follows the torn outline
+//   --folded   creases of a map folded twice the long way, once across
+//   --map      faint sepia graticule over the sheet
+// ============================================================
+
+@use "sass:math";
+@use "sass:list";
+
+// ---- palette ---------------------------------------------------
+// Namespaced + !default: this partial is loaded through the legacy
+// @import chain in main.scss, so every name lands in one global
+// scope and can be overridden before the import.
+$old-paper-base:    #e6d8b5 !default; // base parchment tone
+$old-paper-light:   #f2e8cd !default; // lightest, sun-bleached centre
+$old-paper-dark:    #c9b586 !default; // darker, handled edges
+$old-paper-stain:   #8a6a3d !default; // tea/water stain brown
+$old-paper-foxing:  #6b4a2b !default; // small age-spot brown (foxing)
+$old-paper-ink:     #3f2d17 !default; // body text — ~8:1 on the base tone
+$old-paper-ink-soft: rgba($old-paper-ink, 0.72) !default;
+$old-paper-crease:  rgba(40, 28, 12, 0.22) !default; // shaded side of a fold
+$old-paper-crease-light: rgba(255, 255, 255, 0.18) !default; // the ridge itself
+
+$old-paper-deckle-steps: 30 !default; // points per edge — more steps, finer tear
+$old-paper-deckle-amount: 5px !default; // tear amplitude, in px on every edge
+$old-paper-grain-opacity: 0.16 !default;
+$old-paper-grain-tile: 200px !default;
+
+// ---- 1. procedural grain ---------------------------------------
+// feTurbulence baked into an inline SVG data URI and tiled, so the
+// surface never reads as flat vector art. The <svg> carries explicit
+// width/height: without them it falls back to the 300x150 default
+// intrinsic size and tiles differently across engines.
+@function old-paper-grain($freq: 0.9, $octaves: 2, $tile: 200) {
+    @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='#{$tile}' height='#{$tile}'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='#{$freq}' numOctaves='#{$octaves}' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+// ---- 2. deckled / torn edge -------------------------------------
+// Walks the perimeter as a single closed loop — each corner is
+// emitted exactly once, otherwise the path doubles back on itself
+// and spikes at the corners. The jitter is an absolute px offset,
+// not a percentage, so a tall narrow sheet tears by the same amount
+// on every edge. math.random() runs at compile time:
+// the outline is baked into the CSS, fixed per build rather than
+// re-rolled per page load.
+@function old-paper-jitter($amount) {
+    @return math.div(math.round(math.random(1000) * math.div($amount, 10px)), 100) * 1px;
+}
+
+@function old-paper-step($i, $steps) {
+    @return math.div(math.round(math.div($i, $steps) * 10000), 100) * 1%;
+}
+
+@function old-paper-deckle($steps: $old-paper-deckle-steps, $amount: $old-paper-deckle-amount) {
+    $points: ();
+
+    // top: left -> right, wobble down from the edge
+    @for $i from 0 through $steps {
+        $points: list.append($points, old-paper-step($i, $steps) old-paper-jitter($amount), comma);
+    }
+    // right: top -> bottom, wobble in from the edge
+    @for $i from 1 through $steps {
+        $x: calc(100% - #{old-paper-jitter($amount)});
+        $points: list.append($points, $x old-paper-step($i, $steps), comma);
+    }
+    // bottom: right -> left, wobble up from the edge
+    @for $i from $steps - 1 through 0 {
+        $y: calc(100% - #{old-paper-jitter($amount)});
+        $points: list.append($points, old-paper-step($i, $steps) $y, comma);
+    }
+    // left: bottom -> top, wobble in from the edge
+    @for $i from $steps - 1 through 1 {
+        $points: list.append($points, old-paper-jitter($amount) old-paper-step($i, $steps), comma);
+    }
+
+    @return polygon(#{$points});
+}
+
+// ---- 3. fold creases --------------------------------------------
+// One gradient layer per crease, placed with calc() — the creases
+// are part of the background stack, so they need no extra markup.
+@function old-paper-creases($count: 3, $direction: to right, $width: 14px) {
+    $layers: ();
+    $shade: $old-paper-crease;
+    $highlight: $old-paper-crease-light;
+
+    @for $i from 1 through $count {
+        $at: old-paper-step($i, $count + 1);
+
+        // shadow, ridge, shadow — wide enough that the fold reads as a
+        // soft bend in the sheet rather than a drawn line
+        $layers: list.append(
+            $layers,
+            linear-gradient(
+                $direction,
+                transparent calc(#{$at} - #{$width}),
+                $shade calc(#{$at} - 3px),
+                $highlight #{$at},
+                $shade calc(#{$at} + 3px),
+                transparent calc(#{$at} + #{$width})
+            ),
+            comma
+        );
+    }
+
+    @return $layers;
+}
+
+// ---- 4. background stack ----------------------------------------
+// Soft natural unevenness — the sheet is never a flat single colour.
+$old-paper-surface:
+    radial-gradient(120% 90% at 30% 20%, $old-paper-light 0%, transparent 60%),
+    radial-gradient(100% 80% at 80% 85%, $old-paper-dark 0%, transparent 55%) !default;
+
+// Faint graticule, for the antique-map read.
+$old-paper-graticule:
+    repeating-linear-gradient(to right, rgba($old-paper-foxing, 0.07) 0 1px, transparent 1px 60 * $ptr),
+    repeating-linear-gradient(to bottom, rgba($old-paper-foxing, 0.07) 0 1px, transparent 1px 60 * $ptr) !default;
+
+// Edge vignette / handling wear, plus a deeper darkening at the
+// corners. Shared so --deckled can restate it without the outer
+// shadow that clip-path would eat.
+$old-paper-wear:
+    inset 0 0 60 * $ptr rgba($old-paper-stain, 0.25),
+    inset 0 0 140 * $ptr rgba(0, 0, 0, 0.12) !default;
+
+// Composes the layers a given modifier combination needs, so each
+// modifier restates the stack once instead of repeating gradients.
+@function old-paper-layers($folded: false, $map: false) {
+    $layers: ();
+
+    @if $folded {
+        // folded twice the long way, once across
+        $layers: list.join($layers, old-paper-creases(2, to right), comma);
+        $layers: list.join($layers, old-paper-creases(1, to bottom), comma);
+    }
+
+    @if $map {
+        $layers: list.join($layers, $old-paper-graticule, comma);
+    }
+
+    @return list.join($layers, $old-paper-surface, comma);
+}
+
+// ---- 5. the block -----------------------------------------------
+
+.old-paper {
+    position: relative;
+
+    // Keeps the multiply blending below scoped to this sheet instead
+    // of leaking onto whatever sits behind it.
+    isolation: isolate;
+
+    color: $old-paper-ink;
+
+    background-color: $old-paper-base;
+    background-image: old-paper-layers();
+
+    // lifts the sheet off whatever is behind it, then the wear layers
+    box-shadow: 0 2 * $ptr 6 * $ptr rgba(0, 0, 0, 0.3), $old-paper-wear;
+
+    // Both texture layers sit at z-index -1: a negative z-index
+    // descendant paints above the block's own background but below
+    // its in-flow content, so the grain and stains tint the paper
+    // without ever washing over the text — and no child needs a
+    // z-index of its own.
+    &::before {
+        content: "";
+
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+
+        background-image: old-paper-grain(0.9, 2, math.div($old-paper-grain-tile, 1px));
+        background-size: $old-paper-grain-tile $old-paper-grain-tile;
+
+        opacity: $old-paper-grain-opacity;
+        mix-blend-mode: multiply;
+
+        pointer-events: none;
+    }
+
+    // stains + foxing (age spots)
+    &::after {
+        content: "";
+
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+
+        background-image:
+            radial-gradient(circle at 12% 18%, rgba($old-paper-stain, 0.35), transparent 22%),
+            radial-gradient(circle at 85% 12%, rgba($old-paper-stain, 0.22), transparent 18%),
+            radial-gradient(circle at 78% 82%, rgba($old-paper-stain, 0.3), transparent 26%),
+            radial-gradient(circle at 8% 70%, rgba($old-paper-foxing, 0.25), transparent 12%),
+            radial-gradient(circle at 45% 55%, rgba($old-paper-foxing, 0.12), transparent 30%),
+            radial-gradient(circle at 60% 30%, rgba($old-paper-foxing, 0.1), transparent 14%);
+
+        mix-blend-mode: multiply;
+
+        pointer-events: none;
+    }
+}
+
+// clip-path also clips box-shadow, so the outer shadow moves to a
+// drop-shadow filter — which follows the torn silhouette instead of
+// a rectangle.
+.old-paper--deckled {
+    clip-path: old-paper-deckle();
+
+    box-shadow: $old-paper-wear;
+
+    filter: drop-shadow(0 2 * $ptr 5 * $ptr rgba(0, 0, 0, 0.35));
+}
+
+.old-paper--folded {
+    background-image: old-paper-layers($folded: true);
+}
+
+.old-paper--map {
+    background-image: old-paper-layers($map: true);
+}
+
+.old-paper--folded.old-paper--map {
+    background-image: old-paper-layers($folded: true, $map: true);
+}
+
+    // Optional explicit content layer, for consumers whose children
+    // would otherwise sit inside a stacking context of their own.
+    .old-paper__content {
+        position: relative;
+        z-index: 1;
+    }

@@ -22,8 +22,14 @@
 
         display: flex;
         flex-direction: row;
+        justify-content: center;
+
         color: $black;
         padding: 10 * $ptr;
+
+        @include respond-to($medium-breakpoint) {
+            justify-content: flex-start;
+        }
     }
 
         .game-menu__welcome {
@@ -33,23 +39,38 @@
             align-items: center;
             text-align: center;
 
+            position: relative;
+
             @include respond-to($medium-breakpoint) {
                 max-width: 400 * $ptr;
             }
+        }
+
+        .game-menu__logo-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: auto;
+
+            object-fit: cover;
+            object-position: center;
+
+            filter: drop-shadow(0 4px 4px rgba($black, 0.25));
+
+            z-index: -1;
         }
 
             .game-menu__welcome-title {
                 font-family: $milonga-font;
                 display: flex;
                 flex-direction: row;
-                font-size: 45 * $ptr;
+                font-size: 20 * $ptr;
                 font-weight: 600;
                 letter-spacing: 3 * $ptr;
 
-                background: $argentina-celeste;
-                padding: 10 * $ptr 30 * $ptr;
-
-                box-shadow: 0px 4px 4px rgba($black, 0.25);
+                margin: 20 * $ptr 85 * $ptr 25 * $ptr 85 * $ptr;
 
                 text-shadow: 0px 4px 4px rgba($black, 0.25);
 
@@ -59,6 +80,10 @@
 
                 &--2 {
                     color: $flag-yellow;
+                }
+
+                @include respond-to($medium-breakpoint) {
+                    font-size: 40 * $ptr;
                 }
             }
 
@@ -72,15 +97,25 @@
                 background: radial-gradient(circle,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 54%, rgba(255, 255, 255, 0) 100%);
             }
         .game-menu__info-card {
+            // pulls away from the screen edge as soon as the viewport is
+            // wider than the sheet, and sits flush again when it isn't
+            --info-card-gap: clamp(0px, calc((100dvw - #{600 * $ptr}) * 0.5), #{30 * $ptr});
+
             position: absolute;
-            top: 0;
-            right: 0;
+            // dvh, not 50%: the offset parent is .game-menu__top, which is
+            // only half the screen tall
+            top: 50dvh;
+            right: var(--info-card-gap);
 
-            transition: transform 0.3s ease-in-out;
+            transform: translateY(-50%);
 
-            max-width: 500 * $ptr;
-            width: min(500 * $ptr, 100dvw);
-            height: 100dvh;
+            max-width: min(600 * $ptr, 100dvw);
+            width: fit-content;
+
+            // the sheet is only as tall as its content, up to a full screen
+            // less a margin so the torn top and bottom edges stay visible
+            height: fit-content;
+            max-height: calc(100dvh - #{40 * $ptr});
             min-height: 0;
 
             display: flex;
@@ -89,24 +124,46 @@
             align-items: center;
 
             text-align: center;
-            color: $black;
 
-            padding: 30 * $ptr;
+            // colour, texture and torn edge come from the .old-paper
+            // block this element is mixed with — the extra left padding
+            // keeps the content clear of the deckled edge.
+            padding: 30 * $ptr 30 * $ptr 30 * $ptr 38 * $ptr;
 
             row-gap: 20 * $ptr;
             overflow: hidden;
 
-            background: $argentina-gray;
-            border-radius: 10 * $ptr;
-            border-left: 4 * $ptr solid $argentina-light-gray;
             pointer-events: auto;
 
+            // Resting state of a closed card: where the lift animation below
+            // leaves the sheet, so nothing snaps when the animation ends. The
+            // transition is the fallback for when the animation doesn't run.
             &.hidden {
-                transition: transform 0.3s ease-in-out;
                 display: flex;
-                transform: translateX(100%);
+
+                opacity: 0;
+                transform: translateY(-50%) translateY(-16 * $ptr) scale(1.28) rotate(-6deg);
                 pointer-events: none;
+
+                // visibility flips only once the lift is over — same delay as
+                // the animation duration — so the closed sheet is really gone
+                // instead of sitting invisible over the map
+                visibility: hidden;
+                transition:
+                    opacity 0.26s ease-in,
+                    transform 0.26s ease-in,
+                    visibility 0s linear 0.26s;
             }
+        }
+
+        // Added for one shot each time a route is selected.
+        .game-menu__info-card--slap {
+            animation: info-card-slap 0.42s ease-out;
+        }
+
+        // ...and its counterpart, one shot each time the card is closed.
+        .game-menu__info-card--lift {
+            animation: info-card-lift 0.26s ease-in;
         }
 
             .game-menu__info-card-close {
@@ -115,20 +172,14 @@
                 width: 40 * $ptr;
                 height: 40 * $ptr;
 
-                // padding: 5 * $ptr;
+                color: $old-paper-ink-soft;
 
-                // border-radius: 10 * $ptr;
-                // border-left: 2 * $ptr solid $flag-light-blue;
-                // box-shadow: 0px 4px 4px rgba($flag-light-blue, 0.25);
-
-                color: $black;
                 pointer-events: auto;
-
-                // background-color: $white;
 
                 &:hover {
                     transform: scale(1.05);
-                    // box-shadow: 0px 6px 6px rgba($flag-yellow, 0.35);
+
+                    color: $old-paper-ink;
                 }
 
                 svg {
@@ -145,24 +196,74 @@
                 column-gap: 30 * $ptr;
             }
 
+                // a photograph taped onto the sheet
                 .game-menu__info-card-image {
+                    position: relative;
+
                     width: fit-content;
                     height: 100 * $ptr;
+
+                    padding: 5 * $ptr;
+
+                    background-color: rgba($old-paper-light, 0.85);
+                    box-shadow: 0px 3 * $ptr 6 * $ptr rgba($black, 0.3);
+
+                    transform: rotate(-1.5deg);
 
                     img {
                         width: auto;
                         height: 100%;
                         object-fit: cover;
+
+                        filter: sepia(0.35) contrast(0.95);
+                    }
+
+                    &::before, &::after {
+                        content: '';
+
+                        position: absolute;
+
+                        width: 34 * $ptr;
+                        height: 14 * $ptr;
+
+                        background-color: rgba($white, 0.4);
+                        box-shadow: 0px 1 * $ptr 2 * $ptr rgba($black, 0.15);
+
+                        transform: rotate(-24deg);
+                    }
+
+                    &::before {
+                        top: -7 * $ptr;
+                        left: -10 * $ptr;
+                    }
+
+                    &::after {
+                        right: -10 * $ptr;
+                        bottom: -7 * $ptr;
                     }
                 }
 
 
                 .game-menu__route-name {
                     font-size: 30 * $ptr;
-                    font-weight: 600;
+                    font-weight: 400;
 
-                    font-family: $arimo-font;
+                    font-family: $milonga-font;
+                    letter-spacing: 1 * $ptr;
                     text-transform: uppercase;
+
+                    // hand-ruled line under the title
+                    &::after {
+                        content: '';
+
+                        display: block;
+                        height: 2 * $ptr;
+
+                        margin-top: 6 * $ptr;
+
+                        background: linear-gradient(to right, transparent, $old-paper-ink-soft 15%, $old-paper-ink-soft 85%, transparent);
+                        opacity: 0.55;
+                    }
                 }
 
                 .game-menu__route-sign {
@@ -205,7 +306,8 @@
                     font-size: 16 * $ptr;
                     font-weight: 400;
                     font-style: italic;
-                    color: $black;
+
+                    color: $old-paper-ink-soft;
                 }
 
                 .game-menu__route-record {
@@ -215,8 +317,6 @@
                     row-gap: 4 * $ptr;
 
                     width: 100%;
-
-                    color: $white;
                 }
 
                     .game-menu__route-record-title {
@@ -224,8 +324,12 @@
                         text-transform: uppercase;
                         font-weight: 400;
                         letter-spacing: 1 * $ptr;
+
+                        font-family: $milonga-font;
                     }
 
+                    // ruled-in-ink box rather than a filled panel, so the
+                    // paper still reads through it
                     .game-menu__route-record-values {
                         display: flex;
                         flex-direction: column;
@@ -233,9 +337,8 @@
                         row-gap: 5 * $ptr;
 
                         width: 100%;
-                        border-radius: 10 * $ptr;
 
-                        background-color: $signs-green;
+                        background-color: rgba($old-paper-light, 0.35);
 
                         font-size: 15 * $ptr;
 
@@ -243,65 +346,69 @@
 
                         position: relative;
 
-                        box-shadow: 0px 4px 4px rgba($black, 0.25);
-
-                        &::before {
-                            content: '';
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-
-                            width: calc(100% - 8 * $ptr);
-                            height: calc(100% - 8 * $ptr);
-
-                            border-radius: 10 * $ptr;
-
-                            transform: translate(4 * $ptr, 4 * $ptr);
-
-                            border: 2 * $ptr solid $white;
-                        }
+                        border: 2 * $ptr dashed rgba($old-paper-ink, 0.45);
                     }
 
                         .game-menu__route-record-group {
                             display: flex;
                             flex-direction: row;
-                            align-items: center;
+                            align-items: flex-end;
                             justify-content: space-between;
                             column-gap: 5 * $ptr;
 
                             width: 100%;
+
+                            // dotted leader between label and value
+                            border-bottom: 1 * $ptr dotted rgba($old-paper-ink, 0.35);
                         }
 
             .game-menu__info-card-bottom {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: flex-start;
                 width: 100%;
-                height: 100%;
+
+                // hugs its content, and is the part that shrinks and scrolls
+                // once the sheet runs into its max height
+                flex: 0 1 auto;
+                min-height: 0;
+
                 row-gap: 10 * $ptr;
                 overflow-y: auto;
                 overscroll-behavior: contain;
+
+                padding-bottom: 10 * $ptr;
             }
 
+            // stamped onto the sheet: ink border, washed parchment fill
             .game-menu__button {
                 width: fit-content;
-                padding: 10 * $ptr 15 * $ptr;
-                border-radius: 10 * $ptr;
-                box-shadow: 0px 4px 4px rgba($black, 0.5);
+                padding: 10 * $ptr 25 * $ptr;
 
-                color: $white;
+                color: $old-paper-ink;
+                font-family: $milonga-font;
                 font-size: 20 * $ptr;
-                font-weight: 600;
+                font-weight: 400;
+                letter-spacing: 2 * $ptr;
                 text-transform: uppercase;
 
                 pointer-events: auto;
 
-                background-color: $argentina-dark-gray;
+                background-color: rgba($old-paper-light, 0.55);
+                border: 2 * $ptr solid rgba($old-paper-ink, 0.75);
+
+                // inner rule, like a stamped frame, plus a little lift
+                box-shadow:
+                    inset 0 0 0 2 * $ptr rgba($old-paper-light, 0.6),
+                    0px 2 * $ptr 4 * $ptr rgba($black, 0.25);
+
+                transform: rotate(-1deg);
+                transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 
                 &:hover {
-                    // transform: scale(1.05);
-                    // box-shadow: 0px 6px 6px rgba($flag-yellow, 0.35);
+                    background-color: rgba($old-paper-stain, 0.35);
+                    border-color: $old-paper-ink;
                 }
             }
 
@@ -315,3 +422,54 @@
 
         padding-bottom: 50 * $ptr;
     }
+
+// The sheet drops in oversized and tilted, lands slightly under its resting
+// size, rebounds once and settles — a sheet of paper slapped onto a table.
+// Every step restates translateY(-50%) or the card would lose its centring.
+@keyframes info-card-slap {
+    0% {
+        transform: translateY(-50%) scale(1.32) rotate(-7deg);
+        opacity: 0;
+    }
+
+    55% {
+        transform: translateY(-50%) scale(0.97) rotate(1.5deg);
+        opacity: 1;
+    }
+
+    75% {
+        transform: translateY(-50%) scale(1.02) rotate(-0.8deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-50%) scale(1) rotate(0);
+        opacity: 1;
+    }
+}
+
+// The slap run backwards: a short press down, then the sheet is snatched up
+// off the table — growing, tilting and fading as it leaves.
+@keyframes info-card-lift {
+    0% {
+        transform: translateY(-50%) scale(1) rotate(0);
+        opacity: 1;
+    }
+
+    22% {
+        transform: translateY(-50%) scale(0.98) rotate(0.8deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-50%) translateY(-16 * $ptr) scale(1.28) rotate(-6deg);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .game-menu__info-card--slap,
+    .game-menu__info-card--lift {
+        animation: none;
+    }
+}

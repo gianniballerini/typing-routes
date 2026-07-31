@@ -17,8 +17,7 @@
     justify-content: flex-start;
 }
 
-.game-playing.keyboard-open .game-playing__top,
-.game-playing.keyboard-open .game-playing__info-card {
+.game-playing.keyboard-open .game-playing__top {
     display: none;
 }
 
@@ -134,7 +133,10 @@
     }
 
     .game-playing__user-stats {
-        width: min(620 * $ptr, calc(100dvw - 24 * $ptr));
+        min-width: 0;
+        width: min(250 * $ptr, calc(100dvw - 24 * $ptr));
+        max-width: calc(100dvw - 24 * $ptr);
+
         min-height: 50 * $ptr;
         height: auto;
 
@@ -146,15 +148,13 @@
 
         font-family: $arimo-font;
         text-transform: uppercase;
+        // Keeps the readouts from twitching as the digits change width.
+        font-variant-numeric: tabular-nums;
         color: $white;
 
         display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        column-gap: 12 * $ptr;
+        flex-direction: column;
         row-gap: 8 * $ptr;
-        flex-wrap: wrap;
 
         padding: 12 * $ptr 16 * $ptr;
 
@@ -176,6 +176,28 @@
             border: 2 * $ptr solid $white;
         }
     }
+
+        .game-playing__user-stats-top {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            column-gap: 16 * $ptr;
+        }
+
+        .game-playing__user-stats-bottom {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            column-gap: 16 * $ptr;
+
+            padding-top: 8 * $ptr;
+            border-top: 2 * $ptr solid rgba($white, 0.5);
+        }
+
         .game-playing__stats-cities,
         .game-playing__stats-combo,
         .game-playing__stats-gross-wpm,
@@ -188,126 +210,47 @@
 
             column-gap: 5 * $ptr;
         }
-            .game-playing__cities-completed {}
-            .game-playing__cities-remaining {}
-            .game-playing__combo-number {}
 
-            .game-playing__gross-wpm-number {}
-            .game-playing__net-wpm-number {}
-            .game-playing__accuracy-number {}
+            // Headline readout of the meter.
+            .game-playing__stats-net-wpm {
+                align-items: baseline;
 
-
-    .game-playing__info-card {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-
-        column-gap: 20 * $ptr;
-
-        min-width: 0;
-        width: min(500 * $ptr, calc(100dvw - 24 * $ptr));
-        max-width: calc(100dvw - 24 * $ptr);
-        height: fit-content;
-
-        background: $signs-green;
-
-        overflow: hidden;
-
-        border-radius: 10 * $ptr;
-
-        padding: 15 * $ptr;
-
-        box-shadow: 0 0 10 * $ptr rgba($black, 0.5);
-
-        font-family: $arimo-font;
-        text-transform: uppercase;
-
-        color: $white;
-
-        position: relative;
-
-        &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-
-            width: calc(100% - 8 * $ptr);
-            height: calc(100% - 8 * $ptr);
-
-            border-radius: 10 * $ptr;
-
-            transform: translate(4 * $ptr, 4 * $ptr);
-
-            border: 2 * $ptr solid $white;
-        }
-
-    }
-
-        .game-playing__info-group {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            row-gap: 10 * $ptr;
-
-
-            width: fit-content;
-            height: 100%;
-        }
-
-        .game-playing__start-city, .game-playing__end-city {
-            font-size: 20 * $ptr;
-            font-weight: bold;
-            text-wrap: nowrap;
-        }
-
-        .game-playing__city-count {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            width: 100%;
-
-            row-gap: 5 * $ptr;
-
-        }
-
-            .game-playing__horizontal-line {
-                width: 70 * $ptr;
-                height: 2    * $ptr;
-                border-radius: 10 * $ptr;
-
-                background-color: $white;
-            }
-
-            .game-playing__city-count-number {
+                font-size: 34 * $ptr;
                 font-weight: bold;
-                font-size: 14 * $ptr;
+                line-height: 1;
             }
 
-            .game-playing__bubble {
-                min-width: 50 * $ptr;
-                width: fit-content;
-                height: fit-content;
+                .game-playing__stats-unit {
+                    font-size: 12 * $ptr;
+                    font-weight: normal;
+                    opacity: 0.7;
+                }
 
-                text-transform: uppercase;
-                font-size: 12    * $ptr;
+            // Secondary readouts, stacked to the right of the headline.
+            .game-playing__stats-secondary {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
 
-                // border-radius: 20 * $ptr;
-                // padding: 3 * $ptr 10 * $ptr;
+                row-gap: 2 * $ptr;
 
-                // border: 2 * $ptr solid $white;
+                font-size: 11 * $ptr;
+                opacity: 0.75;
             }
+
+            .game-playing__stats-combo,
+            .game-playing__stats-accuracy {
+                font-size: 11 * $ptr;
+                opacity: 0.75;
+            }
+
 
     .game-playing__typing-card {
         min-width: 0;
         width: min(500 * $ptr, calc(100dvw - 24 * $ptr));
         max-width: calc(100dvw - 24 * $ptr);
-        height: 100 * $ptr;
+        height: fit-content;
+        min-height: 140 * $ptr;
 
         border-radius: 10 * $ptr;
         // border: 2 * $ptr solid $signs-green;
@@ -342,11 +285,39 @@
     .game-playing__typing-card-top {
         flex: 1;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        row-gap: 6 * $ptr;
+
+        padding: 12 * $ptr 0;
 
         font-size: 30 * $ptr;
     }
+
+        // Surrounding cities on the route. Both keep their line height even when
+        // empty (first / last city) so the current word never shifts vertically.
+        .game-playing__typing-prev-city,
+        .game-playing__typing-next-city {
+            display: block;
+
+            min-height: 14 * $ptr;
+
+            font-family: $arimo-font;
+            font-size: 11 * $ptr;
+            line-height: 14 * $ptr;
+            letter-spacing: 1 * $ptr;
+            text-transform: uppercase;
+            text-wrap: nowrap;
+            color: $white;
+            opacity: 0.5;
+
+            // truncateCityDisplayName caps the text at 15 characters; this is only
+            // a backstop for very wide glyphs on a narrow card.
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
         .game-playing__typing {
             display: flex;
@@ -358,6 +329,11 @@
             text-transform: uppercase;
 
             white-space: nowrap;
+        }
+
+        // Added for one shot each time a new city becomes the target.
+        .game-playing__typing--enter {
+            animation: typing-word-enter 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
             .game-playing__typing-ok {
@@ -382,17 +358,6 @@
             .game-playing__typing-rest {
                 color: rgba($white, 0.5);
             }
-
-        input.game-playing__typing-word {
-            font-size: 30 * $ptr;
-            color: $black;
-            width: fit-content;
-
-            &::placeholder {
-                color: $light-gray;
-                opacity: 0.5;
-            }
-        }
 
     .game-playing__typing-card-bottom {
         font-family: $arimo-font;
@@ -428,6 +393,28 @@
 
     50%, 100% {
         opacity: 0;
+    }
+}
+
+@keyframes typing-word-enter {
+    0% {
+        transform: scale(0.86);
+        opacity: 0.4;
+    }
+
+    55% {
+        transform: scale(1.06);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .game-playing__typing--enter {
+        animation: none;
     }
 }
 

@@ -17,43 +17,36 @@
             span.game-playing__timer-number
             span :
             span.game-playing__timer-milliseconds
-        .game-playing__info-card
-            .game-playing__info-group
-                .game-playing__bubble
-                    | inicio
-                span.game-playing__start-city
-            .game-playing__city-count
-                .game-playing__city-count-number
-                .game-playing__horizontal-line
-            .game-playing__info-group
-                .game-playing__bubble
-                    | destino
-                span.game-playing__end-city
     .game-playing__bottom
         .game-playing__user-stats
-            .game-playing__stats-cities
-                span.game-playing__cities-completed
-                span /
-                span.game-playing__cities-remaining
-            .game-playing__stats-combo
-                span.game-playing__combo-number
-                span Combo
-            .game-playing__stats-gross-wpm
-                span.game-playing__gross-wpm-number
-                span PPM Total
-            .game-playing__stats-net-wpm
-                span.game-playing__net-wpm-number
-                span PPM - Errores
-            .game-playing__stats-accuracy
-                span.game-playing__accuracy-number
-                span Precisión
+            .game-playing__user-stats-top
+                .game-playing__stats-net-wpm
+                    span.game-playing__net-wpm-number
+                    span.game-playing__stats-unit ppm
+                .game-playing__stats-secondary
+                    .game-playing__stats-gross-wpm
+                        span.game-playing__gross-wpm-number
+                        span bruto
+                    .game-playing__stats-cities
+                        span.game-playing__cities-completed
+                        span /
+                        span.game-playing__cities-remaining
+            .game-playing__user-stats-bottom
+                .game-playing__stats-combo
+                    span.game-playing__combo-number
+                    span combo
+                .game-playing__stats-accuracy
+                    span.game-playing__accuracy-number
+                    span precisión
         .game-playing__typing-card
             .game-playing__typing-card-top
+                span.game-playing__typing-prev-city
                 .game-playing__typing
                     span.game-playing__typing-ok
                     span.game-playing__typing-caret
                     span.game-playing__typing-next-char
                     span.game-playing__typing-rest
+                span.game-playing__typing-next-city
             .game-playing__typing-card-bottom
                 .game-playing__route-name
 
