@@ -5,7 +5,7 @@ import { MapController } from '../MapController';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
-import { ModalController } from '../ui/ModalController';
+import { ModalController, ModalState } from '../ui/ModalController';
 import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
@@ -43,6 +43,10 @@ class GameFlowCoordinator {
     private activeRunStats: ActiveRunStats | null;
     private completedRouteForCurrentRunId: string | null;
     private timerFrameHandle: number | null;
+    private countdownTimeoutHandle: number | null;
+    private countdownHideTimeoutHandle: number | null;
+    private countdownRemaining: number;
+    private pendingRunRouteId: string | null;
 
     constructor(
         game: Game,
@@ -65,6 +69,10 @@ class GameFlowCoordinator {
         this.activeRunStats = null;
         this.completedRouteForCurrentRunId = null;
         this.timerFrameHandle = null;
+        this.countdownTimeoutHandle = null;
+        this.countdownHideTimeoutHandle = null;
+        this.countdownRemaining = 0;
+        this.pendingRunRouteId = null;
     }
 
     init(): void {
@@ -72,6 +80,9 @@ class GameFlowCoordinator {
         this.ui_presenter.onCloseRequested(this.handleCloseRequested);
         this.ui_presenter.onQuitRequested(this.handleQuitRequested);
         this.ui_presenter.onTypingInput(this.handleTypingInput);
+        this.ui_presenter.onHowToPlayRequested(this.handleHowToPlayRequested);
+        this.ui_presenter.onRouteListRequested(this.handleRouteListRequested);
+        this.ui_presenter.onAchievementsRequested(this.handleAchievementsRequested);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
 
         this.game.addEventListener('city-visited', this.handleCityVisited as EventListener);
@@ -87,6 +98,8 @@ class GameFlowCoordinator {
     }
 
     private handleStartRequested = (): void => {
+        if (this.game.state !== GameState.MENU) return;
+
         const selectedRouteId = this.map_controller.getSelectedRouteId();
         if (!selectedRouteId) {
             console.warn('Select a route before starting the game');
@@ -97,7 +110,8 @@ class GameFlowCoordinator {
 
         this.game.selectRoute(selectedRouteId);
         this.initializeRouteSnappingData(selectedRouteId);
-        this.initializeRunStats(selectedRouteId);
+        this.pendingRunRouteId = selectedRouteId;
+        this.resetRunStatsDisplay();
 
         const initialRunCoordinate = this.getInitialRunCoordinate();
         if (initialRunCoordinate) {
@@ -107,26 +121,107 @@ class GameFlowCoordinator {
             );
         }
 
-        this.game.start();
-        this.ui_presenter.focusTypingInput();
+        // Shows the panel with the first city while the camera settles; the clock
+        // and the stats only start once the countdown lands on "go".
+        this.game.startCountdown();
 
         if (initialRunCoordinate) {
             this.setProgressMarkerAndFollowCamera(initialRunCoordinate);
         }
+
+        this.startCountdown();
     };
+
+    private startCountdown(): void {
+        this.clearCountdownTimers();
+
+        this.countdownRemaining = Math.max(1, Math.round(Settings.runCountdown.seconds));
+        this.ui_presenter.renderCountdown(`${this.countdownRemaining}`);
+        this.countdownTimeoutHandle = window.setTimeout(this.handleCountdownTick, 1000);
+    }
+
+    private handleCountdownTick = (): void => {
+        this.countdownTimeoutHandle = null;
+        if (this.game.state !== GameState.COUNTDOWN) return;
+
+        this.countdownRemaining -= 1;
+
+        if (this.countdownRemaining <= 0) {
+            this.finishCountdown();
+            return;
+        }
+
+        this.ui_presenter.renderCountdown(`${this.countdownRemaining}`);
+        this.countdownTimeoutHandle = window.setTimeout(this.handleCountdownTick, 1000);
+    };
+
+    // Enter / space during the countdown: jumps straight to "go".
+    skipCountdown(): void {
+        if (this.game.state !== GameState.COUNTDOWN) return;
+        this.finishCountdown();
+    }
+
+    private finishCountdown(): void {
+        this.clearCountdownTimers();
+
+        this.ui_presenter.renderCountdown(Settings.runCountdown.goLabel, true);
+        this.countdownHideTimeoutHandle = window.setTimeout(() => {
+            this.countdownHideTimeoutHandle = null;
+            this.ui_presenter.hideCountdown();
+        }, Math.max(0, Settings.runCountdown.goHoldMs));
+
+        // Stats start here, so the elapsed clock measures typing and nothing else.
+        const routeId = this.pendingRunRouteId;
+        this.pendingRunRouteId = null;
+        if (routeId) this.initializeRunStats(routeId);
+
+        this.game.start();
+        this.ui_presenter.focusTypingInput();
+    }
+
+    private cancelCountdown(): void {
+        this.clearCountdownTimers();
+        this.ui_presenter.hideCountdown();
+    }
+
+    private clearCountdownTimers(): void {
+        if (this.countdownTimeoutHandle !== null) {
+            window.clearTimeout(this.countdownTimeoutHandle);
+            this.countdownTimeoutHandle = null;
+        }
+
+        if (this.countdownHideTimeoutHandle !== null) {
+            window.clearTimeout(this.countdownHideTimeoutHandle);
+            this.countdownHideTimeoutHandle = null;
+        }
+    }
 
     private handleQuitRequested = (): void => {
         this.quitActiveRun();
+    };
+
+    private handleHowToPlayRequested = (): void => {
+        this.modal_controller.show(ModalState.HOW_TO_PLAY);
+    };
+
+    private handleRouteListRequested = (): void => {
+        this.modal_controller.show(ModalState.ROUTE_LIST);
+    };
+
+    private handleAchievementsRequested = (): void => {
+        this.modal_controller.show(ModalState.ACHIEVEMENTS);
     };
 
     /**
      * Abandons the current run and returns to the map. Mirrors the route-complete
      * teardown ordering (deselect first, then leave PLAYING), but leaves
      * `completedRouteForCurrentRunId` null so no record is stored and no modal shows.
+     * Also covers COUNTDOWN, where the run is on screen but has not started yet.
      */
     quitActiveRun(): void {
-        if (this.game.state !== GameState.PLAYING) return;
+        if (this.game.state !== GameState.PLAYING && this.game.state !== GameState.COUNTDOWN) return;
 
+        this.cancelCountdown();
         this.map_controller.selectRoute(null);
         this.game.returnToMenu();
     }
@@ -238,14 +333,20 @@ class GameFlowCoordinator {
 
     private handleStateChange = (event: Event): void => {
         const customEvent = event as CustomEvent<{ from: string; to: string }>;
-        const enteringPlaying = customEvent.detail.from === GameState.MENU && customEvent.detail.to === GameState.PLAYING;
-        const leavingPlaying = customEvent.detail.from === GameState.PLAYING && customEvent.detail.to === GameState.MENU;
-        if (enteringPlaying) {
+        // Focus lands on the countdown so the mobile keyboard is already up by the
+        // time the run actually starts.
+        const enteringRun = customEvent.detail.from === GameState.MENU
+            && customEvent.detail.to === GameState.COUNTDOWN;
+        const returningToMenu = customEvent.detail.to === GameState.MENU;
+
+        if (enteringRun) {
             this.ui_presenter.focusTypingInput();
         }
 
-        if (leavingPlaying) {
+        if (returningToMenu) {
+            this.cancelCountdown();
             this.ui_presenter.blurTypingInput();
+            // No-op when the run was abandoned mid-countdown: there are no stats yet.
             this.finalizeRunStats();
         }
 
@@ -407,6 +508,15 @@ class GameFlowCoordinator {
         this.ui_presenter.setMenuWelcomeState();
     }
 
+    // Zeroed readouts for the countdown: the panel already shows the route's city
+    // count and a stopped clock before the run is live.
+    private resetRunStatsDisplay(): void {
+        const totalCities = this.game.current_route?.cities.length ?? 0;
+
+        this.ui_presenter.renderRunStats(0, totalCities, 0, 0, 0, 100);
+        this.ui_presenter.renderElapsedTime(0);
+    }
+
     private initializeRunStats(routeId: string): void {
         const route = this.game.current_route;
         const totalCities = route?.cities.length ?? 0;
@@ -423,8 +533,7 @@ class GameFlowCoordinator {
             lastTypedLength: 0
         };
 
-        this.ui_presenter.renderRunStats(0, totalCities, 0, 0, 0, 100);
-        this.ui_presenter.renderElapsedTime(0);
+        this.resetRunStatsDisplay();
         this.startRunTimer();
     }
 
@@ -485,7 +594,7 @@ class GameFlowCoordinator {
         const route = this.routes_controller.routes[runStats.routeId];
         const totalCities = runStats.citiesCompleted + runStats.citiesRemaining;
 
-        this.modal_controller.showRouteComplete({
+        this.modal_controller.routeCompleteModal.render({
             routeTitle: this.buildRouteTitle(route?.full_name, route?.route_name, route?.route_number),
             combo: runStats.bestCombo,
             grossWpm: calculatedMetrics.grossWpm,
@@ -501,6 +610,7 @@ class GameFlowCoordinator {
             citiesTotal: totalCities,
             mistakes: runStats.mistakes
         });
+        this.modal_controller.show(ModalState.ROUTE_COMPLETE);
     }
 
     private renderActiveRunStats(runStats: ActiveRunStats): void {

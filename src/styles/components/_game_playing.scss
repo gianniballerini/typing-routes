@@ -386,6 +386,92 @@
             width: fit-content;
         }
 
+    // The 3 · 2 · 1 · ¡Ya! that runs before the clock starts. Sits over the map
+    // but never over the input: pointer-events stay off so the panel's
+    // pointerdown keeps refocusing the hidden typing input underneath.
+    .game-playing__countdown {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        z-index: 4;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        pointer-events: none;
+    }
+
+        .game-playing__countdown-value {
+            font-family: $arimo-font;
+            font-weight: bold;
+            font-size: 120 * $ptr;
+            line-height: 1;
+            // Keeps the number from twitching as the digits change width.
+            font-variant-numeric: tabular-nums;
+
+            color: $white;
+            text-shadow:
+                0 4 * $ptr 0 rgba($black, 0.35),
+                0 8 * $ptr 24 * $ptr rgba($black, 0.55);
+        }
+
+    .game-playing__countdown--go .game-playing__countdown-value {
+        font-size: 90 * $ptr;
+        color: $flag-yellow;
+    }
+
+    .game-playing__countdown--tick {
+        animation: countdown-tick 0.9s ease-out both;
+    }
+
+    .game-playing__countdown--go.game-playing__countdown--tick {
+        animation: countdown-go 0.45s ease-out both;
+    }
+
+// The number lands hard and then drifts out, so the next one has a clean frame
+// to pop into.
+@keyframes countdown-tick {
+    0% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
+
+    18% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+
+    70% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(0.82);
+        opacity: 0;
+    }
+}
+
+@keyframes countdown-go {
+    0% {
+        transform: translate(-50%, -50%) scale(0.7);
+        opacity: 0;
+    }
+
+    35% {
+        transform: translate(-50%, -50%) scale(1.12);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
 @keyframes typing-caret-blink {
     0%, 49% {
         opacity: 1;
@@ -414,6 +500,11 @@
 
 @media (prefers-reduced-motion: reduce) {
     .game-playing__typing--enter {
+        animation: none;
+    }
+
+    .game-playing__countdown--tick,
+    .game-playing__countdown--go.game-playing__countdown--tick {
         animation: none;
     }
 }

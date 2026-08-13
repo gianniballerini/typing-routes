@@ -1,0 +1,39 @@
+.achievements-modal {
+    width: min(560 * $ptr, 100%);
+    font-family: $arimo-font;
+
+    pointer-events: auto;
+}
+
+.achievements-modal__content {
+    @include modal-panel;
+}
+
+.achievements-modal__top {
+    display: flex;
+    flex-direction: row;
+    gap: 16 * $ptr;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.achievements-modal__title {
+    text-align: center;
+    padding: 10 * $ptr 12 * $ptr;
+}
+
+.achievements-modal__title-text {
+    @include modal-title-text;
+}
+
+.achievements-modal__close-button {
+    @include modal-close-button;
+}
+
+.achievements-modal__bottom {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+}

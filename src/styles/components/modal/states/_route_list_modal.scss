@@ -1,0 +1,39 @@
+.route-list-modal {
+    width: min(560 * $ptr, 100%);
+    font-family: $arimo-font;
+
+    pointer-events: auto;
+}
+
+.route-list-modal__content {
+    @include modal-panel;
+}
+
+.route-list-modal__top {
+    display: flex;
+    flex-direction: row;
+    gap: 16 * $ptr;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.route-list-modal__title {
+    text-align: center;
+    padding: 10 * $ptr 12 * $ptr;
+}
+
+.route-list-modal__title-text {
+    @include modal-title-text;
+}
+
+.route-list-modal__close-button {
+    @include modal-close-button;
+}
+
+.route-list-modal__bottom {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+}

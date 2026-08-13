@@ -43,6 +43,19 @@ class Game extends EventTarget {
         this.current_city_index = 0;
     }
 
+    // Shows the run before it counts: the first city target is loaded here so the
+    // panel renders it while the countdown plays. Nothing can be typed yet — every
+    // input path is gated on PLAYING.
+    startCountdown(): void {
+        if (!this.current_route) {
+            console.warn('Cannot start: no route selected');
+            return;
+        }
+
+        if (!this.setState(GameState.COUNTDOWN)) return;
+        this.loadCurrentCityTarget();
+    }
+
     start(): void {
         if (!this.current_route) {
             console.warn('Cannot start: no route selected');
@@ -50,7 +63,9 @@ class Game extends EventTarget {
         }
 
         if (!this.setState(GameState.PLAYING)) return;
-        this.loadCurrentCityTarget();
+        // Already loaded by the countdown; reloading would replay the card's
+        // enter animation on the very first city.
+        if (!this.typing_controller.active) this.loadCurrentCityTarget();
     }
 
     pause(): void {

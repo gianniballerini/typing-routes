@@ -1,3 +1,4 @@
+import { GsapManager } from '../app/GsapManager';
 import type { GameStateValue } from '../GameState';
 import { GameState } from '../GameState';
 import type { Route } from '../Route';
@@ -36,6 +37,12 @@ class GameUiPresenter {
     private closeRequestedHandler: (() => void) | null;
 
     private start_button_el: HTMLElement | null;
+    private menu_welcome_el: HTMLElement | null;
+    private sign_button_els: HTMLElement[];
+    private sign_button_how_to_play_el: HTMLElement | null;
+    private sign_button_route_list_el: HTMLElement | null;
+    private sign_button_achievements_el: HTMLElement | null;
+    private last_rendered_state: GameStateValue | null;
     private typing_el: HTMLElement | null;
     private typing_prev_city_el: HTMLElement | null;
     private typing_next_city_el: HTMLElement | null;
@@ -51,6 +58,8 @@ class GameUiPresenter {
     private accuracy_number_el: HTMLElement | null;
     private timer_number_el: HTMLElement | null;
     private timer_milliseconds_el: HTMLElement | null;
+    private countdown_el: HTMLElement | null;
+    private countdown_value_el: HTMLElement | null;
     private quit_button_el: HTMLElement | null;
     private quitRequestedHandler: (() => void) | null;
     private typingInputHandler: ((inputText: string) => void) | null;
@@ -88,6 +97,12 @@ class GameUiPresenter {
         this.menu_route_image_el = this.menu_route_image_container_el?.querySelector('img') ?? null;
 
         this.start_button_el = document.querySelector('.game-menu__button');
+        this.menu_welcome_el = document.querySelector('.game-menu__welcome');
+        this.sign_button_els = Array.from(document.querySelectorAll('.game-menu__sign-button'));
+        this.last_rendered_state = null;
+        this.sign_button_how_to_play_el = document.querySelector('.game-menu__sign-button--how-to-play');
+        this.sign_button_route_list_el = document.querySelector('.game-menu__sign-button--route-list');
+        this.sign_button_achievements_el = document.querySelector('.game-menu__sign-button--achievements');
         this.typing_el = document.querySelector('.game-playing__typing');
         this.typing_prev_city_el = document.querySelector('.game-playing__typing-prev-city');
         this.typing_next_city_el = document.querySelector('.game-playing__typing-next-city');
@@ -103,6 +118,8 @@ class GameUiPresenter {
         this.accuracy_number_el = document.querySelector('.game-playing__accuracy-number');
         this.timer_number_el = document.querySelector('.game-playing__timer-number');
         this.timer_milliseconds_el = document.querySelector('.game-playing__timer-milliseconds');
+        this.countdown_el = document.querySelector('.game-playing__countdown');
+        this.countdown_value_el = document.querySelector('.game-playing__countdown-value');
         this.quit_button_el = document.querySelector('.game-playing__quit');
         this.quitRequestedHandler = null;
         this.quit_button_el?.addEventListener('click', this.handleQuitButtonClick);
@@ -112,6 +129,18 @@ class GameUiPresenter {
 
     onStartRequested(handler: () => void): void {
         this.start_button_el?.addEventListener('click', handler);
+    }
+
+    onHowToPlayRequested(handler: () => void): void {
+        this.sign_button_how_to_play_el?.addEventListener('click', handler);
+    }
+
+    onRouteListRequested(handler: () => void): void {
+        this.sign_button_route_list_el?.addEventListener('click', handler);
+    }
+
+    onAchievementsRequested(handler: () => void): void {
+        this.sign_button_achievements_el?.addEventListener('click', handler);
     }
 
     onCloseRequested(handler: () => void): void {
@@ -194,6 +223,13 @@ class GameUiPresenter {
 
     renderState(state: GameStateValue): void {
         const showMenu = state === GameState.MENU;
+        // Only a real move back into the menu earns the drop-in: the very first
+        // render is the app booting straight into it, not a view change.
+        const isReturningToMenu = showMenu
+            && this.last_rendered_state !== null
+            && this.last_rendered_state !== GameState.MENU;
+        this.last_rendered_state = state;
+
         this.game_menu_el?.classList.toggle('hidden', !showMenu);
         this.game_playing_el?.classList.toggle('hidden', showMenu);
 
@@ -201,7 +237,42 @@ class GameUiPresenter {
             this.renderTyping('', '');
             this.clearPlayingPanel();
             this.clearKeyboardOpenState();
+            if (isReturningToMenu) this.playMenuSignsDropAnimation();
         }
+    }
+
+    // Hides the signs behind the welcome block ahead of time. Needed when the
+    // menu is uncovered by something outside this class — the loading screen —
+    // since the plates would otherwise be caught sitting in their slots for a
+    // frame before the drop takes them back up.
+    prepareMenuSignsDrop(): void {
+        if (!this.sign_button_els.length) return;
+
+        for (const sign of this.sign_button_els) {
+            sign.classList.add('game-menu__sign-button--dropping');
+        }
+
+        GsapManager.parkMenuSigns({ signs: this.sign_button_els, hideBehind: this.menu_welcome_el });
+    }
+
+    // Measured against the live layout, so it has to run once the menu is
+    // actually on screen — after the un-hide above, or after the loading screen
+    // has lifted away.
+    playMenuSignsDropAnimation(): void {
+        if (!this.sign_button_els.length) return;
+
+        for (const sign of this.sign_button_els) {
+            sign.classList.add('game-menu__sign-button--dropping');
+        }
+
+        GsapManager.playMenuSignsDrop(
+            { signs: this.sign_button_els, hideBehind: this.menu_welcome_el },
+            () => {
+                for (const sign of this.sign_button_els) {
+                    sign.classList.remove('game-menu__sign-button--dropping');
+                }
+            }
+        );
     }
 
     private isTypingInputFocused(): boolean {
@@ -391,6 +462,35 @@ class GameUiPresenter {
         if (this.accuracy_number_el) this.accuracy_number_el.textContent = `${this.formatOneDecimal(accuracy)}%`;
     }
 
+    // One tick of the pre-run countdown. `isGo` marks the final beat, which gets
+    // its own colour instead of the plain number treatment.
+    renderCountdown(label: string, isGo: boolean = false): void {
+        const el = this.countdown_el;
+        if (!el) return;
+
+        if (this.countdown_value_el) this.countdown_value_el.textContent = label;
+
+        el.classList.remove('hidden');
+        el.classList.toggle('game-playing__countdown--go', isGo);
+
+        el.classList.remove('game-playing__countdown--tick');
+        // Forces a reflow so the pop replays on every number instead of only
+        // playing the first time the class lands. The class is dropped here on the
+        // next tick rather than on `animationend`: the number animation ends
+        // faded out, and removing it any earlier would snap the old digit back to
+        // full opacity in the gap before the next one.
+        void el.offsetWidth;
+        el.classList.add('game-playing__countdown--tick');
+    }
+
+    hideCountdown(): void {
+        if (!this.countdown_el) return;
+
+        this.countdown_el.classList.add('hidden');
+        this.countdown_el.classList.remove('game-playing__countdown--tick', 'game-playing__countdown--go');
+        if (this.countdown_value_el) this.countdown_value_el.textContent = '';
+    }
+
     renderElapsedTime(elapsedMs: number): void {
         const safeElapsedMs = Number.isFinite(elapsedMs) ? Math.max(0, elapsedMs) : 0;
 
@@ -451,6 +551,7 @@ class GameUiPresenter {
         if (this.route_name_el) this.route_name_el.textContent = '';
         this.renderRunStats(0, 0, 0, 0, 0, 100);
         this.renderElapsedTime(0);
+        this.hideCountdown();
     }
 
     private renderMenuRouteRecord(record: MenuRouteRecord | null): void {

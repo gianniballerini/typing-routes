@@ -84,6 +84,11 @@ export interface SettingsShape {
     veryShortRouteThresholdKm: number;
     veryShortRouteZoom: number;
   };
+  runCountdown: {
+    seconds: number;
+    goLabel: string;
+    goHoldMs: number;
+  };
   progressMarker: {
     iconId: string;
     size: number;

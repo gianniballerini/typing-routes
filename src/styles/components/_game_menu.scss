@@ -28,9 +28,129 @@
         padding: 10 * $ptr;
 
         @include respond-to($medium-breakpoint) {
+            padding: 30 * $ptr 50 * $ptr;
             justify-content: flex-start;
         }
     }
+
+    .game-menu__top-left {
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+
+        row-gap: 30 * $ptr;
+
+        @include respond-to($medium-breakpoint) {
+        }
+    }
+
+        .game-menu__sign-button {
+            pointer-events: auto;
+            width: 300 * $ptr;
+            height: 40 * $ptr;
+
+            background-color: $signs-green;
+
+            color: $white;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            text-transform: uppercase;
+            font-size: 16 * $ptr;
+
+            border-radius: 5 * $ptr;
+
+            position: relative;
+            // Under the welcome block, which is where the drop-in animation
+            // parks the plates before they fall.
+            z-index: 1;
+
+            // The pivot sits below the plate, so the tilt reads as a sign
+            // swinging on its post instead of spinning around its middle.
+            transform-origin: 50% 130%;
+            will-change: transform;
+
+            // Leaving hover: a plain ease-out, so the plate settles back
+            // without a second bounce. Entering hover overrides this below.
+            transition:
+                transform 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+                box-shadow 0.3s ease-out,
+                filter 0.3s ease-out;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                width: calc(100% - 8 * $ptr);
+                height: calc(100% - 8 * $ptr);
+
+                border-radius: 5 * $ptr;
+
+                transform: translate(4 * $ptr, 4 * $ptr);
+
+                border: 2 * $ptr solid $white;
+
+                // Slower and slightly delayed against the plate, so the painted
+                // border drags a frame behind it and the sign gains some depth.
+                transition: transform 0.44s cubic-bezier(0.22, 1.2, 0.36, 1) 0.03s;
+            }
+
+            &:hover {
+                // Overshooting back-ease on the way in: the plate goes a touch
+                // past its mark and settles.
+                transition:
+                    transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    box-shadow 0.42s ease-out,
+                    filter 0.2s ease-out;
+
+                transform: translateY(-3 * $ptr) rotate(-1.4deg);
+
+                box-shadow: 0 6 * $ptr 14 * $ptr rgba(0, 0, 0, 0.3);
+                filter: brightness(1.06);
+
+                &::before {
+                    transform: translate(4.5 * $ptr, 5 * $ptr) rotate(0.5deg);
+                }
+            }
+
+            &:active {
+                // Pressed: drop the lift, flatten the tilt, and snap there.
+                transition: transform 0.09s ease-out;
+                transform: translateY(0) rotate(-0.3deg) scale(0.99);
+            }
+        }
+
+        // While GSAP drives the drop-in it writes transform every frame, and the
+        // hover transition would only lag a step behind it. Hover is also off
+        // until the plate has landed, so nothing tilts mid-fall.
+        .game-menu__sign-button--dropping {
+            transition: none;
+            pointer-events: none;
+        }
+
+        // Each plate is hung by hand: alternating angles keep the stack from
+        // tilting in lockstep on hover.
+        .game-menu__sign-button--route-list:hover {
+            transform: translateY(-3 * $ptr) rotate(1.2deg);
+
+            &::before {
+                transform: translate(3.5 * $ptr, 5 * $ptr) rotate(-0.45deg);
+            }
+        }
+
+        .game-menu__sign-button--achievements:hover {
+            transform: translateY(-4 * $ptr) rotate(-0.9deg);
+
+            &::before {
+                transform: translate(4.5 * $ptr, 4.5 * $ptr) rotate(0.35deg);
+            }
+        }
 
         .game-menu__welcome {
             display: flex;
@@ -40,6 +160,8 @@
             text-align: center;
 
             position: relative;
+            // Covers the sign plates while they are parked behind it.
+            z-index: 2;
 
             @include respond-to($medium-breakpoint) {
                 max-width: 400 * $ptr;
@@ -471,5 +593,21 @@
     .game-menu__info-card--slap,
     .game-menu__info-card--lift {
         animation: none;
+    }
+
+    // Keep the hover feedback, drop the movement.
+    .game-menu__sign-button,
+    .game-menu__sign-button::before {
+        transition: none;
+    }
+
+    .game-menu__sign-button:hover,
+    .game-menu__sign-button--route-list:hover,
+    .game-menu__sign-button--achievements:hover {
+        transform: none;
+
+        &::before {
+            transform: translate(4 * $ptr, 4 * $ptr);
+        }
     }
 }

@@ -1,0 +1,297 @@
+.how-to-play-modal {
+    // Flex column, so the panel below is a flex item that can actually shrink
+    // to this cap — a percentage max-height on it would resolve against an
+    // auto height and be ignored, letting the manual grow past the viewport.
+    display: flex;
+    flex-direction: column;
+
+    width: min(640 * $ptr, 100%);
+    min-height: 0;
+    // 90% of the viewport, but never taller than what is left once the
+    // .modal__content padding is taken out
+    max-height: min(90vh, calc(100vh - 48 * $ptr));
+    max-height: min(90dvh, calc(100dvh - 48 * $ptr));
+
+    font-family: $arimo-font;
+
+    pointer-events: auto;
+}
+
+.how-to-play-modal__content {
+    @include modal-panel;
+
+    min-height: 0;
+    overflow: hidden;
+}
+
+.how-to-play-modal__top {
+    display: flex;
+    flex-direction: row;
+    gap: 16 * $ptr;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.how-to-play-modal__title {
+    text-align: center;
+    padding: 10 * $ptr 12 * $ptr;
+}
+
+.how-to-play-modal__title-text {
+    @include modal-title-text;
+}
+
+.how-to-play-modal__close-button {
+    @include modal-close-button;
+}
+
+.how-to-play-modal__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 20 * $ptr;
+
+    width: 100%;
+
+    // The manual is the one modal state that can outgrow the viewport, so the
+    // body scrolls inside the panel instead of pushing the sign off screen.
+    // min-height: 0 — without it the flex item refuses to shrink below its
+    // content and overflow-y never kicks in.
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    // side room for the tape strips, which stick out past the photos, plus a
+    // little extra on the right so the scrollbar never sits on the text
+    padding: 0 22 * $ptr 0 16 * $ptr;
+
+    // a lane-marked scrollbar: white road line running down a dark shoulder
+    scrollbar-width: thin;
+    scrollbar-color: rgba($white, 0.75) rgba($black, 0.18);
+
+    &::-webkit-scrollbar {
+        width: 12 * $ptr;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: rgba($black, 0.18);
+        border-radius: 10 * $ptr;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10 * $ptr;
+
+        // dashes down the middle of the thumb, like the centre line of a road
+        background-color: rgba($white, 0.75);
+        background-image: repeating-linear-gradient(
+            to bottom,
+            transparent 0 6 * $ptr,
+            rgba($signs-green, 0.9) 6 * $ptr 14 * $ptr
+        );
+        background-clip: content-box;
+
+        border: 3 * $ptr solid transparent;
+
+        &:hover {
+            background-color: $white;
+        }
+    }
+}
+
+.how-to-play-modal__intro {
+    margin: 0;
+
+    font-size: 16 * $ptr;
+    line-height: 1.4;
+
+    opacity: 0.9;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 18 * $ptr;
+    }
+}
+
+.how-to-play-modal__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 22 * $ptr;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.how-to-play-modal__step {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14 * $ptr;
+
+    @include respond-to($medium-breakpoint) {
+        gap: 18 * $ptr;
+    }
+
+    // Every other step leans the other way, so the strip of photos reads as
+    // snapshots stuck onto the sign rather than a tidy column of thumbnails.
+    &:nth-child(even) .how-to-play-modal__step-photo {
+        transform: rotate(2deg);
+
+        &::before {
+            top: auto;
+            bottom: -7 * $ptr;
+            left: -12 * $ptr;
+        }
+
+        &::after {
+            top: -7 * $ptr;
+            right: -12 * $ptr;
+            bottom: auto;
+        }
+    }
+}
+
+// a snapshot taped onto the sign
+.how-to-play-modal__step-photo {
+    position: relative;
+    flex-shrink: 0;
+
+    width: 96 * $ptr;
+    height: 72 * $ptr;
+
+    padding: 5 * $ptr;
+
+    @include respond-to($medium-breakpoint) {
+        width: 120 * $ptr;
+        height: 90 * $ptr;
+    }
+
+    background-color: rgba($old-paper-light, 0.92);
+    box-shadow: 0 3 * $ptr 6 * $ptr rgba($black, 0.35);
+
+    transform: rotate(-2.5deg);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        filter: sepia(0.35) contrast(0.95);
+    }
+
+    // the two strips of tape holding it down
+    &::before, &::after {
+        content: '';
+
+        position: absolute;
+
+        width: 34 * $ptr;
+        height: 14 * $ptr;
+
+        background-color: rgba($white, 0.4);
+        box-shadow: 0 1 * $ptr 2 * $ptr rgba($black, 0.15);
+
+        transform: rotate(-24deg);
+    }
+
+    &::before {
+        top: -7 * $ptr;
+        left: -12 * $ptr;
+    }
+
+    &::after {
+        right: -12 * $ptr;
+        bottom: -7 * $ptr;
+    }
+}
+
+.how-to-play-modal__step-number {
+    position: absolute;
+    right: -10 * $ptr;
+    bottom: -12 * $ptr;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32 * $ptr;
+    height: 32 * $ptr;
+
+    border-radius: 50%;
+    border: 2 * $ptr solid $white;
+
+    background-color: $signs-green;
+    box-shadow: 0 2 * $ptr 4 * $ptr rgba($black, 0.3);
+
+    font-size: 18 * $ptr;
+    line-height: 1;
+}
+
+.how-to-play-modal__step-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4 * $ptr;
+}
+
+.how-to-play-modal__step-title {
+    font-size: 19 * $ptr;
+    line-height: 1;
+    text-transform: uppercase;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 22 * $ptr;
+    }
+}
+
+.how-to-play-modal__step-description {
+    margin: 0;
+
+    font-size: 15 * $ptr;
+    line-height: 1.35;
+
+    opacity: 0.9;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 16 * $ptr;
+    }
+}
+
+.how-to-play-modal__notes {
+    display: flex;
+    flex-direction: column;
+    gap: 8 * $ptr;
+
+    padding-top: 16 * $ptr;
+
+    border-top: 2 * $ptr solid rgba($white, 0.35);
+}
+
+.how-to-play-modal__notes-title {
+    font-size: 20 * $ptr;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.how-to-play-modal__note-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6 * $ptr;
+
+    margin: 0;
+    padding-left: 20 * $ptr;
+}
+
+.how-to-play-modal__note {
+    font-size: 15 * $ptr;
+    line-height: 1.35;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 16 * $ptr;
+    }
+
+    opacity: 0.9;
+
+    &::marker {
+        color: rgba($white, 0.6);
+    }
+}

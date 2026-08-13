@@ -4,11 +4,13 @@ import { GameState } from '../GameState';
 class KeyboardInputCoordinator {
     private game: Game;
     private onQuitRun: () => void;
+    private onSkipCountdown: () => void;
     private bound: boolean;
 
-    constructor(game: Game, onQuitRun: () => void) {
+    constructor(game: Game, onQuitRun: () => void, onSkipCountdown: () => void) {
         this.game = game;
         this.onQuitRun = onQuitRun;
+        this.onSkipCountdown = onSkipCountdown;
         this.bound = false;
     }
 
@@ -25,10 +27,18 @@ class KeyboardInputCoordinator {
     }
 
     private handleKeydown = (event: KeyboardEvent): void => {
+        // Ahead of the editable-element guard below: during the countdown the focus
+        // already sits in the hidden typing input.
+        if (this.game.state === GameState.COUNTDOWN && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            this.onSkipCountdown();
+            return;
+        }
+
         if (event.key === 'Escape') {
             // During a run the route is still selected, so quitting has to win over
             // the deselect branch or Escape would need two presses to leave the run.
-            if (this.game.state === GameState.PLAYING) {
+            if (this.game.state === GameState.PLAYING || this.game.state === GameState.COUNTDOWN) {
                 this.onQuitRun();
                 return;
             }

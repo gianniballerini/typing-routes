@@ -98,6 +98,13 @@ class Settings
       veryShortRouteZoom: 30
     };
 
+    // Warm-up beat before the clock starts, so the first city can be read.
+    this.runCountdown = {
+      seconds: 3,
+      goLabel: '¡Ya!',
+      goHoldMs: 600
+    };
+
     this.progressMarker = {
       iconId: 'progress-marker-car',
       // Car length in px (the sprite points north and is rotated by the route heading).

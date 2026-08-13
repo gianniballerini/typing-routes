@@ -23,6 +23,8 @@ class LoadingManager {
     private exitStarted = false;
     private introFinished = false;
     private progressFinished = false;
+    private finished = false;
+    private finishedHandler: (() => void) | null = null;
 
     private readonly handleStartClick = (): void => {
         if (!this.readyToStart || this.exitStarted) return;
@@ -138,7 +140,17 @@ class LoadingManager {
         }, () => this.finishLoadingScreen());
     }
 
+    // The game layer is uncovered by now, so whoever registers here can measure
+    // and animate against a laid-out menu.
+    onFinished(handler: () => void): void {
+        this.finishedHandler = handler;
+        if (this.finished) handler();
+    }
+
     private finishLoadingScreen(): void {
+        if (this.finished) return;
+        this.finished = true;
+
         this.loadingElement?.removeEventListener('click', this.handleStartClick);
         this.homeElement?.classList.remove('home--loading');
 
@@ -146,6 +158,8 @@ class LoadingManager {
             this.loadingElement.classList.add('hidden');
             this.loadingElement.style.display = 'none';
         }
+
+        this.finishedHandler?.();
     }
 }
 export { LoadingManager };

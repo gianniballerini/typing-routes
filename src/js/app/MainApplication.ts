@@ -62,11 +62,18 @@ class MainApplication {
         );
         this.keyboard_input_coordinator = new KeyboardInputCoordinator(
             this.game,
-            () => this.game_flow_coordinator.quitActiveRun()
+            () => this.game_flow_coordinator.quitActiveRun(),
+            () => this.game_flow_coordinator.skipCountdown()
         );
 
         this.game_flow_coordinator.init();
         this.keyboard_input_coordinator.bind();
+
+        // The menu sits behind the loading screen at this point, so the signs are
+        // parked out of sight now and only dropped once the loader has lifted —
+        // parking any later and they would flash in their slots first.
+        this.ui_presenter.prepareMenuSignsDrop();
+        this.loading_manager.onFinished(() => this.ui_presenter.playMenuSignsDropAnimation());
 
         if (import.meta.env.DEV) {
             new DebugPaneController(this.map_controller).init();
