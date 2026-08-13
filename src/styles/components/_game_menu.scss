@@ -501,6 +501,45 @@
                 overscroll-behavior: contain;
 
                 padding-bottom: 10 * $ptr;
+                // room for the ruler, so the records never run under it
+                padding-right: 12 * $ptr;
+
+                // A margin ruled onto the sheet rather than a browser scrollbar:
+                // a faint pencil line for the track and a soft ink bar for the
+                // thumb, both in the parchment's own ink colour.
+                scrollbar-width: thin;
+                scrollbar-color: rgba($old-paper-ink, 0.45) transparent;
+
+                &::-webkit-scrollbar {
+                    width: 10 * $ptr;
+                }
+
+                &::-webkit-scrollbar-track {
+                    background-color: transparent;
+                    // the ruled line itself: 1px of ink centred in the gutter
+                    background-image: linear-gradient(
+                        to right,
+                        transparent calc(50% - 1 * $ptr),
+                        rgba($old-paper-ink, 0.18) calc(50% - 1 * $ptr),
+                        rgba($old-paper-ink, 0.18) calc(50% + 1 * $ptr),
+                        transparent calc(50% + 1 * $ptr)
+                    );
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background-color: rgba($old-paper-ink, 0.45);
+                    border-radius: 10 * $ptr;
+
+                    // transparent border + content-box clip keeps the bar
+                    // narrower than the gutter, so the ruled line stays visible
+                    // on either side of it
+                    border: 3 * $ptr solid transparent;
+                    background-clip: content-box;
+
+                    &:hover {
+                        background-color: rgba($old-paper-ink, 0.7);
+                    }
+                }
             }
 
             // stamped onto the sheet: ink border, washed parchment fill
