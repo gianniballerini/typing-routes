@@ -46,6 +46,11 @@
     }
 
         .game-menu__sign-button {
+            // Each plate is hung at its own angle; the keyboard-selected pose and
+            // its swing-in both read from these, so they stay in step with hover.
+            --sign-lift: #{-3 * $ptr};
+            --sign-tilt: -1.4deg;
+
             pointer-events: auto;
             width: 300 * $ptr;
             height: 40 * $ptr;
@@ -119,10 +124,39 @@
                 }
             }
 
+            // Arrow-key selection: the plate swings up into the same pose hover
+            // uses, with one overshoot so the cursor move is visible.
+            &:focus-visible {
+                transform: translateY(var(--sign-lift)) rotate(var(--sign-tilt));
+
+                box-shadow: 0 6 * $ptr 14 * $ptr rgba(0, 0, 0, 0.3);
+                filter: brightness(1.06);
+
+                animation: game-menu-sign-select 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+                &::before {
+                    transform: translate(4.5 * $ptr, 5 * $ptr) rotate(0.5deg);
+                }
+            }
+
             &:active {
                 // Pressed: drop the lift, flatten the tilt, and snap there.
                 transition: transform 0.09s ease-out;
                 transform: translateY(0) rotate(-0.3deg) scale(0.99);
+            }
+        }
+
+        @keyframes game-menu-sign-select {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+
+            45% {
+                transform: translateY(calc(var(--sign-lift) * 2.1)) rotate(calc(var(--sign-tilt) * 1.9)) scale(1.035);
+            }
+
+            100% {
+                transform: translateY(var(--sign-lift)) rotate(var(--sign-tilt)) scale(1);
             }
         }
 
@@ -136,19 +170,28 @@
 
         // Each plate is hung by hand: alternating angles keep the stack from
         // tilting in lockstep on hover.
-        .game-menu__sign-button--route-list:hover {
-            transform: translateY(-3 * $ptr) rotate(1.2deg);
+        .game-menu__sign-button--route-list {
+            --sign-tilt: 1.2deg;
 
-            &::before {
-                transform: translate(3.5 * $ptr, 5 * $ptr) rotate(-0.45deg);
+            &:hover, &:focus-visible {
+                transform: translateY(-3 * $ptr) rotate(1.2deg);
+
+                &::before {
+                    transform: translate(3.5 * $ptr, 5 * $ptr) rotate(-0.45deg);
+                }
             }
         }
 
-        .game-menu__sign-button--achievements:hover {
-            transform: translateY(-4 * $ptr) rotate(-0.9deg);
+        .game-menu__sign-button--achievements {
+            --sign-lift: #{-4 * $ptr};
+            --sign-tilt: -0.9deg;
 
-            &::before {
-                transform: translate(4.5 * $ptr, 4.5 * $ptr) rotate(0.35deg);
+            &:hover, &:focus-visible {
+                transform: translateY(-4 * $ptr) rotate(-0.9deg);
+
+                &::before {
+                    transform: translate(4.5 * $ptr, 4.5 * $ptr) rotate(0.35deg);
+                }
             }
         }
 
@@ -432,6 +475,18 @@
                     color: $old-paper-ink-soft;
                 }
 
+                // Ink-toned empties, since the card is paper rather than the
+                // dark modal panel the stars default to.
+                .game-menu__route-stars {
+                    justify-content: center;
+
+                    padding: 2 * $ptr 0;
+
+                    .stars__star {
+                        color: rgba($old-paper-ink, 0.22);
+                    }
+                }
+
                 .game-menu__route-record {
                     display: flex;
                     flex-direction: column;
@@ -571,6 +626,28 @@
                     background-color: rgba($old-paper-stain, 0.35);
                     border-color: $old-paper-ink;
                 }
+
+                // Arrow-key selection: a short press-and-release of the stamp.
+                &:focus-visible {
+                    background-color: rgba($old-paper-stain, 0.35);
+                    border-color: $old-paper-ink;
+
+                    animation: game-menu-start-select 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
+                }
+            }
+
+            @keyframes game-menu-start-select {
+                0% {
+                    transform: rotate(-1deg) scale(1);
+                }
+
+                45% {
+                    transform: rotate(0.6deg) scale(1.07);
+                }
+
+                100% {
+                    transform: rotate(-1deg) scale(1);
+                }
             }
 
     .game-menu__bottom {
@@ -641,12 +718,20 @@
     }
 
     .game-menu__sign-button:hover,
+    .game-menu__sign-button:focus-visible,
     .game-menu__sign-button--route-list:hover,
-    .game-menu__sign-button--achievements:hover {
+    .game-menu__sign-button--route-list:focus-visible,
+    .game-menu__sign-button--achievements:hover,
+    .game-menu__sign-button--achievements:focus-visible {
         transform: none;
+        animation: none;
 
         &::before {
             transform: translate(4 * $ptr, 4 * $ptr);
         }
+    }
+
+    .game-menu__button:focus-visible {
+        animation: none;
     }
 }

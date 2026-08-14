@@ -35,7 +35,12 @@ class Settings
     this.routeLine = {
       colors: {
         default: '#cccccc',
+        // Completed with no stars earned yet.
         visited: '#FFB81C',
+        // Gold ramp by star rating (see Settings.starRating).
+        stars1: '#E8A317',
+        stars2: '#FFC93C',
+        stars3: '#FFE27A',
         hovered: '#777777',
         selected: '#6CACE4'
       },
@@ -96,6 +101,15 @@ class Settings
       flyToZoom: 6,
       veryShortRouteThresholdKm: 120,
       veryShortRouteZoom: 30
+    };
+
+    // Three axes, one star each, awarded in half-star steps: a route is worth
+    // 0 to 3 stars. Scored against the stored best record, never a single run.
+    this.starRating = {
+      maxStars: 3,
+      accuracy: { full: 100, half: 97 },
+      mistakes: { full: 0, half: 2 },
+      netWpm: { full: 50, half: 30 }
     };
 
     // Warm-up beat before the clock starts, so the first city can be read.

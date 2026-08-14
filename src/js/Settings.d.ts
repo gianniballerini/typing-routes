@@ -26,6 +26,9 @@ export interface SettingsShape {
     colors: {
       default: string;
       visited: string;
+      stars1: string;
+      stars2: string;
+      stars3: string;
       hovered: string;
       selected: string;
     };
@@ -83,6 +86,12 @@ export interface SettingsShape {
     flyToZoom: number;
     veryShortRouteThresholdKm: number;
     veryShortRouteZoom: number;
+  };
+  starRating: {
+    maxStars: number;
+    accuracy: { full: number; half: number };
+    mistakes: { full: number; half: number };
+    netWpm: { full: number; half: number };
   };
   runCountdown: {
     seconds: number;

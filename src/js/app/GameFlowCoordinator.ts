@@ -5,10 +5,12 @@ import { MapController } from '../MapController';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
+import type { RouteListRow } from '../ui/modals/RouteListModal';
 import { ModalController, ModalState } from '../ui/ModalController';
 import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
+import { calculateStarRating } from '../utils/StarRating';
 import { UserStatsStorage } from './UserStatsStorage';
 
 interface ActiveRunStats {
@@ -83,6 +85,7 @@ class GameFlowCoordinator {
         this.ui_presenter.onHowToPlayRequested(this.handleHowToPlayRequested);
         this.ui_presenter.onRouteListRequested(this.handleRouteListRequested);
         this.ui_presenter.onAchievementsRequested(this.handleAchievementsRequested);
+        this.modal_controller.routeListModal.onRouteActivated(this.handleRouteListActivated);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
 
         this.game.addEventListener('city-visited', this.handleCityVisited as EventListener);
@@ -98,19 +101,23 @@ class GameFlowCoordinator {
     }
 
     private handleStartRequested = (): void => {
-        if (this.game.state !== GameState.MENU) return;
-
         const selectedRouteId = this.map_controller.getSelectedRouteId();
         if (!selectedRouteId) {
             console.warn('Select a route before starting the game');
             return;
         }
 
-        const selectedRoute = this.routes_controller.routes[selectedRouteId] ?? null;
+        this.startRunForRoute(selectedRouteId);
+    };
 
-        this.game.selectRoute(selectedRouteId);
-        this.initializeRouteSnappingData(selectedRouteId);
-        this.pendingRunRouteId = selectedRouteId;
+    private startRunForRoute(routeId: string): void {
+        if (this.game.state !== GameState.MENU) return;
+
+        const selectedRoute = this.routes_controller.routes[routeId] ?? null;
+
+        this.game.selectRoute(routeId);
+        this.initializeRouteSnappingData(routeId);
+        this.pendingRunRouteId = routeId;
         this.resetRunStatsDisplay();
 
         const initialRunCoordinate = this.getInitialRunCoordinate();
@@ -130,7 +137,7 @@ class GameFlowCoordinator {
         }
 
         this.startCountdown();
-    };
+    }
 
     private startCountdown(): void {
         this.clearCountdownTimers();
@@ -205,8 +212,52 @@ class GameFlowCoordinator {
     };
 
     private handleRouteListRequested = (): void => {
+        this.modal_controller.routeListModal.render(
+            this.buildRouteListRows(),
+            this.map_controller.getSelectedRouteId()
+        );
         this.modal_controller.show(ModalState.ROUTE_LIST);
     };
+
+    // Picking a course starts the run right away. Selecting on the map first keeps
+    // the highlight, the menu card and the camera on the same path the map click
+    // takes; its fly-to is immediately superseded by the one in startRunForRoute.
+    private handleRouteListActivated = (routeId: string): void => {
+        if (this.game.state !== GameState.MENU) return;
+
+        this.modal_controller.hide();
+        this.map_controller.selectRoute(routeId);
+        this.startRunForRoute(routeId);
+    };
+
+    private buildRouteListRows(): RouteListRow[] {
+        return Object.values(this.routes_controller.routes)
+            // A route with no cities has nothing to type, and Enter here starts the
+            // run straight away, so it never belongs in the picker.
+            .filter((route) => route.cities.length > 0)
+            .sort((a, b) => this.toRouteNumber(a.route_number) - this.toRouteNumber(b.route_number))
+            .map((route) => {
+                const record = this.user_stats.getRouteRecord(route.route_id);
+                const completed = this.user_stats.hasCompletedRoute(route.route_id);
+
+                return {
+                    routeId: route.route_id,
+                    routeLabel: `RN ${route.route_number.trim().replace(/^0+(?!$)/, '')}`,
+                    routeName: this.buildRouteTitle(route.full_name, route.route_name, route.route_number),
+                    citiesCount: route.cities.length,
+                    lengthKm: route.length_km,
+                    imageUrl: route.image_url,
+                    completed,
+                    stars: calculateStarRating(record, completed)?.stars ?? null,
+                    record
+                };
+            });
+    }
+
+    private toRouteNumber(routeNumber: string): number {
+        const parsed = Number.parseInt(routeNumber, 10);
+        return Number.isFinite(parsed) ? parsed : Number.MAX_SAFE_INTEGER;
+    }
 
     private handleAchievementsRequested = (): void => {
         this.modal_controller.show(ModalState.ACHIEVEMENTS);
@@ -259,7 +310,7 @@ class GameFlowCoordinator {
 
         if (selectedRoute && routeId) {
             const routeRecord = this.user_stats.getRouteRecord(routeId);
-            this.ui_presenter.setMenuRoutePreview(selectedRoute, routeRecord);
+            this.ui_presenter.setMenuRoutePreview(selectedRoute, routeRecord, this.getRouteStars(routeId));
 
             const geometry = this.routes_controller.getGeometryById(routeId);
             const routeStartCoordinate = this.getRouteStartCoordinate(geometry);
@@ -501,11 +552,18 @@ class GameFlowCoordinator {
 
         if (selectedRoute && selectedRouteId) {
             const routeRecord = this.user_stats.getRouteRecord(selectedRouteId);
-            this.ui_presenter.setMenuRoutePreview(selectedRoute, routeRecord);
+            this.ui_presenter.setMenuRoutePreview(selectedRoute, routeRecord, this.getRouteStars(selectedRouteId));
             return;
         }
 
         this.ui_presenter.setMenuWelcomeState();
+    }
+
+    private getRouteStars(routeId: string): number | null {
+        return calculateStarRating(
+            this.user_stats.getRouteRecord(routeId),
+            this.user_stats.hasCompletedRoute(routeId)
+        )?.stars ?? null;
     }
 
     // Zeroed readouts for the countdown: the panel already shows the route's city
@@ -594,8 +652,16 @@ class GameFlowCoordinator {
         const route = this.routes_controller.routes[runStats.routeId];
         const totalCities = runStats.citiesCompleted + runStats.citiesRemaining;
 
+        // Rated off the stored best, not this run, so a slower replay never looks
+        // like it took stars away.
+        const stars = this.getRouteStars(runStats.routeId) ?? 0;
+
+        if (route) route.stars = stars;
+        this.setRouteVisited(runStats.routeId, true);
+
         this.modal_controller.routeCompleteModal.render({
             routeTitle: this.buildRouteTitle(route?.full_name, route?.route_name, route?.route_number),
+            stars,
             combo: runStats.bestCombo,
             grossWpm: calculatedMetrics.grossWpm,
             netWpm: calculatedMetrics.netWpm,

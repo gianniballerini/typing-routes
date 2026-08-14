@@ -214,6 +214,11 @@ class MapController {
                         'case',
                         ['boolean', ['feature-state', 'selected'], false], Settings.routeLine.colors.selected,
                         ['boolean', ['feature-state', 'hovered'], false], Settings.routeLine.colors.hovered,
+                        // Gold gets brighter with the star rating; `visited` covers
+                        // routes completed without earning a star yet.
+                        ['>=', ['get', 'stars'], 3], Settings.routeLine.colors.stars3,
+                        ['>=', ['get', 'stars'], 2], Settings.routeLine.colors.stars2,
+                        ['>', ['get', 'stars'], 0], Settings.routeLine.colors.stars1,
                         ['get', 'visited'], Settings.routeLine.colors.visited,
                         Settings.routeLine.colors.default
                     ],

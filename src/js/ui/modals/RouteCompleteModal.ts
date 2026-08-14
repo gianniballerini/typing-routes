@@ -1,8 +1,10 @@
 import { copyElementImageToClipboard, shareElementAsImage } from '../../utils/ShareUtils';
+import { renderStars } from '../StarsView';
 import { BaseModal } from './BaseModal';
 
 interface RouteCompleteModalPayload {
 	routeTitle: string;
+	stars: number;
 	combo: number;
 	grossWpm: number;
 	netWpm: number;
@@ -21,6 +23,8 @@ interface RouteCompleteModalPayload {
 class RouteCompleteModal extends BaseModal {
 	private route_name: string;
 	private titleEl: HTMLElement | null;
+	private starsEl: HTMLElement | null;
+	private ratingLabelEl: HTMLElement | null;
 	private comboEl: HTMLElement | null;
 	private grossWpmEl: HTMLElement | null;
 	private netWpmEl: HTMLElement | null;
@@ -38,6 +42,8 @@ class RouteCompleteModal extends BaseModal {
 		this.route_name = '';
 
 		this.titleEl = document.querySelector('.route-complete-modal__title-text');
+		this.starsEl = document.querySelector('.route-complete-modal__stars');
+		this.ratingLabelEl = document.querySelector('.route-complete-modal__rating-label');
 		this.comboEl = document.querySelector('.route-complete-modal__stat-value--combo');
 		this.grossWpmEl = document.querySelector('.route-complete-modal__stat-value--gross-wpm');
 		this.netWpmEl = document.querySelector('.route-complete-modal__stat-value--net-wpm');
@@ -71,6 +77,12 @@ class RouteCompleteModal extends BaseModal {
 		const safeMistakes = this.toRoundedNonNegativeInteger(payload.mistakes);
 
 		if (this.titleEl) this.titleEl.textContent = title;
+
+		renderStars(this.starsEl, payload.stars, { animate: true });
+		if (this.ratingLabelEl) {
+			this.ratingLabelEl.textContent = this.buildRatingLabel(payload.stars);
+		}
+
 		if (this.comboEl) this.comboEl.textContent = comboLabel;
 		if (this.grossWpmEl) this.grossWpmEl.textContent = grossWpmLabel;
 		if (this.netWpmEl) this.netWpmEl.textContent = netWpmLabel;
@@ -113,6 +125,15 @@ class RouteCompleteModal extends BaseModal {
 				}
 			}, 2000);
 		}
+	}
+
+	// The stars come from the stored best record, so a slower repeat run keeps the
+	// rating it already earned instead of appearing to lose stars.
+	private buildRatingLabel(stars: number): string {
+		if (stars >= 3) return '¡Perfecto!';
+		if (stars >= 2) return '¡Muy bien!';
+		if (stars >= 1) return 'Bien, se puede mejorar';
+		return 'Sin estrellas todavía';
 	}
 
 	private toRoundedNonNegativeInteger(value: number): number {

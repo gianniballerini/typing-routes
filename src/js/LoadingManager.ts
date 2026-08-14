@@ -31,6 +31,16 @@ class LoadingManager {
         this.playExitAnimation();
     };
 
+    // Bound on the window: the loading screen is not focusable, so there is no
+    // element for the key to land on.
+    private readonly handleStartKeydown = (event: KeyboardEvent): void => {
+        if (event.key !== 'Enter') return;
+        if (!this.readyToStart || this.exitStarted) return;
+
+        event.preventDefault();
+        this.playExitAnimation();
+    };
+
     constructor() {
         this.loadingElement = document.querySelector('.loading-screen');
         this.contentElement = document.querySelector('.loading-screen__content');
@@ -120,6 +130,7 @@ class LoadingManager {
         this.ctaElement.classList.add('loading-screen__cta--visible');
         this.ctaElement.setAttribute('aria-hidden', 'false');
         this.loadingElement.addEventListener('click', this.handleStartClick);
+        window.addEventListener('keydown', this.handleStartKeydown);
 
         GsapManager.disappearWithSwell(this.progressElement as HTMLElement);
     }
@@ -130,6 +141,7 @@ class LoadingManager {
         this.exitStarted = true;
         this.readyToStart = false;
         this.loadingElement.removeEventListener('click', this.handleStartClick);
+        window.removeEventListener('keydown', this.handleStartKeydown);
 
         this.loadingElement.classList.add('loading-screen--exiting');
 
@@ -152,6 +164,7 @@ class LoadingManager {
         this.finished = true;
 
         this.loadingElement?.removeEventListener('click', this.handleStartClick);
+        window.removeEventListener('keydown', this.handleStartKeydown);
         this.homeElement?.classList.remove('home--loading');
 
         if (this.loadingElement) {

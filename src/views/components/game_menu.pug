@@ -7,11 +7,11 @@
                     .game-menu__welcome-title--1 Tipe
                     .game-menu__welcome-title--2 A
                     .game-menu__welcome-title--1 ndo
-            .button.game-menu__sign-button.game-menu__sign-button--how-to-play
+            .button.game-menu__sign-button.game-menu__sign-button--how-to-play(role="button" tabindex="0")
                 | Como Jugar
-            .button.game-menu__sign-button.game-menu__sign-button--route-list
+            .button.game-menu__sign-button.game-menu__sign-button--route-list(role="button" tabindex="0")
                 | Lista de Rutas
-            .button.game-menu__sign-button.game-menu__sign-button--achievements
+            .button.game-menu__sign-button.game-menu__sign-button--achievements(role="button" tabindex="0")
                 | Trofeos
         .game-menu__info-card.old-paper.old-paper--deckled.old-paper--map.hidden
             .button.game-menu__info-card-close
@@ -30,6 +30,7 @@
 
             .game-menu__info-card-bottom
                 .game-menu__route-description
+                .stars.stars--md.game-menu__route-stars
                 .game-menu__route-record
                     .game-menu__route-record-values
                         span.game-menu__route-record-title Records
@@ -51,6 +52,6 @@
                         .game-menu__route-record-group
                             span Errores
                             span.game-menu__route-record-mistakes --
-                .button.game-menu__button
+                .button.game-menu__button(role="button" tabindex="0")
                     | Empezar
     .game-menu__bottom

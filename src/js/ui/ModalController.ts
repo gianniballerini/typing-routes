@@ -52,10 +52,13 @@ class ModalController {
 			modal.hide();
 		}
 
+		// The shell is uncovered first so the state's own show() has a laid-out
+		// element to move focus onto.
+		this.rootEl?.classList.remove('hidden');
+
 		this.modalsByState[state].show();
 		this.currentState = state;
 
-		this.rootEl?.classList.remove('hidden');
 		this.bindEscapeKey();
 	}
 

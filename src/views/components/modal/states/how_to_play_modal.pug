@@ -3,7 +3,7 @@
         .how-to-play-modal__top
             .how-to-play-modal__title
                 span.how-to-play-modal__title-text Cómo jugar
-            .button.how-to-play-modal__close-button
+            .button.how-to-play-modal__close-button(role="button" tabindex="0" aria-label="Cerrar")
                 svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x")
                     path( d="M18 6 6 18")
                     path( d="m6 6 12 12")
@@ -26,7 +26,7 @@
                     .how-to-play-modal__step-body
                         span.how-to-play-modal__step-title Arrancá el viaje
                         p.how-to-play-modal__step-description
-                            | Apretá Empezar y el reloj se pone en marcha. Aparece la primera ciudad del recorrido, lista para tipear.
+                            | Apretá Empezar, y el reloj se pone en marcha. Aparece la primera ciudad del recorrido, lista para tipear.
                 li.how-to-play-modal__step
                     .how-to-play-modal__step-photo
                         img(src="/images/how_to_play/step_03.jpg" alt="Auto avanzando sobre la ruta mientras se escribe una ciudad")
@@ -47,12 +47,14 @@
                 span.how-to-play-modal__notes-title La letra chica
                 ul.how-to-play-modal__note-list
                     li.how-to-play-modal__note
-                        | Las mayúsculas no importan, pero los acentos y la ñ sí: escribí el nombre tal cual aparece.
+                        | Las mayúsculas no importan.
+                    li.how-to-play-modal__note
+                        | Podes saltear la cuenta regresiva con enter o la barra espaciadora.
                     li.how-to-play-modal__note
                         | Una tecla equivocada no avanza el cursor. Volvé a intentar la misma letra y seguí viaje.
                     li.how-to-play-modal__note
                         | El combo cuenta letras correctas seguidas; un error lo vuelve a cero.
                     li.how-to-play-modal__note
-                        | PPM Total mide todo lo que tipeaste. PPM − Errores te descuenta las equivocaciones.
+                        | PPM Total mide todo lo que tipeaste. PPM - Errores te descuenta las equivocaciones.
                     li.how-to-play-modal__note
                         | Esc abandona la ruta en curso y te devuelve al mapa.

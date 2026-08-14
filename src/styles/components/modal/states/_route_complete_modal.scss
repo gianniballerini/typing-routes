@@ -27,6 +27,23 @@
     @include modal-title-text;
 }
 
+.route-complete-modal__rating {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	row-gap: 6 * $ptr;
+
+	padding: 6 * $ptr 12 * $ptr 16 * $ptr;
+}
+
+.route-complete-modal__rating-label {
+	font-size: 18 * $ptr;
+	text-transform: uppercase;
+	letter-spacing: 0.5 * $ptr;
+
+	text-align: center;
+}
+
 .route-complete-modal__stats {
 	display: flex;
     flex-direction: column;

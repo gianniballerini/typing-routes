@@ -5,6 +5,8 @@ class Route {
     cities: City[];
     cities_cleared: City[];
     visited: boolean;
+    // 0 to 3 in half steps, derived from the stored best record (see StarRating).
+    stars: number;
 
     route_id: string;
     route_number: string;
@@ -21,6 +23,7 @@ class Route {
         this.cities = [];
         this.cities_cleared = [];
         this.visited = false;
+        this.stars = 0;
 
         this.route_id = "";
         this.route_number = "";

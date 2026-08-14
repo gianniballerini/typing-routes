@@ -1,5 +1,5 @@
 .route-list-modal {
-    width: min(560 * $ptr, 100%);
+    width: min(1080 * $ptr, 100%);
     font-family: $arimo-font;
 
     pointer-events: auto;
@@ -34,6 +34,270 @@
 .route-list-modal__bottom {
     display: flex;
     flex-direction: column;
+    row-gap: 14 * $ptr;
 
     width: 100%;
+}
+
+.route-list-modal__filters {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8 * $ptr;
+
+    justify-content: center;
+}
+
+.route-list-modal__filter {
+    border: 2 * $ptr solid rgba($white, 0.45);
+    border-radius: 999 * $ptr;
+
+    padding: 5 * $ptr 16 * $ptr;
+
+    font-size: 15 * $ptr;
+    text-transform: uppercase;
+    letter-spacing: 0.5 * $ptr;
+
+    &:hover {
+        background-color: rgba($white, 0.18);
+    }
+
+    &:focus-visible {
+        outline: 2 * $ptr solid $flag-yellow;
+        outline-offset: 2 * $ptr;
+    }
+}
+
+.route-list-modal__filter--active {
+    background-color: $white;
+    border-color: $white;
+    color: $signs-green;
+
+    &:hover {
+        background-color: $white;
+    }
+}
+
+.route-list-modal__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14 * $ptr;
+
+    width: 100%;
+    max-height: 56vh;
+
+    padding: 8 * $ptr;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    // The grid itself is the keyboard target; the focus ring lives on the tiles.
+    outline: none;
+
+    @include respond-to($medium-wide-breakpoint) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include respond-to($wide-1080-breakpoint) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.route-list-modal__empty {
+    padding: 24 * $ptr;
+    text-align: center;
+    font-size: 18 * $ptr;
+    opacity: 0.8;
+}
+
+.route-list-modal__tile {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 8 * $ptr;
+
+    padding: 12 * $ptr;
+
+    // Leaves room for the focused tile's scale-up when it is scrolled into view.
+    scroll-margin: 12 * $ptr;
+
+    background-color: rgba($black, 0.18);
+    border: 2 * $ptr solid rgba($white, 0.25);
+    border-radius: 12 * $ptr;
+
+    cursor: pointer;
+    outline: none;
+
+    transition: transform 140ms ease-out, box-shadow 140ms ease-out, border-color 140ms ease-out;
+
+    &:hover {
+        border-color: rgba($white, 0.6);
+    }
+}
+
+// Mario-Kart pop: the cursor tile lifts out of the grid.
+.route-list-modal__tile--focused {
+    border-color: $flag-yellow;
+    box-shadow: 0 0 0 3 * $ptr rgba($flag-yellow, 0.45), 0 10 * $ptr 24 * $ptr rgba($black, 0.4);
+
+    transform: scale(1.06);
+    z-index: 1;
+}
+
+.route-list-modal__tile--selected::after {
+    content: '';
+
+    position: absolute;
+    inset: -2 * $ptr;
+
+    border: 2 * $ptr dashed rgba($flag-light-blue, 0.9);
+    border-radius: 12 * $ptr;
+
+    pointer-events: none;
+}
+
+// A photo taped onto the tile, matching the menu info card treatment.
+.route-list-modal__tile-image {
+    width: 100%;
+    height: 74 * $ptr;
+
+    background-color: rgba($white, 0.08);
+    border-radius: 8 * $ptr;
+
+    overflow: hidden;
+
+    // The route images are shield graphics rather than photos, so they are fitted
+    // whole instead of cropped.
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+// Three quarters of the routes have no photo, so the sign-only tile has to
+// stand on its own rather than leave a hole.
+.route-list-modal__tile--no-image .route-list-modal__tile-image {
+    display: none;
+}
+
+.route-list-modal__tile-sign {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8 * $ptr;
+    overflow: hidden;
+
+    box-shadow: 0 4 * $ptr 4 * $ptr rgba($black, 0.25);
+}
+
+.route-list-modal__tile-sign-top {
+    width: 100%;
+
+    background-color: $black;
+    color: $white;
+
+    font-size: 18 * $ptr;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+
+    padding: 2 * $ptr 12 * $ptr;
+}
+
+.route-list-modal__tile-sign-bottom {
+    background-color: $white;
+    color: $black;
+
+    font-size: 13 * $ptr;
+    text-align: center;
+    text-transform: uppercase;
+
+    padding: 3 * $ptr 12 * $ptr;
+}
+
+.route-list-modal__tile-name {
+    font-size: 14 * $ptr;
+    line-height: 1.2;
+    text-align: center;
+
+    // Two lines max, so tiles keep a uniform height across the grid.
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.route-list-modal__tile-check {
+    position: absolute;
+    top: 6 * $ptr;
+    right: 6 * $ptr;
+
+    width: 22 * $ptr;
+    height: 22 * $ptr;
+
+    display: none;
+
+    color: $signs-green;
+    background-color: $flag-yellow;
+    border-radius: 50%;
+
+    padding: 3 * $ptr;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.route-list-modal__tile--completed .route-list-modal__tile-check {
+    display: block;
+}
+
+.route-list-modal__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 6 * $ptr;
+
+    min-height: 54 * $ptr;
+
+    padding-top: 4 * $ptr;
+    border-top: 2 * $ptr solid rgba($white, 0.25);
+}
+
+.route-list-modal__footer-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 2 * $ptr;
+
+    text-align: center;
+}
+
+.route-list-modal__footer-title {
+    font-size: 17 * $ptr;
+    text-transform: uppercase;
+}
+
+.route-list-modal__footer-stats {
+    font-size: 15 * $ptr;
+    opacity: 0.85;
+}
+
+.route-list-modal__footer-hint {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 14 * $ptr;
+
+    font-size: 13 * $ptr;
+    text-transform: uppercase;
+    letter-spacing: 0.5 * $ptr;
+    opacity: 0.65;
 }

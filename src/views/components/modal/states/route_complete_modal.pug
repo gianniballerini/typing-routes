@@ -3,11 +3,14 @@
         .route-complete-modal__top
             .route-complete-modal__title
                 span.route-complete-modal__title-text Ruta completada
-            .button.route-complete-modal__close-button
+            .button.route-complete-modal__close-button(role="button" tabindex="0" aria-label="Cerrar")
                 svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x")
                     path( d="M18 6 6 18")
                     path( d="m6 6 12 12")
         .route-complete-modal__bottom
+            .route-complete-modal__rating
+                .stars.stars--lg.route-complete-modal__stars
+                span.route-complete-modal__rating-label
             .route-complete-modal__stats
                 .route-complete-modal__stat
                     span.route-complete-modal__stat-value.route-complete-modal__stat-value--combo 0
@@ -30,7 +33,7 @@
                 .route-complete-modal__stat
                     span.route-complete-modal__stat-value.route-complete-modal__stat-value--mistakes 0
                     span.route-complete-modal__stat-label Errores
-            .button.route-complete-modal__share-button
+            .button.route-complete-modal__share-button(role="button" tabindex="0")
                 .route-complete-modal__button-icon
                     svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2-icon lucide-share-2")
                         circle(cx="18" cy="5" r="3")

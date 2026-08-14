@@ -2,6 +2,7 @@ import { GsapManager } from '../app/GsapManager';
 import type { GameStateValue } from '../GameState';
 import { GameState } from '../GameState';
 import type { Route } from '../Route';
+import { renderStars } from './StarsView';
 
 interface MenuRouteRecord {
     bestCombo: number;
@@ -32,6 +33,7 @@ class GameUiPresenter {
     private menu_route_record_accuracy_el: HTMLElement | null;
     private menu_route_record_time_el: HTMLElement | null;
     private menu_route_record_mistakes_el: HTMLElement | null;
+    private menu_route_stars_el: HTMLElement | null;
     private menu_route_image_container_el: HTMLElement | null;
     private menu_route_image_el: HTMLImageElement | null;
     private closeRequestedHandler: (() => void) | null;
@@ -93,6 +95,7 @@ class GameUiPresenter {
         this.menu_route_record_accuracy_el = document.querySelector('.game-menu__route-record-accuracy');
         this.menu_route_record_time_el = document.querySelector('.game-menu__route-record-time');
         this.menu_route_record_mistakes_el = document.querySelector('.game-menu__route-record-mistakes');
+        this.menu_route_stars_el = document.querySelector('.game-menu__route-stars');
         this.menu_route_image_container_el = document.querySelector('.game-menu__info-card-image');
         this.menu_route_image_el = this.menu_route_image_container_el?.querySelector('img') ?? null;
 
@@ -125,22 +128,91 @@ class GameUiPresenter {
         this.quit_button_el?.addEventListener('click', this.handleQuitButtonClick);
         this.typingInputHandler = null;
         this.renderElapsedTime(0);
+
+        window.addEventListener('keydown', this.handleMenuNavigationKeydown);
+    }
+
+    /**
+     * Arrow keys walk the menu: the three signs and, once a route is picked,
+     * Empezar. Bound on the window so the first arrow press can pull focus into
+     * the menu from nowhere; when a modal is open its own focus sits inside the
+     * modal, which parks this handler until it closes.
+     */
+    private handleMenuNavigationKeydown = (event: KeyboardEvent): void => {
+        const menuEl = this.game_menu_el;
+        if (this.last_rendered_state !== GameState.MENU) return;
+        if (!menuEl || menuEl.classList.contains('hidden')) return;
+
+        const step = this.getMenuNavigationStep(event.key);
+        if (step === 0) return;
+
+        const activeEl = document.activeElement;
+        const focusIsInMenu = activeEl instanceof HTMLElement && menuEl.contains(activeEl);
+        // Focus sits somewhere else entirely (an open modal): leave those keys alone.
+        if (!focusIsInMenu && activeEl !== document.body) return;
+
+        const buttons = this.getNavigableMenuButtons();
+        if (buttons.length === 0) return;
+
+        event.preventDefault();
+
+        const currentIndex = activeEl instanceof HTMLElement ? buttons.indexOf(activeEl) : -1;
+        const nextIndex = currentIndex === -1
+            ? 0
+            : (currentIndex + step + buttons.length) % buttons.length;
+
+        buttons[nextIndex].focus();
+    };
+
+    private getMenuNavigationStep(key: string): number {
+        if (key === 'ArrowDown' || key === 'ArrowRight') return 1;
+        if (key === 'ArrowUp' || key === 'ArrowLeft') return -1;
+        return 0;
+    }
+
+    // Empezar lives inside the route card, so it only joins the walk once a route
+    // is selected and the card is on screen.
+    private getNavigableMenuButtons(): HTMLElement[] {
+        const candidates = [...this.sign_button_els, this.start_button_el];
+        return candidates.filter((el): el is HTMLElement => el !== null && this.isVisible(el));
+    }
+
+    // The closed route card keeps its box so the lift animation has somewhere to
+    // play, and is hidden with `visibility` — which offsetParent does not catch.
+    private isVisible(el: HTMLElement): boolean {
+        return el.offsetParent !== null && window.getComputedStyle(el).visibility !== 'hidden';
     }
 
     onStartRequested(handler: () => void): void {
-        this.start_button_el?.addEventListener('click', handler);
+        this.bindActivation(this.start_button_el, handler);
     }
 
     onHowToPlayRequested(handler: () => void): void {
-        this.sign_button_how_to_play_el?.addEventListener('click', handler);
+        this.bindActivation(this.sign_button_how_to_play_el, handler);
     }
 
     onRouteListRequested(handler: () => void): void {
-        this.sign_button_route_list_el?.addEventListener('click', handler);
+        this.bindActivation(this.sign_button_route_list_el, handler);
     }
 
     onAchievementsRequested(handler: () => void): void {
-        this.sign_button_achievements_el?.addEventListener('click', handler);
+        this.bindActivation(this.sign_button_achievements_el, handler);
+    }
+
+    // The menu buttons are divs, so Enter and Space have to be wired by hand for
+    // the whole menu to be reachable without a mouse.
+    private bindActivation(el: HTMLElement | null, handler: () => void): void {
+        el?.addEventListener('click', handler);
+        el?.addEventListener('keydown', (event: KeyboardEvent) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+
+            event.preventDefault();
+            // Empezar flips the game into COUNTDOWN synchronously; without this the
+            // same keystroke would reach KeyboardInputCoordinator, where Enter/Space
+            // skips the countdown.
+            event.stopPropagation();
+            handler();
+        });
     }
 
     onCloseRequested(handler: () => void): void {
@@ -314,7 +386,7 @@ class GameUiPresenter {
         this.game_playing_el.style.removeProperty('height');
     }
 
-    setMenuRoutePreview(route: Route, record: MenuRouteRecord | null = null): void {
+    setMenuRoutePreview(route: Route, record: MenuRouteRecord | null = null, stars: number | null = null): void {
         const routeNumber = this.sanitizeRouteNumber(route.route_number);
         this.renderMenuRouteImage(route.image_url);
 
@@ -336,6 +408,7 @@ class GameUiPresenter {
 
         this.menu_welcome_description_el?.classList.add('hidden');
 
+        renderStars(this.menu_route_stars_el, stars);
         this.renderMenuRouteRecord(record);
 
         this.menu_info_card_el?.classList.remove('hidden');
@@ -389,6 +462,7 @@ class GameUiPresenter {
     }
 
     private clearMenuRoutePreview(): void {
+        renderStars(this.menu_route_stars_el, null);
         if (this.menu_route_name_el) this.menu_route_name_el.textContent = '';
         if (this.menu_route_number_el) this.menu_route_number_el.textContent = '';
         if (this.menu_route_length_el) this.menu_route_length_el.textContent = '';

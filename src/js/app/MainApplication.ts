@@ -10,6 +10,7 @@ import { RoutesController } from '../RoutesController';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
 import { ModalController } from '../ui/ModalController';
 import { UserStats } from '../UserStats';
+import { calculateStarRating } from '../utils/StarRating';
 
 class MainApplication {
     map_controller: MapController;
@@ -89,6 +90,10 @@ class MainApplication {
     private applySavedUserProgress(): void {
         for (const route of Object.values(this.routes_controller.routes)) {
             route.visited = this.user_stats.hasCompletedRoute(route.route_id);
+            route.stars = calculateStarRating(
+                this.user_stats.getRouteRecord(route.route_id),
+                route.visited
+            )?.stars ?? 0;
 
             for (const city of route.cities) {
                 city.visited = this.user_stats.hasCompletedCity(city.id);
