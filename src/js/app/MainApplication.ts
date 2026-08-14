@@ -1,6 +1,10 @@
 import { DebugPaneController } from './DebugPaneController';
 import { GameFlowCoordinator } from './GameFlowCoordinator';
 import { UserStatsStorage } from './UserStatsStorage';
+import soundManifest from '../../assets/data/sounds.json';
+import { AudioManager } from '../audio/AudioManager';
+import { AudioPreferencesStorage } from '../audio/AudioPreferencesStorage';
+import type { SoundManifest } from '../audio/types';
 import { Game } from '../Game';
 import { KeyboardInputCoordinator } from '../input/KeyboardInputCoordinator';
 import { LoadingManager } from '../LoadingManager';
@@ -23,12 +27,23 @@ class MainApplication {
     game_flow_coordinator: GameFlowCoordinator;
     user_stats_storage: UserStatsStorage;
     user_stats: UserStats;
+    audio_preferences_storage: AudioPreferencesStorage;
+    audio_manager: AudioManager;
     private readonly loading_manager: LoadingManager;
 
     // The loading screen is built by the entry module long before this class finishes
     // downloading, so the manager is handed in rather than constructed here.
     constructor(loading_manager: LoadingManager) {
         this.loading_manager = loading_manager;
+
+        // Kicked off first: the keyboard sprite is a couple of MB and its
+        // download runs alongside the map tiles rather than after them.
+        this.audio_preferences_storage = new AudioPreferencesStorage();
+        this.audio_manager = new AudioManager(this.audio_preferences_storage);
+        const audio_loading = this.audio_manager.load(soundManifest as SoundManifest);
+        this.audio_manager.bindKeyboardSounds();
+        this.loading_manager.onStartGesture(() => this.audio_manager.unlock());
+
         this.map_controller = new MapController();
         this.mouse_info_card = new MouseInfoCard();
         this.mouse_info_card.hide();
@@ -52,15 +67,16 @@ class MainApplication {
         this.game = new Game(this.routes_controller, this.map_controller);
         this.ui_presenter = new GameUiPresenter();
         this.modal_controller = new ModalController();
-        this.game_flow_coordinator = new GameFlowCoordinator(
-            this.game,
-            this.routes_controller,
-            this.map_controller,
-            this.ui_presenter,
-            this.modal_controller,
-            this.user_stats,
-            this.user_stats_storage
-        );
+        this.game_flow_coordinator = new GameFlowCoordinator({
+            game: this.game,
+            routes_controller: this.routes_controller,
+            map_controller: this.map_controller,
+            ui_presenter: this.ui_presenter,
+            modal_controller: this.modal_controller,
+            user_stats: this.user_stats,
+            user_stats_storage: this.user_stats_storage,
+            audio_manager: this.audio_manager,
+        });
         this.keyboard_input_coordinator = new KeyboardInputCoordinator(
             this.game,
             () => this.game_flow_coordinator.quitActiveRun(),
@@ -77,12 +93,19 @@ class MainApplication {
         this.loading_manager.onFinished(() => this.ui_presenter.playMenuSignsDropAnimation());
 
         if (import.meta.env.DEV) {
-            new DebugPaneController(this.map_controller).init();
+            new DebugPaneController(this.map_controller, this.audio_manager).init();
         }
 
         this.loading_manager.setProgress(60);
 
-        this.map_controller.onReady(() => {
+        // The counter is coarse on purpose: each `setProgress` kills the previous
+        // 1.2s tween, so a step per byte would only stutter.
+        const map_ready = new Promise<void>((resolve) => this.map_controller.onReady(() => resolve()));
+        void map_ready.then(() => this.loading_manager.setProgress(80));
+
+        // `blocking` never rejects, so a missing or undecodable sprite cannot
+        // wedge the loading screen.
+        void Promise.all([map_ready, audio_loading.blocking]).then(() => {
             this.loading_manager.complete();
         });
     }

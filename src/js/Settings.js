@@ -137,6 +137,32 @@ class Settings
         maxSize: 2
       }
     };
+
+    this.audio = {
+      // Applied on top of each sound's own volume, then persisted per user.
+      defaultMasterVolume: 0.8,
+      categoryVolumes: {
+        music: 1,
+        sfx: 1,
+        keys: 0.6
+      },
+      // Ramped rather than switched so mute and volume changes never click.
+      volumeRampMs: 30,
+      key: {
+        // Fast typists overlap voices; past this the graph is doing more harm
+        // than the extra layer adds, so the oldest voice is stopped.
+        maxVoices: 12,
+        // Envelope around each sprite slice, so its cut edges do not pop.
+        attackMs: 4,
+        releaseMs: 10,
+        // Mobile virtual keyboards emit no usable `code`, so the hidden input's
+        // `input` event doubles as a trigger. On desktop both fire for the same
+        // keystroke; anything this soon after a real keydown is that duplicate.
+        virtualKeyDedupeMs: 40,
+        // Slight per-press variation, so a repeated key does not sound looped.
+        gainJitter: 0.08
+      }
+    };
   }
 }
 

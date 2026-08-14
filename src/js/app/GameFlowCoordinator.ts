@@ -11,6 +11,7 @@ import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
 import { calculateStarRating } from '../utils/StarRating';
+import { AudioManager } from '../audio/AudioManager';
 import { UserStatsStorage } from './UserStatsStorage';
 
 interface ActiveRunStats {
@@ -32,6 +33,17 @@ interface CalculatedRunMetrics {
     accuracy: number;
 }
 
+interface GameFlowCoordinatorDependencies {
+    game: Game;
+    routes_controller: RoutesController;
+    map_controller: MapController;
+    ui_presenter: GameUiPresenter;
+    modal_controller: ModalController;
+    user_stats: UserStats;
+    user_stats_storage: UserStatsStorage;
+    audio_manager: AudioManager;
+}
+
 class GameFlowCoordinator {
     private game: Game;
     private routes_controller: RoutesController;
@@ -40,6 +52,7 @@ class GameFlowCoordinator {
     private modal_controller: ModalController;
     private user_stats: UserStats;
     private user_stats_storage: UserStatsStorage;
+    private audio_manager: AudioManager;
     private routeMetrics: RouteMetrics | null;
     private snappedCityPoints: SnappedRoutePoint[];
     private activeRunStats: ActiveRunStats | null;
@@ -50,22 +63,15 @@ class GameFlowCoordinator {
     private countdownRemaining: number;
     private pendingRunRouteId: string | null;
 
-    constructor(
-        game: Game,
-        routes_controller: RoutesController,
-        map_controller: MapController,
-        ui_presenter: GameUiPresenter,
-        modal_controller: ModalController,
-        user_stats: UserStats,
-        user_stats_storage: UserStatsStorage
-    ) {
-        this.game = game;
-        this.routes_controller = routes_controller;
-        this.map_controller = map_controller;
-        this.ui_presenter = ui_presenter;
-        this.modal_controller = modal_controller;
-        this.user_stats = user_stats;
-        this.user_stats_storage = user_stats_storage;
+    constructor(dependencies: GameFlowCoordinatorDependencies) {
+        this.game = dependencies.game;
+        this.routes_controller = dependencies.routes_controller;
+        this.map_controller = dependencies.map_controller;
+        this.ui_presenter = dependencies.ui_presenter;
+        this.modal_controller = dependencies.modal_controller;
+        this.user_stats = dependencies.user_stats;
+        this.user_stats_storage = dependencies.user_stats_storage;
+        this.audio_manager = dependencies.audio_manager;
         this.routeMetrics = null;
         this.snappedCityPoints = [];
         this.activeRunStats = null;
@@ -85,6 +91,7 @@ class GameFlowCoordinator {
         this.ui_presenter.onHowToPlayRequested(this.handleHowToPlayRequested);
         this.ui_presenter.onRouteListRequested(this.handleRouteListRequested);
         this.ui_presenter.onAchievementsRequested(this.handleAchievementsRequested);
+        this.ui_presenter.onAudioToggleRequested(this.handleAudioToggleRequested);
         this.modal_controller.routeListModal.onRouteActivated(this.handleRouteListActivated);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
 
@@ -97,8 +104,19 @@ class GameFlowCoordinator {
         this.game.typing_controller.addEventListener('mistake', this.handleTypingMistake as EventListener);
 
         this.ui_presenter.renderState(this.game.state);
+        this.ui_presenter.renderAudioMuted(this.audio_manager.isMuted());
         this.refreshMenuFromSelectedRoute();
     }
+
+    private handleAudioToggleRequested = (): void => {
+        this.ui_presenter.renderAudioMuted(this.audio_manager.toggleMute());
+
+        // The toggle lives outside `.game-playing`, so clicking it mid-run pulls
+        // focus off the hidden typing input and the next keystroke goes nowhere.
+        if (this.game.state === GameState.PLAYING || this.game.state === GameState.COUNTDOWN) {
+            this.ui_presenter.focusTypingInput();
+        }
+    };
 
     private handleStartRequested = (): void => {
         const selectedRouteId = this.map_controller.getSelectedRouteId();
@@ -340,6 +358,11 @@ class GameFlowCoordinator {
     private handleTypingInput = (inputText: string): void => {
         if (this.game.state !== GameState.PLAYING) return;
 
+        // Mobile on-screen keyboards emit `keydown` with no usable `code`, so
+        // the hidden input's text is the only signal a key was pressed. The
+        // manager ignores this when a real keydown just fired.
+        this.audio_manager.playKeyFromText(inputText);
+
         for (const char of inputText) {
             if (char === '\n' || char === '\r') continue;
             this.game.typing_controller.handleInput(char);
@@ -389,6 +412,12 @@ class GameFlowCoordinator {
         const enteringRun = customEvent.detail.from === GameState.MENU
             && customEvent.detail.to === GameState.COUNTDOWN;
         const returningToMenu = customEvent.detail.to === GameState.MENU;
+
+        // Key sounds only belong to a run; typing into the route-list search or
+        // walking the menu with the arrows should stay quiet.
+        this.audio_manager.setKeySoundsEnabled(
+            customEvent.detail.to === GameState.COUNTDOWN || customEvent.detail.to === GameState.PLAYING
+        );
 
         if (enteringRun) {
             this.ui_presenter.focusTypingInput();

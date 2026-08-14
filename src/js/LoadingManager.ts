@@ -25,9 +25,11 @@ class LoadingManager {
     private progressFinished = false;
     private finished = false;
     private finishedHandler: (() => void) | null = null;
+    private startGestureHandler: (() => void) | null = null;
 
     private readonly handleStartClick = (): void => {
         if (!this.readyToStart || this.exitStarted) return;
+        this.startGestureHandler?.();
         this.playExitAnimation();
     };
 
@@ -38,6 +40,7 @@ class LoadingManager {
         if (!this.readyToStart || this.exitStarted) return;
 
         event.preventDefault();
+        this.startGestureHandler?.();
         this.playExitAnimation();
     };
 
@@ -150,6 +153,13 @@ class LoadingManager {
             transitionPath: this.transitionPathElement,
             transitionBase: this.transitionBaseElement,
         }, () => this.finishLoadingScreen());
+    }
+
+    // The click or Enter on the start CTA is the app's first user gesture, and
+    // therefore the only place an AudioContext can legally be resumed. Fired
+    // before the exit animation so the resume lands inside the gesture's turn.
+    onStartGesture(handler: () => void): void {
+        this.startGestureHandler = handler;
     }
 
     // The game layer is uncovered by now, so whoever registers here can measure

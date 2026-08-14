@@ -115,6 +115,22 @@ export interface SettingsShape {
       maxSize: number;
     };
   };
+  audio: {
+    defaultMasterVolume: number;
+    categoryVolumes: {
+      music: number;
+      sfx: number;
+      keys: number;
+    };
+    volumeRampMs: number;
+    key: {
+      maxVoices: number;
+      attackMs: number;
+      releaseMs: number;
+      virtualKeyDedupeMs: number;
+      gainJitter: number;
+    };
+  };
 }
 
 export const Settings: SettingsShape;

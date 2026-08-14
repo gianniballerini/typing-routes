@@ -65,6 +65,8 @@ class GameUiPresenter {
     private quit_button_el: HTMLElement | null;
     private quitRequestedHandler: (() => void) | null;
     private typingInputHandler: ((inputText: string) => void) | null;
+    private audio_toggle_el: HTMLElement | null;
+    private audio_toggle_label_el: HTMLElement | null;
 
     constructor() {
         this.game_menu_el = document.querySelector('.game-menu');
@@ -127,6 +129,8 @@ class GameUiPresenter {
         this.quitRequestedHandler = null;
         this.quit_button_el?.addEventListener('click', this.handleQuitButtonClick);
         this.typingInputHandler = null;
+        this.audio_toggle_el = document.querySelector('.audio-toggle');
+        this.audio_toggle_label_el = document.querySelector('.audio-toggle__label');
         this.renderElapsedTime(0);
 
         window.addEventListener('keydown', this.handleMenuNavigationKeydown);
@@ -197,6 +201,20 @@ class GameUiPresenter {
 
     onAchievementsRequested(handler: () => void): void {
         this.bindActivation(this.sign_button_achievements_el, handler);
+    }
+
+    onAudioToggleRequested(handler: () => void): void {
+        this.bindActivation(this.audio_toggle_el, handler);
+    }
+
+    renderAudioMuted(muted: boolean): void {
+        this.audio_toggle_el?.classList.toggle('audio-toggle--muted', muted);
+        this.audio_toggle_el?.setAttribute('aria-pressed', String(muted));
+        this.audio_toggle_el?.setAttribute('aria-label', muted ? 'Activar sonido' : 'Silenciar');
+
+        if (this.audio_toggle_label_el) {
+            this.audio_toggle_label_el.textContent = muted ? 'Sonido apagado' : 'Sonido encendido';
+        }
     }
 
     // The menu buttons are divs, so Enter and Space have to be wired by hand for
