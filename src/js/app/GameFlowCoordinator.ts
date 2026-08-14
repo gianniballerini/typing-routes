@@ -1,17 +1,18 @@
 import type { Geometry } from 'geojson';
+import { AudioManager } from '../audio/AudioManager';
+import type { SoundCategory } from '../audio/types';
 import { Game } from '../Game';
 import { GameState } from '../GameState';
 import { MapController } from '../MapController';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
-import type { RouteListRow } from '../ui/modals/RouteListModal';
 import { ModalController, ModalState } from '../ui/ModalController';
+import type { RouteListRow } from '../ui/modals/RouteListModal';
 import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
 import { calculateStarRating } from '../utils/StarRating';
-import { AudioManager } from '../audio/AudioManager';
 import { UserStatsStorage } from './UserStatsStorage';
 
 interface ActiveRunStats {
@@ -91,8 +92,10 @@ class GameFlowCoordinator {
         this.ui_presenter.onHowToPlayRequested(this.handleHowToPlayRequested);
         this.ui_presenter.onRouteListRequested(this.handleRouteListRequested);
         this.ui_presenter.onAchievementsRequested(this.handleAchievementsRequested);
+        this.ui_presenter.onSettingsRequested(this.handleSettingsRequested);
         this.ui_presenter.onAudioToggleRequested(this.handleAudioToggleRequested);
         this.modal_controller.routeListModal.onRouteActivated(this.handleRouteListActivated);
+        this.modal_controller.settingsModal.onVolumeChange(this.handleVolumeChange);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
 
         this.game.addEventListener('city-visited', this.handleCityVisited as EventListener);
@@ -109,7 +112,10 @@ class GameFlowCoordinator {
     }
 
     private handleAudioToggleRequested = (): void => {
-        this.ui_presenter.renderAudioMuted(this.audio_manager.toggleMute());
+        const muted = this.audio_manager.toggleMute();
+
+        this.ui_presenter.renderAudioMuted(muted);
+        this.modal_controller.settingsModal.renderMuted(muted);
 
         // The toggle lives outside `.game-playing`, so clicking it mid-run pulls
         // focus off the hidden typing input and the next keystroke goes nowhere.
@@ -237,6 +243,12 @@ class GameFlowCoordinator {
         this.modal_controller.show(ModalState.ROUTE_LIST);
     };
 
+    private handleSettingsRequested = (): void => {
+        this.modal_controller.settingsModal.renderVolumes(this.audio_manager.getCategoryVolumes());
+        this.modal_controller.settingsModal.renderMuted(this.audio_manager.isMuted());
+        this.modal_controller.show(ModalState.SETTINGS);
+    };
+
     // Picking a course starts the run right away. Selecting on the map first keeps
     // the highlight, the menu card and the camera on the same path the map click
     // takes; its fly-to is immediately superseded by the one in startRunForRoute.
@@ -279,6 +291,10 @@ class GameFlowCoordinator {
 
     private handleAchievementsRequested = (): void => {
         this.modal_controller.show(ModalState.ACHIEVEMENTS);
+    };
+
+    private handleVolumeChange = (category: SoundCategory, value: number): void => {
+        this.audio_manager.setCategoryVolume(category, value);
     };
 
     /**

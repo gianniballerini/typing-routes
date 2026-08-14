@@ -30,6 +30,7 @@ interface DebugState {
     masterVolume: number;
     keysVolume: number;
     musicVolume: number;
+    sfxVolume: number;
 }
 
 class DebugPaneController {
@@ -47,8 +48,9 @@ class DebugPaneController {
             showHitboxes: Settings.cityCircle.hitboxDebug.visible || Settings.routeLine.hitboxDebug.visible,
             muted: this.audio_manager.isMuted(),
             masterVolume: this.audio_manager.getMasterVolume(),
-            keysVolume: Settings.audio.categoryVolumes.keys,
-            musicVolume: Settings.audio.categoryVolumes.music
+            keysVolume: this.audio_manager.getCategoryVolume('keys'),
+            musicVolume: this.audio_manager.getCategoryVolume('music'),
+            sfxVolume: this.audio_manager.getCategoryVolume('sfx')
         };
 
         this.map_controller.setHitboxVisibility(debug_state.showHitboxes);
@@ -87,6 +89,10 @@ class DebugPaneController {
 
             bind('musicVolume', { label: 'Music', ...volume })?.on('change', (event) => {
                 this.audio_manager.setCategoryVolume('music', Number(event.value));
+            });
+
+            bind('sfxVolume', { label: 'SFX', ...volume })?.on('change', (event) => {
+                this.audio_manager.setCategoryVolume('sfx', Number(event.value));
             });
         });
     }

@@ -45,6 +45,8 @@ const DEFAULT_CATEGORY: SoundCategory = 'sfx';
 // and looping sounds keep their playhead. Nothing here throws at the caller: a
 // missing or undecodable asset disables that one sound and is logged.
 class AudioManager {
+    private static readonly PREFERENCES_SAVE_DELAY_MS = 250;
+
     private readonly preferencesStorage: AudioPreferencesStorage;
     private readonly preferences: AudioPreferences;
 
@@ -62,10 +64,12 @@ class AudioManager {
     private keyboardBound = false;
     private unlocked = false;
     private lastPhysicalKeyAt = -Infinity;
+    private pendingPreferencesSaveHandle: number | null;
 
     constructor(preferencesStorage: AudioPreferencesStorage) {
         this.preferencesStorage = preferencesStorage;
         this.preferences = preferencesStorage.load();
+        this.pendingPreferencesSaveHandle = null;
 
         // Constructed suspended until a user gesture; see `unlock`.
         this.context = new AudioContext();
@@ -77,13 +81,14 @@ class AudioManager {
         this.categoryGains = {} as Record<SoundCategory, GainNode>;
         for (const category of CATEGORIES) {
             const gain = this.context.createGain();
-            gain.gain.value = Settings.audio.categoryVolumes[category];
+            gain.gain.value = this.preferences.categoryVolumes[category];
             gain.connect(this.masterGain);
             this.categoryGains[category] = gain;
         }
 
         this.keyPack = new KeyboardSoundPack(this.context, this.categoryGains.keys);
         this.bindUnlockGestures();
+        window.addEventListener('pagehide', this.handlePageHide);
     }
 
     // --- loading -----------------------------------------------------------
@@ -378,7 +383,7 @@ class AudioManager {
         this.preferences.muted = muted;
         this.rampGain(this.masterGain, muted ? 0 : this.preferences.masterVolume);
         if (muted) this.keyPack.stopAll();
-        this.preferencesStorage.save(this.preferences);
+        this.schedulePreferencesSave();
     }
 
     toggleMute(): boolean {
@@ -391,19 +396,63 @@ class AudioManager {
     }
 
     setMasterVolume(value: number): void {
-        this.preferences.masterVolume = Math.max(0, Math.min(1, value));
+        const clampedValue = Math.max(0, Math.min(1, value));
+        if (this.preferences.masterVolume === clampedValue) return;
+
+        this.preferences.masterVolume = clampedValue;
         if (!this.preferences.muted) this.rampGain(this.masterGain, this.preferences.masterVolume);
-        this.preferencesStorage.save(this.preferences);
+        this.schedulePreferencesSave();
+    }
+
+    getCategoryVolume(category: SoundCategory): number {
+        return this.preferences.categoryVolumes[category];
+    }
+
+    getCategoryVolumes(): Record<SoundCategory, number> {
+        return {
+            music: this.preferences.categoryVolumes.music,
+            sfx: this.preferences.categoryVolumes.sfx,
+            keys: this.preferences.categoryVolumes.keys,
+        };
     }
 
     setCategoryVolume(category: SoundCategory, value: number): void {
         const gain = this.categoryGains[category];
         if (!gain) return;
 
-        this.rampGain(gain, Math.max(0, Math.min(1, value)));
+        const clampedValue = Math.max(0, Math.min(1, value));
+        if (this.preferences.categoryVolumes[category] === clampedValue) return;
+
+        this.preferences.categoryVolumes[category] = clampedValue;
+        this.rampGain(gain, clampedValue);
+        this.schedulePreferencesSave();
     }
 
     // --- internals ---------------------------------------------------------
+
+    private schedulePreferencesSave(): void {
+        if (this.pendingPreferencesSaveHandle !== null) {
+            window.clearTimeout(this.pendingPreferencesSaveHandle);
+        }
+
+        this.pendingPreferencesSaveHandle = window.setTimeout(() => {
+            this.pendingPreferencesSaveHandle = null;
+            this.preferencesStorage.save(this.preferences);
+        }, AudioManager.PREFERENCES_SAVE_DELAY_MS);
+    }
+
+    private flushPendingPreferencesSave(): void {
+        if (this.pendingPreferencesSaveHandle !== null) {
+            window.clearTimeout(this.pendingPreferencesSaveHandle);
+            this.pendingPreferencesSaveHandle = null;
+        }
+
+        this.preferencesStorage.save(this.preferences);
+    }
+
+    private handlePageHide = (): void => {
+        this.flushPendingPreferencesSave();
+    };
 
     private rampGain(gain: GainNode, value: number, durationMs = Settings.audio.volumeRampMs): void {
         const now = this.context.currentTime;
@@ -455,5 +504,6 @@ class AudioManager {
     }
 }
 
-export type { PlayOptions };
 export { AudioManager };
+export type { PlayOptions };
+

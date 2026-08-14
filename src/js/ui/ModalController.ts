@@ -1,11 +1,12 @@
 import { AchievementsModal } from './modals/AchievementsModal';
 import { BaseModal } from './modals/BaseModal';
 import { HowToPlayModal } from './modals/HowToPlayModal';
-import { ModalState } from './modals/ModalState';
 import type { ModalStateValue, OpenModalStateValue } from './modals/ModalState';
-import { RouteCompleteModal } from './modals/RouteCompleteModal';
+import { ModalState } from './modals/ModalState';
 import type { RouteCompleteModalPayload } from './modals/RouteCompleteModal';
+import { RouteCompleteModal } from './modals/RouteCompleteModal';
 import { RouteListModal } from './modals/RouteListModal';
+import { SettingsModal } from './modals/SettingsModal';
 
 // Owns the modal shell only: which state is open, switching between states and
 // showing/hiding. Everything inside a given modal lives in its own class.
@@ -14,6 +15,7 @@ class ModalController {
 	readonly howToPlayModal: HowToPlayModal;
 	readonly routeListModal: RouteListModal;
 	readonly achievementsModal: AchievementsModal;
+	readonly settingsModal: SettingsModal;
 
 	private rootEl: HTMLElement | null;
 	private overlayEl: HTMLElement | null;
@@ -31,12 +33,14 @@ class ModalController {
 		this.howToPlayModal = new HowToPlayModal(this.hide);
 		this.routeListModal = new RouteListModal(this.hide);
 		this.achievementsModal = new AchievementsModal(this.hide);
+		this.settingsModal = new SettingsModal(this.hide);
 
 		this.modalsByState = {
 			[ModalState.ROUTE_COMPLETE]: this.routeCompleteModal,
 			[ModalState.HOW_TO_PLAY]: this.howToPlayModal,
 			[ModalState.ROUTE_LIST]: this.routeListModal,
-			[ModalState.ACHIEVEMENTS]: this.achievementsModal
+			[ModalState.ACHIEVEMENTS]: this.achievementsModal,
+			[ModalState.SETTINGS]: this.settingsModal
 		};
 
 		this.overlayEl?.addEventListener('click', this.hide);
@@ -106,3 +110,4 @@ class ModalController {
 
 export { ModalController, ModalState };
 export type { ModalStateValue, RouteCompleteModalPayload };
+

@@ -1,9 +1,17 @@
 import { Settings } from '../Settings';
+import type { SoundCategory } from './types';
 
 const AUDIO_PREFERENCES_STORAGE_KEY = 'typing-routes.audio.v1';
-const AUDIO_PREFERENCES_VERSION = 1;
+const AUDIO_PREFERENCES_VERSION = 2;
 
 interface AudioPreferences {
+    muted: boolean;
+    masterVolume: number;
+    categoryVolumes: Record<SoundCategory, number>;
+}
+
+interface AudioPreferencesV1Snapshot {
+    version: 1;
     muted: boolean;
     masterVolume: number;
 }
@@ -28,8 +36,9 @@ class AudioPreferencesStorage {
 
         try {
             const parsed: unknown = JSON.parse(rawSnapshot);
-            if (this.isValidSnapshot(parsed)) {
-                return { muted: parsed.muted, masterVolume: parsed.masterVolume };
+            const preferences = this.parseSnapshot(parsed);
+            if (preferences) {
+                return preferences;
             }
 
             console.warn('Invalid audio preferences payload in localStorage; using defaults');
@@ -45,13 +54,26 @@ class AudioPreferencesStorage {
             version: AUDIO_PREFERENCES_VERSION,
             muted: preferences.muted,
             masterVolume: preferences.masterVolume,
+            categoryVolumes: { ...preferences.categoryVolumes },
         };
 
         this.setStoredValue(JSON.stringify(snapshot));
     }
 
     private defaults(): AudioPreferences {
-        return { muted: false, masterVolume: Settings.audio.defaultMasterVolume };
+        return {
+            muted: false,
+            masterVolume: Settings.audio.defaultMasterVolume,
+            categoryVolumes: this.defaultCategoryVolumes(),
+        };
+    }
+
+    private defaultCategoryVolumes(): Record<SoundCategory, number> {
+        return {
+            music: Settings.audio.categoryVolumes.music,
+            sfx: Settings.audio.categoryVolumes.sfx,
+            keys: Settings.audio.categoryVolumes.keys,
+        };
     }
 
     private getStoredValue(): string | null {
@@ -70,7 +92,27 @@ class AudioPreferencesStorage {
         }
     }
 
-    private isValidSnapshot(value: unknown): value is AudioPreferencesSnapshot {
+    private parseSnapshot(value: unknown): AudioPreferences | null {
+        if (this.isValidCurrentSnapshot(value)) {
+            return {
+                muted: value.muted,
+                masterVolume: value.masterVolume,
+                categoryVolumes: { ...value.categoryVolumes },
+            };
+        }
+
+        if (this.isValidLegacySnapshot(value)) {
+            return {
+                muted: value.muted,
+                masterVolume: value.masterVolume,
+                categoryVolumes: this.defaultCategoryVolumes(),
+            };
+        }
+
+        return null;
+    }
+
+    private isValidCurrentSnapshot(value: unknown): value is AudioPreferencesSnapshot {
         if (!value || typeof value !== 'object') return false;
 
         const candidate = value as Partial<AudioPreferencesSnapshot>;
@@ -78,10 +120,36 @@ class AudioPreferencesStorage {
         if (typeof candidate.muted !== 'boolean') return false;
         if (typeof candidate.masterVolume !== 'number') return false;
         if (!Number.isFinite(candidate.masterVolume)) return false;
+        if (!this.isValidCategoryVolumes(candidate.categoryVolumes)) return false;
 
         return candidate.masterVolume >= 0 && candidate.masterVolume <= 1;
     }
+
+    private isValidLegacySnapshot(value: unknown): value is AudioPreferencesV1Snapshot {
+        if (!value || typeof value !== 'object') return false;
+
+        const candidate = value as Partial<AudioPreferencesV1Snapshot>;
+        if (candidate.version !== 1) return false;
+        if (typeof candidate.muted !== 'boolean') return false;
+        if (typeof candidate.masterVolume !== 'number') return false;
+        if (!Number.isFinite(candidate.masterVolume)) return false;
+
+        return candidate.masterVolume >= 0 && candidate.masterVolume <= 1;
+    }
+
+    private isValidCategoryVolumes(value: unknown): value is Record<SoundCategory, number> {
+        if (!value || typeof value !== 'object') return false;
+
+        const candidate = value as Partial<Record<SoundCategory, number>>;
+        const categories: SoundCategory[] = ['music', 'sfx', 'keys'];
+
+        return categories.every((category) => {
+            const volume = candidate[category];
+            return typeof volume === 'number' && Number.isFinite(volume) && volume >= 0 && volume <= 1;
+        });
+    }
 }
 
+export { AUDIO_PREFERENCES_STORAGE_KEY, AudioPreferencesStorage };
 export type { AudioPreferences };
-export { AudioPreferencesStorage, AUDIO_PREFERENCES_STORAGE_KEY };
+

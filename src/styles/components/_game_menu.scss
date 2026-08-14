@@ -195,6 +195,18 @@
             }
         }
 
+        .game-menu__sign-button--settings {
+            --sign-tilt: 1deg;
+
+            &:hover, &:focus-visible {
+                transform: translateY(-3 * $ptr) rotate(1deg);
+
+                &::before {
+                    transform: translate(3.5 * $ptr, 5 * $ptr) rotate(-0.35deg);
+                }
+            }
+        }
+
         .game-menu__welcome {
             display: flex;
             flex-direction: column;

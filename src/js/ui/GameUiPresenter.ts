@@ -44,6 +44,7 @@ class GameUiPresenter {
     private sign_button_how_to_play_el: HTMLElement | null;
     private sign_button_route_list_el: HTMLElement | null;
     private sign_button_achievements_el: HTMLElement | null;
+    private sign_button_settings_el: HTMLElement | null;
     private last_rendered_state: GameStateValue | null;
     private typing_el: HTMLElement | null;
     private typing_prev_city_el: HTMLElement | null;
@@ -108,6 +109,7 @@ class GameUiPresenter {
         this.sign_button_how_to_play_el = document.querySelector('.game-menu__sign-button--how-to-play');
         this.sign_button_route_list_el = document.querySelector('.game-menu__sign-button--route-list');
         this.sign_button_achievements_el = document.querySelector('.game-menu__sign-button--achievements');
+        this.sign_button_settings_el = document.querySelector('.game-menu__sign-button--settings');
         this.typing_el = document.querySelector('.game-playing__typing');
         this.typing_prev_city_el = document.querySelector('.game-playing__typing-prev-city');
         this.typing_next_city_el = document.querySelector('.game-playing__typing-next-city');
@@ -137,7 +139,7 @@ class GameUiPresenter {
     }
 
     /**
-     * Arrow keys walk the menu: the three signs and, once a route is picked,
+        * Arrow keys walk the menu: the menu signs and, once a route is picked,
      * Empezar. Bound on the window so the first arrow press can pull focus into
      * the menu from nowhere; when a modal is open its own focus sits inside the
      * modal, which parks this handler until it closes.
@@ -201,6 +203,10 @@ class GameUiPresenter {
 
     onAchievementsRequested(handler: () => void): void {
         this.bindActivation(this.sign_button_achievements_el, handler);
+    }
+
+    onSettingsRequested(handler: () => void): void {
+        this.bindActivation(this.sign_button_settings_el, handler);
     }
 
     onAudioToggleRequested(handler: () => void): void {
