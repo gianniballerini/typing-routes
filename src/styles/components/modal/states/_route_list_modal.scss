@@ -86,13 +86,46 @@
     width: 100%;
     max-height: 56vh;
 
-    padding: 8 * $ptr;
+    // extra room on the right so the scrollbar never sits on the tiles
+    padding: 8 * $ptr 14 * $ptr 8 * $ptr 8 * $ptr;
 
     overflow-x: hidden;
     overflow-y: auto;
 
     // The grid itself is the keyboard target; the focus ring lives on the tiles.
     outline: none;
+
+    // same lane-marked scrollbar as the manual: white road line on a dark shoulder
+    scrollbar-width: thin;
+    scrollbar-color: rgba($white, 0.75) rgba($black, 0.18);
+
+    &::-webkit-scrollbar {
+        width: 12 * $ptr;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: rgba($black, 0.18);
+        border-radius: 10 * $ptr;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10 * $ptr;
+
+        // dashes down the middle of the thumb, like the centre line of a road
+        background-color: rgba($white, 0.75);
+        background-image: repeating-linear-gradient(
+            to bottom,
+            transparent 0 6 * $ptr,
+            rgba($signs-green, 0.9) 6 * $ptr 14 * $ptr
+        );
+        background-clip: content-box;
+
+        border: 3 * $ptr solid transparent;
+
+        &:hover {
+            background-color: $white;
+        }
+    }
 
     @include respond-to($medium-wide-breakpoint) {
         grid-template-columns: repeat(3, 1fr);

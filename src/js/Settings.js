@@ -161,6 +161,23 @@ class Settings
         virtualKeyDedupeMs: 40,
         // Slight per-press variation, so a repeated key does not sound looped.
         gainJitter: 0.08
+      },
+      ui: {
+        // Mechvibes keycodes into the UI sprite (see KeycodeMap). 28 is Enter — a
+        // solid thunk that reads as "button"; 30 is 'A', light enough for hover.
+        clickKeycode: 28,
+        clickVolume: 1,
+        hoverKeycode: 30,
+        hoverVolume: 0.3,
+        // Sweeping the pointer across the route grid crosses a tile every few
+        // milliseconds; below this the hover click becomes a rattle.
+        hoverThrottleMs: 40
+      },
+      music: {
+        // Name of the manifest entry played over the menu.
+        menuTrack: 'menu-music',
+        // Long enough to duck under the countdown rather than cut on the "3".
+        fadeOutMs: 400
       }
     };
   }

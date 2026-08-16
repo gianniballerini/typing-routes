@@ -168,6 +168,16 @@
             pointer-events: none;
         }
 
+        // Parked behind the logo while a route card is open. `visibility` rather
+        // than `display` keeps the plate's slot in the layout for the drop back
+        // in, and it is what GameUiPresenter's `isVisible` reads to leave parked
+        // plates out of the arrow-key walk.
+        .game-menu__sign-button--parked {
+            transition: none;
+            pointer-events: none;
+            visibility: hidden;
+        }
+
         // Each plate is hung by hand: alternating angles keep the stack from
         // tilting in lockstep on hover.
         .game-menu__sign-button--route-list {

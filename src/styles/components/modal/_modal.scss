@@ -29,6 +29,10 @@
         transform: translate(10 * $ptr, 10 * $ptr);
 
         border: 3 * $ptr solid $white;
+
+        // Purely decorative, but as a positioned child it paints over the panel's
+        // own content and would otherwise swallow every click inside the modal.
+        pointer-events: none;
     }
 }
 

@@ -120,6 +120,20 @@
     }
 }
 
+// A row at zero reads as deliberately silenced rather than merely quiet.
+.settings-modal__setting--muted {
+    .settings-modal__setting-label,
+    .settings-modal__slider {
+        opacity: 0.45;
+    }
+
+    .settings-modal__setting-value {
+        opacity: 1;
+        color: $flag-yellow;
+        text-transform: uppercase;
+    }
+}
+
 .settings-modal__setting-label {
     font-size: 16 * $ptr;
     line-height: 1.2;
@@ -225,4 +239,8 @@
 
     font-size: 14 * $ptr;
     line-height: 1.4;
+
+    display: flex;
+    flex-direction: row;
+    gap: 4 * $ptr;
 }

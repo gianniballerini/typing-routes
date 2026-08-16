@@ -130,6 +130,17 @@ export interface SettingsShape {
       virtualKeyDedupeMs: number;
       gainJitter: number;
     };
+    ui: {
+      clickKeycode: number;
+      clickVolume: number;
+      hoverKeycode: number;
+      hoverVolume: number;
+      hoverThrottleMs: number;
+    };
+    music: {
+      menuTrack: string;
+      fadeOutMs: number;
+    };
   };
 }
 

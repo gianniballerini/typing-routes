@@ -6,7 +6,9 @@ type SoundCategory = 'music' | 'sfx' | 'keys';
 interface KeyPackSource {
     url: string;
     // Passed verbatim to `HTMLAudioElement.canPlayType` to pick a source the
-    // browser can actually decode (Safari cannot decode Ogg Vorbis).
+    // browser can actually decode. Every pack ships AAC only: it is the one
+    // encoding Safari and iOS are certain to take, and it is also the smaller
+    // file for these sprites.
     type: string;
     size: number;
     // AAC carries encoder priming delay. If a transcoded sprite plays shifted
@@ -23,7 +25,8 @@ interface KeyPackDefinition {
 interface SoundDefinition {
     name: string;
     url: string;
-    // Used when the browser cannot play `url` (Ogg primary, AAC fallback).
+    // Second encoding for browsers that cannot play `url`. Unused while
+    // everything ships as AAC, which decodes everywhere.
     fallbackUrl?: string;
     size: number;
     loop?: boolean;
@@ -35,7 +38,11 @@ interface SoundDefinition {
 }
 
 interface SoundManifest {
+    // The in-game typing sprite.
     keyPack?: KeyPackDefinition;
+    // A second sprite, played for buttons and every other UI interaction, so the
+    // menu does not sound like the keyboard the player types on.
+    uiPack?: KeyPackDefinition;
     sounds: SoundDefinition[];
 }
 

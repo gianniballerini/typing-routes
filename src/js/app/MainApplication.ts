@@ -5,6 +5,7 @@ import soundManifest from '../../assets/data/sounds.json';
 import { AudioManager } from '../audio/AudioManager';
 import { AudioPreferencesStorage } from '../audio/AudioPreferencesStorage';
 import type { SoundManifest } from '../audio/types';
+import { UiSoundController } from '../audio/UiSoundController';
 import { Game } from '../Game';
 import { KeyboardInputCoordinator } from '../input/KeyboardInputCoordinator';
 import { LoadingManager } from '../LoadingManager';
@@ -29,6 +30,7 @@ class MainApplication {
     user_stats: UserStats;
     audio_preferences_storage: AudioPreferencesStorage;
     audio_manager: AudioManager;
+    ui_sound_controller: UiSoundController;
     private readonly loading_manager: LoadingManager;
 
     // The loading screen is built by the entry module long before this class finishes
@@ -42,7 +44,15 @@ class MainApplication {
         this.audio_manager = new AudioManager(this.audio_preferences_storage);
         const audio_loading = this.audio_manager.load(soundManifest as SoundManifest);
         this.audio_manager.bindKeyboardSounds();
-        this.loading_manager.onStartGesture(() => this.audio_manager.unlock());
+        this.ui_sound_controller = new UiSoundController(this.audio_manager);
+        this.ui_sound_controller.init();
+        this.loading_manager.onStartGesture(() => {
+            this.audio_manager.unlock();
+            // The start CTA is a click like any other, and the menu music has no
+            // earlier legal moment to begin.
+            this.audio_manager.playUiClick();
+            this.audio_manager.playMusic();
+        });
 
         this.map_controller = new MapController();
         this.mouse_info_card = new MouseInfoCard();
@@ -67,6 +77,7 @@ class MainApplication {
         this.game = new Game(this.routes_controller, this.map_controller);
         this.ui_presenter = new GameUiPresenter();
         this.modal_controller = new ModalController();
+        this.ui_presenter.setModalOpenPredicate(() => this.modal_controller.isOpen());
         this.game_flow_coordinator = new GameFlowCoordinator({
             game: this.game,
             routes_controller: this.routes_controller,

@@ -7,6 +7,7 @@ class SettingsModal extends BaseModal {
     private sliderEls: HTMLInputElement[];
     private mutedNoteEl: HTMLElement | null;
     private onVolumeChangeHandler: ((category: SoundCategory, value: number) => void) | null;
+    private onCategoryMuteToggleHandler: ((category: SoundCategory) => void) | null;
 
     constructor(onCloseRequested: () => void) {
         super('.settings-modal', '.settings-modal__close-button', onCloseRequested);
@@ -16,6 +17,7 @@ class SettingsModal extends BaseModal {
         );
         this.mutedNoteEl = this.rootEl?.querySelector('.settings-modal__muted-note') ?? null;
         this.onVolumeChangeHandler = null;
+        this.onCategoryMuteToggleHandler = null;
 
         for (const sliderEl of this.sliderEls) {
             sliderEl.addEventListener('input', this.handleSliderInput);
@@ -25,6 +27,10 @@ class SettingsModal extends BaseModal {
 
     onVolumeChange(handler: (category: SoundCategory, value: number) => void): void {
         this.onVolumeChangeHandler = handler;
+    }
+
+    onCategoryMuteToggle(handler: (category: SoundCategory) => void): void {
+        this.onCategoryMuteToggleHandler = handler;
     }
 
     renderVolumes(volumes: Record<SoundCategory, number>): void {
@@ -70,6 +76,18 @@ class SettingsModal extends BaseModal {
         const sliderEl = event.currentTarget;
         if (!(sliderEl instanceof HTMLInputElement)) return;
 
+        if (event.key === 'Enter' || event.key === ' ') {
+            const category = this.getSliderCategory(sliderEl);
+            if (!category) return;
+
+            event.preventDefault();
+            // Nothing outside the modal should read this keystroke — in
+            // KeyboardInputCoordinator Enter means "skip the countdown".
+            event.stopPropagation();
+            this.onCategoryMuteToggleHandler?.(category);
+            return;
+        }
+
         const step = this.getSliderNavigationStep(event.key);
         if (step === 0) return;
 
@@ -101,8 +119,14 @@ class SettingsModal extends BaseModal {
     }
 
     private renderSliderValue(sliderEl: HTMLInputElement, percentage: number): void {
-        const valueEl = sliderEl.closest('.settings-modal__setting')
-            ?.querySelector('.settings-modal__setting-value');
+        const settingEl = sliderEl.closest('.settings-modal__setting');
+        if (!settingEl) return;
+
+        // A row at zero is a muted row, however it got there — dragging the slider
+        // all the way down and hitting Enter on it are the same state.
+        settingEl.classList.toggle('settings-modal__setting--muted', Math.round(percentage) <= 0);
+
+        const valueEl = settingEl.querySelector('.settings-modal__setting-value');
         if (!valueEl) return;
 
         valueEl.textContent = `${Math.round(percentage)}%`;

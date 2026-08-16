@@ -3,7 +3,9 @@ import { AudioManager } from '../audio/AudioManager';
 import type { SoundCategory } from '../audio/types';
 import { Game } from '../Game';
 import { GameState } from '../GameState';
+import { MapRouteCursor } from '../input/MapRouteCursor';
 import { MapController } from '../MapController';
+import type { Route } from '../Route';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
@@ -63,6 +65,7 @@ class GameFlowCoordinator {
     private countdownHideTimeoutHandle: number | null;
     private countdownRemaining: number;
     private pendingRunRouteId: string | null;
+    private map_route_cursor: MapRouteCursor;
 
     constructor(dependencies: GameFlowCoordinatorDependencies) {
         this.game = dependencies.game;
@@ -82,6 +85,24 @@ class GameFlowCoordinator {
         this.countdownHideTimeoutHandle = null;
         this.countdownRemaining = 0;
         this.pendingRunRouteId = null;
+
+        // Owned here rather than by MainApplication: every dependency it needs is
+        // a method on this coordinator, so handing it over would only be a
+        // circular trip back.
+        this.map_route_cursor = new MapRouteCursor({
+            getOrderedRouteIds: () => this.getOrderedPlayableRoutes().map((route) => route.route_id),
+            getSelectedRouteId: () => this.map_controller.getSelectedRouteId(),
+            selectRoute: (routeId) => this.map_controller.selectRoute(routeId),
+            startRoute: (routeId) => this.selectAndStartRoute(routeId),
+            onExit: () => {
+                this.ui_presenter.setMenuNavigationSuspended(false);
+                this.ui_presenter.focusMenuColumn();
+            },
+            canActivate: () => this.game.state === GameState.MENU && !this.modal_controller.isOpen(),
+            // The menu walk gets its hover blip from `focusin`; the map cursor
+            // moves no focus, so it plays the same one itself.
+            onStep: () => this.audio_manager.playUiHover(),
+        });
     }
 
     init(): void {
@@ -94,9 +115,12 @@ class GameFlowCoordinator {
         this.ui_presenter.onAchievementsRequested(this.handleAchievementsRequested);
         this.ui_presenter.onSettingsRequested(this.handleSettingsRequested);
         this.ui_presenter.onAudioToggleRequested(this.handleAudioToggleRequested);
+        this.ui_presenter.onMapCursorRequested(this.handleMapCursorRequested);
         this.modal_controller.routeListModal.onRouteActivated(this.handleRouteListActivated);
         this.modal_controller.settingsModal.onVolumeChange(this.handleVolumeChange);
+        this.modal_controller.settingsModal.onCategoryMuteToggle(this.handleCategoryMuteToggle);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
+        this.map_route_cursor.bind();
 
         this.game.addEventListener('city-visited', this.handleCityVisited as EventListener);
         this.game.addEventListener('route-complete', this.handleRouteComplete as EventListener);
@@ -122,6 +146,14 @@ class GameFlowCoordinator {
         if (this.game.state === GameState.PLAYING || this.game.state === GameState.COUNTDOWN) {
             this.ui_presenter.focusTypingInput();
         }
+    };
+
+    // Right arrow from the menu column: the arrows now walk the map.
+    private handleMapCursorRequested = (): void => {
+        if (this.game.state !== GameState.MENU) return;
+
+        this.ui_presenter.setMenuNavigationSuspended(true);
+        this.map_route_cursor.activate();
     };
 
     private handleStartRequested = (): void => {
@@ -256,16 +288,33 @@ class GameFlowCoordinator {
         if (this.game.state !== GameState.MENU) return;
 
         this.modal_controller.hide();
-        this.map_controller.selectRoute(routeId);
-        this.startRunForRoute(routeId);
+        this.selectAndStartRoute(routeId);
     };
 
-    private buildRouteListRows(): RouteListRow[] {
+    // The one way in for anything that picks a route and plays it straight away —
+    // the course grid and the map's keyboard cursor both land here.
+    selectAndStartRoute(routeId: string): void {
+        if (this.game.state !== GameState.MENU) return;
+
+        this.map_controller.selectRoute(routeId);
+        this.startRunForRoute(routeId);
+    }
+
+    /**
+     * Every route worth offering, in the order they are offered in. The course
+     * grid and the map cursor share it, so stepping the map and stepping the grid
+     * walk the same list.
+     */
+    private getOrderedPlayableRoutes(): Route[] {
         return Object.values(this.routes_controller.routes)
             // A route with no cities has nothing to type, and Enter here starts the
             // run straight away, so it never belongs in the picker.
             .filter((route) => route.cities.length > 0)
-            .sort((a, b) => this.toRouteNumber(a.route_number) - this.toRouteNumber(b.route_number))
+            .sort((a, b) => this.toRouteNumber(a.route_number) - this.toRouteNumber(b.route_number));
+    }
+
+    private buildRouteListRows(): RouteListRow[] {
+        return this.getOrderedPlayableRoutes()
             .map((route) => {
                 const record = this.user_stats.getRouteRecord(route.route_id);
                 const completed = this.user_stats.hasCompletedRoute(route.route_id);
@@ -295,6 +344,11 @@ class GameFlowCoordinator {
 
     private handleVolumeChange = (category: SoundCategory, value: number): void => {
         this.audio_manager.setCategoryVolume(category, value);
+    };
+
+    private handleCategoryMuteToggle = (category: SoundCategory): void => {
+        this.audio_manager.toggleCategoryMute(category);
+        this.modal_controller.settingsModal.renderVolumes(this.audio_manager.getCategoryVolumes());
     };
 
     /**
@@ -338,9 +392,14 @@ class GameFlowCoordinator {
     };
 
     private handleRouteSelected = (event: Event): void => {
-        const customEvent = event as CustomEvent<{ routeId: string | null }>;
+        const customEvent = event as CustomEvent<{ routeId: string | null; fromMapInteraction: boolean }>;
         const routeId = customEvent.detail.routeId;
         const selectedRoute = routeId ? this.routes_controller.routes[routeId] ?? null : null;
+
+        // The map canvas is not a `.button`, so `UiSoundController`'s delegation
+        // cannot see picking a route on it — including picking nothing, which
+        // deselects. A route chosen from the list already clicked on its tile.
+        if (customEvent.detail.fromMapInteraction) this.audio_manager.playUiClick();
 
         if (selectedRoute && routeId) {
             const routeRecord = this.user_stats.getRouteRecord(routeId);
@@ -429,11 +488,22 @@ class GameFlowCoordinator {
             && customEvent.detail.to === GameState.COUNTDOWN;
         const returningToMenu = customEvent.detail.to === GameState.MENU;
 
+        // The cursor is a menu affordance: leaving the menu takes the arrows back
+        // off the map, and the menu column gets them again on the way in.
+        if (!returningToMenu) this.map_route_cursor.deactivate();
+        this.ui_presenter.setMenuNavigationSuspended(false);
+
         // Key sounds only belong to a run; typing into the route-list search or
         // walking the menu with the arrows should stay quiet.
         this.audio_manager.setKeySoundsEnabled(
             customEvent.detail.to === GameState.COUNTDOWN || customEvent.detail.to === GameState.PLAYING
         );
+
+        // The music belongs to the menu. It ducks out over the countdown rather
+        // than at the "go", so the run starts in silence.
+        if (customEvent.detail.to === GameState.COUNTDOWN) {
+            this.audio_manager.stopMusic();
+        }
 
         if (enteringRun) {
             this.ui_presenter.focusTypingInput();
@@ -441,6 +511,7 @@ class GameFlowCoordinator {
 
         if (returningToMenu) {
             this.cancelCountdown();
+            this.audio_manager.playMusic();
             this.ui_presenter.blurTypingInput();
             // No-op when the run was abandoned mid-countdown: there are no stats yet.
             this.finalizeRunStats();

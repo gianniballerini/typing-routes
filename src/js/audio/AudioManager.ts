@@ -2,7 +2,7 @@ import { Settings } from '../Settings';
 import type { AudioPreferences } from './AudioPreferencesStorage';
 import { AudioPreferencesStorage } from './AudioPreferencesStorage';
 import { KeyboardSoundPack } from './KeyboardSoundPack';
-import type { SoundCategory, SoundDefinition, SoundManifest } from './types';
+import type { KeyPackDefinition, SoundCategory, SoundDefinition, SoundManifest } from './types';
 
 interface PlayOptions {
     volume?: number;
@@ -19,6 +19,9 @@ interface StreamedSound {
     definition: SoundDefinition;
     element: HTMLAudioElement;
     gain: GainNode;
+    // Set while the app wants this element audible, so the deferred park in
+    // `unlock` cannot pause a stream that was started from the same gesture.
+    wantsPlayback: boolean;
 }
 
 interface PlayingVoice {
@@ -55,6 +58,7 @@ class AudioManager {
     private readonly categoryGains: Record<SoundCategory, GainNode>;
 
     private readonly keyPack: KeyboardSoundPack;
+    private readonly uiPack: KeyboardSoundPack;
     private readonly buffered = new Map<string, BufferedSound>();
     private readonly streamed = new Map<string, StreamedSound>();
     private readonly voices = new Map<string, PlayingVoice[]>();
@@ -65,6 +69,10 @@ class AudioManager {
     private unlocked = false;
     private lastPhysicalKeyAt = -Infinity;
     private pendingPreferencesSaveHandle: number | null;
+    // Where a category's volume came from before it was muted. In memory only: a
+    // muted category is a volume of 0, which the snapshot already persists, and a
+    // slider that comes back from storage at 0 unmutes to the default instead.
+    private readonly preMuteCategoryVolumes = new Map<SoundCategory, number>();
 
     constructor(preferencesStorage: AudioPreferencesStorage) {
         this.preferencesStorage = preferencesStorage;
@@ -87,6 +95,9 @@ class AudioManager {
         }
 
         this.keyPack = new KeyboardSoundPack(this.context, this.categoryGains.keys);
+        // The UI pack is an effect, not the keyboard the player types on, so it
+        // rides the sfx slider.
+        this.uiPack = new KeyboardSoundPack(this.context, this.categoryGains.sfx);
         this.bindUnlockGestures();
         window.addEventListener('pagehide', this.handlePageHide);
     }
@@ -104,13 +115,12 @@ class AudioManager {
             onProgress?.(Math.min(loadedBytes, totalBytes), totalBytes);
         };
 
-        const blocking = manifest.keyPack
-            ? this.keyPack
-                .load(manifest.keyPack, reportBytes)
-                .catch((error: unknown) => {
-                    console.warn('Keyboard sound pack failed to load; key sounds are off', error);
-                })
-            : Promise.resolve();
+        // Both packs gate the loading screen: the start CTA is itself a click, so
+        // the UI pack has to be decoded before the player ever reaches the menu.
+        const blocking = Promise.all([
+            this.loadPack(this.keyPack, manifest.keyPack, 'Keyboard', reportBytes),
+            this.loadPack(this.uiPack, manifest.uiPack, 'UI', reportBytes),
+        ]).then(() => undefined);
 
         const rest = (manifest.sounds ?? []).map((definition) =>
             this.loadSound(definition)
@@ -125,6 +135,19 @@ class AudioManager {
             blocking,
             all: Promise.all([blocking, ...rest]).then(() => undefined),
         };
+    }
+
+    private loadPack(
+        pack: KeyboardSoundPack,
+        definition: KeyPackDefinition | undefined,
+        label: string,
+        reportBytes: (bytes: number) => void
+    ): Promise<void> {
+        if (!definition) return Promise.resolve();
+
+        return pack.load(definition, reportBytes).catch((error: unknown) => {
+            console.warn(`${label} sound pack failed to load; its sounds are off`, error);
+        });
     }
 
     private async loadSound(definition: SoundDefinition): Promise<void> {
@@ -152,11 +175,12 @@ class AudioManager {
         gain.connect(this.categoryGains[definition.category ?? DEFAULT_CATEGORY]);
         this.context.createMediaElementSource(element).connect(gain);
 
-        return { definition, element, gain };
+        return { definition, element, gain, wantsPlayback: false };
     }
 
-    // A browser that cannot play the primary encoding gets the fallback; Safari
-    // is the reason every sound ships as both Ogg and AAC.
+    // Everything currently ships as AAC alone, which every target browser can
+    // decode. The fallback path stays for the day a second encoding earns its
+    // place — Ogg/Opus is smaller, but only for the non-Safari half of the users.
     private pickPlayableUrl(definition: SoundDefinition): string {
         if (!definition.fallbackUrl) return definition.url;
 
@@ -177,10 +201,13 @@ class AudioManager {
     }
 
     private totalBytes(manifest: SoundManifest): number {
-        // The pack reports whichever encoding this browser picked, so budget for
-        // the largest of them and let the cap in `reportBytes` absorb the slack.
-        const packBytes = (manifest.keyPack?.sources ?? [])
-            .reduce((largest, source) => Math.max(largest, source.size ?? 0), 0);
+        // A pack reports whichever encoding this browser picked, so budget for the
+        // largest of them and let the cap in `reportBytes` absorb the slack.
+        const packBytes = [manifest.keyPack, manifest.uiPack].reduce(
+            (sum, pack) => sum + (pack?.sources ?? [])
+                .reduce((largest, source) => Math.max(largest, source.size ?? 0), 0),
+            0
+        );
         const soundBytes = (manifest.sounds ?? []).reduce((sum, sound) => sum + (sound.size ?? 0), 0);
         return Math.max(1, packBytes + soundBytes);
     }
@@ -210,6 +237,10 @@ class AudioManager {
             const started = stream.element.play();
             void Promise.resolve(started)
                 .then(() => {
+                    // The menu music is started from this very gesture, and this
+                    // callback lands a turn later: parking it here would silence it.
+                    if (stream.wantsPlayback) return;
+
                     stream.element.pause();
                     stream.element.currentTime = 0;
                 })
@@ -257,7 +288,15 @@ class AudioManager {
     private playStreamed(streamed: StreamedSound, options: PlayOptions): void {
         this.resumeIfNeeded();
 
-        streamed.gain.gain.value = (streamed.definition.volume ?? 1) * (options.volume ?? 1);
+        streamed.wantsPlayback = true;
+
+        // A fade-out may still be scheduled on this gain; assigning `.value` would
+        // not cancel it and the restarted track would ramp itself back to silence.
+        const now = this.context.currentTime;
+        const level = (streamed.definition.volume ?? 1) * (options.volume ?? 1);
+        streamed.gain.gain.cancelScheduledValues(now);
+        streamed.gain.gain.setValueAtTime(level, now);
+
         if (options.rate) streamed.element.playbackRate = options.rate;
         if (options.loop !== undefined) streamed.element.loop = options.loop;
 
@@ -268,7 +307,12 @@ class AudioManager {
     stop(name: string, fadeMs = 0): void {
         const streamed = this.streamed.get(name);
         if (streamed) {
+            streamed.wantsPlayback = false;
             this.fadeOut(streamed.gain, fadeMs, () => {
+                // Restarted mid-fade — abandoning a run inside the countdown puts
+                // the menu music back before this callback lands.
+                if (streamed.wantsPlayback) return;
+
                 streamed.element.pause();
                 streamed.element.currentTime = 0;
                 streamed.gain.gain.value = streamed.definition.volume ?? 1;
@@ -371,6 +415,50 @@ class AudioManager {
         return true;
     }
 
+    // --- ui sounds ---------------------------------------------------------
+
+    // Buttons, modals, route tiles, map selection — everything the player clicks
+    // rather than types. Fixed sprite regions, so a button always sounds like the
+    // same button.
+    playUiClick(): void {
+        this.playUiRegion(Settings.audio.ui.clickKeycode, Settings.audio.ui.clickVolume);
+    }
+
+    playUiHover(): void {
+        this.playUiRegion(Settings.audio.ui.hoverKeycode, Settings.audio.ui.hoverVolume);
+    }
+
+    // The UI keyboard shortcuts share Enter and Space with the countdown skip, so
+    // callers need to know when the typing sprite already owns the keystroke.
+    areKeySoundsEnabled(): boolean {
+        return this.keySoundsEnabled;
+    }
+
+    private playUiRegion(keycode: number, volume: number): void {
+        if (this.preferences.muted) return;
+        if (!this.uiPack.ready) return;
+
+        this.resumeIfNeeded();
+        this.uiPack.playForKeycode(keycode, volume);
+    }
+
+    // --- music -------------------------------------------------------------
+
+    // Idempotent: the menu is re-entered from several paths and none of them
+    // should restart a track that is already running.
+    playMusic(): void {
+        const track = Settings.audio.music.menuTrack;
+        // Checked instead of `isPlaying`, which is still true during a fade-out —
+        // that case has to restart rather than no-op.
+        if (this.streamed.get(track)?.wantsPlayback) return;
+
+        this.play(track);
+    }
+
+    stopMusic(fadeMs = Settings.audio.music.fadeOutMs): void {
+        this.stop(Settings.audio.music.menuTrack, fadeMs);
+    }
+
     // --- volume and mute ---------------------------------------------------
 
     isMuted(): boolean {
@@ -382,7 +470,10 @@ class AudioManager {
 
         this.preferences.muted = muted;
         this.rampGain(this.masterGain, muted ? 0 : this.preferences.masterVolume);
-        if (muted) this.keyPack.stopAll();
+        if (muted) {
+            this.keyPack.stopAll();
+            this.uiPack.stopAll();
+        }
         this.schedulePreferencesSave();
     }
 
@@ -426,6 +517,27 @@ class AudioManager {
         this.preferences.categoryVolumes[category] = clampedValue;
         this.rampGain(gain, clampedValue);
         this.schedulePreferencesSave();
+    }
+
+    isCategoryMuted(category: SoundCategory): boolean {
+        return this.preferences.categoryVolumes[category] <= 0;
+    }
+
+    // Silences one slider without touching the others or the master mute, and
+    // brings it back where it was.
+    toggleCategoryMute(category: SoundCategory): boolean {
+        if (this.isCategoryMuted(category)) {
+            const restoredVolume = this.preMuteCategoryVolumes.get(category)
+                ?? Settings.audio.categoryVolumes[category];
+
+            this.preMuteCategoryVolumes.delete(category);
+            this.setCategoryVolume(category, restoredVolume);
+            return false;
+        }
+
+        this.preMuteCategoryVolumes.set(category, this.preferences.categoryVolumes[category]);
+        this.setCategoryVolume(category, 0);
+        return true;
     }
 
     // --- internals ---------------------------------------------------------

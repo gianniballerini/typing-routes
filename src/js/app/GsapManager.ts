@@ -245,6 +245,33 @@ class GsapManager {
         });
     }
 
+    // The reverse of the drop: the plates are picked back up behind the logo and
+    // left parked there, so the route card gets the screen to itself. Top plate
+    // first, which is the drop's stagger read backwards.
+    playMenuSignsLift(elements: MenuSignsDropElements, onComplete?: () => void): void {
+        const signs = elements.signs.filter(Boolean);
+        if (!signs.length) {
+            onComplete?.();
+            return;
+        }
+
+        this.menuSignsTimeline?.kill();
+        gsap.killTweensOf(signs);
+
+        this.menuSignsTimeline = gsap.timeline({ onComplete });
+
+        signs.forEach((sign, index) => {
+            const parkedState = this.getMenuSignParkedState(sign, index, elements.hideBehind);
+            const startsAt = index * 0.07;
+
+            this.menuSignsTimeline!
+                .to(sign,
+                    { ...parkedState, duration: 0.42, ease: 'back.in(1.6)' },
+                    startsAt
+                );
+        });
+    }
+
     // Mouse info card
 
     moveTo(el: HTMLElement, x: number, y: number): void {

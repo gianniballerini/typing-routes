@@ -68,6 +68,11 @@ class GameUiPresenter {
     private typingInputHandler: ((inputText: string) => void) | null;
     private audio_toggle_el: HTMLElement | null;
     private audio_toggle_label_el: HTMLElement | null;
+    private modalOpenPredicate: (() => boolean) | null;
+    private mapCursorRequestedHandler: (() => void) | null;
+    private menuNavigationSuspended: boolean;
+    private last_focused_menu_button_el: HTMLElement | null;
+    private menu_signs_parked: boolean;
 
     constructor() {
         this.game_menu_el = document.querySelector('.game-menu');
@@ -133,29 +138,56 @@ class GameUiPresenter {
         this.typingInputHandler = null;
         this.audio_toggle_el = document.querySelector('.audio-toggle');
         this.audio_toggle_label_el = document.querySelector('.audio-toggle__label');
+        this.modalOpenPredicate = null;
+        this.mapCursorRequestedHandler = null;
+        this.menuNavigationSuspended = false;
+        this.last_focused_menu_button_el = null;
+        this.menu_signs_parked = false;
         this.renderElapsedTime(0);
 
         window.addEventListener('keydown', this.handleMenuNavigationKeydown);
     }
 
+    // The presenter is built before ModalController exists, so the menu learns
+    // about open modals through a predicate wired up afterwards.
+    setModalOpenPredicate(predicate: () => boolean): void {
+        this.modalOpenPredicate = predicate;
+    }
+
     /**
-        * Arrow keys walk the menu: the menu signs and, once a route is picked,
-     * Empezar. Bound on the window so the first arrow press can pull focus into
-     * the menu from nowhere; when a modal is open its own focus sits inside the
-     * modal, which parks this handler until it closes.
+     * The menu column is the vertical half of the two-zone arrow model: up and
+     * down walk the menu signs and, once a route is picked, Empezar, while right
+     * hands the arrows over to the map. Bound on the window so the first arrow
+     * press can pull focus into the menu from nowhere; an open modal parks this
+     * handler until it closes, and so does the map cursor while it is active.
      */
     private handleMenuNavigationKeydown = (event: KeyboardEvent): void => {
         const menuEl = this.game_menu_el;
         if (this.last_rendered_state !== GameState.MENU) return;
         if (!menuEl || menuEl.classList.contains('hidden')) return;
-
-        const step = this.getMenuNavigationStep(event.key);
-        if (step === 0) return;
+        // Clicking a modal's own non-focusable chrome drops focus back to the
+        // body, so focus alone cannot tell "nothing focused" from "modal open".
+        if (this.modalOpenPredicate?.()) return;
+        if (this.menuNavigationSuspended) return;
 
         const activeEl = document.activeElement;
         const focusIsInMenu = activeEl instanceof HTMLElement && menuEl.contains(activeEl);
-        // Focus sits somewhere else entirely (an open modal): leave those keys alone.
-        if (!focusIsInMenu && activeEl !== document.body) return;
+        // Focus sits somewhere else entirely: leave those keys alone. The map
+        // canvas is the exception — it takes focus on any click, and having
+        // clicked the map is the same starting point as having focused nothing.
+        if (!focusIsInMenu && !this.isLooseFocus(activeEl)) return;
+
+        // Works from a focused sign and from nothing focused alike, so reaching
+        // the map never takes a detour through the menu first.
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            if (focusIsInMenu && activeEl instanceof HTMLElement) activeEl.blur();
+            this.mapCursorRequestedHandler?.();
+            return;
+        }
+
+        const step = this.getMenuNavigationStep(event.key);
+        if (step === 0) return;
 
         const buttons = this.getNavigableMenuButtons();
         if (buttons.length === 0) return;
@@ -167,13 +199,44 @@ class GameUiPresenter {
             ? 0
             : (currentIndex + step + buttons.length) % buttons.length;
 
-        buttons[nextIndex].focus();
+        this.focusMenuButton(buttons[nextIndex]);
     };
 
     private getMenuNavigationStep(key: string): number {
-        if (key === 'ArrowDown' || key === 'ArrowRight') return 1;
-        if (key === 'ArrowUp' || key === 'ArrowLeft') return -1;
+        if (key === 'ArrowDown') return 1;
+        if (key === 'ArrowUp') return -1;
         return 0;
+    }
+
+    private isLooseFocus(activeEl: Element | null): boolean {
+        if (activeEl === null || activeEl === document.body) return true;
+        return activeEl.classList.contains('maplibregl-canvas');
+    }
+
+    private focusMenuButton(el: HTMLElement): void {
+        this.last_focused_menu_button_el = el;
+        el.focus();
+    }
+
+    onMapCursorRequested(handler: () => void): void {
+        this.mapCursorRequestedHandler = handler;
+    }
+
+    // Set while the map cursor owns the arrow keys, so both zones never move at once.
+    setMenuNavigationSuspended(suspended: boolean): void {
+        this.menuNavigationSuspended = suspended;
+    }
+
+    // Coming back from the map: the ring returns to the sign it left, or to the
+    // top of the column when that one is gone (the signs park while a card is open).
+    focusMenuColumn(): void {
+        const buttons = this.getNavigableMenuButtons();
+        if (buttons.length === 0) return;
+
+        const lastFocused = this.last_focused_menu_button_el;
+        const target = lastFocused && buttons.includes(lastFocused) ? lastFocused : buttons[0];
+
+        this.focusMenuButton(target);
     }
 
     // Empezar lives inside the route card, so it only joins the walk once a route
@@ -344,6 +407,8 @@ class GameUiPresenter {
     prepareMenuSignsDrop(): void {
         if (!this.sign_button_els.length) return;
 
+        this.menu_signs_parked = true;
+
         for (const sign of this.sign_button_els) {
             sign.classList.add('game-menu__sign-button--dropping');
         }
@@ -357,7 +422,10 @@ class GameUiPresenter {
     playMenuSignsDropAnimation(): void {
         if (!this.sign_button_els.length) return;
 
+        this.menu_signs_parked = false;
+
         for (const sign of this.sign_button_els) {
+            sign.classList.remove('game-menu__sign-button--parked');
             sign.classList.add('game-menu__sign-button--dropping');
         }
 
@@ -369,6 +437,40 @@ class GameUiPresenter {
                 }
             }
         );
+    }
+
+    // The route card takes the screen for itself: the plates go back up behind the
+    // logo and stay there until the card is closed.
+    private liftMenuSigns(): void {
+        if (this.menu_signs_parked || !this.sign_button_els.length) return;
+
+        this.menu_signs_parked = true;
+
+        for (const sign of this.sign_button_els) {
+            sign.classList.add('game-menu__sign-button--dropping');
+        }
+
+        GsapManager.playMenuSignsLift(
+            { signs: this.sign_button_els, hideBehind: this.menu_welcome_el },
+            () => {
+                for (const sign of this.sign_button_els) {
+                    sign.classList.remove('game-menu__sign-button--dropping');
+                    // `isVisible` reads `visibility`, so parking also takes the
+                    // plates out of the arrow-key walk.
+                    sign.classList.add('game-menu__sign-button--parked');
+                }
+            }
+        );
+    }
+
+    private dropMenuSigns(): void {
+        if (!this.menu_signs_parked) return;
+        // The parked pose is measured against the live layout. Ending a run
+        // deselects the route while the menu is still hidden, so the drop
+        // `renderState` plays on the way back in is the one that can measure.
+        if (!this.game_menu_el || this.game_menu_el.classList.contains('hidden')) return;
+
+        this.playMenuSignsDropAnimation();
     }
 
     private isTypingInputFocused(): boolean {
@@ -437,6 +539,7 @@ class GameUiPresenter {
 
         this.menu_info_card_el?.classList.remove('hidden');
 
+        this.liftMenuSigns();
         this.playMenuInfoCardAnimation('game-menu__info-card--slap');
     }
 
@@ -470,6 +573,7 @@ class GameUiPresenter {
         const cardWasVisible = this.menu_info_card_el?.classList.contains('hidden') === false;
 
         this.menu_info_card_el?.classList.add('hidden');
+        this.dropMenuSigns();
 
         if (!cardWasVisible) {
             this.menu_info_card_el?.classList.remove('game-menu__info-card--slap');

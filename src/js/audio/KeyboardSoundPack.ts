@@ -63,6 +63,13 @@ class KeyboardSoundPack {
         this.playRegion(region ?? this.fallbackRegion(), volume);
     }
 
+    // For callers that pick a region deliberately rather than from a keystroke —
+    // the UI pack sounds the same key for every click, so a button reads as a
+    // button instead of as a random keypress.
+    playForKeycode(keycode: number, volume: number): void {
+        this.playRegion(this.regions.get(keycode) ?? this.fallbackRegion(), volume);
+    }
+
     playFallback(volume: number): void {
         this.playRegion(this.fallbackRegion(), volume);
     }
