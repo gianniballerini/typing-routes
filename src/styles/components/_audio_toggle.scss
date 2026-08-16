@@ -1,0 +1,65 @@
+// Sits above the map in every game state — menu, countdown and run — so the
+// sound can always be cut. Fixed rather than laid out in `.header`, which is
+// otherwise an empty passthrough element.
+.audio-toggle {
+    position: fixed;
+    top: 16 * $ptr;
+    right: 16 * $ptr;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44 * $ptr;
+    height: 44 * $ptr;
+
+    color: $argentina-dark-gray;
+    background-color: rgba($white, 0.82);
+    border-radius: 50%;
+    box-shadow: 0 2 * $ptr 6 * $ptr rgba($black, 0.25);
+
+    transition: color 0.15s ease, background-color 0.15s ease;
+
+    &:hover {
+        color: $black;
+        background-color: $white;
+    }
+
+    &__icon {
+        width: 22 * $ptr;
+        height: 22 * $ptr;
+
+        pointer-events: none;
+    }
+
+    // The two icons are both in the markup; the muted class picks one.
+    &__icon--off {
+        display: none;
+    }
+
+    &--muted {
+        color: $argentina-gray;
+
+        .audio-toggle__icon--on {
+            display: none;
+        }
+
+        .audio-toggle__icon--off {
+            display: block;
+        }
+    }
+
+    // Announced by screen readers, never drawn.
+    &__label {
+        position: absolute;
+
+        overflow: hidden;
+        clip-path: inset(50%);
+
+        width: 1 * $ptr;
+        height: 1 * $ptr;
+
+        white-space: nowrap;
+    }
+}

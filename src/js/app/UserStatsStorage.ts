@@ -66,6 +66,14 @@ class UserStatsStorage {
         this.setStoredValue(JSON.stringify(snapshot));
     }
 
+    clear(): void {
+        try {
+            localStorage.removeItem(this.storageKey);
+        } catch {
+            console.warn('Unable to clear user stats in localStorage');
+        }
+    }
+
     private getStoredValue(): string | null {
         try {
             return localStorage.getItem(this.storageKey);

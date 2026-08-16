@@ -1,135 +1,84 @@
-import { copyElementImageToClipboard, shareElementAsImage } from './../utils/ShareUtils';
+import { AchievementsModal } from './modals/AchievementsModal';
+import { BaseModal } from './modals/BaseModal';
+import { HowToPlayModal } from './modals/HowToPlayModal';
+import type { ModalStateValue, OpenModalStateValue } from './modals/ModalState';
+import { ModalState } from './modals/ModalState';
+import type { RouteCompleteModalPayload } from './modals/RouteCompleteModal';
+import { RouteCompleteModal } from './modals/RouteCompleteModal';
+import { RouteListModal } from './modals/RouteListModal';
+import { SettingsModal } from './modals/SettingsModal';
 
-interface RouteCompleteModalPayload {
-	routeTitle: string;
-	combo: number;
-	grossWpm: number;
-	netWpm: number;
-	accuracy: number;
-	isNewComboRecord?: boolean;
-	isNewGrossWpmRecord?: boolean;
-	isNewNetWpmRecord?: boolean;
-	isNewAccuracyRecord?: boolean;
-	isNewTimeRecord?: boolean;
-	elapsedMs: number;
-	citiesCompleted: number;
-	citiesTotal: number;
-	mistakes: number;
-}
-
+// Owns the modal shell only: which state is open, switching between states and
+// showing/hiding. Everything inside a given modal lives in its own class.
 class ModalController {
-	private route_name: string;
+	readonly routeCompleteModal: RouteCompleteModal;
+	readonly howToPlayModal: HowToPlayModal;
+	readonly routeListModal: RouteListModal;
+	readonly achievementsModal: AchievementsModal;
+	readonly settingsModal: SettingsModal;
+
 	private rootEl: HTMLElement | null;
-	private routeCompleteEl: HTMLElement | null;
-	private routeCompleteTitleEl: HTMLElement | null;
-	private routeCompleteComboEl: HTMLElement | null;
-	private routeCompleteGrossWpmEl: HTMLElement | null;
-	private routeCompleteNetWpmEl: HTMLElement | null;
-	private routeCompleteAccuracyEl: HTMLElement | null;
-	private routeCompleteElapsedEl: HTMLElement | null;
-	private routeCompleteCitiesEl: HTMLElement | null;
-	private routeCompleteMistakesEl: HTMLElement | null;
-	private routeCompleteCloseButtonEl: HTMLElement | null;
-
-	private routeCompleteShareButtonEl: HTMLElement | null;
-	private routeCompleteShareButtonTextEl: HTMLElement | null;
-
+	private overlayEl: HTMLElement | null;
+	private currentState: ModalStateValue;
+	private modalsByState: Record<OpenModalStateValue, BaseModal>;
 	private escapeBound: boolean;
 
 	constructor() {
-		this.route_name = '';
-
 		this.rootEl = document.querySelector('.modal');
-		this.routeCompleteEl = document.querySelector('.route-complete-modal');
-		this.routeCompleteTitleEl = document.querySelector('.route-complete-modal__title-text');
-		this.routeCompleteComboEl = document.querySelector('.route-complete-modal__stat-value--combo');
-		this.routeCompleteGrossWpmEl = document.querySelector('.route-complete-modal__stat-value--gross-wpm');
-		this.routeCompleteNetWpmEl = document.querySelector('.route-complete-modal__stat-value--net-wpm');
-		this.routeCompleteAccuracyEl = document.querySelector('.route-complete-modal__stat-value--accuracy');
-		this.routeCompleteElapsedEl = document.querySelector('.route-complete-modal__stat-value--elapsed');
-		this.routeCompleteCitiesEl = document.querySelector('.route-complete-modal__stat-value--cities');
-		this.routeCompleteMistakesEl = document.querySelector('.route-complete-modal__stat-value--mistakes');
-		this.routeCompleteCloseButtonEl = document.querySelector('.route-complete-modal__button');
+		this.overlayEl = document.querySelector('.modal__overlay');
+		this.currentState = ModalState.NONE;
 		this.escapeBound = false;
 
-		this.routeCompleteShareButtonEl = document.querySelector('.route-complete-modal__share-button');
-		this.routeCompleteShareButtonTextEl = document.querySelector('.route-complete-modal__button-text');
+		this.routeCompleteModal = new RouteCompleteModal(this.hide);
+		this.howToPlayModal = new HowToPlayModal(this.hide);
+		this.routeListModal = new RouteListModal(this.hide);
+		this.achievementsModal = new AchievementsModal(this.hide);
+		this.settingsModal = new SettingsModal(this.hide);
 
-		this.routeCompleteCloseButtonEl?.addEventListener('click', this.hide);
-		this.routeCompleteShareButtonEl?.addEventListener('click', this.share);
+		this.modalsByState = {
+			[ModalState.ROUTE_COMPLETE]: this.routeCompleteModal,
+			[ModalState.HOW_TO_PLAY]: this.howToPlayModal,
+			[ModalState.ROUTE_LIST]: this.routeListModal,
+			[ModalState.ACHIEVEMENTS]: this.achievementsModal,
+			[ModalState.SETTINGS]: this.settingsModal
+		};
+
+		this.overlayEl?.addEventListener('click', this.hide);
 	}
 
-	showRouteComplete(payload: RouteCompleteModalPayload): void {
-		this.route_name = payload.routeTitle || 'Ruta completada';
-		const title = this.route_name;
-		const safeCombo = this.toRoundedNonNegativeInteger(payload.combo);
-		const safeGrossWpm = this.toOneDecimalNonNegative(payload.grossWpm);
-		const safeNetWpm = this.toOneDecimalNonNegative(payload.netWpm);
-		const safeAccuracy = this.toOneDecimalNonNegative(payload.accuracy);
-		const comboLabel = this.withNewRecordPrefix(safeCombo, Boolean(payload.isNewComboRecord));
-		const grossWpmLabel = this.withNewRecordPrefix(safeGrossWpm, Boolean(payload.isNewGrossWpmRecord));
-		const netWpmLabel = this.withNewRecordPrefix(safeNetWpm, Boolean(payload.isNewNetWpmRecord));
-		const accuracyLabel = this.withNewRecordPrefix(`${safeAccuracy}%`, Boolean(payload.isNewAccuracyRecord));
-		const elapsedLabel = this.withNewRecordPrefix(
-			this.formatElapsedTime(payload.elapsedMs),
-			Boolean(payload.isNewTimeRecord)
-		);
-		const safeCitiesTotal = this.toRoundedNonNegativeInteger(payload.citiesTotal);
-		const safeMistakes = this.toRoundedNonNegativeInteger(payload.mistakes);
+	show(state: ModalStateValue): void {
+		if (state === ModalState.NONE) {
+			this.hide();
+			return;
+		}
 
-		if (this.routeCompleteTitleEl) this.routeCompleteTitleEl.textContent = title;
-		if (this.routeCompleteComboEl) this.routeCompleteComboEl.textContent = comboLabel;
-		if (this.routeCompleteGrossWpmEl) this.routeCompleteGrossWpmEl.textContent = grossWpmLabel;
-		if (this.routeCompleteNetWpmEl) this.routeCompleteNetWpmEl.textContent = netWpmLabel;
-		if (this.routeCompleteAccuracyEl) this.routeCompleteAccuracyEl.textContent = accuracyLabel;
-		if (this.routeCompleteElapsedEl) this.routeCompleteElapsedEl.textContent = elapsedLabel;
-		if (this.routeCompleteCitiesEl) this.routeCompleteCitiesEl.textContent = `${safeCitiesTotal}`;
-		if (this.routeCompleteMistakesEl) this.routeCompleteMistakesEl.textContent = `${safeMistakes}`;
+		for (const modal of Object.values(this.modalsByState)) {
+			modal.hide();
+		}
 
+		// The shell is uncovered first so the state's own show() has a laid-out
+		// element to move focus onto.
 		this.rootEl?.classList.remove('hidden');
-		this.routeCompleteEl?.classList.remove('hidden');
+
+		this.modalsByState[state].show();
+		this.currentState = state;
+
 		this.bindEscapeKey();
 	}
 
 	hide = (): void => {
-		this.routeCompleteEl?.classList.add('hidden');
+		for (const modal of Object.values(this.modalsByState)) {
+			modal.hide();
+		}
+
+		this.currentState = ModalState.NONE;
+
 		this.rootEl?.classList.add('hidden');
 		this.unbindEscapeKey();
 	};
 
-	private share = async (): Promise<void> => {
-		if (this.routeCompleteEl) {
-			this.routeCompleteShareButtonEl?.classList.add('hidden');
-			this.routeCompleteCloseButtonEl?.classList.add('hidden');
-			try {
-				await copyElementImageToClipboard(this.routeCompleteEl);
-				// await shareElementAsImage(this.routeCompleteEl, `Record - ${this.route_name}.png`);
-			}
-			catch (error) {
-				try {
-					await shareElementAsImage(this.routeCompleteEl, `Record - ${this.route_name}.png`);
-				} catch (error) {
-					console.error('Failed to share element as image:', error);
-				}
-			}
-			finally {
-				this.routeCompleteShareButtonEl?.classList.remove('hidden');
-				this.routeCompleteCloseButtonEl?.classList.remove('hidden');
-				this.show_copy_success_message();
-			}
-		}
-	};
-
-	show_copy_success_message(): void {
-		if (this.routeCompleteShareButtonTextEl) {
-			const originalText = this.routeCompleteShareButtonTextEl.textContent;
-			this.routeCompleteShareButtonTextEl.textContent = 'Copied!';
-			setTimeout(() => {
-				if (this.routeCompleteShareButtonTextEl) {
-					this.routeCompleteShareButtonTextEl.textContent = originalText;
-				}
-			}, 2000);
-		}
+	getState(): ModalStateValue {
+		return this.currentState;
 	}
 
 	isOpen(): boolean {
@@ -148,6 +97,8 @@ class ModalController {
 		this.escapeBound = false;
 	}
 
+	// Capture phase + stopPropagation so the bubble-phase Escape handler in
+	// KeyboardInputCoordinator does not also quit the run / deselect the route.
 	private handleEscapeKeydown = (event: KeyboardEvent): void => {
 		if (event.key !== 'Escape' || !this.isOpen()) return;
 
@@ -155,32 +106,8 @@ class ModalController {
 		event.stopPropagation();
 		this.hide();
 	};
-
-	private toRoundedNonNegativeInteger(value: number): number {
-		if (!Number.isFinite(value)) return 0;
-		return Math.max(0, Math.round(value));
-	}
-
-	private toOneDecimalNonNegative(value: number): string {
-		const safeValue = Number.isFinite(value) ? Math.max(0, value) : 0;
-		return safeValue.toFixed(1);
-	}
-
-	private withNewRecordPrefix(value: string | number, isNewRecord: boolean): string {
-		const baseValue = `${value}`;
-		if (!isNewRecord) return baseValue;
-		return `(new record) ${baseValue}`;
-	}
-
-	private formatElapsedTime(elapsedMs: number): string {
-		const safeElapsedMs = Number.isFinite(elapsedMs) ? Math.max(0, elapsedMs) : 0;
-		const totalSeconds = Math.floor(safeElapsedMs / 1000);
-		const minutes = Math.floor(totalSeconds / 60);
-		const seconds = totalSeconds % 60;
-		return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-	}
 }
 
-export { ModalController };
-export type { RouteCompleteModalPayload };
+export { ModalController, ModalState };
+export type { ModalStateValue, RouteCompleteModalPayload };
 

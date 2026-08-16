@@ -12,6 +12,8 @@
             path( d="m12 19-7-7 7-7")
             path( d="M19 12H5")
         span.game-playing__quit-text Salir
+    .game-playing__countdown.hidden(aria-hidden='true')
+        span.game-playing__countdown-value
     .game-playing__top
         .game-playing__timer
             span.game-playing__timer-number
@@ -31,6 +33,7 @@
                         span.game-playing__cities-completed
                         span /
                         span.game-playing__cities-remaining
+                        span ciudades
             .game-playing__user-stats-bottom
                 .game-playing__stats-combo
                     span.game-playing__combo-number

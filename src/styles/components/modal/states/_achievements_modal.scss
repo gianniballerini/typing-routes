@@ -1,0 +1,247 @@
+.achievements-modal {
+    // Flex column, so the panel below is a flex item that can actually shrink to
+    // the cap — a percentage max-height on an auto height would be ignored.
+    display: flex;
+    flex-direction: column;
+
+    width: min(620 * $ptr, 100%);
+    min-height: 0;
+    max-height: min(90vh, calc(100vh - 48 * $ptr));
+    max-height: min(90dvh, calc(100dvh - 48 * $ptr));
+
+    font-family: $arimo-font;
+
+    pointer-events: auto;
+}
+
+.achievements-modal__content {
+    @include modal-panel;
+
+    min-height: 0;
+    overflow: hidden;
+}
+
+.achievements-modal__top {
+    display: flex;
+    flex-direction: row;
+    gap: 16 * $ptr;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.achievements-modal__title {
+    text-align: center;
+    padding: 10 * $ptr 12 * $ptr;
+}
+
+.achievements-modal__title-text {
+    @include modal-title-text;
+}
+
+.achievements-modal__close-button {
+    @include modal-close-button;
+}
+
+.achievements-modal__bottom {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12 * $ptr;
+
+    width: 100%;
+    min-height: 0;
+}
+
+.achievements-modal__progress {
+    text-align: center;
+}
+
+.achievements-modal__progress-text {
+    font-size: 18 * $ptr;
+    letter-spacing: 1 * $ptr;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 20 * $ptr;
+    }
+}
+
+.achievements-modal__footer-hint {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 14 * $ptr;
+
+    font-size: 13 * $ptr;
+    text-transform: uppercase;
+    letter-spacing: 0.5 * $ptr;
+    opacity: 0.65;
+}
+
+.achievements-modal__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10 * $ptr;
+
+    width: 100%;
+    // min-height: 0 — without it the flex item refuses to shrink below its
+    // content and overflow-y never kicks in.
+    min-height: 0;
+    max-height: 56vh;
+
+    // overflow clips at the padding edge, so this padding is the only room the
+    // focused row's scale-up + focus ring have to grow into — keep it at least
+    // as wide as that overhang (~8px of scale on a full-width row + the 3px
+    // ring) or the row's left border reads as cut off. The right side doubles
+    // as the gap that keeps the scrollbar off the rows.
+    padding: 6 * $ptr 14 * $ptr;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    // The list itself is the keyboard target; the focus ring lives on the rows.
+    outline: none;
+
+    // same lane-marked scrollbar as the manual: white road line on a dark shoulder
+    scrollbar-width: thin;
+    scrollbar-color: rgba($white, 0.75) rgba($black, 0.18);
+
+    &::-webkit-scrollbar {
+        width: 12 * $ptr;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: rgba($black, 0.18);
+        border-radius: 10 * $ptr;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10 * $ptr;
+
+        // dashes down the middle of the thumb, like the centre line of a road
+        background-color: rgba($white, 0.75);
+        background-image: repeating-linear-gradient(
+            to bottom,
+            transparent 0 6 * $ptr,
+            rgba($signs-green, 0.9) 6 * $ptr 14 * $ptr
+        );
+        background-clip: content-box;
+
+        border: 3 * $ptr solid transparent;
+
+        &:hover {
+            background-color: $white;
+        }
+    }
+}
+
+.achievements-modal__row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 14 * $ptr;
+
+    padding: 10 * $ptr 14 * $ptr;
+
+    // Leaves room for the focused row's scale-up when it is scrolled into view.
+    scroll-margin: 10 * $ptr;
+
+    background-color: rgba($black, 0.18);
+    border: 2 * $ptr solid rgba($white, 0.25);
+    border-radius: 12 * $ptr;
+
+    outline: none;
+
+    transition: transform 140ms ease-out, box-shadow 140ms ease-out,
+        border-color 140ms ease-out, opacity 140ms ease-out;
+
+    &:hover {
+        border-color: rgba($white, 0.6);
+    }
+}
+
+// Same Mario-Kart pop as the route grid, dialled back: these rows are full width,
+// so they need far less scale to read as lifted.
+.achievements-modal__row--focused {
+    border-color: $flag-yellow;
+    box-shadow: 0 0 0 3 * $ptr rgba($flag-yellow, 0.45), 0 8 * $ptr 20 * $ptr rgba($black, 0.4);
+
+    transform: scale(1.03);
+    z-index: 1;
+}
+
+.achievements-modal__row-image {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 56 * $ptr;
+    height: 56 * $ptr;
+
+    background-color: rgba($white, 0.08);
+    border-radius: 10 * $ptr;
+
+    overflow: hidden;
+
+    @include respond-to($medium-breakpoint) {
+        width: 64 * $ptr;
+        height: 64 * $ptr;
+    }
+
+    // Trophy glyphs rather than photos, so they are fitted whole with a little
+    // breathing room instead of cropped.
+    img {
+        width: 68%;
+        height: 68%;
+        object-fit: contain;
+    }
+}
+
+.achievements-modal__row-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4 * $ptr;
+
+    min-width: 0;
+}
+
+.achievements-modal__row-title {
+    font-size: 18 * $ptr;
+    line-height: 1.1;
+    text-transform: uppercase;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 20 * $ptr;
+    }
+}
+
+.achievements-modal__row-description {
+    margin: 0;
+
+    font-size: 14 * $ptr;
+    line-height: 1.35;
+
+    opacity: 0.9;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 15 * $ptr;
+    }
+}
+
+// A trophy still to earn: greyed back, with its description smeared out so the
+// list shows how many are left without giving away what each one asks for.
+.achievements-modal__row--locked {
+    opacity: 0.5;
+
+    .achievements-modal__row-image img {
+        filter: grayscale(1);
+    }
+
+    .achievements-modal__row-description {
+        @include user-select(none);
+
+        font-family: $redacted-script-font;
+    }
+}

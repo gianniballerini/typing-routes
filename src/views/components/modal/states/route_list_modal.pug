@@ -1,0 +1,40 @@
+.route-list-modal.hidden
+    .route-list-modal__content
+        .route-list-modal__top
+            .route-list-modal__title
+                span.route-list-modal__title-text Rutas
+            .button.route-list-modal__close-button(role="button" tabindex="0" aria-label="Cerrar")
+                svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x")
+                    path( d="M18 6 6 18")
+                    path( d="m6 6 12 12")
+        .route-list-modal__bottom
+            .route-list-modal__filters(role="group" aria-label="Filtrar rutas")
+                .button.route-list-modal__filter.route-list-modal__filter--active(data-filter="all" role="button" tabindex="0") Todas
+                .button.route-list-modal__filter(data-filter="unplayed" role="button" tabindex="0") Sin jugar
+                .button.route-list-modal__filter(data-filter="completed" role="button" tabindex="0") Completadas
+            .route-list-modal__grid(role="listbox" tabindex="0" aria-label="Elegí una ruta")
+            .route-list-modal__empty.hidden No hay rutas para este filtro
+            .route-list-modal__footer
+                .route-list-modal__footer-detail
+                    span.route-list-modal__footer-title
+                    span.route-list-modal__footer-stats
+                .route-list-modal__footer-hint
+                    span ← → ↑ ↓ mover
+                    span ENTER jugar
+                    span ESC salir
+
+        //- Cloned once per route by RouteListModal.
+        template.route-list-modal__tile-template
+            .route-list-modal__tile(role="option")
+                .route-list-modal__tile-image
+                    img(src="#" alt="" loading="lazy")
+                .route-list-modal__tile-sign
+                    .route-list-modal__tile-sign-top
+                        span.route-list-modal__tile-number RN
+                    .route-list-modal__tile-sign-bottom
+                        span.route-list-modal__tile-cities 0 ciudades
+                .route-list-modal__tile-name
+                .stars.stars--sm.route-list-modal__tile-stars
+                .route-list-modal__tile-check
+                    svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check")
+                        path( d="M20 6 9 17l-5-5")

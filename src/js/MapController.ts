@@ -58,6 +58,11 @@ class MapController {
             minZoom: Settings.minZoom,
             maxBounds: Settings.maxBounds as [[number, number], [number, number]]
         });
+
+        // The canvas takes focus on any click, and MapLibre's own arrow keys pan
+        // from there — which is exactly the gesture the menu uses to walk routes.
+        // Panning stays available through the mouse.
+        this.map.keyboard.disable();
     }
 
     init() {
@@ -144,9 +149,12 @@ class MapController {
         this.map.getCanvas().removeEventListener(type, listener);
     }
 
-    private emitRouteSelected(routeId: string | null): void {
+    // `fromMapInteraction` separates a click on the canvas from a programmatic
+    // selection (the route list picking a route for the player); only the former
+    // deserves a click sound.
+    private emitRouteSelected(routeId: string | null, fromMapInteraction: boolean): void {
         this.map.getCanvas().dispatchEvent(new CustomEvent('route-selected', {
-            detail: { routeId }
+            detail: { routeId, fromMapInteraction }
         }));
     }
 
@@ -214,6 +222,11 @@ class MapController {
                         'case',
                         ['boolean', ['feature-state', 'selected'], false], Settings.routeLine.colors.selected,
                         ['boolean', ['feature-state', 'hovered'], false], Settings.routeLine.colors.hovered,
+                        // Gold gets brighter with the star rating; `visited` covers
+                        // routes completed without earning a star yet.
+                        ['>=', ['get', 'stars'], 3], Settings.routeLine.colors.stars3,
+                        ['>=', ['get', 'stars'], 2], Settings.routeLine.colors.stars2,
+                        ['>', ['get', 'stars'], 0], Settings.routeLine.colors.stars1,
                         ['get', 'visited'], Settings.routeLine.colors.visited,
                         Settings.routeLine.colors.default
                     ],
@@ -306,7 +319,7 @@ class MapController {
             this.map.on('click', Settings.layerIds.nationalRoutesHitbox, (e) => {
                 if (!e.features || e.features.length === 0) return;
                 const clickedId = e.features[0].id ?? null;
-                this.selectRoute(this.selectedId === clickedId ? null : clickedId);
+                this.selectRoute(this.selectedId === clickedId ? null : clickedId, true);
             });
 
             this.map.on('click', (e) => {
@@ -326,12 +339,12 @@ class MapController {
 
                 if (this.selectedId === null) return;
 
-                this.selectRoute(null);
+                this.selectRoute(null, true);
             });
         });
     }
 
-    selectRoute(routeId: string | number | null) {
+    selectRoute(routeId: string | number | null, fromMapInteraction = false) {
         if (this.selectedId !== null) {
             this.map.setFeatureState({ source: Settings.sourceIds.nationalRoutes, id: this.selectedId }, { selected: false });
         }
@@ -344,7 +357,7 @@ class MapController {
             this.applySelectedRouteCitiesFeatureState();
         }
 
-        this.emitRouteSelected(routeId === null ? null : String(routeId));
+        this.emitRouteSelected(routeId === null ? null : String(routeId), fromMapInteraction);
     }
 
     getSelectedRouteId(): string | null {

@@ -16,6 +16,11 @@ interface LoadingIntroElements {
     welcome: HTMLElement | null;
 }
 
+interface MenuSignsDropElements {
+    signs: HTMLElement[];
+    hideBehind: HTMLElement | null;
+}
+
 // Every GSAP call in the app lives here: modules describe *what* they want
 // animated and this manager owns the tweens, timelines and plugin registration.
 class GsapManager {
@@ -29,6 +34,7 @@ class GsapManager {
     private loadingProgressTween: gsap.core.Tween | null = null;
     private loadingIntroTimeline: gsap.core.Timeline | null = null;
     private loadingExitTimeline: gsap.core.Timeline | null = null;
+    private menuSignsTimeline: gsap.core.Timeline | null = null;
 
     disappearWithSwell(el: HTMLElement): void {
         gsap.timeline()
@@ -158,6 +164,137 @@ class GsapManager {
                 ease: 'power2.out',
             }, 0.56)
             ;
+    }
+
+    // Game menu
+
+    // Where a plate hides: centred on the welcome logo, which paints over it.
+    // Measured off `offsetTop` rather than a bounding rect because the plate may
+    // already be sitting on a transform when this is asked a second time, and a
+    // rect would fold that offset back into the answer. Without a logo to hide
+    // behind, just push the plate up past its own height so it still starts
+    // off-slot.
+    private getMenuSignParkedY(sign: HTMLElement, hideBehind: HTMLElement | null): number {
+        if (!hideBehind) return -(sign.offsetHeight * 2);
+
+        return (hideBehind.offsetTop + hideBehind.offsetHeight / 2)
+            - (sign.offsetTop + sign.offsetHeight / 2);
+    }
+
+    private getMenuSignParkedState(sign: HTMLElement, index: number, hideBehind: HTMLElement | null) {
+        return {
+            y: this.getMenuSignParkedY(sign, hideBehind),
+            rotate: index % 2 === 0 ? -5 : 4,
+            scale: 0.94
+        };
+    }
+
+    // Stacks the plates behind the logo without animating, so they are already
+    // out of sight by the time whatever covers the menu lifts away.
+    parkMenuSigns(elements: MenuSignsDropElements): void {
+        const signs = elements.signs.filter(Boolean);
+        if (!signs.length) return;
+
+        this.menuSignsTimeline?.kill();
+        gsap.killTweensOf(signs);
+
+        signs.forEach((sign, index) => {
+            gsap.set(sign, this.getMenuSignParkedState(sign, index, elements.hideBehind));
+        });
+    }
+
+    // The parked plates fall into their slots one after the other. Safe to call
+    // whether or not they were parked first: the tween declares its own start.
+    playMenuSignsDrop(elements: MenuSignsDropElements, onComplete?: () => void): void {
+        const signs = elements.signs.filter(Boolean);
+        if (!signs.length) {
+            onComplete?.();
+            return;
+        }
+
+        this.menuSignsTimeline?.kill();
+        gsap.killTweensOf(signs);
+
+        this.menuSignsTimeline = gsap.timeline({
+            onComplete: () => {
+                // Hands the transform back to CSS, otherwise the inline one left
+                // by the timeline would outrank the hover tilt.
+                gsap.set(signs, { clearProps: 'transform' });
+                onComplete?.();
+            }
+        });
+
+        signs.forEach((sign, index) => {
+            // Bottom plate first, so the stack fills upwards towards the logo.
+            const startsAt = (signs.length - 1 - index) * 0.13;
+
+            this.menuSignsTimeline!
+                // bounce.out does the landing itself: the plate hits its slot and
+                // settles in two quick diminishing hops.
+                .fromTo(sign,
+                    this.getMenuSignParkedState(sign, index, elements.hideBehind),
+                    { y: 0, duration: 0.72, ease: 'bounce.out' },
+                    startsAt
+                )
+                // The tilt straightens on its own clock, overshooting slightly so
+                // the plate rocks level a beat after it has already landed.
+                .to(sign,
+                    { rotate: 0, scale: 1, duration: 0.5, ease: 'back.out(2.4)' },
+                    startsAt + 0.18
+                );
+        });
+    }
+
+    // The reverse of the drop: the plates are picked back up behind the logo and
+    // left parked there, so the route card gets the screen to itself. Top plate
+    // first, which is the drop's stagger read backwards.
+    playMenuSignsLift(elements: MenuSignsDropElements, onComplete?: () => void): void {
+        const signs = elements.signs.filter(Boolean);
+        if (!signs.length) {
+            onComplete?.();
+            return;
+        }
+
+        this.menuSignsTimeline?.kill();
+        gsap.killTweensOf(signs);
+
+        this.menuSignsTimeline = gsap.timeline({ onComplete });
+
+        signs.forEach((sign, index) => {
+            const parkedState = this.getMenuSignParkedState(sign, index, elements.hideBehind);
+            const startsAt = index * 0.07;
+
+            this.menuSignsTimeline!
+                .to(sign,
+                    { ...parkedState, duration: 0.42, ease: 'back.in(1.6)' },
+                    startsAt
+                );
+        });
+    }
+
+    // Achievement toast
+
+    // Drops in from above the viewport edge and overshoots slightly, so a trophy
+    // earned behind the route-complete modal still catches the eye.
+    playAchievementToastIn(el: HTMLElement): void {
+        gsap.fromTo(el,
+            { opacity: 0, y: -24, scale: 0.92 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: 'back.out(1.7)' }
+        );
+    }
+
+    // The card is removed by the caller once this lands, so the stack does not
+    // keep collapsed nodes around.
+    playAchievementToastOut(el: HTMLElement, onComplete: () => void): void {
+        gsap.killTweensOf(el);
+        gsap.to(el, {
+            opacity: 0,
+            y: -16,
+            scale: 0.96,
+            duration: 0.25,
+            ease: 'power2.in',
+            onComplete
+        });
     }
 
     // Mouse info card

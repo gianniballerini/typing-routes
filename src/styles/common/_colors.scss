@@ -17,5 +17,8 @@ $flag-yellow: #FFB81C !default;
 $flag-brown: #7D4016 !default;
 
 $signs-green: #469C66 !default;
+// A shade under the sign green, for chrome that has to sit on top of a sign
+// panel without reading as part of it.
+$signs-green-dark: #33724A !default;
 $signs-blue: #290bae !default;
 

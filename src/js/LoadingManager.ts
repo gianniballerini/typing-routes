@@ -23,9 +23,24 @@ class LoadingManager {
     private exitStarted = false;
     private introFinished = false;
     private progressFinished = false;
+    private finished = false;
+    private finishedHandler: (() => void) | null = null;
+    private startGestureHandler: (() => void) | null = null;
 
     private readonly handleStartClick = (): void => {
         if (!this.readyToStart || this.exitStarted) return;
+        this.startGestureHandler?.();
+        this.playExitAnimation();
+    };
+
+    // Bound on the window: the loading screen is not focusable, so there is no
+    // element for the key to land on.
+    private readonly handleStartKeydown = (event: KeyboardEvent): void => {
+        if (event.key !== 'Enter') return;
+        if (!this.readyToStart || this.exitStarted) return;
+
+        event.preventDefault();
+        this.startGestureHandler?.();
         this.playExitAnimation();
     };
 
@@ -118,6 +133,7 @@ class LoadingManager {
         this.ctaElement.classList.add('loading-screen__cta--visible');
         this.ctaElement.setAttribute('aria-hidden', 'false');
         this.loadingElement.addEventListener('click', this.handleStartClick);
+        window.addEventListener('keydown', this.handleStartKeydown);
 
         GsapManager.disappearWithSwell(this.progressElement as HTMLElement);
     }
@@ -128,6 +144,7 @@ class LoadingManager {
         this.exitStarted = true;
         this.readyToStart = false;
         this.loadingElement.removeEventListener('click', this.handleStartClick);
+        window.removeEventListener('keydown', this.handleStartKeydown);
 
         this.loadingElement.classList.add('loading-screen--exiting');
 
@@ -138,14 +155,34 @@ class LoadingManager {
         }, () => this.finishLoadingScreen());
     }
 
+    // The click or Enter on the start CTA is the app's first user gesture, and
+    // therefore the only place an AudioContext can legally be resumed. Fired
+    // before the exit animation so the resume lands inside the gesture's turn.
+    onStartGesture(handler: () => void): void {
+        this.startGestureHandler = handler;
+    }
+
+    // The game layer is uncovered by now, so whoever registers here can measure
+    // and animate against a laid-out menu.
+    onFinished(handler: () => void): void {
+        this.finishedHandler = handler;
+        if (this.finished) handler();
+    }
+
     private finishLoadingScreen(): void {
+        if (this.finished) return;
+        this.finished = true;
+
         this.loadingElement?.removeEventListener('click', this.handleStartClick);
+        window.removeEventListener('keydown', this.handleStartKeydown);
         this.homeElement?.classList.remove('home--loading');
 
         if (this.loadingElement) {
             this.loadingElement.classList.add('hidden');
             this.loadingElement.style.display = 'none';
         }
+
+        this.finishedHandler?.();
     }
 }
 export { LoadingManager };

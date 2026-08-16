@@ -1,11 +1,20 @@
 .game-menu
     .game-menu__top
-        .game-menu__welcome
-            img.game-menu__logo-background(src="/images/common/logo_background.png" alt="Logo de Tipeando")
-            span.game-menu__welcome-title
-                .game-menu__welcome-title--1 Tipe
-                .game-menu__welcome-title--2 A
-                .game-menu__welcome-title--1 ndo
+        .game-menu__top-left
+            .game-menu__welcome
+                img.game-menu__logo-background(src="/images/common/logo_background.png" alt="Logo de Tipeando")
+                span.game-menu__welcome-title
+                    .game-menu__welcome-title--1 Tipe
+                    .game-menu__welcome-title--2 A
+                    .game-menu__welcome-title--1 ndo
+            .button.game-menu__sign-button.game-menu__sign-button--route-list(role="button" tabindex="0")
+                | Lista de Rutas
+            .button.game-menu__sign-button.game-menu__sign-button--how-to-play(role="button" tabindex="0")
+                | Como Jugar
+            .button.game-menu__sign-button.game-menu__sign-button--achievements(role="button" tabindex="0")
+                | Trofeos
+            .button.game-menu__sign-button.game-menu__sign-button--settings(role="button" tabindex="0")
+                | Configuración
         .game-menu__info-card.old-paper.old-paper--deckled.old-paper--map.hidden
             .button.game-menu__info-card-close
                 svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x")
@@ -23,6 +32,7 @@
 
             .game-menu__info-card-bottom
                 .game-menu__route-description
+                .stars.stars--md.game-menu__route-stars
                 .game-menu__route-record
                     .game-menu__route-record-values
                         span.game-menu__route-record-title Records
@@ -44,6 +54,6 @@
                         .game-menu__route-record-group
                             span Errores
                             span.game-menu__route-record-mistakes --
-                .button.game-menu__button
+                .button.game-menu__button(role="button" tabindex="0")
                     | Empezar
     .game-menu__bottom

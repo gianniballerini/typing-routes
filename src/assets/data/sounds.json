@@ -1,0 +1,44 @@
+{
+  "keyPack": {
+    "configUrl": "/sounds/cherrymx-red-abs/config.json",
+    "sources": [
+      {
+        "url": "/sounds/cherrymx-red-abs/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 613735,
+        "offsetCompensationMs": 0
+      }
+    ],
+    "volume": 0.6
+  },
+  "uiPack": {
+    "configUrl": "/sounds/model-f-xt/config.json",
+    "sources": [
+      {
+        "url": "/sounds/model-f-xt/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 769737,
+        "offsetCompensationMs": 0
+      }
+    ],
+    "volume": 0.5
+  },
+  "sounds": [
+    {
+      "name": "menu-music",
+      "url": "/sounds/menu-music.m4a",
+      "size": 0,
+      "loop": true,
+      "stream": true,
+      "category": "music",
+      "volume": 0.45
+    },
+    {
+      "name": "achievement",
+      "url": "/sounds/achievement.m4a",
+      "size": 61342,
+      "category": "sfx",
+      "volume": 0.8
+    }
+  ]
+}

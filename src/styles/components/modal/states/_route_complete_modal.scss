@@ -1,38 +1,12 @@
 .route-complete-modal {
 	width: min(560 * $ptr, 100%);
     font-family: $arimo-font;
+
+    pointer-events: auto;
 }
 
 .route-complete-modal__content {
-	background: $signs-green;
-	border-radius: 16 * $ptr;
-	box-shadow: 0 14 * $ptr 48 * $ptr rgba(0, 0, 0, 0.35);
-
-	color: $white;
-
-	display: flex;
-	flex-direction: column;
-	gap: 18 * $ptr;
-
-	padding: 22 * $ptr;
-
-    position: relative;
-
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        width: calc(100% - 20 * $ptr);
-        height: calc(100% - 20 * $ptr);
-
-        border-radius: 10 * $ptr;
-
-        transform: translate(10 * $ptr, 10 * $ptr);
-
-        border: 3 * $ptr solid $white;
-    }
+    @include modal-panel;
 }
 
 .route-complete-modal__top {
@@ -50,9 +24,24 @@
 }
 
 .route-complete-modal__title-text {
-	font-size: 36 * $ptr;
-	line-height: 1;
-    text-transform: uppercase;
+    @include modal-title-text;
+}
+
+.route-complete-modal__rating {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	row-gap: 6 * $ptr;
+
+	padding: 6 * $ptr 12 * $ptr 16 * $ptr;
+}
+
+.route-complete-modal__rating-label {
+	font-size: 18 * $ptr;
+	text-transform: uppercase;
+	letter-spacing: 0.5 * $ptr;
+
+	text-align: center;
 }
 
 .route-complete-modal__stats {
@@ -86,29 +75,8 @@
     width: 100%;
 }
 
-.route-complete-modal__button {
-	position: absolute;
-    top: 0 * $ptr;
-    right: 0 * $ptr;
-
-    margin: 15 * $ptr 15 * $ptr 0 0;
-
-    height: 40 * $ptr;
-    width: 40 * $ptr;
-
-    text-align: center;
-    font-size: 20 * $ptr;
-
-    text-transform: uppercase;
-
-    &:hover {
-        background-color: rgba($white, 0.2);
-    }
-
-    svg {
-        width: 100%;
-        height: 100%;
-    }
+.route-complete-modal__close-button {
+    @include modal-close-button;
 }
 
 .route-complete-modal__share-button {
@@ -125,20 +93,19 @@
     &:hover {
         background-color: rgba($white, 0.2);
     }
-
 }
 
-    .route-complete-modal__button-text {
-        font-size: 20 * $ptr;
-        text-transform: uppercase;
-    }
+.route-complete-modal__button-text {
+    font-size: 20 * $ptr;
+    text-transform: uppercase;
+}
 
-    .route-complete-modal__button-icon {
-        width: 30 * $ptr;
-        height: 30 * $ptr;
+.route-complete-modal__button-icon {
+    width: 30 * $ptr;
+    height: 30 * $ptr;
 
-        svg {
-            width: 100%;
-            height: 100%;
-        }
+    svg {
+        width: 100%;
+        height: 100%;
     }
+}

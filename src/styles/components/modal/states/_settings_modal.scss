@@ -1,0 +1,246 @@
+.settings-modal {
+    display: flex;
+    flex-direction: column;
+
+    width: min(620 * $ptr, 100%);
+    min-height: 0;
+    max-height: min(90vh, calc(100vh - 48 * $ptr));
+    max-height: min(90dvh, calc(100dvh - 48 * $ptr));
+
+    font-family: $arimo-font;
+
+    pointer-events: auto;
+}
+
+.settings-modal__content {
+    @include modal-panel;
+
+    min-height: 0;
+    overflow: hidden;
+}
+
+.settings-modal__top {
+    display: flex;
+    flex-direction: row;
+    gap: 16 * $ptr;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.settings-modal__title {
+    text-align: center;
+    padding: 10 * $ptr 12 * $ptr;
+}
+
+.settings-modal__title-text {
+    @include modal-title-text;
+}
+
+.settings-modal__close-button {
+    @include modal-close-button;
+}
+
+.settings-modal__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 18 * $ptr;
+
+    width: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 0 18 * $ptr 0 12 * $ptr;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba($white, 0.75) rgba($black, 0.18);
+
+    &::-webkit-scrollbar {
+        width: 12 * $ptr;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: rgba($black, 0.18);
+        border-radius: 10 * $ptr;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10 * $ptr;
+        background-color: rgba($white, 0.75);
+        background-image: repeating-linear-gradient(
+            to bottom,
+            transparent 0 6 * $ptr,
+            rgba($signs-green, 0.9) 6 * $ptr 14 * $ptr
+        );
+        background-clip: content-box;
+        border: 3 * $ptr solid transparent;
+
+        &:hover {
+            background-color: $white;
+        }
+    }
+}
+
+.settings-modal__intro {
+    margin: 0;
+
+    font-size: 16 * $ptr;
+    line-height: 1.4;
+
+    opacity: 0.9;
+}
+
+.settings-modal__muted-note {
+    padding: 12 * $ptr 14 * $ptr;
+
+    border-radius: 10 * $ptr;
+
+    background-color: rgba($black, 0.18);
+    border: 1 * $ptr solid rgba($white, 0.25);
+
+    font-size: 14 * $ptr;
+    line-height: 1.35;
+}
+
+.settings-modal__settings {
+    display: flex;
+    flex-direction: column;
+    gap: 14 * $ptr;
+}
+
+.settings-modal__setting {
+    display: grid;
+    grid-template-columns: minmax(0, 110 * $ptr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10 * $ptr 12 * $ptr;
+
+    @include respond-to($small-breakpoint) {
+        grid-template-columns: minmax(0, 130 * $ptr) minmax(0, 1fr) auto;
+    }
+}
+
+// A row at zero reads as deliberately silenced rather than merely quiet.
+.settings-modal__setting--muted {
+    .settings-modal__setting-label,
+    .settings-modal__slider {
+        opacity: 0.45;
+    }
+
+    .settings-modal__setting-value {
+        opacity: 1;
+        color: $flag-yellow;
+        text-transform: uppercase;
+    }
+}
+
+.settings-modal__setting-label {
+    font-size: 16 * $ptr;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.settings-modal__setting-value {
+    min-width: 48 * $ptr;
+
+    text-align: right;
+    font-size: 15 * $ptr;
+    opacity: 0.88;
+}
+
+.settings-modal__slider {
+    appearance: none;
+    width: 100%;
+    height: 14 * $ptr;
+
+    border-radius: 999 * $ptr;
+    border: 1 * $ptr solid rgba($white, 0.35);
+    background: linear-gradient(180deg, rgba($white, 0.22), rgba($white, 0.08));
+    box-shadow:
+        inset 0 1 * $ptr 0 rgba($white, 0.28),
+        inset 0 -1 * $ptr 0 rgba($black, 0.16);
+
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2 * $ptr solid rgba($flag-yellow, 0.92);
+        outline-offset: 3 * $ptr;
+    }
+
+    &::-webkit-slider-runnable-track {
+        height: 14 * $ptr;
+        border-radius: 999 * $ptr;
+        background: linear-gradient(180deg, rgba($white, 0.22), rgba($white, 0.08));
+        box-shadow:
+            inset 0 1 * $ptr 0 rgba($white, 0.28),
+            inset 0 -1 * $ptr 0 rgba($black, 0.16);
+    }
+
+    &::-webkit-slider-thumb {
+        appearance: none;
+        width: 24 * $ptr;
+        height: 24 * $ptr;
+
+        margin-top: -5 * $ptr;
+
+        border-radius: 50%;
+        border: 2 * $ptr solid $white;
+        background: $flag-yellow;
+        box-shadow: 0 2 * $ptr 5 * $ptr rgba($black, 0.28);
+    }
+
+    &::-moz-range-track {
+        height: 14 * $ptr;
+        border-radius: 999 * $ptr;
+        border: 1 * $ptr solid rgba($white, 0.35);
+        background: linear-gradient(180deg, rgba($white, 0.22), rgba($white, 0.08));
+        box-shadow:
+            inset 0 1 * $ptr 0 rgba($white, 0.28),
+            inset 0 -1 * $ptr 0 rgba($black, 0.16);
+    }
+
+    &::-moz-range-thumb {
+        width: 24 * $ptr;
+        height: 24 * $ptr;
+
+        border-radius: 50%;
+        border: 2 * $ptr solid $white;
+        background: $flag-yellow;
+        box-shadow: 0 2 * $ptr 5 * $ptr rgba($black, 0.28);
+    }
+}
+
+.settings-modal__credits {
+    display: flex;
+    flex-direction: column;
+    gap: 8 * $ptr;
+
+    padding-top: 16 * $ptr;
+    border-top: 1 * $ptr solid rgba($white, 0.24);
+
+    opacity: 0.82;
+}
+
+.settings-modal__credits-title {
+    font-size: 14 * $ptr;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.settings-modal__credits-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8 * $ptr;
+}
+
+.settings-modal__credit {
+    margin: 0;
+
+    font-size: 14 * $ptr;
+    line-height: 1.4;
+
+    display: flex;
+    flex-direction: row;
+    gap: 4 * $ptr;
+}

@@ -1,0 +1,36 @@
+.settings-modal.hidden
+    .settings-modal__content
+        .settings-modal__top
+            .settings-modal__title
+                span.settings-modal__title-text Configuración
+            .button.settings-modal__close-button(role="button" tabindex="0" aria-label="Cerrar")
+                svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x")
+                    path( d="M18 6 6 18")
+                    path( d="m6 6 12 12")
+        .settings-modal__bottom
+            .settings-modal__intro
+            .settings-modal__muted-note.hidden
+                | El sonido está apagado. Usá el botón del parlante para volver a activarlo.
+            .settings-modal__settings
+                .settings-modal__setting
+                    label.settings-modal__setting-label(for="settings-volume-music") Música
+                    input.settings-modal__slider#settings-volume-music(type="range" min="0" max="100" step="1" value="100" data-audio-category="music")
+                    span.settings-modal__setting-value 100%
+                .settings-modal__setting
+                    label.settings-modal__setting-label(for="settings-volume-sfx") Efectos
+                    input.settings-modal__slider#settings-volume-sfx(type="range" min="0" max="100" step="1" value="100" data-audio-category="sfx")
+                    span.settings-modal__setting-value 100%
+                .settings-modal__setting
+                    label.settings-modal__setting-label(for="settings-volume-keys") Teclado
+                    input.settings-modal__slider#settings-volume-keys(type="range" min="0" max="100" step="1" value="100" data-audio-category="keys")
+                    span.settings-modal__setting-value 100%
+            .settings-modal__credits
+                span.settings-modal__credits-title Créditos
+                .settings-modal__credits-body
+                    p.settings-modal__credit Gianni Ballerini - Desarrollo y diseño
+                    p.settings-modal__credit
+                        | Música de
+                        a(href="https://suno.com/s/whBosC7fZmrghfbQ" target="_blank" rel="noopener noreferrer") Suno AI
+                    p.settings-modal__credit
+                        | Efectos de sonido de
+                        a(href="https://mechvibes.com" target="_blank" rel="noopener noreferrer") Mechvibes

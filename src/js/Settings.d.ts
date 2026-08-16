@@ -26,6 +26,9 @@ export interface SettingsShape {
     colors: {
       default: string;
       visited: string;
+      stars1: string;
+      stars2: string;
+      stars3: string;
       hovered: string;
       selected: string;
     };
@@ -84,6 +87,17 @@ export interface SettingsShape {
     veryShortRouteThresholdKm: number;
     veryShortRouteZoom: number;
   };
+  starRating: {
+    maxStars: number;
+    accuracy: { full: number; half: number };
+    mistakes: { full: number; half: number };
+    netWpm: { full: number; half: number };
+  };
+  runCountdown: {
+    seconds: number;
+    goLabel: string;
+    goHoldMs: number;
+  };
   progressMarker: {
     iconId: string;
     size: number;
@@ -99,6 +113,33 @@ export interface SettingsShape {
       minSize: number;
       maxZoom: number;
       maxSize: number;
+    };
+  };
+  audio: {
+    defaultMasterVolume: number;
+    categoryVolumes: {
+      music: number;
+      sfx: number;
+      keys: number;
+    };
+    volumeRampMs: number;
+    key: {
+      maxVoices: number;
+      attackMs: number;
+      releaseMs: number;
+      virtualKeyDedupeMs: number;
+      gainJitter: number;
+    };
+    ui: {
+      clickKeycode: number;
+      clickVolume: number;
+      hoverKeycode: number;
+      hoverVolume: number;
+      hoverThrottleMs: number;
+    };
+    music: {
+      menuTrack: string;
+      fadeOutMs: number;
     };
   };
 }

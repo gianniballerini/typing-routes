@@ -1,6 +1,8 @@
+import { GsapManager } from '../app/GsapManager';
 import type { GameStateValue } from '../GameState';
 import { GameState } from '../GameState';
 import type { Route } from '../Route';
+import { renderStars } from './StarsView';
 
 interface MenuRouteRecord {
     bestCombo: number;
@@ -31,11 +33,19 @@ class GameUiPresenter {
     private menu_route_record_accuracy_el: HTMLElement | null;
     private menu_route_record_time_el: HTMLElement | null;
     private menu_route_record_mistakes_el: HTMLElement | null;
+    private menu_route_stars_el: HTMLElement | null;
     private menu_route_image_container_el: HTMLElement | null;
     private menu_route_image_el: HTMLImageElement | null;
     private closeRequestedHandler: (() => void) | null;
 
     private start_button_el: HTMLElement | null;
+    private menu_welcome_el: HTMLElement | null;
+    private sign_button_els: HTMLElement[];
+    private sign_button_how_to_play_el: HTMLElement | null;
+    private sign_button_route_list_el: HTMLElement | null;
+    private sign_button_achievements_el: HTMLElement | null;
+    private sign_button_settings_el: HTMLElement | null;
+    private last_rendered_state: GameStateValue | null;
     private typing_el: HTMLElement | null;
     private typing_prev_city_el: HTMLElement | null;
     private typing_next_city_el: HTMLElement | null;
@@ -51,9 +61,23 @@ class GameUiPresenter {
     private accuracy_number_el: HTMLElement | null;
     private timer_number_el: HTMLElement | null;
     private timer_milliseconds_el: HTMLElement | null;
+    private countdown_el: HTMLElement | null;
+    private countdown_value_el: HTMLElement | null;
     private quit_button_el: HTMLElement | null;
     private quitRequestedHandler: (() => void) | null;
     private typingInputHandler: ((inputText: string) => void) | null;
+    private audio_toggle_el: HTMLElement | null;
+    private audio_toggle_label_el: HTMLElement | null;
+    private modalOpenPredicate: (() => boolean) | null;
+    private mapCursorRequestedHandler: (() => void) | null;
+    // Reported rather than acted on: the trophy rules that watch how the player
+    // drives the menu live in `Achievements`, not here.
+    private menuKeyboardStepHandler: (() => void) | null;
+    private menuKeyboardActivationHandler: (() => void) | null;
+    private pointerActivationHandler: (() => void) | null;
+    private menuNavigationSuspended: boolean;
+    private last_focused_menu_button_el: HTMLElement | null;
+    private menu_signs_parked: boolean;
 
     constructor() {
         this.game_menu_el = document.querySelector('.game-menu');
@@ -84,10 +108,18 @@ class GameUiPresenter {
         this.menu_route_record_accuracy_el = document.querySelector('.game-menu__route-record-accuracy');
         this.menu_route_record_time_el = document.querySelector('.game-menu__route-record-time');
         this.menu_route_record_mistakes_el = document.querySelector('.game-menu__route-record-mistakes');
+        this.menu_route_stars_el = document.querySelector('.game-menu__route-stars');
         this.menu_route_image_container_el = document.querySelector('.game-menu__info-card-image');
         this.menu_route_image_el = this.menu_route_image_container_el?.querySelector('img') ?? null;
 
         this.start_button_el = document.querySelector('.game-menu__button');
+        this.menu_welcome_el = document.querySelector('.game-menu__welcome');
+        this.sign_button_els = Array.from(document.querySelectorAll('.game-menu__sign-button'));
+        this.last_rendered_state = null;
+        this.sign_button_how_to_play_el = document.querySelector('.game-menu__sign-button--how-to-play');
+        this.sign_button_route_list_el = document.querySelector('.game-menu__sign-button--route-list');
+        this.sign_button_achievements_el = document.querySelector('.game-menu__sign-button--achievements');
+        this.sign_button_settings_el = document.querySelector('.game-menu__sign-button--settings');
         this.typing_el = document.querySelector('.game-playing__typing');
         this.typing_prev_city_el = document.querySelector('.game-playing__typing-prev-city');
         this.typing_next_city_el = document.querySelector('.game-playing__typing-next-city');
@@ -103,15 +135,204 @@ class GameUiPresenter {
         this.accuracy_number_el = document.querySelector('.game-playing__accuracy-number');
         this.timer_number_el = document.querySelector('.game-playing__timer-number');
         this.timer_milliseconds_el = document.querySelector('.game-playing__timer-milliseconds');
+        this.countdown_el = document.querySelector('.game-playing__countdown');
+        this.countdown_value_el = document.querySelector('.game-playing__countdown-value');
         this.quit_button_el = document.querySelector('.game-playing__quit');
         this.quitRequestedHandler = null;
         this.quit_button_el?.addEventListener('click', this.handleQuitButtonClick);
         this.typingInputHandler = null;
+        this.audio_toggle_el = document.querySelector('.audio-toggle');
+        this.audio_toggle_label_el = document.querySelector('.audio-toggle__label');
+        this.modalOpenPredicate = null;
+        this.mapCursorRequestedHandler = null;
+        this.menuKeyboardStepHandler = null;
+        this.menuKeyboardActivationHandler = null;
+        this.pointerActivationHandler = null;
+        this.menuNavigationSuspended = false;
+        this.last_focused_menu_button_el = null;
+        this.menu_signs_parked = false;
         this.renderElapsedTime(0);
+
+        window.addEventListener('keydown', this.handleMenuNavigationKeydown);
+    }
+
+    // The presenter is built before ModalController exists, so the menu learns
+    // about open modals through a predicate wired up afterwards.
+    setModalOpenPredicate(predicate: () => boolean): void {
+        this.modalOpenPredicate = predicate;
+    }
+
+    /**
+     * The menu column is the vertical half of the two-zone arrow model: up and
+     * down walk the menu signs and, once a route is picked, Empezar, while right
+     * hands the arrows over to the map. Bound on the window so the first arrow
+     * press can pull focus into the menu from nowhere; an open modal parks this
+     * handler until it closes, and so does the map cursor while it is active.
+     */
+    private handleMenuNavigationKeydown = (event: KeyboardEvent): void => {
+        const menuEl = this.game_menu_el;
+        if (this.last_rendered_state !== GameState.MENU) return;
+        if (!menuEl || menuEl.classList.contains('hidden')) return;
+        // Clicking a modal's own non-focusable chrome drops focus back to the
+        // body, so focus alone cannot tell "nothing focused" from "modal open".
+        if (this.modalOpenPredicate?.()) return;
+        if (this.menuNavigationSuspended) return;
+
+        const activeEl = document.activeElement;
+        const focusIsInMenu = activeEl instanceof HTMLElement && menuEl.contains(activeEl);
+        // Focus sits somewhere else entirely: leave those keys alone. The map
+        // canvas is the exception — it takes focus on any click, and having
+        // clicked the map is the same starting point as having focused nothing.
+        if (!focusIsInMenu && !this.isLooseFocus(activeEl)) return;
+
+        // Works from a focused sign and from nothing focused alike, so reaching
+        // the map never takes a detour through the menu first.
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            if (focusIsInMenu && activeEl instanceof HTMLElement) activeEl.blur();
+            this.mapCursorRequestedHandler?.();
+            return;
+        }
+
+        const step = this.getMenuNavigationStep(event.key);
+        if (step === 0) return;
+
+        const buttons = this.getNavigableMenuButtons();
+        if (buttons.length === 0) return;
+
+        event.preventDefault();
+
+        const currentIndex = activeEl instanceof HTMLElement ? buttons.indexOf(activeEl) : -1;
+        const nextIndex = currentIndex === -1
+            ? 0
+            : (currentIndex + step + buttons.length) % buttons.length;
+
+        this.focusMenuButton(buttons[nextIndex]);
+        this.menuKeyboardStepHandler?.();
+    };
+
+    private getMenuNavigationStep(key: string): number {
+        if (key === 'ArrowDown') return 1;
+        if (key === 'ArrowUp') return -1;
+        return 0;
+    }
+
+    private isLooseFocus(activeEl: Element | null): boolean {
+        if (activeEl === null || activeEl === document.body) return true;
+        return activeEl.classList.contains('maplibregl-canvas');
+    }
+
+    private focusMenuButton(el: HTMLElement): void {
+        this.last_focused_menu_button_el = el;
+        el.focus();
+    }
+
+    onMapCursorRequested(handler: () => void): void {
+        this.mapCursorRequestedHandler = handler;
+    }
+
+    // Set while the map cursor owns the arrow keys, so both zones never move at once.
+    setMenuNavigationSuspended(suspended: boolean): void {
+        this.menuNavigationSuspended = suspended;
+    }
+
+    // Coming back from the map: the ring returns to the sign it left, or to the
+    // top of the column when that one is gone (the signs park while a card is open).
+    focusMenuColumn(): void {
+        const buttons = this.getNavigableMenuButtons();
+        if (buttons.length === 0) return;
+
+        const lastFocused = this.last_focused_menu_button_el;
+        const target = lastFocused && buttons.includes(lastFocused) ? lastFocused : buttons[0];
+
+        this.focusMenuButton(target);
+    }
+
+    // Empezar lives inside the route card, so it only joins the walk once a route
+    // is selected and the card is on screen.
+    private getNavigableMenuButtons(): HTMLElement[] {
+        const candidates = [...this.sign_button_els, this.start_button_el];
+        return candidates.filter((el): el is HTMLElement => el !== null && this.isVisible(el));
+    }
+
+    // The closed route card keeps its box so the lift animation has somewhere to
+    // play, and is hidden with `visibility` — which offsetParent does not catch.
+    private isVisible(el: HTMLElement): boolean {
+        return el.offsetParent !== null && window.getComputedStyle(el).visibility !== 'hidden';
     }
 
     onStartRequested(handler: () => void): void {
-        this.start_button_el?.addEventListener('click', handler);
+        this.bindActivation(this.start_button_el, handler);
+    }
+
+    onHowToPlayRequested(handler: () => void): void {
+        this.bindActivation(this.sign_button_how_to_play_el, handler);
+    }
+
+    onRouteListRequested(handler: () => void): void {
+        this.bindActivation(this.sign_button_route_list_el, handler);
+    }
+
+    onAchievementsRequested(handler: () => void): void {
+        this.bindActivation(this.sign_button_achievements_el, handler);
+    }
+
+    onSettingsRequested(handler: () => void): void {
+        this.bindActivation(this.sign_button_settings_el, handler);
+    }
+
+    onAudioToggleRequested(handler: () => void): void {
+        this.bindActivation(this.audio_toggle_el, handler);
+    }
+
+    renderAudioMuted(muted: boolean): void {
+        this.audio_toggle_el?.classList.toggle('audio-toggle--muted', muted);
+        this.audio_toggle_el?.setAttribute('aria-pressed', String(muted));
+        this.audio_toggle_el?.setAttribute('aria-label', muted ? 'Activar sonido' : 'Silenciar');
+
+        if (this.audio_toggle_label_el) {
+            this.audio_toggle_label_el.textContent = muted ? 'Sonido apagado' : 'Sonido encendido';
+        }
+    }
+
+    // The menu buttons are divs, so Enter and Space have to be wired by hand for
+    // the whole menu to be reachable without a mouse.
+    private bindActivation(el: HTMLElement | null, handler: () => void): void {
+        el?.addEventListener('click', (event: MouseEvent) => {
+            // `click` also fires for a keyboard-activated element in some paths, so
+            // only a real pointer counts as having reached for the mouse. A synthetic
+            // click reports detail 0.
+            if (event.detail > 0) this.pointerActivationHandler?.();
+            handler();
+        });
+        el?.addEventListener('keydown', (event: KeyboardEvent) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+
+            event.preventDefault();
+            // Empezar flips the game into COUNTDOWN synchronously; without this the
+            // same keystroke would reach KeyboardInputCoordinator, where Enter/Space
+            // skips the countdown.
+            event.stopPropagation();
+            // The audio toggle also goes through here and is not part of the menu
+            // walk, so only the signs and Empezar count as "chose an option".
+            if (el && this.getNavigableMenuButtons().includes(el)) this.menuKeyboardActivationHandler?.();
+            handler();
+        });
+    }
+
+    // The three menu-input reports behind the "¿Qué es un mouse?" trophy. They
+    // carry no meaning here — `Achievements` decides what a run of them adds up to.
+
+    onMenuKeyboardStep(handler: () => void): void {
+        this.menuKeyboardStepHandler = handler;
+    }
+
+    onMenuKeyboardActivation(handler: () => void): void {
+        this.menuKeyboardActivationHandler = handler;
+    }
+
+    onPointerActivation(handler: () => void): void {
+        this.pointerActivationHandler = handler;
     }
 
     onCloseRequested(handler: () => void): void {
@@ -194,6 +415,13 @@ class GameUiPresenter {
 
     renderState(state: GameStateValue): void {
         const showMenu = state === GameState.MENU;
+        // Only a real move back into the menu earns the drop-in: the very first
+        // render is the app booting straight into it, not a view change.
+        const isReturningToMenu = showMenu
+            && this.last_rendered_state !== null
+            && this.last_rendered_state !== GameState.MENU;
+        this.last_rendered_state = state;
+
         this.game_menu_el?.classList.toggle('hidden', !showMenu);
         this.game_playing_el?.classList.toggle('hidden', showMenu);
 
@@ -201,7 +429,81 @@ class GameUiPresenter {
             this.renderTyping('', '');
             this.clearPlayingPanel();
             this.clearKeyboardOpenState();
+            if (isReturningToMenu) this.playMenuSignsDropAnimation();
         }
+    }
+
+    // Hides the signs behind the welcome block ahead of time. Needed when the
+    // menu is uncovered by something outside this class — the loading screen —
+    // since the plates would otherwise be caught sitting in their slots for a
+    // frame before the drop takes them back up.
+    prepareMenuSignsDrop(): void {
+        if (!this.sign_button_els.length) return;
+
+        this.menu_signs_parked = true;
+
+        for (const sign of this.sign_button_els) {
+            sign.classList.add('game-menu__sign-button--dropping');
+        }
+
+        GsapManager.parkMenuSigns({ signs: this.sign_button_els, hideBehind: this.menu_welcome_el });
+    }
+
+    // Measured against the live layout, so it has to run once the menu is
+    // actually on screen — after the un-hide above, or after the loading screen
+    // has lifted away.
+    playMenuSignsDropAnimation(): void {
+        if (!this.sign_button_els.length) return;
+
+        this.menu_signs_parked = false;
+
+        for (const sign of this.sign_button_els) {
+            sign.classList.remove('game-menu__sign-button--parked');
+            sign.classList.add('game-menu__sign-button--dropping');
+        }
+
+        GsapManager.playMenuSignsDrop(
+            { signs: this.sign_button_els, hideBehind: this.menu_welcome_el },
+            () => {
+                for (const sign of this.sign_button_els) {
+                    sign.classList.remove('game-menu__sign-button--dropping');
+                }
+            }
+        );
+    }
+
+    // The route card takes the screen for itself: the plates go back up behind the
+    // logo and stay there until the card is closed.
+    private liftMenuSigns(): void {
+        if (this.menu_signs_parked || !this.sign_button_els.length) return;
+
+        this.menu_signs_parked = true;
+
+        for (const sign of this.sign_button_els) {
+            sign.classList.add('game-menu__sign-button--dropping');
+        }
+
+        GsapManager.playMenuSignsLift(
+            { signs: this.sign_button_els, hideBehind: this.menu_welcome_el },
+            () => {
+                for (const sign of this.sign_button_els) {
+                    sign.classList.remove('game-menu__sign-button--dropping');
+                    // `isVisible` reads `visibility`, so parking also takes the
+                    // plates out of the arrow-key walk.
+                    sign.classList.add('game-menu__sign-button--parked');
+                }
+            }
+        );
+    }
+
+    private dropMenuSigns(): void {
+        if (!this.menu_signs_parked) return;
+        // The parked pose is measured against the live layout. Ending a run
+        // deselects the route while the menu is still hidden, so the drop
+        // `renderState` plays on the way back in is the one that can measure.
+        if (!this.game_menu_el || this.game_menu_el.classList.contains('hidden')) return;
+
+        this.playMenuSignsDropAnimation();
     }
 
     private isTypingInputFocused(): boolean {
@@ -243,7 +545,7 @@ class GameUiPresenter {
         this.game_playing_el.style.removeProperty('height');
     }
 
-    setMenuRoutePreview(route: Route, record: MenuRouteRecord | null = null): void {
+    setMenuRoutePreview(route: Route, record: MenuRouteRecord | null = null, stars: number | null = null): void {
         const routeNumber = this.sanitizeRouteNumber(route.route_number);
         this.renderMenuRouteImage(route.image_url);
 
@@ -265,10 +567,12 @@ class GameUiPresenter {
 
         this.menu_welcome_description_el?.classList.add('hidden');
 
+        renderStars(this.menu_route_stars_el, stars);
         this.renderMenuRouteRecord(record);
 
         this.menu_info_card_el?.classList.remove('hidden');
 
+        this.liftMenuSigns();
         this.playMenuInfoCardAnimation('game-menu__info-card--slap');
     }
 
@@ -302,6 +606,7 @@ class GameUiPresenter {
         const cardWasVisible = this.menu_info_card_el?.classList.contains('hidden') === false;
 
         this.menu_info_card_el?.classList.add('hidden');
+        this.dropMenuSigns();
 
         if (!cardWasVisible) {
             this.menu_info_card_el?.classList.remove('game-menu__info-card--slap');
@@ -318,6 +623,7 @@ class GameUiPresenter {
     }
 
     private clearMenuRoutePreview(): void {
+        renderStars(this.menu_route_stars_el, null);
         if (this.menu_route_name_el) this.menu_route_name_el.textContent = '';
         if (this.menu_route_number_el) this.menu_route_number_el.textContent = '';
         if (this.menu_route_length_el) this.menu_route_length_el.textContent = '';
@@ -391,6 +697,35 @@ class GameUiPresenter {
         if (this.accuracy_number_el) this.accuracy_number_el.textContent = `${this.formatOneDecimal(accuracy)}%`;
     }
 
+    // One tick of the pre-run countdown. `isGo` marks the final beat, which gets
+    // its own colour instead of the plain number treatment.
+    renderCountdown(label: string, isGo: boolean = false): void {
+        const el = this.countdown_el;
+        if (!el) return;
+
+        if (this.countdown_value_el) this.countdown_value_el.textContent = label;
+
+        el.classList.remove('hidden');
+        el.classList.toggle('game-playing__countdown--go', isGo);
+
+        el.classList.remove('game-playing__countdown--tick');
+        // Forces a reflow so the pop replays on every number instead of only
+        // playing the first time the class lands. The class is dropped here on the
+        // next tick rather than on `animationend`: the number animation ends
+        // faded out, and removing it any earlier would snap the old digit back to
+        // full opacity in the gap before the next one.
+        void el.offsetWidth;
+        el.classList.add('game-playing__countdown--tick');
+    }
+
+    hideCountdown(): void {
+        if (!this.countdown_el) return;
+
+        this.countdown_el.classList.add('hidden');
+        this.countdown_el.classList.remove('game-playing__countdown--tick', 'game-playing__countdown--go');
+        if (this.countdown_value_el) this.countdown_value_el.textContent = '';
+    }
+
     renderElapsedTime(elapsedMs: number): void {
         const safeElapsedMs = Number.isFinite(elapsedMs) ? Math.max(0, elapsedMs) : 0;
 
@@ -451,6 +786,7 @@ class GameUiPresenter {
         if (this.route_name_el) this.route_name_el.textContent = '';
         this.renderRunStats(0, 0, 0, 0, 0, 100);
         this.renderElapsedTime(0);
+        this.hideCountdown();
     }
 
     private renderMenuRouteRecord(record: MenuRouteRecord | null): void {
