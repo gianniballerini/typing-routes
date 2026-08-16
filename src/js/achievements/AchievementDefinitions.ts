@@ -41,7 +41,7 @@ const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     },
     {
         id: 'first-three-stars',
-        title: 'Podio',
+        title: 'Scaloneta',
         description: 'Conseguí 3 estrellas en una ruta.',
         imageUrl: null
     },
@@ -53,7 +53,7 @@ const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
     },
     {
         id: 'longest-route-perfect',
-        title: 'Maratón perfecta',
+        title: 'La 40 sin pinchar',
         description: 'Conseguí 3 estrellas en la ruta más larga del país.',
         imageUrl: null
     },
@@ -139,3 +139,4 @@ export {
     THREE_STAR_TIERS
 };
 export type { AchievementDefinition };
+
