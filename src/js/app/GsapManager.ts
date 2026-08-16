@@ -272,6 +272,31 @@ class GsapManager {
         });
     }
 
+    // Achievement toast
+
+    // Drops in from above the viewport edge and overshoots slightly, so a trophy
+    // earned behind the route-complete modal still catches the eye.
+    playAchievementToastIn(el: HTMLElement): void {
+        gsap.fromTo(el,
+            { opacity: 0, y: -24, scale: 0.92 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: 'back.out(1.7)' }
+        );
+    }
+
+    // The card is removed by the caller once this lands, so the stack does not
+    // keep collapsed nodes around.
+    playAchievementToastOut(el: HTMLElement, onComplete: () => void): void {
+        gsap.killTweensOf(el);
+        gsap.to(el, {
+            opacity: 0,
+            y: -16,
+            scale: 0.96,
+            duration: 0.25,
+            ease: 'power2.in',
+            onComplete
+        });
+    }
+
     // Mouse info card
 
     moveTo(el: HTMLElement, x: number, y: number): void {

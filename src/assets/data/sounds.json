@@ -32,6 +32,13 @@
       "stream": true,
       "category": "music",
       "volume": 0.45
+    },
+    {
+      "name": "achievement",
+      "url": "/sounds/achievement.m4a",
+      "size": 61342,
+      "category": "sfx",
+      "volume": 0.8
     }
   ]
 }

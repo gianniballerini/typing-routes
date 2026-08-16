@@ -1,3 +1,5 @@
+import { UserStatsStorage } from './UserStatsStorage';
+import { AchievementsStorage } from '../achievements/AchievementsStorage';
 import { AudioManager } from '../audio/AudioManager';
 import { MapController } from '../MapController';
 import { Settings } from '../Settings';
@@ -13,6 +15,10 @@ interface BindingCompat {
     on: (eventName: string, handler: (event: { value: unknown }) => void) => void;
 }
 
+interface ButtonCompat {
+    on: (eventName: string, handler: () => void) => void;
+}
+
 type BindingFactory = (
     object: Record<string, unknown>,
     key: string,
@@ -22,6 +28,7 @@ type BindingFactory = (
 type PaneCompat = {
     addBinding?: BindingFactory;
     addInput?: BindingFactory;
+    addButton?: (params: { title: string }) => ButtonCompat;
 };
 
 interface DebugState {
@@ -37,10 +44,19 @@ class DebugPaneController {
     private static readonly CONTAINER_ID = 'debug-pane-container';
     private readonly map_controller: MapController;
     private readonly audio_manager: AudioManager;
+    private readonly achievements_storage: AchievementsStorage;
+    private readonly user_stats_storage: UserStatsStorage;
 
-    constructor(map_controller: MapController, audio_manager: AudioManager) {
+    constructor(
+        map_controller: MapController,
+        audio_manager: AudioManager,
+        achievements_storage: AchievementsStorage,
+        user_stats_storage: UserStatsStorage
+    ) {
         this.map_controller = map_controller;
         this.audio_manager = audio_manager;
+        this.achievements_storage = achievements_storage;
+        this.user_stats_storage = user_stats_storage;
     }
 
     init(): void {
@@ -93,6 +109,24 @@ class DebugPaneController {
 
             bind('sfxVolume', { label: 'SFX', ...volume })?.on('change', (event) => {
                 this.audio_manager.setCategoryVolume('sfx', Number(event.value));
+            });
+
+            // Trophies and records live under separate localStorage keys, so each
+            // can be wiped without touching the other. Both reload rather than
+            // unpick the live state: routes, stars and map layers are all derived
+            // at boot, and a reload is the honest way back to a clean slate.
+            const addButton = (title: string, onClick: () => void): void => {
+                pane_with_compat.addButton?.({ title })?.on('click', onClick);
+            };
+
+            addButton('Reiniciar trofeos', () => {
+                this.achievements_storage.clear();
+                window.location.reload();
+            });
+
+            addButton('Reiniciar records', () => {
+                this.user_stats_storage.clear();
+                window.location.reload();
             });
         });
     }

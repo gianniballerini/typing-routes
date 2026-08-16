@@ -51,3 +51,29 @@ $arimo-font: 'Arimo';
   font-weight: 600;
   font-display: swap;
 }
+
+$redacted-script-font: 'Redacted Script';
+
+@font-face{
+  font-family: $redacted-script-font;
+  src: url('/fonts/redacted_script/redacted-script-light.woff2') format('woff2');
+
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face{
+  font-family: $redacted-script-font;
+  src: url('/fonts/redacted_script/redacted-script-regular.woff2') format('woff2');
+
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face{
+  font-family: $redacted-script-font;
+  src: url('/fonts/redacted_script/redacted-script-bold.woff2') format('woff2');
+
+  font-weight: 600;
+  font-display: swap;
+}

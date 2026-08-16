@@ -35,6 +35,7 @@ class RouteCompleteModal extends BaseModal {
 
 	private shareButtonEl: HTMLElement | null;
 	private shareButtonTextEl: HTMLElement | null;
+	private onSharedHandler: (() => void) | null;
 
 	constructor(onCloseRequested: () => void) {
 		super('.route-complete-modal', '.route-complete-modal__close-button', onCloseRequested);
@@ -55,7 +56,13 @@ class RouteCompleteModal extends BaseModal {
 		this.shareButtonEl = document.querySelector('.route-complete-modal__share-button');
 		this.shareButtonTextEl = document.querySelector('.route-complete-modal__button-text');
 
+		this.onSharedHandler = null;
+
 		this.shareButtonEl?.addEventListener('click', this.share);
+	}
+
+	onShared(handler: () => void): void {
+		this.onSharedHandler = handler;
 	}
 
 	render(payload: RouteCompleteModalPayload): void {
@@ -111,6 +118,9 @@ class RouteCompleteModal extends BaseModal {
 				this.shareButtonEl?.classList.remove('hidden');
 				this.closeButtonEl?.classList.remove('hidden');
 				this.show_copy_success_message();
+				// Fired alongside the success message so the trophy follows the
+				// same notion of "shared" the button already reports to the player.
+				this.onSharedHandler?.();
 			}
 		}
 	};

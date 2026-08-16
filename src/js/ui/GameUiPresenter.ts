@@ -70,6 +70,11 @@ class GameUiPresenter {
     private audio_toggle_label_el: HTMLElement | null;
     private modalOpenPredicate: (() => boolean) | null;
     private mapCursorRequestedHandler: (() => void) | null;
+    // Reported rather than acted on: the trophy rules that watch how the player
+    // drives the menu live in `Achievements`, not here.
+    private menuKeyboardStepHandler: (() => void) | null;
+    private menuKeyboardActivationHandler: (() => void) | null;
+    private pointerActivationHandler: (() => void) | null;
     private menuNavigationSuspended: boolean;
     private last_focused_menu_button_el: HTMLElement | null;
     private menu_signs_parked: boolean;
@@ -140,6 +145,9 @@ class GameUiPresenter {
         this.audio_toggle_label_el = document.querySelector('.audio-toggle__label');
         this.modalOpenPredicate = null;
         this.mapCursorRequestedHandler = null;
+        this.menuKeyboardStepHandler = null;
+        this.menuKeyboardActivationHandler = null;
+        this.pointerActivationHandler = null;
         this.menuNavigationSuspended = false;
         this.last_focused_menu_button_el = null;
         this.menu_signs_parked = false;
@@ -200,6 +208,7 @@ class GameUiPresenter {
             : (currentIndex + step + buttons.length) % buttons.length;
 
         this.focusMenuButton(buttons[nextIndex]);
+        this.menuKeyboardStepHandler?.();
     };
 
     private getMenuNavigationStep(key: string): number {
@@ -289,7 +298,13 @@ class GameUiPresenter {
     // The menu buttons are divs, so Enter and Space have to be wired by hand for
     // the whole menu to be reachable without a mouse.
     private bindActivation(el: HTMLElement | null, handler: () => void): void {
-        el?.addEventListener('click', handler);
+        el?.addEventListener('click', (event: MouseEvent) => {
+            // `click` also fires for a keyboard-activated element in some paths, so
+            // only a real pointer counts as having reached for the mouse. A synthetic
+            // click reports detail 0.
+            if (event.detail > 0) this.pointerActivationHandler?.();
+            handler();
+        });
         el?.addEventListener('keydown', (event: KeyboardEvent) => {
             if (event.key !== 'Enter' && event.key !== ' ') return;
 
@@ -298,8 +313,26 @@ class GameUiPresenter {
             // same keystroke would reach KeyboardInputCoordinator, where Enter/Space
             // skips the countdown.
             event.stopPropagation();
+            // The audio toggle also goes through here and is not part of the menu
+            // walk, so only the signs and Empezar count as "chose an option".
+            if (el && this.getNavigableMenuButtons().includes(el)) this.menuKeyboardActivationHandler?.();
             handler();
         });
+    }
+
+    // The three menu-input reports behind the "¿Qué es un mouse?" trophy. They
+    // carry no meaning here — `Achievements` decides what a run of them adds up to.
+
+    onMenuKeyboardStep(handler: () => void): void {
+        this.menuKeyboardStepHandler = handler;
+    }
+
+    onMenuKeyboardActivation(handler: () => void): void {
+        this.menuKeyboardActivationHandler = handler;
+    }
+
+    onPointerActivation(handler: () => void): void {
+        this.pointerActivationHandler = handler;
     }
 
     onCloseRequested(handler: () => void): void {

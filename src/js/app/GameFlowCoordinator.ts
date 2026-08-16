@@ -1,4 +1,9 @@
 import type { Geometry } from 'geojson';
+import type { AchievementProgressContext } from '../achievements/Achievements';
+import { Achievements } from '../achievements/Achievements';
+import type { AchievementDefinition } from '../achievements/AchievementDefinitions';
+import { ACHIEVEMENT_PLACEHOLDER_IMAGE } from '../achievements/AchievementDefinitions';
+import { AchievementsStorage } from '../achievements/AchievementsStorage';
 import { AudioManager } from '../audio/AudioManager';
 import type { SoundCategory } from '../audio/types';
 import { Game } from '../Game';
@@ -8,14 +13,19 @@ import { MapController } from '../MapController';
 import type { Route } from '../Route';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';
+import { AchievementToast } from '../ui/AchievementToast';
 import { GameUiPresenter } from '../ui/GameUiPresenter';
 import { ModalController, ModalState } from '../ui/ModalController';
+import type { AchievementRow } from '../ui/modals/AchievementsModal';
 import type { RouteListRow } from '../ui/modals/RouteListModal';
 import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
 import { calculateStarRating } from '../utils/StarRating';
 import { UserStatsStorage } from './UserStatsStorage';
+
+// Several trophies can land in the same tick; past this they share one cue.
+const ACHIEVEMENT_CUE_THROTTLE_MS = 150;
 
 interface ActiveRunStats {
     routeId: string;
@@ -44,6 +54,8 @@ interface GameFlowCoordinatorDependencies {
     modal_controller: ModalController;
     user_stats: UserStats;
     user_stats_storage: UserStatsStorage;
+    achievements: Achievements;
+    achievements_storage: AchievementsStorage;
     audio_manager: AudioManager;
 }
 
@@ -55,6 +67,9 @@ class GameFlowCoordinator {
     private modal_controller: ModalController;
     private user_stats: UserStats;
     private user_stats_storage: UserStatsStorage;
+    private achievements: Achievements;
+    private achievements_storage: AchievementsStorage;
+    private achievement_toast: AchievementToast;
     private audio_manager: AudioManager;
     private routeMetrics: RouteMetrics | null;
     private snappedCityPoints: SnappedRoutePoint[];
@@ -65,6 +80,8 @@ class GameFlowCoordinator {
     private countdownHideTimeoutHandle: number | null;
     private countdownRemaining: number;
     private pendingRunRouteId: string | null;
+    private runCameraZoom: number | null;
+    private lastAchievementCueAt: number;
     private map_route_cursor: MapRouteCursor;
 
     constructor(dependencies: GameFlowCoordinatorDependencies) {
@@ -75,6 +92,9 @@ class GameFlowCoordinator {
         this.modal_controller = dependencies.modal_controller;
         this.user_stats = dependencies.user_stats;
         this.user_stats_storage = dependencies.user_stats_storage;
+        this.achievements = dependencies.achievements;
+        this.achievements_storage = dependencies.achievements_storage;
+        this.achievement_toast = new AchievementToast();
         this.audio_manager = dependencies.audio_manager;
         this.routeMetrics = null;
         this.snappedCityPoints = [];
@@ -85,6 +105,8 @@ class GameFlowCoordinator {
         this.countdownHideTimeoutHandle = null;
         this.countdownRemaining = 0;
         this.pendingRunRouteId = null;
+        this.runCameraZoom = null;
+        this.lastAchievementCueAt = -Infinity;
 
         // Owned here rather than by MainApplication: every dependency it needs is
         // a method on this coordinator, so handing it over would only be a
@@ -93,7 +115,12 @@ class GameFlowCoordinator {
             getOrderedRouteIds: () => this.getOrderedPlayableRoutes().map((route) => route.route_id),
             getSelectedRouteId: () => this.map_controller.getSelectedRouteId(),
             selectRoute: (routeId) => this.map_controller.selectRoute(routeId),
-            startRoute: (routeId) => this.selectAndStartRoute(routeId),
+            startRoute: (routeId) => {
+                // Walking the map with the arrows and pressing Enter is the same
+                // "did it without a mouse" move as walking the sign column.
+                this.handleMenuKeyboardActivation();
+                this.selectAndStartRoute(routeId);
+            },
             onExit: () => {
                 this.ui_presenter.setMenuNavigationSuspended(false);
                 this.ui_presenter.focusMenuColumn();
@@ -101,8 +128,23 @@ class GameFlowCoordinator {
             canActivate: () => this.game.state === GameState.MENU && !this.modal_controller.isOpen(),
             // The menu walk gets its hover blip from `focusin`; the map cursor
             // moves no focus, so it plays the same one itself.
-            onStep: () => this.audio_manager.playUiHover(),
+            onStep: () => {
+                this.audio_manager.playUiHover();
+                this.achievements.reportMenuKeyboardStep();
+            },
         });
+    }
+
+    /**
+     * Awards anything a saved game already qualifies for — trophies added in a
+     * later build, or progress made before this system existed.
+     *
+     * Must run before `init()`: nothing is listening for `achievement-unlocked`
+     * yet, so a returning player is not met by a wall of toasts for trophies they
+     * earned weeks ago.
+     */
+    catchUpAchievements(): void {
+        this.evaluateAchievements();
     }
 
     init(): void {
@@ -116,6 +158,11 @@ class GameFlowCoordinator {
         this.ui_presenter.onSettingsRequested(this.handleSettingsRequested);
         this.ui_presenter.onAudioToggleRequested(this.handleAudioToggleRequested);
         this.ui_presenter.onMapCursorRequested(this.handleMapCursorRequested);
+        this.ui_presenter.onMenuKeyboardStep(() => this.achievements.reportMenuKeyboardStep());
+        this.ui_presenter.onMenuKeyboardActivation(this.handleMenuKeyboardActivation);
+        this.ui_presenter.onPointerActivation(() => this.achievements.reportPointerActivation());
+        this.achievements.addEventListener('achievement-unlocked', this.handleAchievementUnlocked as EventListener);
+        this.modal_controller.routeCompleteModal.onShared(this.handleScoreShared);
         this.modal_controller.routeListModal.onRouteActivated(this.handleRouteListActivated);
         this.modal_controller.settingsModal.onVolumeChange(this.handleVolumeChange);
         this.modal_controller.settingsModal.onCategoryMuteToggle(this.handleCategoryMuteToggle);
@@ -178,19 +225,23 @@ class GameFlowCoordinator {
 
         const initialRunCoordinate = this.getInitialRunCoordinate();
         if (initialRunCoordinate) {
-            this.map_controller.flyToCoordinate(
-                initialRunCoordinate,
-                this.getRouteSelectionZoom(selectedRoute?.length_km)
-            );
+            // The marker is placed directly instead of through
+            // `setProgressMarkerAndFollowCamera`: that one eases the camera, and
+            // an ease issued in the same tick cancels the fly-to below before it
+            // leaves the country view — which is how starting from the course
+            // grid used to begin a run fully zoomed out.
+            const runZoom = this.getRouteSelectionZoom(selectedRoute?.length_km);
+
+            this.map_controller.setProgressMarkerCoordinate(initialRunCoordinate, true);
+            this.map_controller.flyToCoordinate(initialRunCoordinate, runZoom);
+            // Remembered so the first camera follow lands at the run's zoom even
+            // if it fires while the fly-to is still in the air.
+            this.runCameraZoom = runZoom;
         }
 
         // Shows the panel with the first city while the camera settles; the clock
         // and the stats only start once the countdown lands on "go".
         this.game.startCountdown();
-
-        if (initialRunCoordinate) {
-            this.setProgressMarkerAndFollowCamera(initialRunCoordinate);
-        }
 
         this.startCountdown();
     }
@@ -283,7 +334,8 @@ class GameFlowCoordinator {
 
     // Picking a course starts the run right away. Selecting on the map first keeps
     // the highlight, the menu card and the camera on the same path the map click
-    // takes; its fly-to is immediately superseded by the one in startRunForRoute.
+    // takes; its fly-to targets the same coordinate and zoom as the one in
+    // startRunForRoute, which simply re-issues it.
     private handleRouteListActivated = (routeId: string): void => {
         if (this.game.state !== GameState.MENU) return;
 
@@ -339,8 +391,87 @@ class GameFlowCoordinator {
     }
 
     private handleAchievementsRequested = (): void => {
+        this.modal_controller.achievementsModal.render(this.buildAchievementRows());
         this.modal_controller.show(ModalState.ACHIEVEMENTS);
     };
+
+    private buildAchievementRows(): AchievementRow[] {
+        return this.achievements.getDefinitions().map((definition) => ({
+            id: definition.id,
+            title: definition.title,
+            description: definition.description,
+            imageUrl: definition.imageUrl ?? ACHIEVEMENT_PLACEHOLDER_IMAGE,
+            unlocked: this.achievements.isUnlocked(definition.id)
+        }));
+    }
+
+    /**
+     * Recomputes every derived trophy and persists if anything changed. Mirrors
+     * the `if (changed) save()` idiom the user-stats writes use.
+     *
+     * Cheap enough to call on any progress change: the rules are set arithmetic
+     * over ~96 routes and already-unlocked trophies short-circuit.
+     */
+    private evaluateAchievements(): void {
+        const unlocked = this.achievements.evaluate(this.buildAchievementContext());
+        if (unlocked.length > 0) this.achievements_storage.save(this.achievements);
+    }
+
+    private buildAchievementContext(): AchievementProgressContext {
+        const playableRoutes = this.getOrderedPlayableRoutes();
+        const completedRouteIds = new Set<string>();
+        const threeStarRouteIds = new Set<string>();
+
+        let longestRoute: Route | null = null;
+        let shortestRoute: Route | null = null;
+
+        for (const route of playableRoutes) {
+            if (this.user_stats.hasCompletedRoute(route.route_id)) completedRouteIds.add(route.route_id);
+            if (this.getRouteStars(route.route_id) === Settings.starRating.maxStars) {
+                threeStarRouteIds.add(route.route_id);
+            }
+
+            if (!longestRoute || route.length_km > longestRoute.length_km) longestRoute = route;
+            if (!shortestRoute || route.length_km < shortestRoute.length_km) shortestRoute = route;
+        }
+
+        return {
+            totalPlayableRoutes: playableRoutes.length,
+            completedRouteIds,
+            threeStarRouteIds,
+            longestRouteId: longestRoute?.route_id ?? null,
+            shortestRouteId: shortestRoute?.route_id ?? null
+        };
+    }
+
+    private handleScoreShared = (): void => {
+        const unlocked = this.achievements.reportScoreShared();
+        if (unlocked.length > 0) this.achievements_storage.save(this.achievements);
+    };
+
+    private handleMenuKeyboardActivation = (): void => {
+        const unlocked = this.achievements.reportMenuKeyboardActivation();
+        if (unlocked.length > 0) this.achievements_storage.save(this.achievements);
+    };
+
+    // Fired synchronously from inside the rules, so this only announces — the
+    // saving is done by whoever ran the evaluation.
+    private handleAchievementUnlocked = (event: Event): void => {
+        const customEvent = event as CustomEvent<{ definition: AchievementDefinition }>;
+
+        this.achievement_toast.show(customEvent.detail.definition);
+        this.playAchievementCue();
+    };
+
+    // Finishing a route can unlock a tier, its star twin and the meta trophy in
+    // the same tick; three copies of the same cue is a mess, one is a fanfare.
+    private playAchievementCue(): void {
+        const now = performance.now();
+        if (now - this.lastAchievementCueAt < ACHIEVEMENT_CUE_THROTTLE_MS) return;
+
+        this.lastAchievementCueAt = now;
+        this.audio_manager.play('achievement');
+    }
 
     private handleVolumeChange = (category: SoundCategory, value: number): void => {
         this.audio_manager.setCategoryVolume(category, value);
@@ -361,6 +492,7 @@ class GameFlowCoordinator {
         if (this.game.state !== GameState.PLAYING && this.game.state !== GameState.COUNTDOWN) return;
 
         this.cancelCountdown();
+        this.runCameraZoom = null;
         this.map_controller.selectRoute(null);
         this.game.returnToMenu();
     }
@@ -387,6 +519,7 @@ class GameFlowCoordinator {
         const changed = this.user_stats.markRouteCompleted(customEvent.detail.routeId);
         if (changed) this.user_stats_storage.save(this.user_stats);
 
+        this.runCameraZoom = null;
         this.map_controller.selectRoute(null);
         console.log(`Route complete: ${customEvent.detail.routeId}`);
     };
@@ -399,7 +532,12 @@ class GameFlowCoordinator {
         // The map canvas is not a `.button`, so `UiSoundController`'s delegation
         // cannot see picking a route on it — including picking nothing, which
         // deselects. A route chosen from the list already clicked on its tile.
-        if (customEvent.detail.fromMapInteraction) this.audio_manager.playUiClick();
+        if (customEvent.detail.fromMapInteraction) {
+            this.audio_manager.playUiClick();
+            // Picking a route off the canvas is a mouse move that no `.button`
+            // listener sees, so the no-mouse streak is broken here instead.
+            this.achievements.reportPointerActivation();
+        }
 
         if (selectedRoute && routeId) {
             const routeRecord = this.user_stats.getRouteRecord(routeId);
@@ -639,7 +777,11 @@ class GameFlowCoordinator {
 
     private setProgressMarkerAndFollowCamera(coordinate: [number, number], bearing?: number): void {
         this.map_controller.setProgressMarkerCoordinate(coordinate, true, bearing);
-        this.map_controller.jumpToCoordinate(coordinate);
+        this.map_controller.jumpToCoordinate(coordinate, this.runCameraZoom ?? undefined);
+        // Only the first follow of a run forces the zoom, so that the camera is
+        // framed on the route even when the countdown is skipped; from there on
+        // the player's own zooming is left alone.
+        this.runCameraZoom = null;
     }
 
     private setRouteVisited(routeId: string, visited: boolean): void {
@@ -774,6 +916,11 @@ class GameFlowCoordinator {
 
         if (route) route.stars = stars;
         this.setRouteVisited(runStats.routeId, true);
+
+        // The only point where completions and stars have both settled, so it is
+        // the only point where a derived trophy can change. Runs before the modal
+        // so the toasts drop in over it rather than behind it.
+        this.evaluateAchievements();
 
         this.modal_controller.routeCompleteModal.render({
             routeTitle: this.buildRouteTitle(route?.full_name, route?.route_name, route?.route_number),

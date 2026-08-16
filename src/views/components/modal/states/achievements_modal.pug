@@ -8,4 +8,18 @@
                     path( d="M18 6 6 18")
                     path( d="m6 6 12 12")
         .achievements-modal__bottom
-            //- Contenido pendiente
+            .achievements-modal__progress
+                span.achievements-modal__progress-text
+            .achievements-modal__list(role="listbox" tabindex="0" aria-label="Trofeos")
+            .achievements-modal__footer-hint
+                span ↑ ↓ mover
+                span ESC salir
+
+        //- Cloned once per trophy by AchievementsModal.
+        template.achievements-modal__row-template
+            .achievements-modal__row(role="option")
+                .achievements-modal__row-image
+                    img(src="#" alt="" loading="lazy")
+                .achievements-modal__row-body
+                    span.achievements-modal__row-title
+                    p.achievements-modal__row-description

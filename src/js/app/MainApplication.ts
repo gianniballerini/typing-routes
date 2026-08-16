@@ -2,6 +2,8 @@ import { DebugPaneController } from './DebugPaneController';
 import { GameFlowCoordinator } from './GameFlowCoordinator';
 import { UserStatsStorage } from './UserStatsStorage';
 import soundManifest from '../../assets/data/sounds.json';
+import { Achievements } from '../achievements/Achievements';
+import { AchievementsStorage } from '../achievements/AchievementsStorage';
 import { AudioManager } from '../audio/AudioManager';
 import { AudioPreferencesStorage } from '../audio/AudioPreferencesStorage';
 import type { SoundManifest } from '../audio/types';
@@ -28,6 +30,8 @@ class MainApplication {
     game_flow_coordinator: GameFlowCoordinator;
     user_stats_storage: UserStatsStorage;
     user_stats: UserStats;
+    achievements_storage: AchievementsStorage;
+    achievements: Achievements;
     audio_preferences_storage: AudioPreferencesStorage;
     audio_manager: AudioManager;
     ui_sound_controller: UiSoundController;
@@ -64,6 +68,8 @@ class MainApplication {
         this.user_stats_storage = new UserStatsStorage();
         this.user_stats = this.user_stats_storage.load();
         this.applySavedUserProgress();
+        this.achievements_storage = new AchievementsStorage();
+        this.achievements = this.achievements_storage.load();
         this.loading_manager.setProgress(25);
         this.map_controller.setRouteCityIdsMap(this.routes_controller.getRouteCityIdsMap());
         this.map_controller.setCityRoutesMap(this.routes_controller.getCityRoutesMap());
@@ -86,6 +92,8 @@ class MainApplication {
             modal_controller: this.modal_controller,
             user_stats: this.user_stats,
             user_stats_storage: this.user_stats_storage,
+            achievements: this.achievements,
+            achievements_storage: this.achievements_storage,
             audio_manager: this.audio_manager,
         });
         this.keyboard_input_coordinator = new KeyboardInputCoordinator(
@@ -93,6 +101,10 @@ class MainApplication {
             () => this.game_flow_coordinator.quitActiveRun(),
             () => this.game_flow_coordinator.skipCountdown()
         );
+
+        // Silent by construction: nothing is subscribed to the unlock event until
+        // `init()` runs, so a saved game catches up without a wall of toasts.
+        this.game_flow_coordinator.catchUpAchievements();
 
         this.game_flow_coordinator.init();
         this.keyboard_input_coordinator.bind();
@@ -104,7 +116,12 @@ class MainApplication {
         this.loading_manager.onFinished(() => this.ui_presenter.playMenuSignsDropAnimation());
 
         if (import.meta.env.DEV) {
-            new DebugPaneController(this.map_controller, this.audio_manager).init();
+            new DebugPaneController(
+                this.map_controller,
+                this.audio_manager,
+                this.achievements_storage,
+                this.user_stats_storage
+            ).init();
         }
 
         this.loading_manager.setProgress(60);

@@ -1,0 +1,91 @@
+// Sits above the modal (z-index 20), because a trophy earned at route-complete
+// lands while the results panel is already on screen.
+.achievement-toast-stack {
+    position: fixed;
+    top: 16 * $ptr;
+    left: 50%;
+    z-index: 30;
+
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 8 * $ptr;
+    align-items: center;
+
+    width: max-content;
+    max-width: calc(100vw - 32 * $ptr);
+
+    // Purely an announcement: clicks belong to whatever is underneath.
+    pointer-events: none;
+
+    @include respond-to($medium-breakpoint) {
+        top: 24 * $ptr;
+    }
+}
+
+.achievement-toast__card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 12 * $ptr;
+
+    padding: 10 * $ptr 18 * $ptr 10 * $ptr 12 * $ptr;
+
+    // A shade under the modal panels: a trophy earned at route-complete lands on
+    // top of one, and matching their green would read as part of the panel.
+    background-color: $signs-green-dark;
+    border: 2 * $ptr solid $white;
+    border-radius: 12 * $ptr;
+    box-shadow: 0 8 * $ptr 20 * $ptr rgba($black, 0.45);
+
+    font-family: $arimo-font;
+    color: $white;
+}
+
+.achievement-toast__card-image {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44 * $ptr;
+    height: 44 * $ptr;
+
+    background-color: rgba($black, 0.18);
+    border-radius: 8 * $ptr;
+
+    img {
+        width: 68%;
+        height: 68%;
+        object-fit: contain;
+    }
+}
+
+.achievement-toast__card-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2 * $ptr;
+
+    min-width: 0;
+}
+
+.achievement-toast__card-label {
+    font-size: 12 * $ptr;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 1 * $ptr;
+
+    color: $flag-yellow;
+}
+
+.achievement-toast__card-title {
+    font-size: 18 * $ptr;
+    line-height: 1.1;
+    text-transform: uppercase;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 20 * $ptr;
+    }
+}

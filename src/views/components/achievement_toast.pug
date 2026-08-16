@@ -1,0 +1,12 @@
+//- Host for the unlock notifications. Cards are appended by AchievementToast and
+//- removed once their exit tween finishes, so it sits empty most of the time.
+.achievement-toast-stack(aria-live="polite" aria-atomic="false")
+
+    //- Cloned once per unlocked trophy.
+    template.achievement-toast__card-template
+        .achievement-toast__card
+            .achievement-toast__card-image
+                img(src="#" alt="")
+            .achievement-toast__card-body
+                span.achievement-toast__card-label Trofeo desbloqueado
+                span.achievement-toast__card-title
