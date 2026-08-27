@@ -79,14 +79,24 @@
     @include modal-close-button;
 }
 
+.route-complete-modal__actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 10 * $ptr;
+
+    align-self: center;
+}
+
+.route-complete-modal__retry-button,
 .route-complete-modal__share-button {
     display: flex;
     flex-direction: row;
     align-items: center;
 
     gap: 10 * $ptr;
-
-    align-self: center;
 
     padding: 10 * $ptr 15 * $ptr;
 

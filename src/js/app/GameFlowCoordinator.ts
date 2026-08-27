@@ -76,9 +76,8 @@ class GameFlowCoordinator {
     private activeRunStats: ActiveRunStats | null;
     private completedRouteForCurrentRunId: string | null;
     private timerFrameHandle: number | null;
-    private countdownTimeoutHandle: number | null;
+    private countdownTimeoutHandles: number[];
     private countdownHideTimeoutHandle: number | null;
-    private countdownRemaining: number;
     private pendingRunRouteId: string | null;
     private runCameraZoom: number | null;
     private lastAchievementCueAt: number;
@@ -101,9 +100,8 @@ class GameFlowCoordinator {
         this.activeRunStats = null;
         this.completedRouteForCurrentRunId = null;
         this.timerFrameHandle = null;
-        this.countdownTimeoutHandle = null;
+        this.countdownTimeoutHandles = [];
         this.countdownHideTimeoutHandle = null;
-        this.countdownRemaining = 0;
         this.pendingRunRouteId = null;
         this.runCameraZoom = null;
         this.lastAchievementCueAt = -Infinity;
@@ -163,6 +161,7 @@ class GameFlowCoordinator {
         this.ui_presenter.onPointerActivation(() => this.achievements.reportPointerActivation());
         this.achievements.addEventListener('achievement-unlocked', this.handleAchievementUnlocked as EventListener);
         this.modal_controller.routeCompleteModal.onShared(this.handleScoreShared);
+        this.modal_controller.routeCompleteModal.onRetry(this.handleRetryRequested);
         this.modal_controller.routeListModal.onRouteActivated(this.handleRouteListActivated);
         this.modal_controller.settingsModal.onVolumeChange(this.handleVolumeChange);
         this.modal_controller.settingsModal.onCategoryMuteToggle(this.handleCategoryMuteToggle);
@@ -246,32 +245,50 @@ class GameFlowCoordinator {
         this.startCountdown();
     }
 
+    /**
+     * The digits are pinned to the beeps in the countdown cue, so every beat is
+     * scheduled up front against one start time. Chaining a timeout per tick
+     * would accumulate its own lateness and walk the digits off the audio.
+     */
     private startCountdown(): void {
         this.clearCountdownTimers();
 
-        this.countdownRemaining = Math.max(1, Math.round(Settings.runCountdown.seconds));
-        this.ui_presenter.renderCountdown(`${this.countdownRemaining}`);
-        this.countdownTimeoutHandle = window.setTimeout(this.handleCountdownTick, 1000);
-    }
+        const beatsMs = Settings.runCountdown.beatsMs;
 
-    private handleCountdownTick = (): void => {
-        this.countdownTimeoutHandle = null;
-        if (this.game.state !== GameState.COUNTDOWN) return;
+        this.audio_manager.play(Settings.runCountdown.soundName);
 
-        this.countdownRemaining -= 1;
-
-        if (this.countdownRemaining <= 0) {
-            this.finishCountdown();
-            return;
+        // Offsets are absolute from the cue's first sample, lead-in included, so
+        // the first digit waits out the silence before the first beep instead of
+        // appearing over it. The run panel is already on screen through that beat.
+        for (const [beatIndex, beatMs] of beatsMs.entries()) {
+            const label = `${beatsMs.length - beatIndex}`;
+            this.scheduleCountdownBeat(beatMs, () => {
+                this.ui_presenter.renderCountdown(label);
+            });
         }
 
-        this.ui_presenter.renderCountdown(`${this.countdownRemaining}`);
-        this.countdownTimeoutHandle = window.setTimeout(this.handleCountdownTick, 1000);
-    };
+        this.scheduleCountdownBeat(
+            Settings.runCountdown.goAtMs,
+            () => this.finishCountdown()
+        );
+    }
+
+    private scheduleCountdownBeat(delayMs: number, onBeat: () => void): void {
+        this.countdownTimeoutHandles.push(window.setTimeout(() => {
+            // Abandoning the run leaves COUNTDOWN before the later beats land.
+            if (this.game.state !== GameState.COUNTDOWN) return;
+            onBeat();
+        }, Math.max(0, delayMs)));
+    }
 
     // Enter / space during the countdown: jumps straight to "go".
     skipCountdown(): void {
         if (this.game.state !== GameState.COUNTDOWN) return;
+
+        // Only the skip silences the cue. Left to run, its last beat is the "go"
+        // tone that lands under the label `finishCountdown` is about to draw, so
+        // stopping there would cut the countdown off one beep short.
+        this.stopCountdownSound();
         this.finishCountdown();
     }
 
@@ -295,13 +312,20 @@ class GameFlowCoordinator {
 
     private cancelCountdown(): void {
         this.clearCountdownTimers();
+        this.stopCountdownSound();
         this.ui_presenter.hideCountdown();
     }
 
+    private stopCountdownSound(): void {
+        this.audio_manager.stop(
+            Settings.runCountdown.soundName,
+            Settings.runCountdown.soundFadeOutMs
+        );
+    }
+
     private clearCountdownTimers(): void {
-        if (this.countdownTimeoutHandle !== null) {
-            window.clearTimeout(this.countdownTimeoutHandle);
-            this.countdownTimeoutHandle = null;
+        for (const handle of this.countdownTimeoutHandles.splice(0)) {
+            window.clearTimeout(handle);
         }
 
         if (this.countdownHideTimeoutHandle !== null) {
@@ -443,6 +467,18 @@ class GameFlowCoordinator {
             shortestRouteId: shortestRoute?.route_id ?? null
         };
     }
+
+    /**
+     * "Reintentar" on the completion modal. By the time the modal is on screen the
+     * run has already returned to MENU, so this can go straight back in through
+     * `selectAndStartRoute` — the same door the course grid and the map cursor use.
+     */
+    private handleRetryRequested = (routeId: string): void => {
+        // Closed first: hiding hands focus back to whatever opened the modal, and
+        // the COUNTDOWN transition below is what should own focus from here on.
+        this.modal_controller.hide();
+        this.selectAndStartRoute(routeId);
+    };
 
     private handleScoreShared = (): void => {
         const unlocked = this.achievements.reportScoreShared();
@@ -923,6 +959,7 @@ class GameFlowCoordinator {
         this.evaluateAchievements();
 
         this.modal_controller.routeCompleteModal.render({
+            routeId: runStats.routeId,
             routeTitle: this.buildRouteTitle(route?.full_name, route?.route_name, route?.route_number),
             stars,
             combo: runStats.bestCombo,

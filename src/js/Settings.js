@@ -112,11 +112,20 @@ class Settings
       netWpm: { full: 50, half: 30 }
     };
 
-    // Warm-up beat before the clock starts, so the first city can be read.
+    // Warm-up beat before the clock starts, so the first city can be read. The
+    // offsets are the beep onsets measured off `countdown.m4a`, so every digit
+    // lands on its beep instead of on a round second — re-measure them if the
+    // cue is ever re-cut.
     this.runCountdown = {
-      seconds: 3,
+      soundName: 'countdown',
+      beatsMs: [570, 1200, 1980],
+      goAtMs: 2640,
       goLabel: '¡Ya!',
-      goHoldMs: 600
+      // Holds '¡Ya!' while the cue's tail rings out (it ends at 3413ms).
+      goHoldMs: 770,
+      // Short enough to read as a cut, long enough not to pop, for when the
+      // player skips the countdown or abandons the run part-way through it.
+      soundFadeOutMs: 100
     };
 
     this.progressMarker = {

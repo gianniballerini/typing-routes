@@ -2,16 +2,25 @@ import { Settings } from '../Settings';
 import type { AudioManager } from './AudioManager';
 
 // Every interactive element in the Pug views already carries a shared `.button`
-// class, and the route grid's tiles are the one exception worth naming. One set
-// of delegated listeners therefore covers the whole UI — menu signs, modal
-// closes, list filters, quit, share, the audio toggle — without threading an
-// `AudioManager` through `GameUiPresenter` and every modal.
-const UI_SELECTOR = '.button, .route-list-modal__tile';
+// class, and the route grid's tiles and the trophy rows are the exceptions worth
+// naming. One set of delegated listeners therefore covers the whole UI — menu
+// signs, modal closes, list filters, quit, share, the audio toggle — without
+// threading an `AudioManager` through `GameUiPresenter` and every modal.
+//
+// Anything a cursor can come to rest on, whether it got there by pointer or by
+// arrow key.
+const UI_HOVER_SELECTOR = '.button, .route-list-modal__tile, .achievements-modal__row';
 
-// Keys that walk the UI rather than activate it. Both navigation paths — the
-// menu signs in `GameUiPresenter` and the route grid in `RouteListModal` — end
-// in `.focus()` on an element matching `UI_SELECTOR`, so listening for the focus
-// move covers them without either of them knowing about audio.
+// Only what actually does something when pressed. Trophy rows are a cursor
+// target and nothing more — there is no trophy to open — so they take the hover
+// voice but never the click, which would otherwise announce a no-op.
+const UI_ACTIVATE_SELECTOR = '.button, .route-list-modal__tile';
+
+// Keys that walk the UI rather than activate it. Every navigation path — the
+// menu signs in `GameUiPresenter`, the route grid in `RouteListModal`, the
+// trophy list in `AchievementsModal` — ends in `.focus()` on an element matching
+// `UI_HOVER_SELECTOR`, so listening for the focus move covers them all without
+// any of them knowing about audio.
 const NAVIGATION_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End', 'PageUp', 'PageDown']);
 
 // A pointer-driven or programmatic focus lands nowhere near a navigation key, so
@@ -48,13 +57,13 @@ class UiSoundController {
     }
 
     private handlePointerDown = (event: PointerEvent): void => {
-        if (!this.targetElement(event.target)) return;
+        if (!this.targetElement(event.target, UI_ACTIVATE_SELECTOR)) return;
 
         this.audioManager.playUiClick();
     };
 
     private handlePointerOver = (event: PointerEvent): void => {
-        const element = this.targetElement(event.target);
+        const element = this.targetElement(event.target, UI_HOVER_SELECTOR);
         if (!element) return;
 
         // `pointerover` fires again for every child crossed inside the same
@@ -80,7 +89,7 @@ class UiSoundController {
 
         if (event.repeat) return;
         if (event.key !== 'Enter' && event.key !== ' ') return;
-        if (!this.targetElement(document.activeElement)) return;
+        if (!this.targetElement(document.activeElement, UI_ACTIVATE_SELECTOR)) return;
 
         this.audioManager.playUiClick();
     };
@@ -90,7 +99,7 @@ class UiSoundController {
     // full click.
     private handleFocusIn = (event: FocusEvent): void => {
         if (performance.now() - this.lastNavigationKeyAt > NAVIGATION_FOCUS_WINDOW_MS) return;
-        if (!this.targetElement(event.target)) return;
+        if (!this.targetElement(event.target, UI_HOVER_SELECTOR)) return;
 
         this.playHover();
     };
@@ -106,9 +115,9 @@ class UiSoundController {
         this.audioManager.playUiHover();
     }
 
-    private targetElement(target: EventTarget | null): HTMLElement | null {
+    private targetElement(target: EventTarget | null, selector: string): HTMLElement | null {
         return target instanceof Element
-            ? target.closest<HTMLElement>(UI_SELECTOR)
+            ? target.closest<HTMLElement>(selector)
             : null;
     }
 }

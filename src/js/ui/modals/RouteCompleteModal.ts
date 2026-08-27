@@ -3,6 +3,7 @@ import { renderStars } from '../StarsView';
 import { BaseModal } from './BaseModal';
 
 interface RouteCompleteModalPayload {
+	routeId: string;
 	routeTitle: string;
 	stars: number;
 	combo: number;
@@ -22,6 +23,7 @@ interface RouteCompleteModalPayload {
 
 class RouteCompleteModal extends BaseModal {
 	private route_name: string;
+	private route_id: string;
 	private titleEl: HTMLElement | null;
 	private starsEl: HTMLElement | null;
 	private ratingLabelEl: HTMLElement | null;
@@ -33,14 +35,19 @@ class RouteCompleteModal extends BaseModal {
 	private citiesEl: HTMLElement | null;
 	private mistakesEl: HTMLElement | null;
 
+	private retryButtonEl: HTMLElement | null;
 	private shareButtonEl: HTMLElement | null;
 	private shareButtonTextEl: HTMLElement | null;
+	// Left to right, which is the order the arrows walk them in.
+	private actionButtonEls: HTMLElement[];
 	private onSharedHandler: (() => void) | null;
+	private onRetryHandler: ((routeId: string) => void) | null;
 
 	constructor(onCloseRequested: () => void) {
 		super('.route-complete-modal', '.route-complete-modal__close-button', onCloseRequested);
 
 		this.route_name = '';
+		this.route_id = '';
 
 		this.titleEl = document.querySelector('.route-complete-modal__title-text');
 		this.starsEl = document.querySelector('.route-complete-modal__stars');
@@ -53,19 +60,89 @@ class RouteCompleteModal extends BaseModal {
 		this.citiesEl = document.querySelector('.route-complete-modal__stat-value--cities');
 		this.mistakesEl = document.querySelector('.route-complete-modal__stat-value--mistakes');
 
+		this.retryButtonEl = document.querySelector('.route-complete-modal__retry-button');
 		this.shareButtonEl = document.querySelector('.route-complete-modal__share-button');
-		this.shareButtonTextEl = document.querySelector('.route-complete-modal__button-text');
+		// Scoped to the share button: the retry button carries the same text class
+		// and comes first in the DOM, so a document-wide query would hand back the
+		// wrong label and `show_copy_success_message` would rename "Reintentar".
+		this.shareButtonTextEl = this.shareButtonEl?.querySelector('.route-complete-modal__button-text') ?? null;
+
+		this.actionButtonEls = [this.retryButtonEl, this.shareButtonEl]
+			.filter((el): el is HTMLElement => el !== null);
 
 		this.onSharedHandler = null;
+		this.onRetryHandler = null;
 
-		this.shareButtonEl?.addEventListener('click', this.share);
+		this.bindAction(this.retryButtonEl, this.retry);
+		this.bindAction(this.shareButtonEl, this.share);
 	}
 
 	onShared(handler: () => void): void {
 		this.onSharedHandler = handler;
 	}
 
+	onRetry(handler: (routeId: string) => void): void {
+		this.onRetryHandler = handler;
+	}
+
+	// Opens on "Reintentar" so Enter replays the route straight away — by far the
+	// likeliest thing to want next, and the reason the button exists.
+	protected focusInitialElement(): void {
+		if (!this.retryButtonEl) {
+			super.focusInitialElement();
+			return;
+		}
+
+		this.retryButtonEl.focus({ preventScroll: true });
+	}
+
+	// The action buttons are divs, so Enter and Space need wiring by hand, and the
+	// arrows walk between them the way they walk the route grid and the sliders.
+	private bindAction(el: HTMLElement | null, handler: () => void): void {
+		el?.addEventListener('click', handler);
+		el?.addEventListener('keydown', (event: KeyboardEvent) => {
+			const step = this.getNavigationStep(event.key);
+			if (step !== 0) {
+				event.preventDefault();
+				this.focusRelativeAction(el, step);
+				return;
+			}
+
+			if (event.key !== 'Enter' && event.key !== ' ') return;
+
+			event.preventDefault();
+			// Retrying puts the game into COUNTDOWN synchronously, so this same
+			// keystroke must not bubble to KeyboardInputCoordinator — there,
+			// Enter/Space means "skip the countdown" and the run would start instantly.
+			event.stopPropagation();
+			handler();
+		});
+	}
+
+	private getNavigationStep(key: string): number {
+		if (key === 'ArrowRight' || key === 'ArrowDown') return 1;
+		if (key === 'ArrowLeft' || key === 'ArrowUp') return -1;
+		return 0;
+	}
+
+	private focusRelativeAction(currentEl: HTMLElement, step: number): void {
+		const currentIndex = this.actionButtonEls.indexOf(currentEl);
+		if (currentIndex === -1) return;
+
+		const nextIndex = Math.max(0, Math.min(this.actionButtonEls.length - 1, currentIndex + step));
+		if (nextIndex === currentIndex) return;
+
+		this.actionButtonEls[nextIndex].focus({ preventScroll: true });
+	}
+
+	private retry = (): void => {
+		if (!this.route_id) return;
+
+		this.onRetryHandler?.(this.route_id);
+	};
+
 	render(payload: RouteCompleteModalPayload): void {
+		this.route_id = payload.routeId;
 		this.route_name = payload.routeTitle || 'Ruta completada';
 		const title = this.route_name;
 		const safeCombo = this.toRoundedNonNegativeInteger(payload.combo);
@@ -101,6 +178,7 @@ class RouteCompleteModal extends BaseModal {
 
 	private share = async (): Promise<void> => {
 		if (this.rootEl) {
+			this.retryButtonEl?.classList.add('hidden');
 			this.shareButtonEl?.classList.add('hidden');
 			this.closeButtonEl?.classList.add('hidden');
 			try {
@@ -115,6 +193,7 @@ class RouteCompleteModal extends BaseModal {
 				}
 			}
 			finally {
+				this.retryButtonEl?.classList.remove('hidden');
 				this.shareButtonEl?.classList.remove('hidden');
 				this.closeButtonEl?.classList.remove('hidden');
 				this.show_copy_success_message();

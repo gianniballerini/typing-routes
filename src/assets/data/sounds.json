@@ -39,6 +39,13 @@
       "size": 61342,
       "category": "sfx",
       "volume": 0.8
+    },
+    {
+      "name": "countdown",
+      "url": "/sounds/countdown.m4a",
+      "size": 42964,
+      "category": "sfx",
+      "volume": 0.8
     }
   ]
 }

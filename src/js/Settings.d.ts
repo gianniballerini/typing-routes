@@ -94,9 +94,12 @@ export interface SettingsShape {
     netWpm: { full: number; half: number };
   };
   runCountdown: {
-    seconds: number;
+    soundName: string;
+    beatsMs: number[];
+    goAtMs: number;
     goLabel: string;
     goHoldMs: number;
+    soundFadeOutMs: number;
   };
   progressMarker: {
     iconId: string;

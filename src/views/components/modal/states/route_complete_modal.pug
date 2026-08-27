@@ -33,13 +33,21 @@
                 .route-complete-modal__stat
                     span.route-complete-modal__stat-value.route-complete-modal__stat-value--mistakes 0
                     span.route-complete-modal__stat-label Errores
-            .button.route-complete-modal__share-button(role="button" tabindex="0")
-                .route-complete-modal__button-icon
-                    svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2-icon lucide-share-2")
-                        circle(cx="18" cy="5" r="3")
-                        circle(cx="6" cy="12" r="3")
-                        circle(cx="18" cy="19" r="3")
-                        line(x1="8.59" x2="15.42" y1="13.51" y2="17.49")
-                        line(x1="15.41" x2="8.59" y1="6.51" y2="10.49")
-                .route-complete-modal__button-text
-                    | Compartir
+            .route-complete-modal__actions
+                .button.route-complete-modal__retry-button(role="button" tabindex="0")
+                    .route-complete-modal__button-icon
+                        svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw")
+                            path( d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8")
+                            path( d="M3 3v5h5")
+                    .route-complete-modal__button-text
+                        | Reintentar
+                .button.route-complete-modal__share-button(role="button" tabindex="0")
+                    .route-complete-modal__button-icon
+                        svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2-icon lucide-share-2")
+                            circle(cx="18" cy="5" r="3")
+                            circle(cx="6" cy="12" r="3")
+                            circle(cx="18" cy="19" r="3")
+                            line(x1="8.59" x2="15.42" y1="13.51" y2="17.49")
+                            line(x1="15.41" x2="8.59" y1="6.51" y2="10.49")
+                    .route-complete-modal__button-text
+                        | Compartir
