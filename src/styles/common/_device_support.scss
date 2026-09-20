@@ -1,0 +1,13 @@
+
+// Tipeando is a typing game: without a physical keyboard there is no game to play,
+// so touch-only devices get a static sign instead of the app.
+//
+// The same condition lives in `src/js/DeviceSupport.ts`, which skips the whole boot.
+// CSS owns the visual because a deferred module script cannot beat first paint, and
+// a flash of the loading screen before the sign would look like a bug. Keep the two
+// expressions in sync.
+@mixin unsupported-device {
+    @media (pointer: coarse) and (hover: none) {
+        @content;
+    }
+}

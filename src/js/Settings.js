@@ -177,9 +177,9 @@ class Settings
         // Envelope around each sprite slice, so its cut edges do not pop.
         attackMs: 4,
         releaseMs: 10,
-        // Mobile virtual keyboards emit no usable `code`, so the hidden input's
-        // `input` event doubles as a trigger. On desktop both fire for the same
-        // keystroke; anything this soon after a real keydown is that duplicate.
+        // A composed character emits no usable `code`, so the hidden input's
+        // `input` event doubles as a trigger. Both fire for an ordinary keystroke;
+        // anything this soon after a real keydown is that duplicate.
         virtualKeyDedupeMs: 40,
         // Slight per-press variation, so a repeated key does not sound looped.
         gainJitter: 0.08

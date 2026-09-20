@@ -5,7 +5,6 @@ class MouseInfoCard
   container: HTMLElement;
   header: HTMLElement;
   body: HTMLElement;
-  private enabled: boolean;
 
   constructor()
   {
@@ -27,20 +26,6 @@ class MouseInfoCard
     this.container = container;
     this.header = header;
     this.body = body;
-    this.enabled = this.detectDesktopHoverCapability();
-
-    if (!this.enabled) {
-      this.hide();
-    }
-  }
-
-  private detectDesktopHoverCapability(): boolean
-  {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return true;
-    }
-
-    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   }
 
   hide()
@@ -54,8 +39,6 @@ class MouseInfoCard
 
   show(header: string, body: string, variant: 'route' | 'city' = 'route', x: number, y: number)
   {
-    if (!this.enabled) return;
-
     this.container.classList.toggle('mouse_info_card--city', variant === 'city');
     this.container.classList.toggle('mouse_info_card--route', variant === 'route');
     this.header.classList.toggle('mouse_info_card__header--city', variant === 'city');
@@ -70,7 +53,6 @@ class MouseInfoCard
 
   moveTo(x: number, y: number)
   {
-    if (!this.enabled) return;
     GsapManager.moveTo(this.container, x, y);
   }
 }

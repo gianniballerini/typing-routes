@@ -3,7 +3,7 @@ html()
   head
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible", content="IE=Edge")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     include src/views/meta
 
     link(rel="preload", href="/fonts/noto-sans-mono/noto-sans-mono-regular.woff2", as="font", type="font/woff2", crossorigin)
@@ -18,5 +18,7 @@ html()
       include src/views/components/loading_screen
       //- __SECTIONS__
       include src/views/home
+
+    include src/views/components/desktop_only_screen
 
     script(type='module', src='/src/js/main.ts')

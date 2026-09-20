@@ -48,7 +48,7 @@ const CODE_TO_KEYCODE: Record<string, number> = {
     ArrowUp: 57416, ArrowLeft: 57419, ArrowRight: 57421, ArrowDown: 57424,
 };
 
-// Used when a key has no mapping, and for mobile virtual keyboards, which report
+// Used when a key has no mapping, and for composed characters, which report
 // `Unidentified` with no usable `code`. The home row keeps the fallback sounding
 // like ordinary typing rather than a modifier thunk.
 const FALLBACK_KEYCODES: number[] = [30, 31, 32, 33, 34, 35, 36, 37, 38];

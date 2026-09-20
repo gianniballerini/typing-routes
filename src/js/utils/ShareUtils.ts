@@ -1,23 +1,5 @@
 import { toBlob, toJpeg, toPixelData, toPng, toSvg } from 'html-to-image';
 
-const SHARE_DESCRIPTION = 'Juego de mecanografia con rutas nacionales argentinas. https://tipeando.com.ar';
-const SHARE_URL = 'https://tipeando.com.ar';
-
-const isMobileDevice = (): boolean => {
-    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
-        return false;
-    }
-
-    const hasCoarsePointer = typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
-    const mobileUserAgent = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-    return hasCoarsePointer || mobileUserAgent;
-};
-
-export const shouldUseNativeShare = (): boolean => {
-    return isMobileDevice() && typeof navigator.share === 'function';
-};
-
-
 // Taken off `toPng` rather than imported from a deep `html-to-image/lib` path, so
 // the option shape follows whatever version of the library is installed.
 type ElementToImageOptions = Parameters<typeof toPng>[1];
@@ -73,37 +55,14 @@ export const copyElementImageToClipboard = async (
     await copyImageToClipboard(dataUrl);
 };
 
-export const shareImage = async (dataUrl: string, filename: string) => {
-    const response = await fetch(dataUrl);
-    const blob = await response.blob();
-    const file = new File([blob], filename, { type: blob.type });
-
-    if (shouldUseNativeShare()) {
-        try {
-            if (!navigator.canShare || navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    files: [file],
-                    text: SHARE_DESCRIPTION,
-                    url: SHARE_URL
-                });
-                return;
-            }
-        } catch (error) {
-            console.error('Error sharing:', error);
-        }
-    }
-
-    downloadImage(dataUrl, filename);
-}
-
+// The app is desktop-only, so there is no native share sheet to hand the image to:
+// downloading it is the share.
 export const shareElementAsImage = async (element: HTMLElement, filename: string) => {
     try {
         const dataUrl = await elementToImage(element, 'png');
-        if (typeof dataUrl === 'string') {
-            await shareImage(dataUrl, filename);
-        } else {
-            throw new Error('Failed to convert element to image');
-        }
+        if (typeof dataUrl !== 'string') throw new Error('Failed to convert element to image');
+
+        downloadImage(dataUrl, filename);
     } catch (error) {
         console.error('Error sharing element as image:', error);
     }

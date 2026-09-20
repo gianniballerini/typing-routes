@@ -632,9 +632,9 @@ class GameFlowCoordinator {
     private handleTypingInput = (inputText: string): void => {
         if (this.game.state !== GameState.PLAYING) return;
 
-        // Mobile on-screen keyboards emit `keydown` with no usable `code`, so
-        // the hidden input's text is the only signal a key was pressed. The
-        // manager ignores this when a real keydown just fired.
+        // A composed character (dead key + vowel) emits `keydown` with no usable
+        // `code`, so the hidden input's text is the only signal a key was pressed.
+        // The manager ignores this when a real keydown just fired.
         this.audio_manager.playKeyFromText(inputText);
 
         for (const char of inputText) {
@@ -681,7 +681,7 @@ class GameFlowCoordinator {
 
     private handleStateChange = (event: Event): void => {
         const customEvent = event as CustomEvent<{ from: string; to: string }>;
-        // Focus lands on the countdown so the mobile keyboard is already up by the
+        // Focus lands on the countdown so the typing input is already live by the
         // time the run actually starts.
         const enteringRun = customEvent.detail.from === GameState.MENU
             && customEvent.detail.to === GameState.COUNTDOWN;

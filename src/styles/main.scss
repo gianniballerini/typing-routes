@@ -1,4 +1,5 @@
 @import 'common/mixins';
+@import 'common/device_support';
 @import 'common/fonts';
 @import 'common/colors';
 @import 'common/common';
@@ -12,6 +13,7 @@
 @import 'components/game_menu';
 @import 'components/game_playing';
 @import 'components/loading_screen';
+@import 'components/desktop_only_screen';
 @import 'components/achievement_toast';
 @import 'components/toast';
 @import 'components/share_card';

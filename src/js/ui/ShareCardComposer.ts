@@ -116,9 +116,9 @@ class ShareCardComposer {
             console.error('Could not copy the share card to the clipboard:', error);
         }
 
-        // Kept as-is from the previous flow for the platforms where the
-        // clipboard refuses images. It still swallows its own errors, so
-        // `shared` is best effort until the mobile pass revisits it.
+        // Fallback for the browsers where the clipboard refuses images: the card
+        // gets downloaded instead. It still swallows its own errors, so `shared`
+        // is best effort.
         try {
             await this.withTimeout(
                 shareElementAsImage(cardEl, `TipeAndo - ${routeTitle}.png`),

@@ -1,0 +1,74 @@
+// Hidden by default: only the touch-only media query below reveals it, so a desktop
+// browser never paints it even for a frame.
+.desktop-only {
+    display: none;
+}
+
+@include unsupported-device {
+    // The app never boots on these devices (see `src/js/DeviceSupport.ts`), so the
+    // game layer would just sit there half-built behind the sign.
+    .container {
+        display: none;
+    }
+
+    .desktop-only {
+        position: fixed;
+        inset: 0;
+        z-index: 30;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40 * $ptr 30 * $ptr;
+
+        color: $white;
+        background: #474747;
+    }
+
+    .desktop-only__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 24 * $ptr;
+
+        max-width: 40ch;
+        text-align: center;
+    }
+
+    .desktop-only__title {
+        font-family: $milonga-font;
+        font-size: clamp(44px, 12vw, 72px);
+        line-height: 0.9;
+        letter-spacing: 3 * $ptr;
+    }
+
+    .desktop-only__title-part--1 {
+        color: $white;
+    }
+
+    .desktop-only__title-part--2 {
+        color: $flag-yellow;
+    }
+
+    .desktop-only__lead {
+        font-family: $noto-sans-font;
+        font-size: clamp(17px, 4.5vw, 22px);
+        font-weight: 600;
+        line-height: 1.35;
+    }
+
+    .desktop-only__body {
+        font-family: $arimo-font;
+        font-size: clamp(15px, 4vw, 19px);
+        line-height: 1.5;
+        color: rgba($white, 0.92);
+    }
+
+    .desktop-only__site {
+        font-family: $noto-sans-font;
+        font-size: clamp(13px, 3.4vw, 16px);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba($white, 0.6);
+    }
+}

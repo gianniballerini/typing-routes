@@ -13,21 +13,9 @@
     flex-direction: column;
 }
 
-.game-playing.keyboard-open {
-    justify-content: flex-start;
-}
-
-.game-playing.keyboard-open .game-playing__top {
-    display: none;
-}
-
-.game-playing.keyboard-open .game-playing__bottom {
-    height: 100%;
-    justify-content: flex-start;
-    padding-top: 16 * $ptr;
-    padding-bottom: calc(12 * $ptr + env(safe-area-inset-bottom));
-}
-
+    // Off-screen but focusable: keeping focus in a real input is what lets the browser
+    // hand us already-composed characters (dead key + vowel -> "ó"), which the raw
+    // `keydown` path cannot do. See `KeyboardInputCoordinator`.
     .game-playing__keyboard-focus-target {
         position: absolute;
         top: 0;

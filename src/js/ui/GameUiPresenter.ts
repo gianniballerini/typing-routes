@@ -17,8 +17,6 @@ class GameUiPresenter {
     private game_menu_el: HTMLElement | null;
     private game_playing_el: HTMLElement | null;
     private game_playing_focus_input_el: HTMLInputElement | null;
-    private readonly keyboardViewportOpenRatioThreshold: number;
-    private readonly keyboardViewportMinDeltaPx: number;
     private menu_info_card_close_button_el: HTMLElement | null;
 
     private menu_info_card_el: HTMLElement | null;
@@ -83,14 +81,8 @@ class GameUiPresenter {
         this.game_menu_el = document.querySelector('.game-menu');
         this.game_playing_el = document.querySelector('.game-playing');
         this.game_playing_focus_input_el = document.querySelector('.game-playing__keyboard-focus-target');
-        this.keyboardViewportOpenRatioThreshold = 0.78;
-        this.keyboardViewportMinDeltaPx = 120;
         this.game_playing_el?.addEventListener('pointerdown', this.handlePlayingPointerDown);
         this.game_playing_focus_input_el?.addEventListener('input', this.handleKeyboardFocusInput);
-        this.game_playing_focus_input_el?.addEventListener('focus', this.handleTypingInputFocus);
-        this.game_playing_focus_input_el?.addEventListener('blur', this.handleTypingInputBlur);
-        window.visualViewport?.addEventListener('resize', this.handleVisualViewportChange);
-        window.visualViewport?.addEventListener('scroll', this.handleVisualViewportChange);
 
         this.menu_info_card_el = document.querySelector('.game-menu__info-card');
         this.menu_info_card_close_button_el = document.querySelector('.game-menu__info-card-close');
@@ -350,20 +342,19 @@ class GameUiPresenter {
     focusTypingInput(): void {
         if (!this.game_playing_focus_input_el) return;
         this.game_playing_focus_input_el.focus({ preventScroll: true });
-        this.updateKeyboardViewportState();
     }
 
     blurTypingInput(): void {
         if (!this.game_playing_focus_input_el) return;
         this.game_playing_focus_input_el.value = '';
         this.game_playing_focus_input_el.blur();
-        this.clearKeyboardOpenState();
     }
 
     private handlePlayingPointerDown = (event: PointerEvent): void => {
         if (this.game_playing_el?.classList.contains('hidden')) return;
 
-        // The quit button leaves the run: refocusing here would reopen the mobile keyboard.
+        // The quit button leaves the run: stealing focus back here would keep the typing
+        // input live on a panel the player is on their way out of.
         const target = event.target;
         if (target instanceof Element && target.closest('.game-playing__quit')) return;
 
@@ -372,18 +363,6 @@ class GameUiPresenter {
 
     private handleQuitButtonClick = (): void => {
         this.quitRequestedHandler?.();
-    };
-
-    private handleTypingInputFocus = (): void => {
-        this.updateKeyboardViewportState();
-    };
-
-    private handleTypingInputBlur = (): void => {
-        this.clearKeyboardOpenState();
-    };
-
-    private handleVisualViewportChange = (): void => {
-        this.updateKeyboardViewportState();
     };
 
     private handleKeyboardFocusInput = (event: Event): void => {
@@ -428,7 +407,6 @@ class GameUiPresenter {
         if (showMenu) {
             this.renderTyping('', '');
             this.clearPlayingPanel();
-            this.clearKeyboardOpenState();
             if (isReturningToMenu) this.playMenuSignsDropAnimation();
         }
     }
@@ -504,45 +482,6 @@ class GameUiPresenter {
         if (!this.game_menu_el || this.game_menu_el.classList.contains('hidden')) return;
 
         this.playMenuSignsDropAnimation();
-    }
-
-    private isTypingInputFocused(): boolean {
-        return document.activeElement === this.game_playing_focus_input_el;
-    }
-
-    private isPlayingVisible(): boolean {
-        return !!this.game_playing_el && !this.game_playing_el.classList.contains('hidden');
-    }
-
-    private updateKeyboardViewportState(): void {
-        if (!this.isPlayingVisible() || !this.isTypingInputFocused()) {
-            this.clearKeyboardOpenState();
-            return;
-        }
-
-        const visualViewport = window.visualViewport;
-        if (!visualViewport || !this.game_playing_el) return;
-
-        const layoutViewportHeight = Math.max(window.innerHeight, document.documentElement.clientHeight);
-        const keyboardDeltaPx = Math.max(0, layoutViewportHeight - visualViewport.height);
-        const viewportRatio = visualViewport.height / Math.max(1, layoutViewportHeight);
-
-        const keyboardIsOpen = keyboardDeltaPx >= this.keyboardViewportMinDeltaPx
-            && viewportRatio <= this.keyboardViewportOpenRatioThreshold;
-
-        if (!keyboardIsOpen) {
-            this.clearKeyboardOpenState();
-            return;
-        }
-
-        this.game_playing_el.classList.add('keyboard-open');
-        this.game_playing_el.style.height = `${Math.max(0, Math.round(visualViewport.height))}px`;
-    }
-
-    private clearKeyboardOpenState(): void {
-        if (!this.game_playing_el) return;
-        this.game_playing_el.classList.remove('keyboard-open');
-        this.game_playing_el.style.removeProperty('height');
     }
 
     setMenuRoutePreview(route: Route, record: MenuRouteRecord | null = null, stars: number | null = null): void {

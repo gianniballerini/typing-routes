@@ -386,8 +386,8 @@ class AudioManager {
         if (event.repeat) return;
         if (!this.canPlayKeySound()) return;
 
-        // Mobile virtual keyboards report no usable code; those keystrokes reach
-        // us through `playKeyFromText` instead.
+        // Composed characters (dead key + vowel) arrive with no usable code; those
+        // keystrokes reach us through `playKeyFromText` instead.
         const code = event.code;
         if (!code || code === 'Unidentified') return;
 
@@ -395,8 +395,8 @@ class AudioManager {
         this.keyPack.playForEventCode(code, 1);
     };
 
-    // Fed by the hidden typing input's `input` event, the only signal a mobile
-    // on-screen keyboard produces.
+    // Fed by the hidden typing input's `input` event, the only signal a composed
+    // character produces.
     playKeyFromText(text: string): void {
         if (!text || !this.canPlayKeySound()) return;
 
