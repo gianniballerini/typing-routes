@@ -1,0 +1,179 @@
+// ============================================================
+// Block: share-card (+ its host)
+// The image the player pastes into a chat. Never visible on screen.
+//
+// Three things here are deliberate and easy to undo by accident:
+//
+// 1. The HOST hides the card; the card hides nothing. html-to-image clones the
+//    captured node and copies that node's OWN computed styles onto the clone,
+//    then paints it into a foreignObject the size of its box. So an offset on
+//    `.share-card` is reapplied inside the capture and shoves the content off
+//    the canvas, producing a perfectly sized, perfectly blank PNG. Keep every
+//    offset on `.share-card-host` and leave the card positionally neutral.
+//
+// 2. The host is parked OFF-SCREEN, not hidden. `display: none` (what `.hidden`
+//    does) leaves nothing laid out to measure, and `visibility: hidden` /
+//    `opacity: 0` are inherited by the clone and rasterise to nothing.
+//
+// 3. Every length is a raw ` * $ptr`, NOT `N * $ptr`. `$ptr` is relative to the root
+//    font size, which this app scales from 14 * $ptr up to 40 * $ptr across breakpoints
+//    (see common/_common.scss) — a $ptr-sized card would come out roughly three
+//    times larger on an ultra-wide than on a laptop. A shared image has to look
+//    the same no matter who copied it.
+// ============================================================
+
+.share-card-host {
+    position: fixed;
+    top: 0;
+    // Far enough to clear the card at its full width. Because it is `fixed` it
+    // never joins an ancestor's scrollable box, so it cannot introduce a
+    // phantom scrollbar or move anything on the page.
+    left: -10000 * $ptr;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.share-card {
+    // `relative` only so the keyline below has something to anchor to. Do not
+    // add `top`/`left`/`transform` here — see note 1 above.
+    position: relative;
+
+    width: 640 * $ptr;
+    padding: 36 * $ptr;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 26 * $ptr;
+
+    background: $signs-green;
+    border-radius: 24 * $ptr;
+
+    font-family: $arimo-font;
+    color: $white;
+}
+
+// The white inset keyline every modal panel carries — the road-sign look,
+// rebuilt in  * $ptr rather than reusing `modal-panel` for reason 3 above.
+.share-card::before {
+    content: '';
+
+    position: absolute;
+    top: 14 * $ptr;
+    left: 14 * $ptr;
+
+    width: calc(100% - 28 * $ptr);
+    height: calc(100% - 28 * $ptr);
+
+    border: 4 * $ptr solid $white;
+    border-radius: 14 * $ptr;
+
+    pointer-events: none;
+}
+
+.share-card__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 20 * $ptr;
+}
+
+.share-card__brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 10 * $ptr;
+
+    flex-shrink: 0;
+}
+
+.share-card__brand-logo {
+    width: 40 * $ptr;
+    height: 40 * $ptr;
+
+    object-fit: contain;
+}
+
+.share-card__brand-name {
+    font-size: 24 * $ptr;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 1 * $ptr;
+}
+
+.share-card__route-title {
+    min-width: 0;
+
+    font-size: 22 * $ptr;
+    line-height: 1.1;
+    text-align: right;
+    text-transform: uppercase;
+
+    color: $flag-yellow;
+}
+
+.share-card__rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10 * $ptr;
+}
+
+// `.stars--lg` sizes itself in `$ptr`, and every star is `1em` off that. Pinning
+// the font size in  * $ptr keeps the stars in step with the rest of the card.
+.share-card__stars {
+    font-size: 52 * $ptr;
+}
+
+.share-card__rating-label {
+    font-size: 20 * $ptr;
+    line-height: 1;
+}
+
+.share-card__stats {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    column-gap: 8 * $ptr;
+}
+
+.share-card__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 6 * $ptr;
+
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.share-card__stat-value {
+    font-size: 26 * $ptr;
+    line-height: 1;
+}
+
+.share-card__stat-label {
+    font-size: 12 * $ptr;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 1 * $ptr;
+
+    color: rgba($white, 0.75);
+    text-align: center;
+}
+
+.share-card__footer {
+    display: flex;
+    justify-content: center;
+
+    padding-top: 18 * $ptr;
+    border-top: 2 * $ptr solid rgba($white, 0.35);
+}
+
+.share-card__footer-text {
+    font-size: 16 * $ptr;
+    line-height: 1;
+
+    color: rgba($white, 0.9);
+}

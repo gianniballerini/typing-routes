@@ -297,6 +297,30 @@ class GsapManager {
         });
     }
 
+    // Toast
+
+    // Mirrors the achievement pair, but travelling the other way: this stack
+    // lives at the bottom edge, so it has to read as rising out of it rather
+    // than dropping in from above.
+    playToastIn(el: HTMLElement): void {
+        gsap.fromTo(el,
+            { opacity: 0, y: 24, scale: 0.94 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: 'back.out(1.7)' }
+        );
+    }
+
+    playToastOut(el: HTMLElement, onComplete: () => void): void {
+        gsap.killTweensOf(el);
+        gsap.to(el, {
+            opacity: 0,
+            y: 16,
+            scale: 0.96,
+            duration: 0.25,
+            ease: 'power2.in',
+            onComplete
+        });
+    }
+
     // Mouse info card
 
     moveTo(el: HTMLElement, x: number, y: number): void {

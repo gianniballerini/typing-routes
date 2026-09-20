@@ -3764,6 +3764,16 @@
       "tier": "minor"
     },
     {
+      "id": "ar-santa_cruz-tellier",
+      "georef_id": null,
+      "name": "Tellier",
+      "typing": "tellier",
+      "lat": -47.6477,
+      "lon": -66.0382,
+      "province": "Santa Cruz",
+      "tier": "minor"
+    },
+    {
       "id": "ar-santa_cruz-puerto_deseado",
       "georef_id": null,
       "name": "Puerto Deseado",

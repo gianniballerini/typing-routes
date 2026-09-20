@@ -1,0 +1,47 @@
+//- The artwork the player actually shares. Populated on demand by
+//- ShareCardComposer and never shown on screen.
+//-
+//- The HOST does the hiding, not the card. Two reasons it has to be that way:
+//- `.hidden` is `display: none`, and an element with no layout box gives
+//- html-to-image nothing to measure or clone; and html-to-image copies the
+//- captured node's OWN computed styles onto its clone, so an offset living on
+//- `.share-card` gets reapplied inside the capture and pushes the content off
+//- the canvas — a correctly sized but completely blank PNG.
+//-
+//- `aria-hidden` keeps it out of the accessibility tree, since it only restates
+//- what the results panel already announces.
+.share-card-host(aria-hidden="true")
+    .share-card
+        .share-card__header
+            .share-card__brand
+                .game-menu__welcome
+                    img.game-menu__logo-background(src="/images/common/logo_background.png" alt="Logo de Tipeando")
+                    span.game-menu__welcome-title
+                        .game-menu__welcome-title--1 Tipe
+                        .game-menu__welcome-title--2 A
+                        .game-menu__welcome-title--1 ndo
+            span.share-card__route-title
+
+        .share-card__rating
+            .stars.stars--lg.share-card__stars
+            span.share-card__rating-label
+
+        .share-card__stats
+            .share-card__stat
+                span.share-card__stat-value.share-card__stat-value--wpm 0.0
+                span.share-card__stat-label PPM
+            .share-card__stat
+                span.share-card__stat-value.share-card__stat-value--accuracy 0.0%
+                span.share-card__stat-label Precisión
+            .share-card__stat
+                span.share-card__stat-value.share-card__stat-value--elapsed 00:00
+                span.share-card__stat-label Tiempo
+            .share-card__stat
+                span.share-card__stat-value.share-card__stat-value--combo 0
+                span.share-card__stat-label Combo
+            .share-card__stat
+                span.share-card__stat-value.share-card__stat-value--cities 0
+                span.share-card__stat-label Ciudades
+
+        .share-card__footer
+            span.share-card__footer-text tipeando.com.ar

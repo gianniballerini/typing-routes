@@ -1,0 +1,52 @@
+// Bottom-edge counterpart to the achievement stack. Same z-index tier (30):
+// the two never overlap — one hugs the top, this one the bottom — and both only
+// need to clear `.modal` (z-index 20), since the share toast fires while the
+// route-complete panel is still open.
+.toast-stack {
+    position: fixed;
+    bottom: 16 * $ptr;
+    left: 50%;
+    z-index: 30;
+
+    transform: translateX(-50%);
+
+    display: flex;
+    // Newest card nearest the bottom edge, where the eye already is.
+    flex-direction: column-reverse;
+    row-gap: 8 * $ptr;
+    align-items: center;
+
+    width: max-content;
+    max-width: calc(100vw - 32 * $ptr);
+
+    // Purely an announcement: clicks belong to whatever is underneath.
+    pointer-events: none;
+
+    @include respond-to($medium-breakpoint) {
+        bottom: 24 * $ptr;
+    }
+}
+
+.toast__card {
+    padding: 12 * $ptr 20 * $ptr;
+
+    // A shade under the modal panels, matching the achievement card: this lands
+    // on top of a panel and should not read as part of it.
+    background-color: $signs-green-dark;
+    border: 2 * $ptr solid $white;
+    border-radius: 12 * $ptr;
+    box-shadow: 0 8 * $ptr 20 * $ptr rgba($black, 0.45);
+
+    font-family: $arimo-font;
+    color: $white;
+    text-align: center;
+}
+
+.toast__card-text {
+    font-size: 14 * $ptr;
+    line-height: 1.25;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 16 * $ptr;
+    }
+}

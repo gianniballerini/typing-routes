@@ -18,6 +18,10 @@ import { GameUiPresenter } from '../ui/GameUiPresenter';
 import { ModalController, ModalState } from '../ui/ModalController';
 import type { AchievementRow } from '../ui/modals/AchievementsModal';
 import type { RouteListRow } from '../ui/modals/RouteListModal';
+import type { RouteCompleteModalPayload } from '../ui/modals/RouteCompleteModal';
+import type { ShareCardResult } from '../ui/ShareCardComposer';
+import { ShareCardComposer } from '../ui/ShareCardComposer';
+import { Toast } from '../ui/Toast';
 import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
@@ -26,6 +30,14 @@ import { UserStatsStorage } from './UserStatsStorage';
 
 // Several trophies can land in the same tick; past this they share one cue.
 const ACHIEVEMENT_CUE_THROTTLE_MS = 150;
+
+// Said only once the image is actually on the clipboard, so the player is never
+// sent to a chat to paste something that is not there.
+const SHARE_MESSAGES: Record<ShareCardResult, string> = {
+    copied: '¡Resultado copiado! Pegalo en el chat que quieras.',
+    shared: 'Listo, ya tenés la imagen de tu resultado.',
+    failed: 'No pudimos copiar el resultado. Probá de nuevo.'
+};
 
 interface ActiveRunStats {
     routeId: string;
@@ -70,6 +82,8 @@ class GameFlowCoordinator {
     private achievements: Achievements;
     private achievements_storage: AchievementsStorage;
     private achievement_toast: AchievementToast;
+    private share_card_composer: ShareCardComposer;
+    private toast: Toast;
     private audio_manager: AudioManager;
     private routeMetrics: RouteMetrics | null;
     private snappedCityPoints: SnappedRoutePoint[];
@@ -94,6 +108,8 @@ class GameFlowCoordinator {
         this.achievements = dependencies.achievements;
         this.achievements_storage = dependencies.achievements_storage;
         this.achievement_toast = new AchievementToast();
+        this.share_card_composer = new ShareCardComposer();
+        this.toast = new Toast();
         this.audio_manager = dependencies.audio_manager;
         this.routeMetrics = null;
         this.snappedCityPoints = [];
@@ -160,7 +176,7 @@ class GameFlowCoordinator {
         this.ui_presenter.onMenuKeyboardActivation(this.handleMenuKeyboardActivation);
         this.ui_presenter.onPointerActivation(() => this.achievements.reportPointerActivation());
         this.achievements.addEventListener('achievement-unlocked', this.handleAchievementUnlocked as EventListener);
-        this.modal_controller.routeCompleteModal.onShared(this.handleScoreShared);
+        this.modal_controller.routeCompleteModal.onShareRequested(this.handleShareRequested);
         this.modal_controller.routeCompleteModal.onRetry(this.handleRetryRequested);
         this.modal_controller.routeListModal.onRouteActivated(this.handleRouteListActivated);
         this.modal_controller.settingsModal.onVolumeChange(this.handleVolumeChange);
@@ -480,9 +496,18 @@ class GameFlowCoordinator {
         this.selectAndStartRoute(routeId);
     };
 
-    private handleScoreShared = (): void => {
-        const unlocked = this.achievements.reportScoreShared();
-        if (unlocked.length > 0) this.achievements_storage.save(this.achievements);
+    // Draws the off-screen share card from the finished run, copies it, and only
+    // then says what happened. The trophy follows the same notion of "shared"
+    // the toast reports, so neither can claim something the other denies.
+    private handleShareRequested = async (payload: RouteCompleteModalPayload): Promise<void> => {
+        const result = await this.share_card_composer.renderAndCopy(payload);
+
+        if (result !== 'failed') {
+            const unlocked = this.achievements.reportScoreShared();
+            if (unlocked.length > 0) this.achievements_storage.save(this.achievements);
+        }
+
+        this.toast.show(SHARE_MESSAGES[result]);
     };
 
     private handleMenuKeyboardActivation = (): void => {

@@ -1050,8 +1050,9 @@
       "id": "rn-0281",
       "route": "0281",
       "city_refs": [
-        "ar-santa_cruz-jaramillo",
-        "ar-santa_cruz-puerto_deseado"
+        "ar-santa_cruz-puerto_deseado",
+        "ar-santa_cruz-tellier",
+        "ar-santa_cruz-jaramillo"
       ]
     },
     {

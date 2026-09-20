@@ -26,4 +26,14 @@ function formatInteger(value: number | null | undefined): string {
     return `${Math.max(0, Math.round(value))}`;
 }
 
-export { EMPTY_TIME, EMPTY_VALUE, formatAccuracy, formatElapsedTime, formatInteger, formatOneDecimal };
+// The stars come from the stored best record, so a slower repeat run keeps the
+// rating it already earned instead of appearing to lose stars. Shared because
+// the route-complete panel and the share card have to agree on the wording.
+function buildRatingLabel(stars: number): string {
+    if (stars >= 3) return '¡Perfecto!';
+    if (stars >= 2) return '¡Muy bien!';
+    if (stars >= 1) return 'Mejorable';
+    return '';
+}
+
+export { buildRatingLabel, EMPTY_TIME, EMPTY_VALUE, formatAccuracy, formatElapsedTime, formatInteger, formatOneDecimal };

@@ -1,0 +1,9 @@
+//- Host for transient status messages at the bottom of the screen. Cards are
+//- appended by Toast and removed once their exit tween finishes, so it sits
+//- empty most of the time.
+.toast-stack(role="status" aria-live="polite" aria-atomic="true")
+
+    //- Cloned once per message.
+    template.toast__card-template
+        .toast__card
+            span.toast__card-text

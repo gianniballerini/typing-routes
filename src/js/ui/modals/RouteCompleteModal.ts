@@ -1,6 +1,17 @@
-import { copyElementImageToClipboard, shareElementAsImage } from '../../utils/ShareUtils';
+import {
+	buildRatingLabel,
+	formatAccuracy,
+	formatElapsedTime,
+	formatInteger,
+	formatOneDecimal
+} from '../../utils/StatFormatters';
 import { renderStars } from '../StarsView';
 import { BaseModal } from './BaseModal';
+
+// A record is shown as a medal drawn by CSS on this modifier, so the value stays
+// a clean number with no wording baked into it.
+const NEW_RECORD_CLASS = 'route-complete-modal__stat-value--new-record';
+const NEW_RECORD_LABEL = 'Nuevo récord';
 
 interface RouteCompleteModalPayload {
 	routeId: string;
@@ -37,10 +48,16 @@ class RouteCompleteModal extends BaseModal {
 
 	private retryButtonEl: HTMLElement | null;
 	private shareButtonEl: HTMLElement | null;
-	private shareButtonTextEl: HTMLElement | null;
 	// Left to right, which is the order the arrows walk them in.
 	private actionButtonEls: HTMLElement[];
-	private onSharedHandler: (() => void) | null;
+	// The card is drawn from the run, not from the panel, so the last rendered
+	// payload is what the share handler needs — the coordinator has already let
+	// go of the live run stats by the time this modal opens.
+	private lastPayload: RouteCompleteModalPayload | null;
+	// A capture takes a few frames and fills one shared off-screen card, so a
+	// second click mid-flight would race the first for the same DOM.
+	private isSharing: boolean;
+	private onShareRequestedHandler: ((payload: RouteCompleteModalPayload) => Promise<void>) | null;
 	private onRetryHandler: ((routeId: string) => void) | null;
 
 	constructor(onCloseRequested: () => void) {
@@ -62,23 +79,21 @@ class RouteCompleteModal extends BaseModal {
 
 		this.retryButtonEl = document.querySelector('.route-complete-modal__retry-button');
 		this.shareButtonEl = document.querySelector('.route-complete-modal__share-button');
-		// Scoped to the share button: the retry button carries the same text class
-		// and comes first in the DOM, so a document-wide query would hand back the
-		// wrong label and `show_copy_success_message` would rename "Reintentar".
-		this.shareButtonTextEl = this.shareButtonEl?.querySelector('.route-complete-modal__button-text') ?? null;
 
 		this.actionButtonEls = [this.retryButtonEl, this.shareButtonEl]
 			.filter((el): el is HTMLElement => el !== null);
 
-		this.onSharedHandler = null;
+		this.lastPayload = null;
+		this.isSharing = false;
+		this.onShareRequestedHandler = null;
 		this.onRetryHandler = null;
 
 		this.bindAction(this.retryButtonEl, this.retry);
 		this.bindAction(this.shareButtonEl, this.share);
 	}
 
-	onShared(handler: () => void): void {
-		this.onSharedHandler = handler;
+	onShareRequested(handler: (payload: RouteCompleteModalPayload) => Promise<void>): void {
+		this.onShareRequestedHandler = handler;
 	}
 
 	onRetry(handler: (routeId: string) => void): void {
@@ -142,112 +157,60 @@ class RouteCompleteModal extends BaseModal {
 	};
 
 	render(payload: RouteCompleteModalPayload): void {
+		this.lastPayload = payload;
 		this.route_id = payload.routeId;
 		this.route_name = payload.routeTitle || 'Ruta completada';
 		const title = this.route_name;
-		const safeCombo = this.toRoundedNonNegativeInteger(payload.combo);
-		const safeGrossWpm = this.toOneDecimalNonNegative(payload.grossWpm);
-		const safeNetWpm = this.toOneDecimalNonNegative(payload.netWpm);
-		const safeAccuracy = this.toOneDecimalNonNegative(payload.accuracy);
-		const comboLabel = this.withNewRecordPrefix(safeCombo, Boolean(payload.isNewComboRecord));
-		const grossWpmLabel = this.withNewRecordPrefix(safeGrossWpm, Boolean(payload.isNewGrossWpmRecord));
-		const netWpmLabel = this.withNewRecordPrefix(safeNetWpm, Boolean(payload.isNewNetWpmRecord));
-		const accuracyLabel = this.withNewRecordPrefix(`${safeAccuracy}%`, Boolean(payload.isNewAccuracyRecord));
-		const elapsedLabel = this.withNewRecordPrefix(
-			this.formatElapsedTime(payload.elapsedMs),
-			Boolean(payload.isNewTimeRecord)
-		);
-		const safeCitiesTotal = this.toRoundedNonNegativeInteger(payload.citiesTotal);
-		const safeMistakes = this.toRoundedNonNegativeInteger(payload.mistakes);
-
 		if (this.titleEl) this.titleEl.textContent = title;
 
 		renderStars(this.starsEl, payload.stars, { animate: true });
 		if (this.ratingLabelEl) {
-			this.ratingLabelEl.textContent = this.buildRatingLabel(payload.stars);
+			this.ratingLabelEl.textContent = buildRatingLabel(payload.stars);
 		}
 
-		if (this.comboEl) this.comboEl.textContent = comboLabel;
-		if (this.grossWpmEl) this.grossWpmEl.textContent = grossWpmLabel;
-		if (this.netWpmEl) this.netWpmEl.textContent = netWpmLabel;
-		if (this.accuracyEl) this.accuracyEl.textContent = accuracyLabel;
-		if (this.elapsedEl) this.elapsedEl.textContent = elapsedLabel;
-		if (this.citiesEl) this.citiesEl.textContent = `${safeCitiesTotal}`;
-		if (this.mistakesEl) this.mistakesEl.textContent = `${safeMistakes}`;
+		this.renderStat(this.comboEl, formatInteger(payload.combo), Boolean(payload.isNewComboRecord));
+		this.renderStat(this.grossWpmEl, formatOneDecimal(payload.grossWpm), Boolean(payload.isNewGrossWpmRecord));
+		this.renderStat(this.netWpmEl, formatOneDecimal(payload.netWpm), Boolean(payload.isNewNetWpmRecord));
+		this.renderStat(this.accuracyEl, formatAccuracy(payload.accuracy), Boolean(payload.isNewAccuracyRecord));
+		this.renderStat(this.elapsedEl, formatElapsedTime(payload.elapsedMs), Boolean(payload.isNewTimeRecord));
+		// Neither of these can be a record; routed through the same call so a
+		// stale medal from an earlier run cannot survive on them either.
+		this.renderStat(this.citiesEl, formatInteger(payload.citiesTotal), false);
+		this.renderStat(this.mistakesEl, formatInteger(payload.mistakes), false);
 	}
 
+	// The medal is a background image, which assistive tech cannot see, so the
+	// record is also stated in an aria-label that keeps the value with it.
+	private renderStat(el: HTMLElement | null, value: string, isNewRecord: boolean): void {
+		if (!el) return;
+
+		el.textContent = value;
+		el.classList.toggle(NEW_RECORD_CLASS, isNewRecord);
+
+		if (isNewRecord) {
+			el.setAttribute('title', NEW_RECORD_LABEL);
+			el.setAttribute('aria-label', `${value}, ${NEW_RECORD_LABEL.toLowerCase()}`);
+			return;
+		}
+
+		el.removeAttribute('title');
+		el.removeAttribute('aria-label');
+	}
+
+	// The panel is no longer the artwork: the picture comes from the off-screen
+	// share card, so there is nothing to hide here and no buttons to flicker.
 	private share = async (): Promise<void> => {
-		if (this.rootEl) {
-			this.retryButtonEl?.classList.add('hidden');
-			this.shareButtonEl?.classList.add('hidden');
-			this.closeButtonEl?.classList.add('hidden');
-			try {
-				await copyElementImageToClipboard(this.rootEl);
-				// await shareElementAsImage(this.rootEl, `Record - ${this.route_name}.png`);
-			}
-			catch (error) {
-				try {
-					await shareElementAsImage(this.rootEl, `Record - ${this.route_name}.png`);
-				} catch (error) {
-					console.error('Failed to share element as image:', error);
-				}
-			}
-			finally {
-				this.retryButtonEl?.classList.remove('hidden');
-				this.shareButtonEl?.classList.remove('hidden');
-				this.closeButtonEl?.classList.remove('hidden');
-				this.show_copy_success_message();
-				// Fired alongside the success message so the trophy follows the
-				// same notion of "shared" the button already reports to the player.
-				this.onSharedHandler?.();
-			}
+		if (!this.lastPayload || this.isSharing || !this.onShareRequestedHandler) return;
+
+		this.isSharing = true;
+		try {
+			await this.onShareRequestedHandler(this.lastPayload);
+		}
+		finally {
+			this.isSharing = false;
 		}
 	};
 
-	show_copy_success_message(): void {
-		if (this.shareButtonTextEl) {
-			const originalText = this.shareButtonTextEl.textContent;
-			this.shareButtonTextEl.textContent = 'Copied!';
-			setTimeout(() => {
-				if (this.shareButtonTextEl) {
-					this.shareButtonTextEl.textContent = originalText;
-				}
-			}, 2000);
-		}
-	}
-
-	// The stars come from the stored best record, so a slower repeat run keeps the
-	// rating it already earned instead of appearing to lose stars.
-	private buildRatingLabel(stars: number): string {
-		if (stars >= 3) return '¡Perfecto!';
-		if (stars >= 2) return '¡Muy bien!';
-		if (stars >= 1) return 'Bien, se puede mejorar';
-		return 'Sin estrellas todavía';
-	}
-
-	private toRoundedNonNegativeInteger(value: number): number {
-		if (!Number.isFinite(value)) return 0;
-		return Math.max(0, Math.round(value));
-	}
-
-	private toOneDecimalNonNegative(value: number): string {
-		const safeValue = Number.isFinite(value) ? Math.max(0, value) : 0;
-		return safeValue.toFixed(1);
-	}
-
-	private withNewRecordPrefix(value: string | number, isNewRecord: boolean): string {
-		const baseValue = `${value}`;
-		if (!isNewRecord) return baseValue;
-		return `(new record) ${baseValue}`;
-	}
-
-	private formatElapsedTime(elapsedMs: number): string {
-		const safeElapsedMs = Number.isFinite(elapsedMs) ? Math.max(0, elapsedMs) : 0;
-		const totalSeconds = Math.floor(safeElapsedMs / 1000);
-		const minutes = Math.floor(totalSeconds / 60);
-		const seconds = totalSeconds % 60;
-		return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-	}
 }
 
 export { RouteCompleteModal };
