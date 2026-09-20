@@ -4,6 +4,11 @@ export interface SettingsShape {
   minZoom: number;
   maxZoom: number;
   maxBounds: [[number, number], [number, number]];
+  mapTexture: {
+    src: string;
+    bounds: { west: number; east: number; north: number; south: number };
+    opacity: number;
+  };
   argentinaBorder: {
     color: string;
     width: number;

@@ -11,6 +11,17 @@ class Settings
       [-40.0, -20.0]
     ];
 
+    // Background artwork for the country. The image is rendered in Web Mercator
+    // at exactly these bounds (see data/build_map_texture_template.py), so it
+    // aligns with the routes by construction — no offset to tune. An
+    // equirectangular image would NOT line up: Mercator stretches latitude by
+    // 1/cos(lat), and Argentina spans 35 degrees of it.
+    this.mapTexture = {
+      src: '/images/map/argentina_texture.png',
+      bounds: { west: -74.0, east: -53.0, north: -21.0, south: -56.0 },
+      opacity: 1
+    };
+
     this.argentinaBorder = {
       color: '#e1e1e184',
       width: 2

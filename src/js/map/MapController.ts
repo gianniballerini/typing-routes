@@ -112,6 +112,8 @@ class MapController {
 
         this.startLoop();
 
+        this.loadTexture();
+
         // The border is decoration: a failure to fetch it must not keep the app
         // on the loading screen, so readiness does not wait on it.
         void loadBorderBuffer()
@@ -125,6 +127,22 @@ class MapController {
         const callbacks = this.pendingCallbacks;
         this.pendingCallbacks = [];
         callbacks.forEach((cb) => cb());
+    }
+
+    /**
+     * Loads the country artwork.
+     *
+     * Decoration, like the border: a missing or broken image leaves the map
+     * rendering without it rather than blocking the loading screen.
+     */
+    private loadTexture(): void {
+        const image = new Image();
+        image.onload = () => {
+            this.renderer.setTexture(image);
+            this.invalidate();
+        };
+        image.onerror = () => { /* map renders without the artwork */ };
+        image.src = Settings.mapTexture.src;
     }
 
     onReady(cb: () => void): void {

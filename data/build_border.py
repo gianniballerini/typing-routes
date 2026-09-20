@@ -28,6 +28,15 @@ QUANT_MAX = 32767
 MAX_ZOOM = 9.0
 EXCLUDE_TOKENS = ("antártico", "antartico")
 
+# Maritime boundaries are ruled lines drawn between a handful of survey points,
+# so they run hundreds of km with a dozen vertices; surveyed land borders are
+# dense (median 0.09 km per segment). Measured on this export the land borders
+# top out at 3.97 km/segment and the maritime ones start at 13.1, so this cuts
+# cleanly between them. Without it the Rio de la Plata limit and the line south
+# of Tierra del Fuego render as strays trailing off into open ocean.
+MAX_KM_PER_SEGMENT = 5.0
+EARTH_KM_PER_DEGREE = 111.32
+
 
 def project(lon, lat):
     lat = max(-MAX_LATITUDE, min(MAX_LATITUDE, lat))
@@ -68,6 +77,18 @@ def rdp(points, tolerance):
     return [p for p, k in zip(points, keep) if k]
 
 
+def mean_segment_km(line):
+    """Average spacing between consecutive vertices, in km."""
+    if len(line) < 2:
+        return 0.0
+    total = 0.0
+    for i in range(1, len(line)):
+        dx = (line[i][0] - line[i - 1][0]) * math.cos(math.radians(line[i][1]))
+        dy = line[i][1] - line[i - 1][1]
+        total += math.hypot(dx, dy) * EARTH_KM_PER_DEGREE
+    return total / (len(line) - 1)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("input")
@@ -83,6 +104,7 @@ def main():
 
     lines = []
     before = 0
+    dropped = 0
     for feature in data["features"]:
         props = feature.get("properties") or {}
         label = f"{props.get('fna', '')} {props.get('nam', '')}".lower()
@@ -92,6 +114,9 @@ def main():
         if geometry.get("type") != "MultiLineString":
             continue
         for line in geometry["coordinates"]:
+            if mean_segment_km(line) > MAX_KM_PER_SEGMENT:
+                dropped += 1
+                continue
             projected = [project(c[0], c[1]) for c in line]
             before += len(projected)
             simplified = rdp(projected, tolerance)
@@ -127,7 +152,7 @@ def main():
                   f, separators=(",", ":"))
 
     after = sum(parts)
-    print(f"lines        {len(lines)}")
+    print(f"lines        {len(lines)}  ({dropped} maritime line(s) dropped)")
     print(f"coordinates  {before} -> {after} ({before / max(after, 1):.1f}x fewer)")
     print(f"{bin_path}  {len(blob):,} bytes")
     print(f"{json_path}  {os.path.getsize(json_path):,} bytes")

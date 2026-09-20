@@ -2,7 +2,7 @@ import { Settings } from '../Settings';
 import { createCarMarkerSprite, type CarMarkerSprite } from '../utils/CarMarkerIcon';
 import type { MapCamera } from './MapCamera';
 import type { CityFeature, RouteFeature } from './MapFeatures';
-import { interpolateByZoom } from './MercatorProjection';
+import { interpolateByZoom, projectLat, projectLon } from './MercatorProjection';
 
 export type ProgressMarkerState = {
     x: number;
@@ -31,6 +31,7 @@ class MapRenderer {
     private sprite: CarMarkerSprite | null;
     private spriteResolved: boolean;
     private borderParts: Float64Array[];
+    private texture: HTMLImageElement | null;
     private pixelRatio: number;
 
     constructor(canvas: HTMLCanvasElement) {
@@ -42,11 +43,16 @@ class MapRenderer {
         this.sprite = null;
         this.spriteResolved = false;
         this.borderParts = [];
+        this.texture = null;
         this.pixelRatio = 1;
     }
 
     setBorder(parts: Float64Array[]): void {
         this.borderParts = parts;
+    }
+
+    setTexture(image: HTMLImageElement | null): void {
+        this.texture = image;
     }
 
     /**
@@ -142,14 +148,29 @@ class MapRenderer {
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
 
-        // 1. Border.
+        // 1. Country artwork. The image is stored in the same projection as the
+        // routes, so its bounding box projects to an axis-aligned rectangle and a
+        // plain `drawImage` lands it exactly — no warping, no offset.
+        if (this.texture) {
+            const bounds = Settings.mapTexture.bounds;
+            const left = camera.projectWorldX(projectLon(bounds.west));
+            const right = camera.projectWorldX(projectLon(bounds.east));
+            const top = camera.projectWorldY(projectLat(bounds.north));
+            const bottom = camera.projectWorldY(projectLat(bounds.south));
+
+            ctx.globalAlpha = Settings.mapTexture.opacity;
+            ctx.drawImage(this.texture, left, top, right - left, bottom - top);
+            ctx.globalAlpha = 1;
+        }
+
+        // 2. Border.
         if (this.borderParts.length > 0) {
             ctx.strokeStyle = Settings.argentinaBorder.color;
             ctx.lineWidth = Settings.argentinaBorder.width;
             this.strokeParts(ctx, camera, this.borderParts);
         }
 
-        // 2. Routes.
+        // 3. Routes.
         const lineWidth = interpolateByZoom(
             zoom,
             Settings.routeLine.widthByZoom.minZoom,
@@ -178,7 +199,7 @@ class MapRenderer {
         }
         ctx.globalAlpha = 1;
 
-        // 3. Cities.
+        // 4. Cities.
         const radius = interpolateByZoom(
             zoom,
             Settings.cityCircle.radiusByZoom.minZoom,
@@ -206,7 +227,7 @@ class MapRenderer {
             if (Settings.cityCircle.stroke.width > 0) ctx.stroke();
         }
 
-        // 4. Hover ring.
+        // 5. Hover ring.
         if (hoverRing.cityId !== null && hoverRing.strokeOpacity > 0) {
             const city = cities.find((candidate) => candidate.id === hoverRing.cityId);
             if (city) {
@@ -226,7 +247,7 @@ class MapRenderer {
             }
         }
 
-        // 5. Progress marker.
+        // 6. Progress marker.
         if (marker.visible) {
             const x = camera.projectWorldX(marker.x);
             const y = camera.projectWorldY(marker.y);
