@@ -23,6 +23,7 @@ class Settings
       nationalRoutesLine: 'national-routes-line',
       nationalRoutesHitbox: 'national-routes-hitbox',
       citiesCircle: 'cities-circle',
+      citiesCircleHoverRing: 'cities-circle-hover-ring',
       citiesCircleHitbox: 'cities-circle-hitbox',
       progressMarkerIcon: 'progress-marker-icon'
     };
@@ -85,6 +86,18 @@ class Settings
         strokeColor: '#ffffff',
         strokeOpacity: 0.8,
         strokeWidth: 1
+      },
+      // Ring drawn around the hovered city. It sits at the same radius the
+      // hitbox debug helper outlines, so hover feedback doubles as a hint of
+      // the real click area.
+      hoverRing: {
+        color: '#ffffff',
+        strokeWidth: 1.5,
+        // How far past the hitbox radius the ring reaches at the pulse peak.
+        growthPx: 4,
+        minOpacity: 0.25,
+        maxOpacity: 0.85,
+        periodMs: 1100
       },
       colors: {
         default: '#cccccc',

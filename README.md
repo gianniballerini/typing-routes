@@ -60,10 +60,6 @@ Use `city_meta` only for route-specific attributes that should not live in the s
 
 
 ### To Do
- - Mobile friendly
- - Fix spacing of letters in the typing area
- - Add congratulations for long routes and fun facts
- - Add achievements board, a sign with stickers for each route completed and km traveled
- - Add spaces to typing and move the caret when typing a space
- - Add difficulty with Capitalization and accents
- - Add leaderboard with top scores and fastest times per route
+ - Mobile warning
+ - Add fun facts
+ - Add a sign with stickers for each route completed and km traveled

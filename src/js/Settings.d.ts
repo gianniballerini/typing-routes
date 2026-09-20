@@ -15,6 +15,7 @@ export interface SettingsShape {
     nationalRoutesLine: string;
     nationalRoutesHitbox: string;
     citiesCircle: string;
+    citiesCircleHoverRing: string;
     citiesCircleHitbox: string;
     progressMarkerIcon: string;
   };
@@ -71,6 +72,14 @@ export interface SettingsShape {
       strokeColor: string;
       strokeOpacity: number;
       strokeWidth: number;
+    };
+    hoverRing: {
+      color: string;
+      strokeWidth: number;
+      growthPx: number;
+      minOpacity: number;
+      maxOpacity: number;
+      periodMs: number;
     };
     colors: {
       default: string;

@@ -1,5 +1,6 @@
 import type { FeatureCollection } from 'geojson';
 import maplibregl from 'maplibre-gl';
+import type { FilterSpecification } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { MouseInfoCard } from './MouseInfoCard';
 import { Settings } from './Settings';
@@ -20,6 +21,14 @@ type ProgressMarkerFeatureCollection = {
     }>;
 };
 
+// The hover ring layer is narrowed to the single hovered city, so the pulse
+// only ever repaints one feature. This filter parks it on no feature at all.
+//
+// Filters match on the `id` *property*, not `['id']`: filters are evaluated
+// while the worker parses the tile, before the source's `promoteId` has copied
+// that property onto the feature id, so `['id']` matches nothing there.
+const CITY_HOVER_RING_NO_MATCH_FILTER: FilterSpecification = ['==', ['get', 'id'], ''];
+
 class MapController {
     map: maplibregl.Map;
     private ready: boolean;
@@ -31,6 +40,8 @@ class MapController {
     private selectedRouteCityIds: string[];
     private mouseInfoCard: MouseInfoCard | null;
     private hoveredCityId: string | null;
+    private cityHoverPulseFrameHandle: number | null;
+    private cityHoverPulseStartedAtMs: number;
     private progressMarkerBearing: number;
 
     constructor() {
@@ -43,6 +54,8 @@ class MapController {
         this.selectedRouteCityIds = [];
         this.mouseInfoCard = null;
         this.hoveredCityId = null;
+        this.cityHoverPulseFrameHandle = null;
+        this.cityHoverPulseStartedAtMs = 0;
         this.progressMarkerBearing = 0;
         this.map = new maplibregl.Map({
             container: 'map', // container id
@@ -394,6 +407,28 @@ class MapController {
             });
 
             this.map.addLayer({
+                id: Settings.layerIds.citiesCircleHoverRing,
+                type: 'circle',
+                source: Settings.sourceIds.cities,
+                filter: CITY_HOVER_RING_NO_MATCH_FILTER,
+                paint: {
+                    // Radius and stroke opacity are driven per frame by the
+                    // hover pulse; a transparent fill keeps it a ring, never a
+                    // disc covering the dot underneath.
+                    'circle-radius': 0,
+                    'circle-opacity': 0,
+                    'circle-stroke-color': Settings.cityCircle.hoverRing.color,
+                    'circle-stroke-width': Settings.cityCircle.hoverRing.strokeWidth,
+                    'circle-stroke-opacity': 0,
+                    // The pulse writes a new value every frame, so MapLibre's
+                    // default 300ms paint transition would chase it and flatten
+                    // the curve into a barely moving average.
+                    'circle-radius-transition': { duration: 0 },
+                    'circle-stroke-opacity-transition': { duration: 0 }
+                }
+            });
+
+            this.map.addLayer({
                 id: Settings.layerIds.citiesCircleHitbox,
                 type: 'circle',
                 source: Settings.sourceIds.cities,
@@ -431,29 +466,40 @@ class MapController {
                     this.hoveredId = null;
                 }
 
-                if (this.mouseInfoCard && cityId && cityName) {
-                    if (this.hoveredCityId === cityId) {
-                        this.mouseInfoCard.moveTo(e.point.x + 10, e.point.y + 10);
-                        this.map.getCanvas().style.cursor = 'pointer';
-                        return;
-                    }
-
-                    this.hoveredCityId = cityId;
-                    const connectedRoutes = this.cityRoutesMap[cityId] ?? [];
-                    const routeDisplayNames = connectedRoutes.map((route) => route.displayName);
-                    this.mouseInfoCard.show(
-                        cityName,
-                        this.buildConnectedRoutesTooltip(routeDisplayNames),
-                        'city',
-                        e.point.x + 10,
-                        e.point.y + 10
-                    );
-                }
                 this.map.getCanvas().style.cursor = 'pointer';
+
+                if (!cityId) return;
+
+                // Hover tracking drives the ring, so it is kept out of the
+                // tooltip branch below: the dot reacts whether or not a
+                // MouseInfoCard was registered.
+                const isSameCity = this.hoveredCityId === cityId;
+                if (!isSameCity) {
+                    this.hoveredCityId = cityId;
+                    this.startCityHoverPulse(cityId);
+                }
+
+                if (!this.mouseInfoCard || !cityName) return;
+
+                if (isSameCity) {
+                    this.mouseInfoCard.moveTo(e.point.x + 10, e.point.y + 10);
+                    return;
+                }
+
+                const connectedRoutes = this.cityRoutesMap[cityId] ?? [];
+                const routeDisplayNames = connectedRoutes.map((route) => route.displayName);
+                this.mouseInfoCard.show(
+                    cityName,
+                    this.buildConnectedRoutesTooltip(routeDisplayNames),
+                    'city',
+                    e.point.x + 10,
+                    e.point.y + 10
+                );
             });
 
             this.map.on('mouseleave', Settings.layerIds.citiesCircleHitbox, () => {
                 this.hoveredCityId = null;
+                this.stopCityHoverPulse();
 
                 if (this.hoveredId === null) {
                     this.mouseInfoCard?.hide();
@@ -475,6 +521,84 @@ class MapController {
             this.renderProgressMarker();
         });
     }
+
+    // Same linear ramp MapLibre's `interpolate` applies to the hitbox radius,
+    // resolved here so the animated paint values stay plain numbers instead of
+    // an expression rebuilt on every frame.
+    private interpolateRadiusByZoom(
+        zoom: number,
+        stops: { minZoom: number; minRadius: number; maxZoom: number; maxRadius: number }
+    ): number {
+        const zoomSpan = stops.maxZoom - stops.minZoom;
+        if (zoomSpan <= 0) return stops.maxRadius;
+
+        const t = Math.max(0, Math.min(1, (zoom - stops.minZoom) / zoomSpan));
+        return stops.minRadius + (stops.maxRadius - stops.minRadius) * t;
+    }
+
+    private setCityHoverRingPaint(radius: number, strokeOpacity: number): void {
+        this.map.setPaintProperty(Settings.layerIds.citiesCircleHoverRing, 'circle-radius', radius);
+        this.map.setPaintProperty(Settings.layerIds.citiesCircleHoverRing, 'circle-stroke-opacity', strokeOpacity);
+    }
+
+    private prefersReducedMotion(): boolean {
+        return typeof window.matchMedia === 'function'
+            && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    private startCityHoverPulse(cityId: string): void {
+        if (!this.map.getLayer(Settings.layerIds.citiesCircleHoverRing)) return;
+
+        this.stopCityHoverPulse();
+
+        const hoverRing = Settings.cityCircle.hoverRing;
+        const baseRadius = this.interpolateRadiusByZoom(this.map.getZoom(), Settings.cityCircle.hitRadiusByZoom);
+
+        this.map.setFilter(Settings.layerIds.citiesCircleHoverRing, ['==', ['get', 'id'], cityId]);
+        this.setCityHoverRingPaint(baseRadius, hoverRing.maxOpacity);
+
+        // A still ring still answers "which dot is this?", so reduced motion
+        // loses the animation and nothing else.
+        if (this.prefersReducedMotion()) return;
+
+        this.cityHoverPulseStartedAtMs = performance.now();
+        this.cityHoverPulseFrameHandle = requestAnimationFrame(this.handleCityHoverPulseFrame);
+    }
+
+    private stopCityHoverPulse(): void {
+        if (this.cityHoverPulseFrameHandle !== null) {
+            cancelAnimationFrame(this.cityHoverPulseFrameHandle);
+            this.cityHoverPulseFrameHandle = null;
+        }
+
+        if (!this.map.getLayer(Settings.layerIds.citiesCircleHoverRing)) return;
+
+        this.map.setFilter(Settings.layerIds.citiesCircleHoverRing, CITY_HOVER_RING_NO_MATCH_FILTER);
+        this.map.setPaintProperty(Settings.layerIds.citiesCircleHoverRing, 'circle-stroke-opacity', 0);
+    }
+
+    private handleCityHoverPulseFrame = (): void => {
+        if (!this.map.getLayer(Settings.layerIds.citiesCircleHoverRing)) {
+            this.cityHoverPulseFrameHandle = null;
+            return;
+        }
+
+        const hoverRing = Settings.cityCircle.hoverRing;
+        const elapsed = performance.now() - this.cityHoverPulseStartedAtMs;
+        const phase = (elapsed % hoverRing.periodMs) / hoverRing.periodMs;
+        // Cosine ease, so the ripple has no seam where the period wraps.
+        const pulse = (1 - Math.cos(phase * 2 * Math.PI)) / 2;
+        // Re-read the zoom each frame: the ring keeps tracking the click radius
+        // while the map is zooming under the pointer.
+        const baseRadius = this.interpolateRadiusByZoom(this.map.getZoom(), Settings.cityCircle.hitRadiusByZoom);
+
+        this.setCityHoverRingPaint(
+            baseRadius + hoverRing.growthPx * pulse,
+            hoverRing.maxOpacity - (hoverRing.maxOpacity - hoverRing.minOpacity) * pulse
+        );
+
+        this.cityHoverPulseFrameHandle = requestAnimationFrame(this.handleCityHoverPulseFrame);
+    };
 
     private createProgressMarkerData(
         coordinates: [number, number],
