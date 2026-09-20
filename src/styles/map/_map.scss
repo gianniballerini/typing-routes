@@ -1,4 +1,8 @@
 .map {
+    // The map is a <canvas>; `block` keeps it off the text baseline, which would
+    // otherwise leave a few pixels of gap under it.
+    display: block;
+
     position: absolute;
     top: 0;
     left: 0;

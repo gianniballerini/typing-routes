@@ -26,8 +26,10 @@ import math
 import os
 import struct
 
-# Matches Settings.maxZoom / the 256px tile size MapLibre's zoom scale assumes.
-TILE_SIZE = 256
+# MapLibre — and the canvas renderer replacing it — size the world as
+# `tileSize * 2**zoom`, with 512px tiles. A tolerance expressed in screen pixels at
+# `maxZoom` has to use the same constant or it silently means twice what it says.
+TILE_SIZE = 512
 # Web Mercator is undefined at the poles; this is the standard cutoff.
 MAX_LATITUDE = 85.05112878
 # Int16 range used for per-route quantization.

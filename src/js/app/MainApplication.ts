@@ -12,7 +12,7 @@ import { UiSoundController } from '../audio/UiSoundController';
 import { Game } from '../Game';
 import { KeyboardInputCoordinator } from '../input/KeyboardInputCoordinator';
 import { LoadingManager } from '../LoadingManager';
-import { MapController } from '../MapController';
+import { MapController } from '../map/MapController';
 import { MouseInfoCard } from '../MouseInfoCard';
 import { RoutesController } from '../RoutesController';
 import { GameUiPresenter } from '../ui/GameUiPresenter';

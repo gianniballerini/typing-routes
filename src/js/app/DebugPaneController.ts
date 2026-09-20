@@ -1,7 +1,7 @@
 import { UserStatsStorage } from './UserStatsStorage';
 import { AchievementsStorage } from '../achievements/AchievementsStorage';
 import { AudioManager } from '../audio/AudioManager';
-import { MapController } from '../MapController';
+import { MapController } from '../map/MapController';
 import { Settings } from '../Settings';
 
 interface BindingOptions {
@@ -61,7 +61,7 @@ class DebugPaneController {
 
     init(): void {
         const debug_state: DebugState = {
-            showHitboxes: Settings.cityCircle.hitboxDebug.visible || Settings.routeLine.hitboxDebug.visible,
+            showHitboxes: Settings.routeLine.hitboxDebug.visible,
             muted: this.audio_manager.isMuted(),
             masterVolume: this.audio_manager.getMasterVolume(),
             keysVolume: this.audio_manager.getCategoryVolume('keys'),

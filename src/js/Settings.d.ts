@@ -4,21 +4,6 @@ export interface SettingsShape {
   minZoom: number;
   maxZoom: number;
   maxBounds: [[number, number], [number, number]];
-  sourceIds: {
-    openmaptiles: string;
-    nationalRoutes: string;
-    cities: string;
-    progressMarker: string;
-  };
-  layerIds: {
-    argentinaLimits: string;
-    nationalRoutesLine: string;
-    nationalRoutesHitbox: string;
-    citiesCircle: string;
-    citiesCircleHoverRing: string;
-    citiesCircleHitbox: string;
-    progressMarkerIcon: string;
-  };
   argentinaBorder: {
     color: string;
     width: number;
@@ -48,7 +33,6 @@ export interface SettingsShape {
     };
     hitboxDebug: {
       visible: boolean;
-      color: string;
       opacity: number;
     };
   };
@@ -64,14 +48,6 @@ export interface SettingsShape {
       minRadius: number;
       maxZoom: number;
       maxRadius: number;
-    };
-    hitboxDebug: {
-      visible: boolean;
-      color: string;
-      opacity: number;
-      strokeColor: string;
-      strokeOpacity: number;
-      strokeWidth: number;
     };
     hoverRing: {
       color: string;
@@ -111,7 +87,6 @@ export interface SettingsShape {
     soundFadeOutMs: number;
   };
   progressMarker: {
-    iconId: string;
     size: number;
     color: string;
     roofColor: string;

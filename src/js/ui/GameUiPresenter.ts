@@ -211,7 +211,9 @@ class GameUiPresenter {
 
     private isLooseFocus(activeEl: Element | null): boolean {
         if (activeEl === null || activeEl === document.body) return true;
-        return activeEl.classList.contains('maplibregl-canvas');
+        // The map canvas takes focus on any click, which should not count as the
+        // player having deliberately focused something.
+        return activeEl.classList.contains('map');
     }
 
     private focusMenuButton(el: HTMLElement): void {

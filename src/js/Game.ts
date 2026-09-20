@@ -1,7 +1,7 @@
 import { GameState, ALLOWED_TRANSITIONS } from './GameState';
 import type { GameStateValue } from './GameState';
 import { RoutesController } from './RoutesController';
-import { MapController } from './MapController';
+import { MapController } from './map/MapController';
 import { TypingController } from './TypingController';
 import { Route } from './Route';
 

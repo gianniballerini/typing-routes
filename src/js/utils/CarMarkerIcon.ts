@@ -61,11 +61,22 @@ const fillRoundedRect = (
     ctx.fill();
 };
 
+export type CarMarkerSprite = {
+    canvas: HTMLCanvasElement;
+    /** Size in CSS px; the canvas itself is this times `pixelRatio`. */
+    cssWidth: number;
+    cssHeight: number;
+    pixelRatio: number;
+};
+
 /**
- * Draws a top-down car sprite (front facing up) that MapLibre can consume through
- * `map.addImage`. Returns null when a 2D canvas context is unavailable.
+ * Draws a top-down car sprite (front facing up) onto its own canvas.
+ *
+ * Returned as a canvas rather than raw pixels because that is what `drawImage`
+ * wants; the renderer rotates it by the route bearing at draw time.
+ * Returns null when a 2D canvas context is unavailable.
  */
-export const createCarMarkerIcon = (options: CarMarkerIconOptions): CarMarkerIcon | null => {
+export const createCarMarkerSprite = (options: CarMarkerIconOptions): CarMarkerSprite | null => {
     const pixelRatio = getPixelRatio();
 
     const carLength = options.length;
@@ -140,12 +151,27 @@ export const createCarMarkerIcon = (options: CarMarkerIconOptions): CarMarkerIco
         options.glassColor
     );
 
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    return { canvas, cssWidth, cssHeight, pixelRatio };
+};
 
+/**
+ * Raw-pixel form of the same sprite.
+ *
+ * Kept for any consumer that needs an `ImageData`-shaped payload rather than a
+ * canvas. Returns null when a 2D canvas context is unavailable.
+ */
+export const createCarMarkerIcon = (options: CarMarkerIconOptions): CarMarkerIcon | null => {
+    const sprite = createCarMarkerSprite(options);
+    if (!sprite) return null;
+
+    const ctx = sprite.canvas.getContext('2d');
+    if (!ctx) return null;
+
+    const imageData = ctx.getImageData(0, 0, sprite.canvas.width, sprite.canvas.height);
     return {
         width: imageData.width,
         height: imageData.height,
         data: imageData.data,
-        pixelRatio
+        pixelRatio: sprite.pixelRatio
     };
 };

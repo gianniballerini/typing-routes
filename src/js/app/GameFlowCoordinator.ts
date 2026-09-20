@@ -9,7 +9,7 @@ import type { SoundCategory } from '../audio/types';
 import { Game } from '../Game';
 import { GameState } from '../GameState';
 import { MapRouteCursor } from '../input/MapRouteCursor';
-import { MapController } from '../MapController';
+import { MapController } from '../map/MapController';
 import type { Route } from '../Route';
 import { RoutesController } from '../RoutesController';
 import { Settings } from '../Settings';

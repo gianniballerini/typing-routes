@@ -11,23 +11,6 @@ class Settings
       [-40.0, -20.0]
     ];
 
-    this.sourceIds = {
-      openmaptiles: 'openmaptiles',
-      nationalRoutes: 'national-routes',
-      cities: 'cities',
-      progressMarker: 'progress-marker'
-    };
-
-    this.layerIds = {
-      argentinaLimits: 'argentina-limits',
-      nationalRoutesLine: 'national-routes-line',
-      nationalRoutesHitbox: 'national-routes-hitbox',
-      citiesCircle: 'cities-circle',
-      citiesCircleHoverRing: 'cities-circle-hover-ring',
-      citiesCircleHitbox: 'cities-circle-hitbox',
-      progressMarkerIcon: 'progress-marker-icon'
-    };
-
     this.argentinaBorder = {
       color: '#e1e1e184',
       width: 2
@@ -58,10 +41,11 @@ class Settings
         maxZoom: 7,
         maxWidth: 18
       },
+      // The debug pane composites the pick buffer over the frame at this
+      // opacity, so every hit target becomes visible at once.
       hitboxDebug: {
         visible: false,
-        color: '#00bcd4',
-        opacity: 0.28
+        opacity: 0.45
       }
     };
 
@@ -77,15 +61,6 @@ class Settings
         minRadius: 7,
         maxZoom: 7,
         maxRadius: 13
-      },
-      hitboxDebug: {
-        // Toggle to visualize city interaction hotspots.
-        visible: false,
-        color: '#ff0066',
-        opacity: 0.2,
-        strokeColor: '#ffffff',
-        strokeOpacity: 0.8,
-        strokeWidth: 1
       },
       // Ring drawn around the hovered city. It sits at the same radius the
       // hitbox debug helper outlines, so hover feedback doubles as a hint of
@@ -142,7 +117,6 @@ class Settings
     };
 
     this.progressMarker = {
-      iconId: 'progress-marker-car',
       // Car length in px (the sprite points north and is rotated by the route heading).
       size: 26,
       color: '#FFB81C',
