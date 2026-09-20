@@ -2,6 +2,7 @@ import { DebugPaneController } from './DebugPaneController';
 import { GameFlowCoordinator } from './GameFlowCoordinator';
 import { UserStatsStorage } from './UserStatsStorage';
 import soundManifest from '../../assets/data/sounds.json';
+import { decodeRouteGeometries } from '../data/RouteGeometryStore';
 import { Achievements } from '../achievements/Achievements';
 import { AchievementsStorage } from '../achievements/AchievementsStorage';
 import { AudioManager } from '../audio/AudioManager';
@@ -38,8 +39,10 @@ class MainApplication {
     private readonly loading_manager: LoadingManager;
 
     // The loading screen is built by the entry module long before this class finishes
-    // downloading, so the manager is handed in rather than constructed here.
-    constructor(loading_manager: LoadingManager) {
+    // downloading, so the manager is handed in rather than constructed here. The same
+    // goes for `route_geometry`: the entry module starts that fetch in parallel with
+    // this chunk's download, so by the time we get here it is already resolved.
+    constructor(loading_manager: LoadingManager, route_geometry: ArrayBuffer) {
         this.loading_manager = loading_manager;
 
         // Kicked off first: the keyboard sprite is a couple of MB and its
@@ -64,7 +67,7 @@ class MainApplication {
         this.map_controller.setMouseInfoCard(this.mouse_info_card);
         this.map_controller.init();
         this.routes_controller = new RoutesController();
-        this.routes_controller.init();
+        this.routes_controller.init(decodeRouteGeometries(route_geometry));
         this.user_stats_storage = new UserStatsStorage();
         this.user_stats = this.user_stats_storage.load();
         this.applySavedUserProgress();

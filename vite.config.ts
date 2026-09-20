@@ -74,6 +74,9 @@ function pugHtmlTemplate(): Plugin {
 
 export default defineConfig({
   plugins: [pugHtmlTemplate()],
+  // The simplified route geometry ships as a binary blob (see
+  // `data/simplify_geometries.py`); Vite does not treat `.bin` as an asset by default.
+  assetsInclude: ['**/*.bin'],
   server: {
     https: useHttps && hasHttpsCertificates
       ? {

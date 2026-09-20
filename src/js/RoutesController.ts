@@ -2,7 +2,6 @@ import type { FeatureCollection, Geometry } from 'geojson';
 import citiesData from '../assets/data/national_cities.json';
 import routesData from '../assets/data/national_routes.json';
 import routesCitiesData from '../assets/data/national_routes_cities.json';
-import geometriesData from '../assets/data/national_routes_geometries.json';
 import { City } from './City';
 import { Route } from './Route';
 
@@ -34,12 +33,6 @@ interface RawCity {
     tier: string;
 }
 
-interface RawRouteGeometry {
-    id: string;
-    route: string;
-    geometry: Geometry;
-}
-
 interface RawRoutesData {
     source: string;
     sentido_preferred: string;
@@ -55,13 +48,6 @@ interface RawRoutesCitiesData {
 interface RawCitiesData {
     total_cities: number;
     cities: RawCity[];
-}
-
-interface RawRoutesGeometriesData {
-    source: string;
-    sentido_preferred: string;
-    total_routes: number;
-    routes: RawRouteGeometry[];
 }
 
 class RoutesController {
@@ -118,11 +104,16 @@ class RoutesController {
         return city;
     }
 
-    init() {
+    /**
+     * @param geometries - Route geometry keyed by route id, already decoded from the
+     *   binary payload (see `data/RouteGeometryStore`). Passed in rather than imported
+     *   so the blob can be fetched in parallel with the app chunk instead of being
+     *   inlined into it.
+     */
+    init(geometries: { [routeId: string]: Geometry }) {
         const routesDataTyped: RawRoutesData = routesData;
         const routesCitiesDataTyped: RawRoutesCitiesData = routesCitiesData;
         const citiesDataTyped: RawCitiesData = citiesData;
-        const geometriesDataTyped = geometriesData as RawRoutesGeometriesData;
 
         const sharedCitiesById: { [key: string]: RawCity } = {};
         for (const cityEntry of citiesDataTyped.cities) {
@@ -148,10 +139,7 @@ class RoutesController {
             citiesMap[citiesEntry.id] = resolvedCities;
         }
 
-        // Create a map of geometries by route id for quick lookup
-        for (const geometryEntry of geometriesDataTyped.routes) {
-            this.geometriesMap[geometryEntry.id] = geometryEntry.geometry;
-        }
+        this.geometriesMap = geometries;
 
         // Populate routes with data from national_routes.json and national_routes_cities.json
         for (const routeEntry of routesDataTyped.routes) {
