@@ -117,11 +117,11 @@ class Settings
     // cue is ever re-cut.
     this.runCountdown = {
       soundName: 'countdown',
-      beatsMs: [570, 1200, 1980],
-      goAtMs: 2640,
+      beatsMs: [405, 1280, 2145],
+      goAtMs: 3010,
       goLabel: '¡Ya!',
-      // Holds '¡Ya!' while the cue's tail rings out (it ends at 3413ms).
-      goHoldMs: 770,
+      // Holds '¡Ya!' while the cue's tail rings out (it ends at 4125ms).
+      goHoldMs: 1115,
       // Short enough to read as a cut, long enough not to pop, for when the
       // player skips the countdown or abandons the run part-way through it.
       soundFadeOutMs: 100
