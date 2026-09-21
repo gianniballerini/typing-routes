@@ -29,12 +29,12 @@ type Bounds = {
  * Deliberately mirrors the MapLibre transform it replaces, because every tuned
  * value in `Settings` was chosen against that behaviour:
  *
- * - `worldSize = 512 * 2**zoom`, so `initialZoom`, `maxZoom` and
- *   `routeSelection.flyToZoom` keep their meaning.
- * - `maxBounds` does not merely clamp panning. When the viewport is wider than
- *   the bounds, MapLibre *raises* the zoom until the bounds cover the viewport,
- *   which is why the country fills the screen at a nominal `initialZoom` of 1.
- *   Drop that and the map opens as a speck in the middle of an empty canvas.
+ * - `worldSize = 512 * 2**zoom`, so `maxZoom` and `routeSelection.flyToZoom`
+ *   keep their meaning.
+ * - `maxBounds` clamps panning only. The zoom floor comes from
+ *   `Settings.countryView`: a contain fit of the country's bbox, so the map
+ *   opens with all of Argentina on screen and cannot zoom out past it. Without
+ *   a floor the map would open as a speck in the middle of an empty canvas.
  */
 class MapCamera {
     private centerX: number;
@@ -88,9 +88,19 @@ class MapCamera {
     }
 
     setViewport(width: number, height: number): void {
+        // A camera resting at the country view must stay fitted across a resize.
+        // The zoom floor alone will not do it: a shorter viewport *lowers* the
+        // floor, so the old zoom stays legal and the country gets cropped.
+        // Anything zoomed in past the fit — a selected route, a run — is left
+        // where the player put it.
+        const wasAtCountryView = Math.abs(this.zoomLevel - this.minZoomForBounds()) < 1e-6;
+
         this.viewportWidth = Math.max(1, width);
         this.viewportHeight = Math.max(1, height);
-        this.constrain();
+
+        if (wasAtCountryView) this.applyTarget(this.countryViewTarget());
+        else this.constrain();
+
         this.onChange();
     }
 
@@ -115,25 +125,54 @@ class MapCamera {
     }
 
     /**
-     * The lowest zoom at which the bounds still cover the viewport. Below this
-     * the camera would show empty space outside the allowed area, so it is the
-     * real floor regardless of `Settings.minZoom`.
+     * The zoom at which `bounds` fits *inside* the padded viewport on both axes:
+     * a contain fit, so the whole box is visible with slack on the longer axis.
+     * The cover fit this replaced (`Math.max`) filled the screen by cropping
+     * whichever axis had the surplus, which cut the country north and south.
      */
-    private minZoomForBounds(): number {
-        if (!this.bounds) return Settings.minZoom;
-
-        const boundsWidth = Math.abs(projectLon(this.bounds.east) - projectLon(this.bounds.west));
-        const boundsHeight = Math.abs(projectLat(this.bounds.south) - projectLat(this.bounds.north));
+    private containZoomFor(bounds: Bounds, paddingRatio: number): number {
+        const boundsWidth = Math.abs(projectLon(bounds.east) - projectLon(bounds.west));
+        const boundsHeight = Math.abs(projectLat(bounds.south) - projectLat(bounds.north));
         if (boundsWidth <= 0 || boundsHeight <= 0) return Settings.minZoom;
 
-        // worldSize needed for the bounds to span each axis of the viewport.
-        const neededWorld = Math.max(
-            this.viewportWidth / boundsWidth,
-            this.viewportHeight / boundsHeight
-        );
-        const neededZoom = Math.log2(neededWorld / 512);
+        const padding = Math.min(this.viewportWidth, this.viewportHeight) * paddingRatio;
+        const availableWidth = Math.max(1, this.viewportWidth - padding * 2);
+        const availableHeight = Math.max(1, this.viewportHeight - padding * 2);
 
-        return Math.max(Settings.minZoom, neededZoom);
+        // The largest worldSize at which the bounds still fit on both axes.
+        const fittingWorld = Math.min(
+            availableWidth / boundsWidth,
+            availableHeight / boundsHeight
+        );
+
+        return Math.log2(fittingWorld / 512);
+    }
+
+    /**
+     * The lowest zoom the camera may reach: the whole country on screen. Zooming
+     * out past this would only add empty map, so it is the real floor regardless
+     * of `Settings.minZoom`.
+     */
+    private minZoomForBounds(): number {
+        const { bounds, paddingRatio } = Settings.countryView;
+        return Math.max(Settings.minZoom, this.containZoomFor(bounds, paddingRatio));
+    }
+
+    /**
+     * Centre and zoom that frame the whole country — the menu's resting camera.
+     * The centre is the *projected* midpoint, not the mean of the latitudes:
+     * Mercator stretches latitude, so the two are not the same point.
+     */
+    countryViewTarget(): CameraTarget {
+        const { bounds } = Settings.countryView;
+        const midY = (projectLat(bounds.north) + projectLat(bounds.south)) / 2;
+
+        // Deliberately the floor rather than the raw contain fit, so a camera at
+        // rest here compares equal to it (see `setViewport`).
+        return {
+            center: [(bounds.west + bounds.east) / 2, unprojectY(midY)],
+            zoom: this.minZoomForBounds()
+        };
     }
 
     /** Clamps zoom to the allowed range, then keeps the viewport inside `maxBounds`. */

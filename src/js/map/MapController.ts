@@ -1,12 +1,19 @@
 import type { FeatureCollection, Geometry, Position } from 'geojson';
 import { MouseInfoCard } from '../MouseInfoCard';
 import { Settings } from '../Settings';
-import { decodeBorder, loadBorderBuffer } from './BorderStore';
+import { loadCountryOutline } from './CountryOutline';
 import { MapCamera } from './MapCamera';
 import type { CityFeature, PickResult, RouteFeature } from './MapFeatures';
-import { MapRenderer, type HoverRingState, type ProgressMarkerState } from './MapRenderer';
+import {
+    MapRenderer,
+    type CityBurstState,
+    type HoverRingState,
+    type ProgressMarkerState,
+    type RouteOutlineState
+} from './MapRenderer';
 import { interpolateByZoom, projectLat, projectLon } from './MercatorProjection';
 import { PickBuffer } from './PickBuffer';
+import { SeaRenderer } from './SeaRenderer';
 
 const DRAG_THRESHOLD_PX = 4;
 const ZOOM_PER_WHEEL_LINE = 0.0025;
@@ -28,6 +35,10 @@ class MapController {
     private readonly canvas: HTMLCanvasElement;
     private readonly camera: MapCamera;
     private readonly renderer: MapRenderer;
+    // Null when the page has no sea canvas: the map then sits on the page's
+    // flat `$sea-deep` backdrop.
+    private readonly seaRenderer: SeaRenderer | null;
+    private lastSeaDrawMs: number;
     private readonly pickBuffer: PickBuffer;
 
     private routes: RouteFeature[];
@@ -44,10 +55,16 @@ class MapController {
     private cityRoutesMap: { [key: string]: Array<{ id: string; displayName: string }> };
     private selectedRouteCityIds: string[];
     private mouseInfoCard: MouseInfoCard | null;
+    // What the info card currently shows (`city:<id>` / `route:<id>`), so it is
+    // only re-shown when the target changes rather than on every pointer move.
+    private infoCardTarget: string | null;
 
     private marker: ProgressMarkerState;
     private hoverRing: HoverRingState;
     private hoverPulseStartedAtMs: number;
+    private routeOutline: RouteOutlineState;
+    private routePulseStartedAtMs: number;
+    private cityBurstStartedAtMs: Map<string, number>;
 
     private frameHandle: number | null;
     private needsRender: boolean;
@@ -80,10 +97,14 @@ class MapController {
         this.cityRoutesMap = {};
         this.selectedRouteCityIds = [];
         this.mouseInfoCard = null;
+        this.infoCardTarget = null;
 
         this.marker = { x: 0, y: 0, visible: false, bearing: 0 };
         this.hoverRing = { cityId: null, radius: 0, strokeOpacity: 0 };
         this.hoverPulseStartedAtMs = 0;
+        this.routeOutline = { routeId: null, width: 0, strokeOpacity: 0 };
+        this.routePulseStartedAtMs = 0;
+        this.cityBurstStartedAtMs = new Map();
 
         this.frameHandle = null;
         this.needsRender = true;
@@ -97,11 +118,17 @@ class MapController {
 
         this.camera = new MapCamera(() => this.invalidate());
         this.renderer = new MapRenderer(this.canvas);
+        const seaCanvas = document.getElementById('map-sea');
+        this.seaRenderer = seaCanvas instanceof HTMLCanvasElement ? new SeaRenderer(seaCanvas) : null;
+        this.lastSeaDrawMs = 0;
         this.pickBuffer = new PickBuffer();
     }
 
     init(): void {
         this.handleResize();
+        // Explicit rather than implied by `Settings.center`: the map opens on the
+        // same framing `resetToCountryView()` returns to.
+        this.camera.jumpTo(this.camera.countryViewTarget());
         window.addEventListener('resize', this.handleResize);
 
         this.canvas.addEventListener('pointerdown', this.handlePointerDown);
@@ -114,11 +141,12 @@ class MapController {
 
         this.loadTexture();
 
-        // The border is decoration: a failure to fetch it must not keep the app
-        // on the loading screen, so readiness does not wait on it.
-        void loadBorderBuffer()
-            .then((buffer) => {
-                this.renderer.setBorder(decodeBorder(buffer));
+        // The coastline is decoration: a failure to fetch it must not keep the
+        // app on the loading screen, so readiness does not wait on it.
+        void loadCountryOutline(Settings.mapTexture.src)
+            .then((outline) => {
+                this.renderer.setCountryOutline(outline);
+                this.seaRenderer?.setCountryOutline(outline);
                 this.invalidate();
             })
             .catch(() => { /* map simply renders without the outline */ });
@@ -372,6 +400,11 @@ class MapController {
     setCityVisited(cityId: string, visited: boolean): void {
         const city = this.cityById.get(cityId);
         if (!city) return;
+        // Only a fresh completion earns the burst; progress restored from
+        // storage lands through `updateCities` and stays still.
+        if (visited && !city.properties.visited && !this.prefersReducedMotion()) {
+            this.cityBurstStartedAtMs.set(cityId, performance.now());
+        }
         city.properties.visited = visited;
         this.invalidate();
     }
@@ -466,11 +499,7 @@ class MapController {
 
     resetToCountryView(): void {
         this.onReady(() => {
-            this.camera.easeTo(
-                { center: [Settings.center[0], Settings.center[1]], zoom: Settings.initialZoom },
-                280,
-                'power2.out'
-            );
+            this.camera.easeTo(this.camera.countryViewTarget(), 280, 'power2.out');
         });
     }
 
@@ -483,6 +512,7 @@ class MapController {
 
     private handleResize = (): void => {
         const { width, height } = this.renderer.resize();
+        this.seaRenderer?.resize();
         this.camera.setViewport(width, height);
         this.invalidate();
     };
@@ -530,10 +560,7 @@ class MapController {
             return;
         }
 
-        const elapsed = performance.now() - this.hoverPulseStartedAtMs;
-        const phase = (elapsed % ring.periodMs) / ring.periodMs;
-        // Cosine ease, so the ripple has no seam where the period wraps.
-        const pulse = (1 - Math.cos(phase * 2 * Math.PI)) / 2;
+        const pulse = this.pulseAt(this.hoverPulseStartedAtMs, ring.periodMs);
 
         this.hoverRing = {
             cityId: this.hoveredCityId,
@@ -541,6 +568,89 @@ class MapController {
             strokeOpacity: ring.maxOpacity - (ring.maxOpacity - ring.minOpacity) * pulse
         };
         this.needsRender = true;
+    }
+
+    /** 0 → 1 → 0 over one period, starting at rest. */
+    private pulseAt(startedAtMs: number, periodMs: number): number {
+        const elapsed = performance.now() - startedAtMs;
+        const phase = (elapsed % periodMs) / periodMs;
+        // Cosine ease, so the ripple has no seam where the period wraps.
+        return (1 - Math.cos(phase * 2 * Math.PI)) / 2;
+    }
+
+    private updateRouteOutline(): void {
+        if (this.hoveredRouteId === null) {
+            if (this.routeOutline.routeId !== null) {
+                this.routeOutline = { routeId: null, width: 0, strokeOpacity: 0 };
+                this.needsRender = true;
+            }
+            return;
+        }
+
+        const style = Settings.routeLine.hoverOutline;
+        const hitWidth = interpolateByZoom(
+            this.camera.zoom,
+            Settings.routeLine.hitWidthByZoom.minZoom,
+            Settings.routeLine.hitWidthByZoom.minWidth,
+            Settings.routeLine.hitWidthByZoom.maxZoom,
+            Settings.routeLine.hitWidthByZoom.maxWidth
+        );
+        const baseWidth = hitWidth + style.strokeWidth * 2;
+
+        if (this.prefersReducedMotion()) {
+            this.routeOutline = {
+                routeId: this.hoveredRouteId,
+                width: baseWidth,
+                strokeOpacity: style.maxOpacity
+            };
+            return;
+        }
+
+        const pulse = this.pulseAt(this.routePulseStartedAtMs, style.periodMs);
+        this.routeOutline = {
+            routeId: this.hoveredRouteId,
+            width: baseWidth + style.growthPx * 2 * pulse,
+            strokeOpacity: style.maxOpacity - (style.maxOpacity - style.minOpacity) * pulse
+        };
+        this.needsRender = true;
+    }
+
+    private collectCityBursts(): CityBurstState[] {
+        if (this.cityBurstStartedAtMs.size === 0) return [];
+
+        const now = performance.now();
+        const duration = Settings.cityCircle.completionBurst.durationMs;
+        const bursts: CityBurstState[] = [];
+        for (const [cityId, startedAt] of this.cityBurstStartedAtMs) {
+            const progress = (now - startedAt) / duration;
+            if (progress >= 1) {
+                this.cityBurstStartedAtMs.delete(cityId);
+                continue;
+            }
+            bursts.push({ cityId, progress });
+        }
+        // Keep rendering until the last burst has fully faded, including the
+        // frame that removes it.
+        this.needsRender = true;
+        return bursts;
+    }
+
+    /**
+     * The sea follows the map whenever the map redraws, so a pan never shows
+     * the shallows a frame behind the coast. Between those it repaints on its
+     * own, capped at `breathing.maxFps` — its canvas is cheap, which is the
+     * whole point of it being separate.
+     */
+    private drawSea(): void {
+        if (!this.seaRenderer) return;
+
+        const now = performance.now();
+        const animate = !this.prefersReducedMotion();
+        const frameDue = animate && now - this.lastSeaDrawMs >= 1000 / Settings.sea.breathing.maxFps;
+        if (!this.needsRender && !frameDue) return;
+
+        this.lastSeaDrawMs = now;
+        this.seaRenderer.draw(this.camera, now, animate);
     }
 
     private tick(): void {
@@ -555,6 +665,10 @@ class MapController {
         }
 
         this.updateHoverRing();
+        this.updateRouteOutline();
+        const bursts = this.collectCityBursts();
+
+        this.drawSea();
 
         if (!this.needsRender) return;
         this.needsRender = false;
@@ -565,6 +679,8 @@ class MapController {
             this.routes,
             this.cities,
             this.hoverRing,
+            this.routeOutline,
+            bursts,
             this.marker,
             this.showHitboxes ? this.pickBuffer.getCanvas() : null
         );
@@ -598,6 +714,7 @@ class MapController {
                 if (previous) previous.hovered = false;
             }
             this.hoveredRouteId = nextRouteId;
+            this.routePulseStartedAtMs = performance.now();
             if (nextRouteId) {
                 const route = this.routeById.get(nextRouteId);
                 if (route) route.hovered = true;
@@ -615,10 +732,14 @@ class MapController {
 
         if (!this.mouseInfoCard) return;
 
+        const nextTarget = nextCityId ? `city:${nextCityId}` : nextRouteId ? `route:${nextRouteId}` : null;
+        if (nextTarget === this.infoCardTarget) return;
+
         if (nextCityId) {
             const city = this.cityById.get(nextCityId);
             if (!city || !city.properties.name) return;
             const names = (this.cityRoutesMap[nextCityId] ?? []).map((route) => route.displayName);
+            this.infoCardTarget = nextTarget;
             this.mouseInfoCard.show(
                 city.properties.name,
                 this.buildConnectedRoutesTooltip(names),
@@ -633,6 +754,7 @@ class MapController {
             const route = this.routeById.get(nextRouteId);
             if (!route) return;
             const count = route.properties.citiesCount;
+            this.infoCardTarget = nextTarget;
             this.mouseInfoCard.show(
                 route.properties.routeDisplay,
                 `${count} ${count === 1 ? 'ciudad' : 'ciudades'}`,
@@ -643,7 +765,13 @@ class MapController {
             return;
         }
 
-        this.mouseInfoCard.hide();
+        this.hideInfoCard();
+    }
+
+    private hideInfoCard(): void {
+        if (this.infoCardTarget === null) return;
+        this.infoCardTarget = null;
+        this.mouseInfoCard?.hide();
     }
 
     private handlePointerDown = (event: PointerEvent): void => {
@@ -667,14 +795,14 @@ class MapController {
                 this.camera.panBy(dx, dy);
                 this.lastPointerX = x;
                 this.lastPointerY = y;
-                this.mouseInfoCard?.hide();
+                this.hideInfoCard();
             }
             return;
         }
 
         // Deferred to the next frame; see `tick`.
         this.pendingPointer = { x, y };
-        if (this.hoveredCityId !== null) this.mouseInfoCard?.moveTo(x + 10, y + 10);
+        if (this.infoCardTarget !== null) this.mouseInfoCard?.moveTo(x + 10, y + 10);
     };
 
     private handlePointerUp = (event: PointerEvent): void => {
@@ -719,7 +847,7 @@ class MapController {
         }
         this.hoveredCityId = null;
         this.canvas.style.cursor = '';
-        this.mouseInfoCard?.hide();
+        this.hideInfoCard();
         this.needsRender = true;
     };
 

@@ -11,3 +11,8 @@
     width: 100dvw;
     height: 100dvh;
 }
+
+.map--sea {
+    // Decoration only: pointer input belongs to the map canvas above it.
+    pointer-events: none;
+}

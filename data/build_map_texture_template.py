@@ -14,8 +14,14 @@ latitude by 1/cos(lat), and Argentina spans 35 degrees of it, so the south would
 drift badly against the routes.
 
 Outputs into <out_dir>:
-  argentina_texture.png           the placeholder the game loads
+  argentina_texture.png           the raster placeholder, and the trace source
   argentina_texture_template.png  the same, plus tracing guides and labels
+
+The game itself loads `argentina_texture.svg` (see `Settings.mapTexture.src`),
+traced from the placeholder above. A tracer crops to the drawn shape, so the
+trace loses this script's full-canvas framing: the SVG carries a viewBox that
+puts the path back at its position on the <width> x <height> canvas. Keep that
+viewBox in step with the canvas, or the artwork stops lining up with the routes.
 
 Usage:
     python3 build_map_texture_template.py <border.json> <border.bin> <routes.json> <routes.bin> <out_dir> [--width 2048]

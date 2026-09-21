@@ -22,3 +22,8 @@ $signs-green: #469C66 !default;
 $signs-green-dark: #33724A !default;
 $signs-blue: #290bae !default;
 
+// Open sea behind the country. Mirrors `Settings.sea.baseColor`, which is what
+// actually paints it: this only keeps the page from flashing another colour
+// before the map's first frame.
+$sea-deep: #2B4A5C !default;
+

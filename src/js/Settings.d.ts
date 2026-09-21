@@ -9,6 +9,33 @@ export interface SettingsShape {
     bounds: { west: number; east: number; north: number; south: number };
     opacity: number;
   };
+  countryView: {
+    bounds: { west: number; east: number; north: number; south: number };
+    paddingRatio: number;
+  };
+  sea: {
+    baseColor: string;
+    bands: { color: string; width: number }[];
+    scaleByZoom: {
+      minZoom: number;
+      minScale: number;
+      maxZoom: number;
+      maxScale: number;
+    };
+    breathing: {
+      amplitude: number;
+      periodMs: number;
+      phaseStep: number;
+      maxFps: number;
+    };
+  };
+  countryShadow: {
+    color: string;
+    opacity: number;
+    offsetX: number;
+    offsetY: number;
+    maxSize: number;
+  };
   argentinaBorder: {
     color: string;
     width: number;
@@ -20,8 +47,24 @@ export interface SettingsShape {
       stars1: string;
       stars2: string;
       stars3: string;
-      hovered: string;
       selected: string;
+    };
+    hoverOutline: {
+      color: string;
+      strokeWidth: number;
+      growthPx: number;
+      minOpacity: number;
+      maxOpacity: number;
+      periodMs: number;
+    };
+    casing: {
+      color: string;
+      widthByZoom: {
+        minZoom: number;
+        minWidth: number;
+        maxZoom: number;
+        maxWidth: number;
+      };
     };
     opacity: number;
     widthByZoom: {
@@ -66,6 +109,18 @@ export interface SettingsShape {
       default: string;
       visited: string;
       selected: string;
+    };
+    visited: {
+      radiusScale: number;
+      highlightColor: string;
+      highlightScale: number;
+    };
+    completionBurst: {
+      durationMs: number;
+      popScale: number;
+      ringColor: string;
+      ringStrokeWidth: number;
+      ringGrowthPx: number;
     };
     stroke: {
       width: number;

@@ -859,6 +859,9 @@ class GameFlowCoordinator {
             if (!city) continue;
 
             city.visited = visited;
+            // Flip the map city first so it sees the transition and plays the
+            // completion burst; the full refresh below then finds it unchanged.
+            this.map_controller.setCityVisited(cityId, visited);
             const citiesFc = this.routes_controller.getCitiesFeatureCollection();
             this.map_controller.updateCities(citiesFc);
             return;
