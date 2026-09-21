@@ -328,6 +328,9 @@ class GsapManager {
     }
 
     showBubble(el: HTMLElement, x: number, y: number): void {
+        // A hide still running would otherwise keep fading the bubble out
+        // underneath the entrance.
+        gsap.killTweensOf(el);
         gsap.set(el, { x, y });
         gsap.timeline()
             .fromTo(el,
