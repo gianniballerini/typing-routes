@@ -26,14 +26,24 @@ abstract class BaseModal {
     }
 
     hide(): void {
+        this.restoreFocus();
+        this.rootEl?.classList.add('hidden');
+    }
+
+    // Split from hide() so the shell can hand focus back the moment a close
+    // starts, instead of once the exit animation has finished — by then whatever
+    // the close led to (a countdown, the menu) may already own focus.
+    restoreFocus(): void {
         // Every state is hidden on close, so only the one that was actually open
         // hands focus back to whatever opened it.
         const wasOpen = this.rootEl?.classList.contains('hidden') === false;
 
-        this.rootEl?.classList.add('hidden');
-
         if (wasOpen) this.previouslyFocusedEl?.focus();
         this.previouslyFocusedEl = null;
+    }
+
+    getRootElement(): HTMLElement | null {
+        return this.rootEl;
     }
 
     // Focus has to land inside the modal for Escape to read as "go back" rather

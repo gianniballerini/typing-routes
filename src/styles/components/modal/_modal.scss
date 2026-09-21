@@ -71,6 +71,16 @@
     position: fixed;
     z-index: 20;
     inset: 0;
+
+    // Already closed as far as input goes: the exit animation must not swallow
+    // the click that follows it.
+    &.modal--closing {
+        pointer-events: none;
+
+        * {
+            pointer-events: none !important;
+        }
+    }
 }
 
 .modal__overlay {

@@ -1,3 +1,4 @@
+import { GsapManager } from '../app/GsapManager';
 import { AchievementsModal } from './modals/AchievementsModal';
 import { BaseModal } from './modals/BaseModal';
 import { HowToPlayModal } from './modals/HowToPlayModal';
@@ -52,29 +53,63 @@ class ModalController {
 			return;
 		}
 
+		// Switching states inside an open shell only swaps the panel; the backdrop
+		// stays put instead of blinking out and back in.
+		const wasOpen = this.isOpen();
+
 		for (const modal of Object.values(this.modalsByState)) {
 			modal.hide();
 		}
 
 		// The shell is uncovered first so the state's own show() has a laid-out
-		// element to move focus onto.
-		this.rootEl?.classList.remove('hidden');
+		// element to move focus onto. Reopening mid-exit lands here too, and the
+		// enter animation below takes over from wherever the exit had got to.
+		this.rootEl?.classList.remove('hidden', 'modal--closing');
 
-		this.modalsByState[state].show();
+		const modal = this.modalsByState[state];
+		modal.show();
 		this.currentState = state;
+
+		GsapManager.playModalIn({
+			overlay: wasOpen ? null : this.overlayEl,
+			panel: modal.getRootElement()
+		});
 
 		this.bindEscapeKey();
 	}
 
+	// The shell counts as closed from the first frame of the exit: focus goes back
+	// and the keys are released straight away, only the pixels linger while the
+	// panel swings out.
 	hide = (): void => {
+		const openModal = this.currentState === ModalState.NONE
+			? null
+			: this.modalsByState[this.currentState];
+
+		this.currentState = ModalState.NONE;
+		this.unbindEscapeKey();
+
+		if (!openModal || !this.rootEl || this.rootEl.classList.contains('hidden')) {
+			this.hideImmediately();
+			return;
+		}
+
+		openModal.restoreFocus();
+		this.rootEl.classList.add('modal--closing');
+
+		GsapManager.playModalOut(
+			{ overlay: this.overlayEl, panel: openModal.getRootElement() },
+			this.hideImmediately
+		);
+	};
+
+	private hideImmediately = (): void => {
 		for (const modal of Object.values(this.modalsByState)) {
 			modal.hide();
 		}
 
-		this.currentState = ModalState.NONE;
-
 		this.rootEl?.classList.add('hidden');
-		this.unbindEscapeKey();
+		this.rootEl?.classList.remove('modal--closing');
 	};
 
 	getState(): ModalStateValue {
@@ -82,7 +117,7 @@ class ModalController {
 	}
 
 	isOpen(): boolean {
-		return Boolean(this.rootEl && !this.rootEl.classList.contains('hidden'));
+		return this.currentState !== ModalState.NONE;
 	}
 
 	private bindEscapeKey(): void {

@@ -24,6 +24,11 @@ interface MenuKeysTipElements {
     keys: SVGGElement[];
 }
 
+interface ModalElements {
+    overlay: HTMLElement | null;
+    panel: HTMLElement | null;
+}
+
 interface MenuSignsDropElements {
     signs: HTMLElement[];
     hideBehind: HTMLElement | null;
@@ -43,6 +48,7 @@ class GsapManager {
     private loadingIntroTimeline: gsap.core.Timeline | null = null;
     private loadingExitTimeline: gsap.core.Timeline | null = null;
     private menuSignsTimeline: gsap.core.Timeline | null = null;
+    private modalTimeline: gsap.core.Timeline | null = null;
     private menuKeysTipTimeline: gsap.core.Timeline | null = null;
 
     disappearWithSwell(el: HTMLElement): void {
@@ -361,6 +367,76 @@ class GsapManager {
             ease: 'power2.in',
             onComplete
         });
+    }
+
+    // Modal
+
+    // The panel is one more green road sign, so it swings in the way the menu
+    // plates do: dropped from above, tilted, and settling on its hook. A null
+    // overlay means the backdrop is already up (switching states in place).
+    playModalIn(elements: ModalElements): void {
+        this.modalTimeline?.kill();
+
+        const timeline = gsap.timeline();
+
+        if (elements.overlay) {
+            timeline.fromTo(elements.overlay,
+                { opacity: 0 },
+                { opacity: 1, duration: 0.25, ease: 'power1.out' },
+                0
+            );
+        }
+
+        if (elements.panel) {
+            timeline.fromTo(elements.panel,
+                { opacity: 0, y: -60, rotation: -4, scale: 0.94, transformOrigin: '50% 0%' },
+                {
+                    opacity: 1,
+                    y: 0,
+                    rotation: 0,
+                    scale: 1,
+                    duration: 0.5,
+                    ease: 'back.out(1.6)',
+                    // Hand the transform back to CSS so nothing inside the panel
+                    // inherits a stale inline one.
+                    clearProps: 'transform,opacity'
+                },
+                0.05
+            );
+        }
+
+        this.modalTimeline = timeline;
+    }
+
+    // Snatched back up the way it came, quicker than it arrived so closing never
+    // feels like waiting. The caller hides the shell once this lands.
+    playModalOut(elements: ModalElements, onComplete: () => void): void {
+        this.modalTimeline?.kill();
+
+        const timeline = gsap.timeline({
+            onComplete: () => {
+                gsap.set([elements.overlay, elements.panel].filter(Boolean), { clearProps: 'transform,opacity' });
+                onComplete();
+            }
+        });
+
+        if (elements.panel) {
+            timeline.to(elements.panel, {
+                opacity: 0,
+                y: -40,
+                rotation: 3,
+                scale: 0.96,
+                transformOrigin: '50% 0%',
+                duration: 0.22,
+                ease: 'power2.in'
+            }, 0);
+        }
+
+        if (elements.overlay) {
+            timeline.to(elements.overlay, { opacity: 0, duration: 0.22, ease: 'power1.in' }, 0.04);
+        }
+
+        this.modalTimeline = timeline;
     }
 
     // Toast
