@@ -1,4 +1,5 @@
 import { GsapManager } from '../app/GsapManager';
+import type { MenuKeysTipElements } from '../app/GsapManager';
 import type { GameStateValue } from '../GameState';
 import { GameState } from '../GameState';
 import type { Route } from '../Route';
@@ -38,6 +39,7 @@ class GameUiPresenter {
 
     private start_button_el: HTMLElement | null;
     private menu_welcome_el: HTMLElement | null;
+    private menu_keys_tip: MenuKeysTipElements | null;
     private sign_button_els: HTMLElement[];
     private sign_button_how_to_play_el: HTMLElement | null;
     private sign_button_route_list_el: HTMLElement | null;
@@ -106,6 +108,7 @@ class GameUiPresenter {
 
         this.start_button_el = document.querySelector('.game-menu__button');
         this.menu_welcome_el = document.querySelector('.game-menu__welcome');
+        this.menu_keys_tip = this.queryMenuKeysTip();
         this.sign_button_els = Array.from(document.querySelectorAll('.game-menu__sign-button'));
         this.last_rendered_state = null;
         this.sign_button_how_to_play_el = document.querySelector('.game-menu__sign-button--how-to-play');
@@ -421,6 +424,7 @@ class GameUiPresenter {
         if (!this.sign_button_els.length) return;
 
         this.menu_signs_parked = true;
+        if (this.menu_keys_tip) GsapManager.hideMenuKeysTip(this.menu_keys_tip);
 
         for (const sign of this.sign_button_els) {
             sign.classList.add('game-menu__sign-button--dropping');
@@ -436,6 +440,8 @@ class GameUiPresenter {
         if (!this.sign_button_els.length) return;
 
         this.menu_signs_parked = false;
+        // Out of sight while the plates fall; it only comes in once they land.
+        if (this.menu_keys_tip) GsapManager.hideMenuKeysTip(this.menu_keys_tip);
 
         for (const sign of this.sign_button_els) {
             sign.classList.remove('game-menu__sign-button--parked');
@@ -448,6 +454,7 @@ class GameUiPresenter {
                 for (const sign of this.sign_button_els) {
                     sign.classList.remove('game-menu__sign-button--dropping');
                 }
+                if (this.menu_keys_tip) GsapManager.playMenuKeysTipIn(this.menu_keys_tip);
             }
         );
     }
@@ -458,6 +465,7 @@ class GameUiPresenter {
         if (this.menu_signs_parked || !this.sign_button_els.length) return;
 
         this.menu_signs_parked = true;
+        if (this.menu_keys_tip) GsapManager.playMenuKeysTipOut(this.menu_keys_tip);
 
         for (const sign of this.sign_button_els) {
             sign.classList.add('game-menu__sign-button--dropping');
@@ -474,6 +482,20 @@ class GameUiPresenter {
                 }
             }
         );
+    }
+
+    // The arrow-keys hint belongs to the sign column: it leaves with the plates
+    // and comes back after them, so it never points at a menu that is not there.
+    private queryMenuKeysTip(): MenuKeysTipElements | null {
+        const container = document.querySelector<HTMLElement>('.game-menu__keys-tip');
+        if (!container) return null;
+
+        return {
+            container,
+            note: container.querySelector<HTMLElement>('.game-menu__keys-tip-note'),
+            arrowLines: Array.from(container.querySelectorAll<SVGPathElement>('.game-menu__keys-tip-arrow-line')),
+            keys: Array.from(container.querySelectorAll<SVGGElement>('.game-menu__keys-tip-key'))
+        };
     }
 
     private dropMenuSigns(): void {

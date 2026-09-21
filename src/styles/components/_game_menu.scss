@@ -757,3 +757,64 @@
         animation: none;
     }
 }
+
+// Hand-drawn hint in the bottom right corner pointing at the arrow keys.
+// Arrow keys are meaningless without a physical keyboard, so it only shows
+// from the medium breakpoint up.
+.game-menu__keys-tip {
+    position: absolute;
+    right: 30 * $ptr;
+    bottom: 30 * $ptr;
+
+    display: none;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    align-items: end;
+
+    color: $white;
+    pointer-events: none;
+
+    // Starts out of sight: GsapManager brings it in once the menu signs have
+    // landed and takes it away again with them.
+    opacity: 0;
+    visibility: hidden;
+
+    @include respond-to($medium-breakpoint) {
+        display: grid;
+    }
+}
+
+    .game-menu__keys-tip-note {
+        grid-column: 1;
+        grid-row: 1;
+
+        max-width: 180 * $ptr;
+
+        font-family: $noto-sans-font;
+        font-size: 18 * $ptr;
+        line-height: 1.2;
+        text-align: center;
+
+        transform: rotate(-5deg);
+        text-shadow: 0 2 * $ptr 4 * $ptr rgba($black, 0.35);
+    }
+
+    .game-menu__keys-tip-arrow {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: end;
+
+        width: 70 * $ptr;
+        margin-top: 6 * $ptr;
+
+        filter: drop-shadow(0 2 * $ptr 3 * $ptr rgba($black, 0.35));
+    }
+
+    .game-menu__keys-tip-keys {
+        grid-column: 2;
+        grid-row: 2;
+
+        width: 110 * $ptr;
+
+        filter: drop-shadow(0 2 * $ptr 3 * $ptr rgba($black, 0.35));
+    }

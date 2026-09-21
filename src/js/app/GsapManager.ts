@@ -16,6 +16,14 @@ interface LoadingIntroElements {
     welcome: HTMLElement | null;
 }
 
+interface MenuKeysTipElements {
+    container: HTMLElement;
+    note: HTMLElement | null;
+    // Shaft first, then the head, so the arrow is drawn in the order a hand would.
+    arrowLines: SVGPathElement[];
+    keys: SVGGElement[];
+}
+
 interface MenuSignsDropElements {
     signs: HTMLElement[];
     hideBehind: HTMLElement | null;
@@ -35,6 +43,7 @@ class GsapManager {
     private loadingIntroTimeline: gsap.core.Timeline | null = null;
     private loadingExitTimeline: gsap.core.Timeline | null = null;
     private menuSignsTimeline: gsap.core.Timeline | null = null;
+    private menuKeysTipTimeline: gsap.core.Timeline | null = null;
 
     disappearWithSwell(el: HTMLElement): void {
         gsap.timeline()
@@ -272,6 +281,63 @@ class GsapManager {
         });
     }
 
+    // Menu keys tip
+
+    hideMenuKeysTip(elements: MenuKeysTipElements): void {
+        this.menuKeysTipTimeline?.kill();
+        gsap.set(elements.container, { autoAlpha: 0, y: 0 });
+    }
+
+    // Played once the menu signs have landed, read in the order the tip is
+    // meant to be read: the note is jotted down, the arrow is drawn out of it
+    // towards the corner, and the keys it points at pop in one by one.
+    playMenuKeysTipIn(elements: MenuKeysTipElements): void {
+        this.menuKeysTipTimeline?.kill();
+
+        const timeline = gsap.timeline();
+        timeline.set(elements.container, { autoAlpha: 1, y: 0 }, 0);
+
+        if (elements.note) {
+            timeline.fromTo(elements.note,
+                { opacity: 0, y: 12, rotation: -12, scale: 0.9 },
+                { opacity: 1, y: 0, rotation: -5, scale: 1, duration: 0.45, ease: 'back.out(2)' },
+                0
+            );
+        }
+
+        // Each stroke is "drawn" by sliding a dash as long as the path off it.
+        let drawAt = 0.3;
+        for (const line of elements.arrowLines) {
+            const length = line.getTotalLength();
+            const duration = Math.max(0.12, length / 180);
+
+            timeline.fromTo(line,
+                { strokeDasharray: length, strokeDashoffset: length },
+                { strokeDashoffset: 0, duration, ease: 'power1.inOut' },
+                drawAt
+            );
+            drawAt += duration;
+        }
+
+        if (elements.keys.length) {
+            timeline.fromTo(elements.keys,
+                { opacity: 0, scale: 0.4, y: 8, transformOrigin: '50% 50%' },
+                { opacity: 1, scale: 1, y: 0, duration: 0.4, stagger: 0.08, ease: 'back.out(2.4)' },
+                drawAt - 0.05
+            );
+        }
+
+        this.menuKeysTipTimeline = timeline;
+    }
+
+    // Leaves as one piece and quickly, alongside the plates lifting away.
+    playMenuKeysTipOut(elements: MenuKeysTipElements): void {
+        this.menuKeysTipTimeline?.kill();
+
+        this.menuKeysTipTimeline = gsap.timeline()
+            .to(elements.container, { autoAlpha: 0, y: 12, duration: 0.2, ease: 'power2.in' });
+    }
+
     // Achievement toast
 
     // Drops in from above the viewport edge and overshoots slightly, so a trophy
@@ -378,3 +444,4 @@ class GsapManager {
 
 const gsapManager = new GsapManager();
 export { gsapManager as GsapManager };
+export type { MenuKeysTipElements };

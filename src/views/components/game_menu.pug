@@ -57,3 +57,23 @@
                 .button.game-menu__button(role="button" tabindex="0")
                     | Empezar
     .game-menu__bottom
+    .game-menu__keys-tip(aria-hidden="true")
+        span.game-menu__keys-tip-note Usá las flechas del teclado para moverte por el menú
+        svg.game-menu__keys-tip-arrow(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 70" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round")
+            path.game-menu__keys-tip-arrow-line(d="M6 6 C 10 30, 30 50, 66 58")
+            path.game-menu__keys-tip-arrow-line(d="M52 50 L 67 58 L 54 66")
+        svg.game-menu__keys-tip-keys(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124 84" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round")
+            //- one group per key (keycap + glyph) so each can pop in on its own;
+            //- keycaps are drawn a little crooked so they read as sketched
+            g.game-menu__keys-tip-key
+                path(d="M5 45 L 39 44 L 40 79 L 4 80 Z")
+                path(d="M31 62 L 14 62 M 20 55 L 13 62 L 20 69")
+            g.game-menu__keys-tip-key
+                path(d="M45 44 L 79 45 L 78 80 L 44 79 Z")
+                path(d="M62 53 L 61 70 M 55 64 L 61 71 L 68 64")
+            g.game-menu__keys-tip-key
+                path(d="M84 45 L 119 44 L 120 79 L 85 80 Z")
+                path(d="M93 62 L 110 62 M 104 55 L 111 62 L 104 69")
+            g.game-menu__keys-tip-key
+                path(d="M45 5 L 79 4 L 80 37 L 44 38 Z")
+                path(d="M62 29 L 62 13 M 55 19 L 62 12 L 68 19")
