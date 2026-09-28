@@ -1,32 +1,19 @@
 // Small Devices Portrait
 $small-breakpoint: 370px;
 
-// Small Devices Landscale
-$small-wide-breakpoint: 568px;
-
 // Big Devices Portrait
 // $medium-breakpoint: 820px;
 $medium-breakpoint: 568px;
 $medium-wide-breakpoint: 880px;
 
-// Big Devices Landscape
-$wide-breakpoint: 960px;
-
 // Desktop Devices
 $wide-1080-breakpoint: 1080px;
 $wide-1300-breakpoint: 1366px;
 $wide-1600-breakpoint: 1600px;
-$wide-1700-breakpoint: 1700px;
 $wide-1800-breakpoint: 1800px;
-$wide-1900-breakpoint: 1920px;
 $wide-2000-breakpoint: 2000px;
 $wide-2500-breakpoint: 2560px;
 $wide-3500-breakpoint: 3500px;
-$ultra-small-height-breakpoint: 200px;
-$small-height-breakpoint: 450px;
-$medium-height-breakpoint: 530px;
-$high-height-breakpoint: 600px;
-$ultra-high-height-breakpoint: 660px;
 
 // Pixel to rem
 $ptr: 0.0625rem;

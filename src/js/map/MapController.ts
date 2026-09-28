@@ -354,8 +354,7 @@ class MapController {
                     y: projectLat(Number(lat)),
                     properties: {
                         name: String(props.name ?? ''),
-                        visited: Boolean(props.visited),
-                        tier: String(props.tier ?? '')
+                        visited: Boolean(props.visited)
                     },
                     selected: false
                 };

@@ -87,20 +87,6 @@
     flex-shrink: 0;
 }
 
-.share-card__brand-logo {
-    width: 40 * $ptr;
-    height: 40 * $ptr;
-
-    object-fit: contain;
-}
-
-.share-card__brand-name {
-    font-size: 24 * $ptr;
-    line-height: 1;
-    text-transform: uppercase;
-    letter-spacing: 1 * $ptr;
-}
-
 .share-card__route-title {
     min-width: 0;
 

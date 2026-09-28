@@ -9,13 +9,6 @@ export type CarMarkerIconOptions = {
     strokeWidth: number;
 };
 
-export type CarMarkerIcon = {
-    width: number;
-    height: number;
-    data: Uint8ClampedArray;
-    pixelRatio: number;
-};
-
 const MAX_PIXEL_RATIO = 3;
 
 const getPixelRatio = (): number => {
@@ -152,26 +145,4 @@ export const createCarMarkerSprite = (options: CarMarkerIconOptions): CarMarkerS
     );
 
     return { canvas, cssWidth, cssHeight, pixelRatio };
-};
-
-/**
- * Raw-pixel form of the same sprite.
- *
- * Kept for any consumer that needs an `ImageData`-shaped payload rather than a
- * canvas. Returns null when a 2D canvas context is unavailable.
- */
-export const createCarMarkerIcon = (options: CarMarkerIconOptions): CarMarkerIcon | null => {
-    const sprite = createCarMarkerSprite(options);
-    if (!sprite) return null;
-
-    const ctx = sprite.canvas.getContext('2d');
-    if (!ctx) return null;
-
-    const imageData = ctx.getImageData(0, 0, sprite.canvas.width, sprite.canvas.height);
-    return {
-        width: imageData.width,
-        height: imageData.height,
-        data: imageData.data,
-        pixelRatio: sprite.pixelRatio
-    };
 };

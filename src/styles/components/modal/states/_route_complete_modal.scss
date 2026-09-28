@@ -69,7 +69,7 @@
 
 // A new record is flagged with a medal instead of a words-in-the-number prefix,
 // so the value stays a clean number and there is no copy to keep translated.
-// Drawn as a data URI the way _old_paper.scss does; the colours are
+// Drawn as an SVG data URI; the colours are
 // $flag-light-blue, $argentina-celeste and $flag-yellow, hardcoded because a
 // `#` cannot survive interpolation into a URL unencoded.
 //

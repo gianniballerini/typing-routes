@@ -2,25 +2,23 @@
 $white: #fff !default;
 $black: #111 !default;
 $light-gray: #949494 !default;
-$gray: #373737 !default;
 $dark-gray: #282828 !default;
-$light-blue: #1292e8 !default;
 
 $argentina-celeste: #37BBED !default;
 $dark-gray: #29292E !default;
 $argentina-dark-gray: #50535C !default;
 $argentina-gray: #AAAAAA !default;
-$argentina-light-gray: #E7E7E7 !default;
 
 $flag-light-blue: #6CACE4 !default;
 $flag-yellow: #FFB81C !default;
-$flag-brown: #7D4016 !default;
 
 $signs-green: #469C66 !default;
 // A shade under the sign green, for chrome that has to sit on top of a sign
 // panel without reading as part of it.
 $signs-green-dark: #33724A !default;
-$signs-blue: #290bae !default;
+
+// Sun-bleached parchment, behind the how-to-play steps.
+$parchment-light: #f2e8cd !default;
 
 // Open sea behind the country. Mirrors `Settings.sea.baseColor`, which is what
 // actually paints it: this only keeps the page from flashing another colour

@@ -44,8 +44,6 @@ export type ProjectedRoute = {
 
 const INDEX = renderIndex as RenderIndex;
 
-export const getRouteGeometryUrl = (): string => renderBinaryUrl;
-
 /** Fetches the geometry blob. Start this as early as possible — it is on the critical path. */
 export const loadRouteGeometryBuffer = (): Promise<ArrayBuffer> =>
     fetch(renderBinaryUrl).then((response) => {

@@ -4,9 +4,6 @@ class City {
     typing: string;
     lat: number;
     lon: number;
-    province: string;
-    tier: string;
-    kind: string | null;
     visited: boolean;
 
     constructor() {
@@ -15,9 +12,6 @@ class City {
         this.typing = "";
         this.lat = 0;
         this.lon = 0;
-        this.province = "";
-        this.tier = "";
-        this.kind = null;
         this.visited = false;
     }
 }

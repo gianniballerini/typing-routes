@@ -41,8 +41,6 @@ export const project = (lon: number, lat: number): WorldPoint => ({
     y: projectLat(lat)
 });
 
-export const unproject = (x: number, y: number): Coordinate => [unprojectX(x), unprojectY(y)];
-
 /** Pixels across the whole world at a given zoom. */
 export const worldSizeAtZoom = (zoom: number): number => TILE_SIZE * Math.pow(2, zoom);
 

@@ -30,7 +30,6 @@ export type RouteFeature = {
 export type CityProperties = {
     name: string;
     visited: boolean;
-    tier: string;
 };
 
 export type CityFeature = {
