@@ -196,6 +196,7 @@ class GameFlowCoordinator {
         this.ui_presenter.renderState(this.game.state);
         this.ui_presenter.renderAudioMuted(this.audio_manager.isMuted());
         this.refreshMenuFromSelectedRoute();
+        this.renderHomeProgress();
     }
 
     private handleAudioToggleRequested = (): void => {
@@ -404,6 +405,35 @@ class GameFlowCoordinator {
             // run straight away, so it never belongs in the picker.
             .filter((route) => route.cities.length > 0)
             .sort((a, b) => this.toRouteNumber(a.route_number) - this.toRouteNumber(b.route_number));
+    }
+
+    /**
+     * Country-wide progress for the home screen. Completion is weighted by
+     * route length, so it reads as "how much of the country was driven".
+     * Hidden until the first route is completed.
+     */
+    private renderHomeProgress(): void {
+        const playableRoutes = this.getOrderedPlayableRoutes();
+        let totalKm = 0;
+        let completedKm = 0;
+        let completedRoutes = 0;
+
+        for (const route of playableRoutes) {
+            totalKm += route.length_km;
+            if (!this.user_stats.hasCompletedRoute(route.route_id)) continue;
+            completedKm += route.length_km;
+            completedRoutes += 1;
+        }
+
+        if (completedRoutes === 0) {
+            this.ui_presenter.renderHomeProgress(null);
+            return;
+        }
+
+        this.ui_presenter.renderHomeProgress({
+            completionPercent: totalKm > 0 ? (completedKm / totalKm) * 100 : 0,
+            averageBestWpm: this.user_stats.getAverageBestNetWpm()
+        });
     }
 
     private buildRouteListRows(): RouteListRow[] {
@@ -734,6 +764,7 @@ class GameFlowCoordinator {
             this.ui_presenter.blurTypingInput();
             // No-op when the run was abandoned mid-countdown: there are no stats yet.
             this.finalizeRunStats();
+            this.renderHomeProgress();
         }
 
         this.ui_presenter.renderState(this.game.state);

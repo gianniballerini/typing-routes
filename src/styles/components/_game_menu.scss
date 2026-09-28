@@ -646,6 +646,104 @@
     }
 }
 
+// Country-wide progress in the bottom left corner. Same surface as the route
+// info card, which docks over this corner — so it steps aside while the card
+// is open (`--covered`).
+.game-menu__progress {
+    position: absolute;
+    left: 30 * $ptr;
+    bottom: 30 * $ptr;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 10 * $ptr;
+
+    width: min(#{280 * $ptr}, calc(100vw - #{60 * $ptr}));
+    padding: 16 * $ptr 18 * $ptr;
+
+    font-family: $noto-sans-font;
+    color: $white;
+
+    // background-color: rgba(#2F4E5E, 0.92);
+    border: 1px solid rgba($white, 0.14);
+    border-radius: 12 * $ptr;
+    // box-shadow: 0 6 * $ptr 18 * $ptr rgba($black, 0.35);
+
+    transition: opacity 0.25s ease, visibility 0s linear 0s;
+
+    &.game-menu__progress--covered {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.15s ease, visibility 0s linear 0.15s;
+    }
+}
+
+    .game-menu__progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        column-gap: 12 * $ptr;
+    }
+
+    .game-menu__progress-label {
+        font-size: 14 * $ptr;
+        color: rgba($white, 0.7);
+    }
+
+    .game-menu__progress-percent {
+        font-size: 22 * $ptr;
+        font-weight: 700;
+    }
+
+    .game-menu__progress-bar {
+        height: 8 * $ptr;
+        overflow: hidden;
+
+        background-color: rgba($white, 0.14);
+        border-radius: 4 * $ptr;
+    }
+
+    .game-menu__progress-bar-fill {
+        width: 0;
+        height: 100%;
+
+        background-color: $flag-yellow;
+        border-radius: inherit;
+
+        transition: width 0.6s ease-out;
+    }
+
+    .game-menu__progress-stats {
+        display: flex;
+        flex-direction: column;
+        row-gap: 4 * $ptr;
+    }
+
+    .game-menu__progress-stat {
+        display: flex;
+        justify-content: space-between;
+        column-gap: 12 * $ptr;
+
+        font-size: 14 * $ptr;
+    }
+
+    .game-menu__progress-stat-label {
+        color: rgba($white, 0.7);
+    }
+
+    .game-menu__progress-stat-value {
+        font-weight: 700;
+    }
+
+@media (prefers-reduced-motion: reduce) {
+    .game-menu__progress,
+    .game-menu__progress.game-menu__progress--covered,
+    .game-menu__progress-bar-fill {
+        transition: none;
+    }
+}
+
 // Hand-drawn hint in the bottom right corner pointing at the arrow keys.
 // Arrow keys are meaningless without a physical keyboard, so it only shows
 // from the medium breakpoint up.

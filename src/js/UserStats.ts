@@ -70,6 +70,14 @@ class UserStats {
         return this.completedRouteIds.size;
     }
 
+    getAverageBestNetWpm(): number | null {
+        const bests = [...this.routeRecords.values()]
+            .map((record) => record.bestNetWpm)
+            .filter((wpm): wpm is number => wpm !== null);
+        if (bests.length === 0) return null;
+        return bests.reduce((sum, wpm) => sum + wpm, 0) / bests.length;
+    }
+
     getRouteRecord(routeId: string): RouteRecordSnapshot | null {
         const record = this.routeRecords.get(routeId);
         if (!record) return null;

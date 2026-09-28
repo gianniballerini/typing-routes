@@ -14,6 +14,11 @@ interface MenuRouteRecord {
     fewestMistakes: number | null;
 }
 
+interface HomeProgress {
+    completionPercent: number;
+    averageBestWpm: number | null;
+}
+
 class GameUiPresenter {
     private game_menu_el: HTMLElement | null;
     private game_playing_el: HTMLElement | null;
@@ -32,6 +37,10 @@ class GameUiPresenter {
     private menu_route_record_accuracy_el: HTMLElement | null;
     private menu_route_record_time_el: HTMLElement | null;
     private menu_route_record_mistakes_el: HTMLElement | null;
+    private menu_progress_el: HTMLElement | null;
+    private menu_progress_percent_el: HTMLElement | null;
+    private menu_progress_bar_fill_el: HTMLElement | null;
+    private menu_progress_wpm_best_el: HTMLElement | null;
     private menu_route_stars_el: HTMLElement | null;
     private menu_route_image_container_el: HTMLElement | null;
     private menu_route_image_el: HTMLImageElement | null;
@@ -100,6 +109,10 @@ class GameUiPresenter {
         this.menu_route_length_el = document.querySelector('.game-menu__route-length');
         this.menu_route_description_el = document.querySelector('.game-menu__route-description');
         this.menu_welcome_description_el = document.querySelector('.game-menu__welcome-description');
+        this.menu_progress_el = document.querySelector('.game-menu__progress');
+        this.menu_progress_percent_el = document.querySelector('.game-menu__progress-percent');
+        this.menu_progress_bar_fill_el = document.querySelector('.game-menu__progress-bar-fill');
+        this.menu_progress_wpm_best_el = document.querySelector('.game-menu__progress-wpm-best');
         this.menu_route_record_combo_el = document.querySelector('.game-menu__route-record-combo');
         this.menu_route_record_gross_wpm_el = document.querySelector('.game-menu__route-record-gross-wpm');
         this.menu_route_record_net_wpm_el = document.querySelector('.game-menu__route-record-net-wpm');
@@ -549,6 +562,8 @@ class GameUiPresenter {
         }
 
         this.menu_welcome_description_el?.classList.add('hidden');
+        // The info card docks over the bottom-left corner the panel sits in.
+        this.menu_progress_el?.classList.add('game-menu__progress--covered');
 
         renderStars(this.menu_route_stars_el, stars);
         this.renderMenuRouteRecord(record);
@@ -578,6 +593,29 @@ class GameUiPresenter {
         return width > window.innerWidth * 0.6 ? 0 : width;
     }
 
+    /** `null` hides the panel (no route completed yet). */
+    renderHomeProgress(progress: HomeProgress | null): void {
+        if (!this.menu_progress_el) return;
+
+        this.menu_progress_el.classList.toggle('hidden', progress === null);
+        if (!progress) return;
+
+        const percent = Math.min(100, Math.max(0, progress.completionPercent));
+        if (this.menu_progress_percent_el) {
+            this.menu_progress_percent_el.textContent = `${percent.toFixed(1)}%`;
+        }
+        if (this.menu_progress_bar_fill_el) {
+            this.menu_progress_bar_fill_el.style.width = `${percent}%`;
+        }
+        if (this.menu_progress_wpm_best_el) {
+            this.menu_progress_wpm_best_el.textContent = this.formatAverageWpm(progress.averageBestWpm);
+        }
+    }
+
+    private formatAverageWpm(wpm: number | null): string {
+        return wpm === null ? '--' : `${Math.round(wpm)}`;
+    }
+
     private renderMenuRouteCities(route: Route): void {
         if (this.menu_route_cities_count_el) {
             this.menu_route_cities_count_el.textContent = `${route.cities.length}`;
@@ -595,6 +633,7 @@ class GameUiPresenter {
 
     setMenuWelcomeState(): void {
         this.menu_welcome_description_el?.classList.remove('hidden');
+        this.menu_progress_el?.classList.remove('game-menu__progress--covered');
 
         // Nothing to lift if the card was already closed — otherwise the
         // animation would flash it back into view on its way out.
@@ -853,5 +892,5 @@ class GameUiPresenter {
 }
 
 export { GameUiPresenter };
-export type { MenuRouteRecord };
+export type { HomeProgress, MenuRouteRecord };
 

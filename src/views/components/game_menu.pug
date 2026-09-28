@@ -69,6 +69,17 @@
             .button.game-menu__button(role="button" tabindex="0")
                 | Empezar
     .game-menu__bottom
+    //- Country-wide progress; hidden until the first route is completed.
+    .game-menu__progress.hidden(role="region" aria-label="Progreso")
+        .game-menu__progress-header
+            span.game-menu__progress-label Argentina recorrida
+            span.game-menu__progress-percent 0%
+        .game-menu__progress-bar
+            .game-menu__progress-bar-fill
+        .game-menu__progress-stats
+            .game-menu__progress-stat
+                span.game-menu__progress-stat-label PPM promedio
+                span.game-menu__progress-stat-value.game-menu__progress-wpm-best --
     .game-menu__keys-tip(aria-hidden="true")
         span.game-menu__keys-tip-note Usá las flechas del teclado para moverte por el menú
         svg.game-menu__keys-tip-arrow(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 70" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round")
