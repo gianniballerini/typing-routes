@@ -513,9 +513,11 @@
     {
       "id": "rn-73",
       "length_km": 78.71,
-      "description": "Ruta Nacional 73: carretera asfaltada que recorre Salta en el noroeste argentino. Conecta localidades de la región andina, facilitando el acceso a zonas productivas y comunidades del norte salteño.",
+      "description": "La Ruta Nacional 73 es una carretera argentina que se encuentra en la provincia de La Rioja. Forma parte de la nueva conexión entre La Rioja y Chilecito a través de la Sierra de Velasco: su traza une Pampa de la Viuda con Chilecito y se encuentra en construcción.",
       "cities": [
-        "la-rioja/pampa-de-la-viuda"
+        "la-rioja/pampa-de-la-viuda",
+        "la-rioja/anguinan",
+        "la-rioja/chilecito"
       ]
     },
     {
@@ -666,7 +668,8 @@
       "length_km": 12.88,
       "description": "La Ruta Nacional 117 es una carretera argentina que se encuentra en el departamento Paso de los Libres, en la provincia de Corrientes. Tiene una longitud de 12,9 km y es una ruta asfaltada con luminarias. La construcción de la ruta asfaltada fue terminada en 1951 y en 1990 se concesionó con cobro de peaje las rutas más transitadas del país.",
       "cities": [
-        "corrientes/paso-de-los-libres"
+        "corrientes/paso-de-los-libres",
+        "corrientes/puente-getulio-vargas"
       ]
     },
     {
@@ -696,6 +699,7 @@
       "length_km": 57.51,
       "description": "Es una carretera asfaltada argentina que se encuentra en el noreste de la provincia de Corrientes, con un recorrido de 58 km desde el empalme con la Ruta Nacional 14 hasta el empalme con la Ruta Nacional 12. Antiguamente fue conocida como la Ruta Provincial 38 y pasó a jurisdicción nacional mediante convenio en 1997.",
       "cities": [
+        "corrientes/gobernador-virasoro",
         "corrientes/puerto-valle"
       ]
     },
@@ -714,6 +718,7 @@
       "length_km": 5.94,
       "description": "La Ruta Nacional 122 es una carretera argentina que se encuentra al este de la provincia de Corrientes, conectando la ruta nacional 14 en el km 551 con la ciudad de Yapeyú, junto al río Uruguay. Mide 6 kilómetros asfaltados y une la ruta nacional 14 con la ciudad de Yapeyú.",
       "cities": [
+        "corrientes/empalme-yapeyu",
         "corrientes/yapeyu"
       ]
     },
@@ -764,7 +769,9 @@
       "length_km": 14.58,
       "description": "La Ruta Nacional 135 es una carretera argentina que une el kilómetro 151 de la Ruta Nacional 14 con el Puente General Artigas sobre el río Uruguay. Tiene un recorrido de 14,6 km asfaltados y pasa por el departamento Colón en la provincia de Entre Ríos. Ofrece servicios como estaciones de servicio y tiene un peaje exclusivamente del lado uruguayo para el uso del puente y control de migraciones y aduana.",
       "cities": [
-        "entre-rios/colon"
+        "entre-rios/empalme-colon",
+        "entre-rios/colon",
+        "entre-rios/puente-general-artigas"
       ]
     },
     {
@@ -772,7 +779,8 @@
       "length_km": 42.86,
       "description": "La Ruta Nacional 136 es una carretera argentina que se encuentra en el departamento de Gualeguaychú, en el centro-este de la provincia de Entre Ríos. La traza tiene 33,9 kilómetros asfaltados y une la ruta provincial 20 con el Puente Libertador General San Martín sobre el río Uruguay.",
       "cities": [
-        "entre-rios/gualeguaychu"
+        "entre-rios/gualeguaychu",
+        "entre-rios/puente-san-martin"
       ]
     },
     {
@@ -956,7 +964,10 @@
       "id": "rn-173",
       "length_km": 5.68,
       "description": "La Ruta Nacional 173 es una carretera argentina de tierra que se encuentra al este de la provincia de Santa Fe. Esta ruta de 5,7 kilómetros une la Ruta Nacional 11 con el paraje Puerto Aragón en el Departamento San Jerónimo.",
-      "cities": []
+      "cities": [
+        "santa-fe/barrancas",
+        "santa-fe/puerto-aragon"
+      ]
     },
     {
       "id": "rn-174",
@@ -971,7 +982,10 @@
       "id": "rn-175",
       "length_km": 3.06,
       "description": "La Ruta Nacional 175 es una carretera asfaltada que se encuentra en el Departamento San Lorenzo, al este de la provincia de Santa Fe, conectando la Ruta Nacional 11 con el pueblo de Puerto General San Martín. Es considerada como una de las rutas nacionales más cortas de Argentina, con un recorrido de apenas 3 kilómetros.",
-      "cities": []
+      "cities": [
+        "santa-fe/san-lorenzo",
+        "santa-fe/puerto-general-san-martin"
+      ]
     },
     {
       "id": "rn-178",
@@ -1063,9 +1077,10 @@
     {
       "id": "rn-231",
       "length_km": 31.47,
-      "description": "La Ruta Nacional 231 es una carretera argentina pavimentada de 105 km que une la Ruta Nacional 40 con el paso internacional Cardenal Samoré en el límite con Chile. El camino forma parte del Eje del Sur y recorre la Provincia del Neuquén antes de continuar en Chile como Ruta CH-215 y luego como ruta U-40 hasta el Océano Pacífico.",
+      "description": "La Ruta Nacional 231 es una carretera argentina pavimentada de unos 32 km que une Villa La Angostura, en la provincia del Neuquén, con el paso internacional Cardenal Samoré en el límite con Chile. Antes de 2012, cuando la Ruta Nacional 40 pasó a recorrer los Siete Lagos, su traza medía 105 km. Forma parte del Eje del Sur y continúa en Chile como Ruta CH-215.",
       "cities": [
-        "neuquen/villa-la-angostura"
+        "neuquen/villa-la-angostura",
+        "neuquen/paso-cardenal-samore"
       ]
     },
     {

@@ -3424,6 +3424,111 @@
       "lon": -71.4442,
       "province": "Santa Cruz",
       "tier": "minor"
+    },
+    {
+      "id": "la-rioja/anguinan",
+      "name": "Anguinán",
+      "typing": "anguinan",
+      "lat": -29.1991,
+      "lon": -67.4621,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "corrientes/puente-getulio-vargas",
+      "name": "Puente Getulio Vargas",
+      "typing": "puente getulio vargas",
+      "lat": -29.7429,
+      "lon": -57.0932,
+      "province": "Corrientes",
+      "tier": "minor",
+      "kind": "bridge"
+    },
+    {
+      "id": "corrientes/gobernador-virasoro",
+      "name": "Gobernador Virasoro",
+      "typing": "gobernador virasoro",
+      "lat": -27.9674,
+      "lon": -56.0087,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "corrientes/empalme-yapeyu",
+      "name": "Empalme Yapeyú",
+      "typing": "empalme yapeyu",
+      "lat": -29.4223,
+      "lon": -56.846,
+      "province": "Corrientes",
+      "tier": "minor",
+      "kind": "endpoint"
+    },
+    {
+      "id": "entre-rios/empalme-colon",
+      "name": "Empalme Colón",
+      "typing": "empalme colon",
+      "lat": -32.2604,
+      "lon": -58.2382,
+      "province": "Entre Ríos",
+      "tier": "minor",
+      "kind": "endpoint"
+    },
+    {
+      "id": "entre-rios/puente-general-artigas",
+      "name": "Puente General Artigas",
+      "typing": "puente general artigas",
+      "lat": -32.2646,
+      "lon": -58.0995,
+      "province": "Entre Ríos",
+      "tier": "minor",
+      "kind": "bridge"
+    },
+    {
+      "id": "entre-rios/puente-san-martin",
+      "name": "Puente San Martín",
+      "typing": "puente san martin",
+      "lat": -33.1007,
+      "lon": -58.2486,
+      "province": "Entre Ríos",
+      "tier": "minor",
+      "kind": "bridge"
+    },
+    {
+      "id": "santa-fe/barrancas",
+      "name": "Barrancas",
+      "typing": "barrancas",
+      "lat": -32.2346,
+      "lon": -60.9835,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "santa-fe/puerto-aragon",
+      "name": "Puerto Aragón",
+      "typing": "puerto aragon",
+      "lat": -32.243,
+      "lon": -60.9233,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "santa-fe/puerto-general-san-martin",
+      "name": "Puerto General San Martín",
+      "typing": "puerto general san martin",
+      "lat": -32.716,
+      "lon": -60.7314,
+      "province": "Santa Fe",
+      "tier": "minor"
+    },
+    {
+      "id": "neuquen/paso-cardenal-samore",
+      "name": "Paso Cardenal Samoré",
+      "typing": "paso cardenal samore",
+      "lat": -40.7125,
+      "lon": -71.9444,
+      "province": "Neuquén",
+      "tier": "minor",
+      "kind": "endpoint"
     }
   ]
 }
