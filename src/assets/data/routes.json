@@ -42,12 +42,12 @@
         "santa-cruz/puerto-san-julian",
         "santa-cruz/comandante-luis-piedrabuena",
         "santa-cruz/rio-gallegos",
-        "tierra-del-fuego/cruce-estrecho-de-magallanes",
+        "tierra-del-fuego/estrecho-de-magallanes",
         "tierra-del-fuego/san-sebastian",
         "tierra-del-fuego/rio-grande",
         "tierra-del-fuego/tolhuin",
         "tierra-del-fuego/ushuaia",
-        "tierra-del-fuego/lapataia-parque-nacional-tierra-del-fuego"
+        "tierra-del-fuego/lapataia"
       ]
     },
     {
@@ -710,7 +710,7 @@
       "cities": [
         "corrientes/santo-tome",
         "corrientes/hormiguero",
-        "corrientes/puente-internacional-de-la-integracion"
+        "corrientes/puente-de-la-integracion"
       ]
     },
     {
@@ -850,7 +850,7 @@
       "cities": [
         "san-luis/san-luis",
         "san-luis/san-geronimo",
-        "san-luis/parque-nacional-sierras-de-las-quijadas"
+        "san-luis/sierras-de-las-quijadas"
       ]
     },
     {
@@ -1175,7 +1175,7 @@
       "cities": [
         "chubut/lago-blanco",
         "chubut/estancia-valle-huemules",
-        "chubut/paso-fronterizo-integrado-huemules-argentina-chile"
+        "chubut/paso-huemules"
       ]
     },
     {

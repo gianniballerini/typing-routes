@@ -47,7 +47,7 @@ Two hand-curated JSON sources plus one generated geometry artifact, all under
   Ciudad Autónoma de Buenos Aires (displayed as
   `"Ciudad Autónoma de Buenos Aires"`) uses the short-hand slug `caba` instead
   of its literal slug. The historical ferry crossing (no real Argentine
-  province) is filed under `tierra-del-fuego/cruce-estrecho-de-magallanes`.
+  province) is filed under `tierra-del-fuego/estrecho-de-magallanes`.
 - **Province**: canonical display names only — no `"N/A"`, no parenthetical
   qualifiers like the old `"Buenos Aires (CABA)"`.
 - `typing` must be lowercase and accent-free; it should normally match what

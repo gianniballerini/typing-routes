@@ -263,9 +263,9 @@
       "tier": "minor"
     },
     {
-      "id": "chubut/paso-fronterizo-integrado-huemules-argentina-chile",
-      "name": "Paso Fronterizo Integrado Huemules (Argentina-Chile)",
-      "typing": "paso fronterizo huemules",
+      "id": "chubut/paso-huemules",
+      "name": "Paso Huemules",
+      "typing": "paso huemules",
       "lat": -45.9,
       "lon": -71.67,
       "province": "Chubut",
@@ -326,8 +326,8 @@
       "tier": "minor"
     },
     {
-      "id": "tierra-del-fuego/cruce-estrecho-de-magallanes",
-      "name": "Cruce Estrecho de Magallanes (ferry, vía Chile)",
+      "id": "tierra-del-fuego/estrecho-de-magallanes",
+      "name": "Estrecho de Magallanes",
       "typing": "estrecho de magallanes",
       "lat": -52.45,
       "lon": -69.4,
@@ -372,8 +372,8 @@
       "tier": "major"
     },
     {
-      "id": "tierra-del-fuego/lapataia-parque-nacional-tierra-del-fuego",
-      "name": "Lapataia (Parque Nacional Tierra del Fuego)",
+      "id": "tierra-del-fuego/lapataia",
+      "name": "Lapataia",
       "typing": "lapataia",
       "lat": -54.8461,
       "lon": -68.5936,
@@ -562,9 +562,9 @@
       "tier": "minor"
     },
     {
-      "id": "san-luis/parque-nacional-sierras-de-las-quijadas",
-      "name": "Parque Nacional Sierras de las Quijadas",
-      "typing": "parque nacional sierras de las quijadas",
+      "id": "san-luis/sierras-de-las-quijadas",
+      "name": "Sierras de las Quijadas",
+      "typing": "sierras de las quijadas",
       "lat": -32.46,
       "lon": -66.96,
       "province": "San Luis",
@@ -1129,9 +1129,9 @@
       "tier": "minor"
     },
     {
-      "id": "corrientes/puente-internacional-de-la-integracion",
-      "name": "Puente Internacional de la Integración",
-      "typing": "puente internacional de la integracion",
+      "id": "corrientes/puente-de-la-integracion",
+      "name": "Puente de la Integración",
+      "typing": "puente de la integracion",
       "lat": -28.6,
       "lon": -56.03,
       "province": "Corrientes",
