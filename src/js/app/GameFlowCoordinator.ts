@@ -299,7 +299,8 @@ class GameFlowCoordinator {
         }, Math.max(0, delayMs)));
     }
 
-    // Enter / space during the countdown: jumps straight to "go".
+    // Enter / space or any typed character during the countdown: jumps straight
+    // to "go". A typed character is then forwarded as the run's first keystroke.
     skipCountdown(): void {
         if (this.game.state !== GameState.COUNTDOWN) return;
 
@@ -682,6 +683,9 @@ class GameFlowCoordinator {
     };
 
     private handleTypingInput = (inputText: string): void => {
+        // A printable key during the countdown starts the run and counts as its
+        // first keystroke, so skip to "go" before forwarding it.
+        if (this.game.state === GameState.COUNTDOWN) this.skipCountdown();
         if (this.game.state !== GameState.PLAYING) return;
 
         // A composed character (dead key + vowel) emits `keydown` with no usable
@@ -754,10 +758,6 @@ class GameFlowCoordinator {
             this.audio_manager.stopMusic();
         }
 
-        if (enteringRun) {
-            this.ui_presenter.focusTypingInput();
-        }
-
         if (returningToMenu) {
             this.cancelCountdown();
             this.audio_manager.playMusic();
@@ -768,6 +768,12 @@ class GameFlowCoordinator {
         }
 
         this.ui_presenter.renderState(this.game.state);
+
+        // After `renderState`: the playing panel is still `.hidden` before it,
+        // and focusing an input inside a hidden panel is a no-op.
+        if (enteringRun) {
+            this.ui_presenter.focusTypingInput();
+        }
     };
 
     private handleTypingTargetSet = (event: Event): void => {
