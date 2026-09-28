@@ -35,11 +35,14 @@ class GameUiPresenter {
     private menu_route_stars_el: HTMLElement | null;
     private menu_route_image_container_el: HTMLElement | null;
     private menu_route_image_el: HTMLImageElement | null;
+    private menu_route_cities_el: HTMLElement | null;
+    private menu_route_cities_count_el: HTMLElement | null;
     private closeRequestedHandler: (() => void) | null;
 
     private start_button_el: HTMLElement | null;
     private menu_welcome_el: HTMLElement | null;
     private menu_keys_tip: MenuKeysTipElements | null;
+    private menu_route_keys_tip: MenuKeysTipElements | null;
     private sign_button_els: HTMLElement[];
     private sign_button_how_to_play_el: HTMLElement | null;
     private sign_button_route_list_el: HTMLElement | null;
@@ -90,6 +93,7 @@ class GameUiPresenter {
         this.menu_info_card_close_button_el = document.querySelector('.game-menu__info-card-close');
         this.closeRequestedHandler = null;
         this.menu_info_card_close_button_el?.addEventListener('click', this.handleCloseButtonClick);
+        this.menu_info_card_el?.addEventListener('transitionend', this.handleMenuInfoCardTransitionEnd);
 
         this.menu_route_name_el = document.querySelector('.game-menu__route-name');
         this.menu_route_number_el = document.querySelector('.game-menu__route-number');
@@ -105,10 +109,13 @@ class GameUiPresenter {
         this.menu_route_stars_el = document.querySelector('.game-menu__route-stars');
         this.menu_route_image_container_el = document.querySelector('.game-menu__info-card-image');
         this.menu_route_image_el = this.menu_route_image_container_el?.querySelector('img') ?? null;
+        this.menu_route_cities_el = document.querySelector('.game-menu__route-cities');
+        this.menu_route_cities_count_el = document.querySelector('.game-menu__route-cities-count');
 
         this.start_button_el = document.querySelector('.game-menu__button');
         this.menu_welcome_el = document.querySelector('.game-menu__welcome');
         this.menu_keys_tip = this.queryMenuKeysTip();
+        this.menu_route_keys_tip = this.queryMenuRouteKeysTip();
         this.sign_button_els = Array.from(document.querySelectorAll('.game-menu__sign-button'));
         this.last_rendered_state = null;
         this.sign_button_how_to_play_el = document.querySelector('.game-menu__sign-button--how-to-play');
@@ -498,6 +505,19 @@ class GameUiPresenter {
         };
     }
 
+    // No note and no arrow: just the legend rows, popped in one by one.
+    private queryMenuRouteKeysTip(): MenuKeysTipElements | null {
+        const container = document.querySelector<HTMLElement>('.game-menu__route-keys-tip');
+        if (!container) return null;
+
+        return {
+            container,
+            note: null,
+            arrowLines: [],
+            keys: Array.from(container.querySelectorAll<HTMLElement>('.game-menu__route-keys-tip-row'))
+        };
+    }
+
     private dropMenuSigns(): void {
         if (!this.menu_signs_parked) return;
         // The parked pose is measured against the live layout. Ending a run
@@ -532,33 +552,45 @@ class GameUiPresenter {
 
         renderStars(this.menu_route_stars_el, stars);
         this.renderMenuRouteRecord(record);
+        this.renderMenuRouteCities(route);
+
+        // Only on the way in: stepping to another route keeps the legend still.
+        const cardWasHidden = this.menu_info_card_el?.classList.contains('hidden') !== false;
+        if (cardWasHidden && this.menu_route_keys_tip) GsapManager.playMenuKeysTipIn(this.menu_route_keys_tip);
 
         this.menu_info_card_el?.classList.remove('hidden');
+        // Switching routes while open should start the new list from the top.
+        this.menu_info_card_el?.querySelector('.game-menu__info-card-body')?.scrollTo({ top: 0 });
 
         this.liftMenuSigns();
-        this.playMenuInfoCardAnimation('game-menu__info-card--slap');
     }
 
-    // The card lands with `--slap` and is picked back up with `--lift`; both are
-    // one-shot classes, and starting either one cancels the other.
-    private playMenuInfoCardAnimation(modifierClass: string, onEnd?: () => void): void {
+    /**
+     * Horizontal space the open info card takes from the map, in CSS px, so the
+     * camera can frame the route beside it. 0 when the card covers most of the
+     * screen (phones): there is no useful strip left to frame into.
+     */
+    getMenuInfoCardInset(): number {
         const el = this.menu_info_card_el;
-        if (!el) return;
+        if (!el) return 0;
 
-        el.classList.remove('game-menu__info-card--slap', 'game-menu__info-card--lift');
-        // Forces a reflow so the animation restarts on every open and close
-        // instead of only playing the first time the class lands.
-        void el.offsetWidth;
-        el.classList.add(modifierClass);
+        const width = el.offsetWidth;
+        return width > window.innerWidth * 0.6 ? 0 : width;
+    }
 
-        el.addEventListener(
-            'animationend',
-            () => {
-                el.classList.remove(modifierClass);
-                onEnd?.();
-            },
-            { once: true }
-        );
+    private renderMenuRouteCities(route: Route): void {
+        if (this.menu_route_cities_count_el) {
+            this.menu_route_cities_count_el.textContent = `${route.cities.length}`;
+        }
+
+        if (!this.menu_route_cities_el) return;
+
+        const items = route.cities.map((city) => {
+            const item = document.createElement('li');
+            item.textContent = this.formatCityDisplayName(city.name);
+            return item;
+        });
+        this.menu_route_cities_el.replaceChildren(...items);
     }
 
     setMenuWelcomeState(): void {
@@ -569,20 +601,23 @@ class GameUiPresenter {
         const cardWasVisible = this.menu_info_card_el?.classList.contains('hidden') === false;
 
         this.menu_info_card_el?.classList.add('hidden');
+        if (cardWasVisible && this.menu_route_keys_tip) GsapManager.playMenuKeysTipOut(this.menu_route_keys_tip);
         this.dropMenuSigns();
 
-        if (!cardWasVisible) {
-            this.menu_info_card_el?.classList.remove('game-menu__info-card--slap');
-            this.clearMenuRoutePreview();
-            return;
-        }
+        // An open panel keeps its content until it has slid off the screen (see
+        // `handleMenuInfoCardTransitionEnd`), so it doesn't blank out on the way out.
+        if (!cardWasVisible || this.prefersReducedMotion()) this.clearMenuRoutePreview();
+    }
 
-        // The sheet keeps its content until it is off the screen, so it doesn't
-        // blank out halfway through being picked up.
-        this.playMenuInfoCardAnimation(
-            'game-menu__info-card--lift',
-            () => this.clearMenuRoutePreview()
-        );
+    private handleMenuInfoCardTransitionEnd = (event: TransitionEvent): void => {
+        const el = this.menu_info_card_el;
+        if (!el || event.target !== el || event.propertyName !== 'transform') return;
+        // Re-opened before the slide finished: keep the new route's content.
+        if (el.classList.contains('hidden')) this.clearMenuRoutePreview();
+    };
+
+    private prefersReducedMotion(): boolean {
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
     private clearMenuRoutePreview(): void {
@@ -597,6 +632,8 @@ class GameUiPresenter {
         if (this.menu_route_record_accuracy_el) this.menu_route_record_accuracy_el.textContent = '--';
         if (this.menu_route_record_time_el) this.menu_route_record_time_el.textContent = '--:--';
         if (this.menu_route_record_mistakes_el) this.menu_route_record_mistakes_el.textContent = '--';
+        if (this.menu_route_cities_count_el) this.menu_route_cities_count_el.textContent = '';
+        this.menu_route_cities_el?.replaceChildren();
         if (this.menu_route_image_el) {
             this.menu_route_image_container_el?.classList.add('hidden');
             this.menu_route_image_el?.removeAttribute('src');

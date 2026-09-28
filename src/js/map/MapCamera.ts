@@ -15,11 +15,19 @@ export type CameraTarget = {
     zoom?: number;
 };
 
-type Bounds = {
+export type Bounds = {
     west: number;
     south: number;
     east: number;
     north: number;
+};
+
+/** Screen space (CSS px) covered by UI on each side, which a fit must avoid. */
+export type ViewportInsets = {
+    left?: number;
+    right?: number;
+    top?: number;
+    bottom?: number;
 };
 
 /**
@@ -173,6 +181,48 @@ class MapCamera {
             center: [(bounds.west + bounds.east) / 2, unprojectY(midY)],
             zoom: this.minZoomForBounds()
         };
+    }
+
+    /**
+     * Centre and zoom that contain `bounds` in the part of the viewport left
+     * over after `insets`, with the bounds centred in that part rather than in
+     * the whole canvas — e.g. a route framed beside a side panel.
+     */
+    fitBoundsTarget(bounds: Bounds, insets: ViewportInsets, paddingRatio: number): CameraTarget {
+        const left = insets.left ?? 0;
+        const right = insets.right ?? 0;
+        const top = insets.top ?? 0;
+        const bottom = insets.bottom ?? 0;
+
+        const minX = projectLon(bounds.west);
+        const maxX = projectLon(bounds.east);
+        // y grows south, so the northern edge is the smaller value.
+        const minY = projectLat(bounds.north);
+        const maxY = projectLat(bounds.south);
+
+        const padding = Math.min(this.viewportWidth, this.viewportHeight) * paddingRatio;
+        const availableWidth = Math.max(1, this.viewportWidth - left - right - padding * 2);
+        const availableHeight = Math.max(1, this.viewportHeight - top - bottom - padding * 2);
+
+        // A single point (or a degenerate line) has no extent to fit: go as
+        // close as allowed instead of dividing by zero.
+        const fittingWorld = Math.min(
+            maxX - minX > 0 ? availableWidth / (maxX - minX) : Infinity,
+            maxY - minY > 0 ? availableHeight / (maxY - minY) : Infinity
+        );
+        const zoom = clamp(
+            Number.isFinite(fittingWorld) ? Math.log2(fittingWorld / 512) : Settings.maxZoom,
+            this.minZoomForBounds(),
+            Settings.maxZoom
+        );
+        const world = worldSizeAtZoom(zoom);
+
+        // The visible area's centre sits (left - right) / 2 px right of the
+        // canvas centre, so the camera centre moves the other way by as much.
+        const centerX = (minX + maxX) / 2 - (left - right) / 2 / world;
+        const centerY = (minY + maxY) / 2 - (top - bottom) / 2 / world;
+
+        return { center: [unprojectX(centerX), unprojectY(centerY)], zoom };
     }
 
     /** Clamps zoom to the allowed range, then keeps the viewport inside `maxBounds`. */

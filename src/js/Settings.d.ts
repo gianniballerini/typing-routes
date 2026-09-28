@@ -131,6 +131,7 @@ export interface SettingsShape {
     flyToZoom: number;
     veryShortRouteThresholdKm: number;
     veryShortRouteZoom: number;
+    fitPaddingRatio: number;
   };
   starRating: {
     maxStars: number;

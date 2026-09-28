@@ -21,7 +21,8 @@ interface MenuKeysTipElements {
     note: HTMLElement | null;
     // Shaft first, then the head, so the arrow is drawn in the order a hand would.
     arrowLines: SVGPathElement[];
-    keys: SVGGElement[];
+    // Popped in one after the other: keycaps, or whole rows of a keys legend.
+    keys: Element[];
 }
 
 interface ModalElements {
@@ -49,7 +50,9 @@ class GsapManager {
     private loadingExitTimeline: gsap.core.Timeline | null = null;
     private menuSignsTimeline: gsap.core.Timeline | null = null;
     private modalTimeline: gsap.core.Timeline | null = null;
-    private menuKeysTipTimeline: gsap.core.Timeline | null = null;
+    // One per tip (the home hint and the route card hint), so bringing one in
+    // never kills the other's animation half-way.
+    private menuKeysTipTimelines = new WeakMap<HTMLElement, gsap.core.Timeline>();
 
     disappearWithSwell(el: HTMLElement): void {
         gsap.timeline()
@@ -290,7 +293,7 @@ class GsapManager {
     // Menu keys tip
 
     hideMenuKeysTip(elements: MenuKeysTipElements): void {
-        this.menuKeysTipTimeline?.kill();
+        this.menuKeysTipTimelines.get(elements.container)?.kill();
         gsap.set(elements.container, { autoAlpha: 0, y: 0 });
     }
 
@@ -298,7 +301,7 @@ class GsapManager {
     // meant to be read: the note is jotted down, the arrow is drawn out of it
     // towards the corner, and the keys it points at pop in one by one.
     playMenuKeysTipIn(elements: MenuKeysTipElements): void {
-        this.menuKeysTipTimeline?.kill();
+        this.menuKeysTipTimelines.get(elements.container)?.kill();
 
         const timeline = gsap.timeline();
         timeline.set(elements.container, { autoAlpha: 1, y: 0 }, 0);
@@ -333,15 +336,15 @@ class GsapManager {
             );
         }
 
-        this.menuKeysTipTimeline = timeline;
+        this.menuKeysTipTimelines.set(elements.container, timeline);
     }
 
     // Leaves as one piece and quickly, alongside the plates lifting away.
     playMenuKeysTipOut(elements: MenuKeysTipElements): void {
-        this.menuKeysTipTimeline?.kill();
+        this.menuKeysTipTimelines.get(elements.container)?.kill();
 
-        this.menuKeysTipTimeline = gsap.timeline()
-            .to(elements.container, { autoAlpha: 0, y: 12, duration: 0.2, ease: 'power2.in' });
+        this.menuKeysTipTimelines.set(elements.container, gsap.timeline()
+            .to(elements.container, { autoAlpha: 0, y: 12, duration: 0.2, ease: 'power2.in' }));
     }
 
     // Achievement toast

@@ -1,4 +1,4 @@
-import type { Geometry } from 'geojson';
+import type { Geometry, Position } from 'geojson';
 import type { AchievementProgressContext } from '../achievements/Achievements';
 import { Achievements } from '../achievements/Achievements';
 import type { AchievementDefinition } from '../achievements/AchievementDefinitions';
@@ -9,6 +9,7 @@ import type { SoundCategory } from '../audio/types';
 import { Game } from '../Game';
 import { GameState } from '../GameState';
 import { MapRouteCursor } from '../input/MapRouteCursor';
+import type { Bounds } from '../map/MapCamera';
 import { MapController } from '../map/MapController';
 import type { Route } from '../Route';
 import { RoutesController } from '../RoutesController';
@@ -601,21 +602,28 @@ class GameFlowCoordinator {
         }
 
         if (selectedRoute && routeId) {
+            this.engageMapRouteCursor(routeId);
+
             const routeRecord = this.user_stats.getRouteRecord(routeId);
             this.ui_presenter.setMenuRoutePreview(selectedRoute, routeRecord, this.getRouteStars(routeId));
 
+            // Frame the whole route in the map area the info card leaves free.
             const geometry = this.routes_controller.getGeometryById(routeId);
-            const routeStartCoordinate = this.getRouteStartCoordinate(geometry);
-            if (routeStartCoordinate) {
-                this.map_controller.flyToCoordinate(
-                    routeStartCoordinate,
-                    this.getRouteSelectionZoom(selectedRoute.length_km)
-                );
+            const routeBounds = this.getGeometryBounds(geometry);
+            if (routeBounds) {
+                this.map_controller.flyToBounds(routeBounds, { left: this.ui_presenter.getMenuInfoCardInset() });
             }
             this.routeMetrics = null;
             this.snappedCityPoints = [];
             this.map_controller.hideProgressMarker();
             return;
+        }
+
+        // Closed by the X or a click on empty map: the arrows go back to the menu
+        // column. (Leaving with the left arrow already did this through `onExit`.)
+        if (this.map_route_cursor.isActive()) {
+            this.map_route_cursor.deactivate();
+            this.ui_presenter.setMenuNavigationSuspended(false);
         }
 
         this.ui_presenter.setMenuWelcomeState();
@@ -624,6 +632,20 @@ class GameFlowCoordinator {
         this.snappedCityPoints = [];
         this.map_controller.hideProgressMarker();
     };
+
+    /**
+     * While the route card is open its key legend promises that the arrows walk
+     * the routes, so a route picked with the mouse takes the arrows over too —
+     * not only one reached with the right arrow from the menu column.
+     */
+    private engageMapRouteCursor(routeId: string): void {
+        if (this.game.state !== GameState.MENU || this.map_route_cursor.isActive()) return;
+        // Off the walkable list the cursor would jump to its first route instead.
+        if (!this.getOrderedPlayableRoutes().some((route) => route.route_id === routeId)) return;
+
+        this.ui_presenter.setMenuNavigationSuspended(true);
+        this.map_route_cursor.activate();
+    }
 
     private handleCloseRequested = (): void => {
         this.map_controller.selectRoute(null);
@@ -652,31 +674,29 @@ class GameFlowCoordinator {
             : defaultZoom;
     }
 
-    private getRouteStartCoordinate(geometry: Geometry | undefined): [number, number] | null {
+    private getGeometryBounds(geometry: Geometry | undefined): Bounds | null {
         if (!geometry) return null;
 
-        if (geometry.type === 'LineString') {
-            const firstPoint = geometry.coordinates[0];
-            if (!firstPoint || firstPoint.length < 2) return null;
+        let points: Position[];
+        if (geometry.type === 'LineString') points = geometry.coordinates;
+        else if (geometry.type === 'MultiLineString') points = geometry.coordinates.flat();
+        else return null;
 
-            const lon = Number(firstPoint[0]);
-            const lat = Number(firstPoint[1]);
-            if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
-            return [lon, lat];
+        let west = Infinity;
+        let south = Infinity;
+        let east = -Infinity;
+        let north = -Infinity;
+        for (const point of points) {
+            const lon = Number(point[0]);
+            const lat = Number(point[1]);
+            if (!Number.isFinite(lon) || !Number.isFinite(lat)) continue;
+            west = Math.min(west, lon);
+            east = Math.max(east, lon);
+            south = Math.min(south, lat);
+            north = Math.max(north, lat);
         }
 
-        if (geometry.type === 'MultiLineString') {
-            const firstSegment = geometry.coordinates[0];
-            const firstPoint = firstSegment?.[0];
-            if (!firstPoint || firstPoint.length < 2) return null;
-
-            const lon = Number(firstPoint[0]);
-            const lat = Number(firstPoint[1]);
-            if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
-            return [lon, lat];
-        }
-
-        return null;
+        return Number.isFinite(west) ? { west, south, east, north } : null;
     }
 
     private handleStateChange = (event: Event): void => {

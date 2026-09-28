@@ -218,7 +218,10 @@ class Settings
     this.routeSelection = {
       flyToZoom: 6,
       veryShortRouteThresholdKm: 120,
-      veryShortRouteZoom: 30
+      veryShortRouteZoom: 30,
+      // Margin around a selected route when the menu frames it beside the info
+      // card, as a fraction of the shorter viewport side.
+      fitPaddingRatio: 0.08
     };
 
     // Three axes, one star each, awarded in half-star steps: a route is worth

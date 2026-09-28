@@ -2,7 +2,7 @@ import type { FeatureCollection, Geometry, Position } from 'geojson';
 import { MouseInfoCard } from '../MouseInfoCard';
 import { Settings } from '../Settings';
 import { loadCountryOutline } from './CountryOutline';
-import { MapCamera } from './MapCamera';
+import { MapCamera, type Bounds, type ViewportInsets } from './MapCamera';
 import type { CityFeature, PickResult, RouteFeature } from './MapFeatures';
 import {
     MapRenderer,
@@ -494,6 +494,15 @@ class MapController {
             const [lon, lat] = center;
             if (!Number.isFinite(lon) || !Number.isFinite(lat)) return;
             this.camera.easeTo({ center, ...(typeof zoom === 'number' ? { zoom } : {}) }, 180, 'none');
+        });
+    }
+
+    flyToBounds(bounds: Bounds, insets: ViewportInsets = {}): void {
+        this.onReady(() => {
+            const { west, south, east, north } = bounds;
+            if (![west, south, east, north].every(Number.isFinite)) return;
+            const target = this.camera.fitBoundsTarget(bounds, insets, Settings.routeSelection.fitPaddingRatio);
+            this.camera.easeTo(target, 1200, 'power2.inOut');
         });
     }
 
