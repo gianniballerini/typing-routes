@@ -9,8 +9,8 @@ Mercator world is 256 * 2**9 = 131072 px wide, so anything finer than a pixel
 at that zoom is invisible detail that still costs bundle bytes and draw time.
 
 Output (written next to the input):
-- national_routes_render.bin    flat Int16 pairs, quantized per route
-- national_routes_render.json   per-route index: offset, count, bbox
+- routes_render.bin    flat Int16 pairs, quantized per route
+- routes_render.json   per-route index: offset, count, bbox
 
 Coordinates are Web Mercator normalized to [0, 1] (x east, y south) before
 simplification, so the tolerance is expressed directly in screen pixels and the
@@ -18,6 +18,9 @@ runtime only has to do `(world - cameraWorld) * scale`.
 
 Usage:
     python3 simplify_geometries.py <geometries.json> <out_dir> [--max-zoom 9] [--px 0.5]
+
+Route ids in the input are expected in the `rn-<n>` form (no zero padding),
+matching src/assets/data/routes.json.
 """
 
 import argparse
@@ -165,8 +168,8 @@ def main():
         })
 
     os.makedirs(args.out_dir, exist_ok=True)
-    bin_path = os.path.join(args.out_dir, "national_routes_render.bin")
-    json_path = os.path.join(args.out_dir, "national_routes_render.json")
+    bin_path = os.path.join(args.out_dir, "routes_render.bin")
+    json_path = os.path.join(args.out_dir, "routes_render.json")
 
     with open(bin_path, "wb") as f:
         f.write(blob)

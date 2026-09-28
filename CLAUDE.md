@@ -24,14 +24,13 @@ There is no test suite and no linter configured in this repo. `yarn build` is th
 ### Data flow: JSON → controllers → map/UI
 
 Static game data lives under `src/assets/data/` as build-time-imported JSON (not fetched at runtime):
-- `national_routes.json` — route metadata (id, number, name, length, road type)
-- `national_cities.json` — a **shared, deduplicated city catalog** (cities can belong to multiple routes)
-- `national_routes_cities.json` — per-route `city_refs: string[]` pointing into the shared catalog, in traversal order, plus optional `city_meta`
-- `national_routes_geometries.json` — GeoJSON geometry per route
+- `routes.json` — route metadata plus an ordered `cities: string[]` of city ids (ids per route, in traversal order); see `data/README.md` for the full schema
+- `cities.json` — a **shared, deduplicated city catalog** (cities can belong to multiple routes)
+- `routes_render.json` + `routes_render.bin` — simplified, quantized route geometry (see below)
 
-`RoutesController` (`src/js/RoutesController.ts`) loads and joins all four at `init()` time into `Route`/`City` domain objects (`src/js/Route.ts`, `src/js/City.ts`), and builds lookup maps (`routeCityIdsMap`, `cityRoutesMap` for "which routes pass through this city"). It also probes `/images/routes/RN{n}.webp` existence per route (used for the menu preview card) and exposes GeoJSON `FeatureCollection`s for the map layers.
+`RoutesController` (`src/js/RoutesController.ts`) loads `routes.json` and `cities.json` at `init()` time, resolving each route's city ids against the shared catalog into `Route`/`City` domain objects (`src/js/Route.ts`, `src/js/City.ts`), and builds lookup maps (`routeCityIdsMap`, `cityRoutesMap` for "which routes pass through this city"). It also probes `/images/routes/RN{n}.webp` existence per route (used for the menu preview card) and exposes GeoJSON `FeatureCollection`s for the map layers.
 
-The raw DNV (Argentina's road authority) GeoJSON export is transformed into these files offline by `data/build_national_routes.py`; cities are added manually afterward. This script is not part of the app build.
+The raw DNV (Argentina's road authority) GeoJSON export lives at `data/raw/national_routes_geometries.json` and is transformed offline by `data/build_national_routes.py` (route metadata) and `data/simplify_geometries.py` (the render geometry); cities are added manually afterward. Neither script is part of the app build. `data/validate_data.py` checks the checked-in `routes.json`/`cities.json`/`routes_render.json` for id/reference integrity — see `data/README.md`.
 
 `MapController` (`src/js/MapController.ts`) owns the MapLibre GL instance and all map layers/sources (routes line layer, cities circle layer, progress marker). It renders from the `FeatureCollection`s produced by `RoutesController` and emits DOM `CustomEvent`s (`route-selected`, `city-selected`) on the map canvas rather than taking callbacks directly — consumers call `map_controller.addEventListener(...)`.
 
@@ -56,7 +55,7 @@ Typing input on mobile is handled via a hidden, always-focused `<input>` element
 
 ### Persistence
 
-`UserStatsStorage` (`src/js/app/UserStatsStorage.ts`) reads/writes a single `localStorage` key (`typing-routes.user-stats.v1`) holding a versioned JSON snapshot. It supports migrating older snapshot shapes forward (v1 legacy → v2 → v3); when changing `UserStats`'s snapshot shape, bump `USER_STATS_VERSION` and add a migration path rather than breaking old saves. `UserStats` (`src/js/UserStats.ts`) itself is a plain in-memory model (`Set`/`Map`-backed) with a `toSnapshot`/`fromSnapshot` pair — it has no knowledge of `localStorage`.
+`UserStatsStorage` (`src/js/app/UserStatsStorage.ts`) reads/writes a single `localStorage` key (`typing-routes.user-stats.v2`) holding a versioned JSON snapshot; only the current shape (`USER_STATS_VERSION`) is accepted, anything else resets to empty stats. The key itself was bumped to `.v2` when route/city ids were rewritten (see `data/README.md`), since old snapshots held ids that no longer resolve to anything — treat a future id rewrite the same way rather than trying to migrate stale ids forward. When changing `UserStats`'s snapshot shape without an id rewrite, bump `USER_STATS_VERSION` instead and add a migration path. `UserStats` (`src/js/UserStats.ts`) itself is a plain in-memory model (`Set`/`Map`-backed) with a `toSnapshot`/`fromSnapshot` pair — it has no knowledge of `localStorage`.
 
 ### Views and styling
 
@@ -70,4 +69,4 @@ Views are Pug templates (`src/views/`), compiled at dev/build time by a custom V
 
 - Class fields and most local variables use `snake_case` in the older files (`Game`, `main.ts`) but newer additions (`GameFlowCoordinator`, `GeometryUtils`, `UserStats`) use `camelCase` — match the style of the file you're editing rather than mixing conventions within it.
 - Cross-module communication favors DOM `CustomEvent`s / `EventTarget` over direct method calls or callbacks wherever two pieces shouldn't be tightly coupled (`Game`, `MapController`, `TypingController` all extend or wrap `EventTarget`).
-- Route/city id formats: routes are `rn-XXXX` (matches `RawRoute.id`), city ids look like `rn{n}-XXX`; display names are formatted on the fly via `formatRouteDisplayName`/`sanitizeRouteNumber` helpers (strip leading zeros, prefix `RN`) rather than stored pre-formatted.
+- Route/city id formats: routes are `rn-<n>` with no zero padding (e.g. `rn-3`); city ids are `<province-slug>/<city-slug>`, both kebab-case ASCII (e.g. `buenos-aires/la-plata`) — see `data/README.md` for the full id rules. `route_number`/`route_name` are derived from the route id at load time in `RoutesController`, not stored; display names are formatted on the fly via `formatRouteDisplayName`/`sanitizeRouteNumber` helpers (prefix `RN`) rather than stored pre-formatted.

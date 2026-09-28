@@ -1,6 +1,6 @@
 import type { Geometry } from 'geojson';
-import renderIndex from '../../assets/data/national_routes_render.json';
-import renderBinaryUrl from '../../assets/data/national_routes_render.bin?url';
+import renderIndex from '../../assets/data/routes_render.json';
+import renderBinaryUrl from '../../assets/data/routes_render.bin?url';
 
 /**
  * Loads the route geometry that `data/simplify_geometries.py` produces.

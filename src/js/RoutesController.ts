@@ -1,26 +1,16 @@
 import type { FeatureCollection, Geometry } from 'geojson';
-import citiesData from '../assets/data/national_cities.json';
-import routesData from '../assets/data/national_routes.json';
-import routesCitiesData from '../assets/data/national_routes_cities.json';
+import citiesData from '../assets/data/cities.json';
+import routesData from '../assets/data/routes.json';
 import { City } from './City';
 import { Route } from './Route';
 
 // Type interfaces for raw JSON data
 interface RawRoute {
     id: string;
-    route: string;
-    name: string;
-    full_name: string;
-    sentido: string;
+    full_name?: string;
     length_km: number;
-    tipo_calzada: string;
     description?: string;
-}
-
-interface RawRouteCity {
-    id: string;
-    route: string;
-    city_refs: string[];
+    cities: string[];
 }
 
 interface RawCity {
@@ -31,22 +21,14 @@ interface RawCity {
     lon: number;
     province: string;
     tier: string;
+    kind?: string;
 }
 
 interface RawRoutesData {
-    source: string;
-    sentido_preferred: string;
-    total_routes: number;
     routes: RawRoute[];
 }
 
-interface RawRoutesCitiesData {
-    total_routes: number;
-    routes: RawRouteCity[];
-}
-
 interface RawCitiesData {
-    total_cities: number;
     cities: RawCity[];
 }
 
@@ -101,6 +83,7 @@ class RoutesController {
         city.lon = Number(raw?.lon ?? 0);
         city.province = String(raw?.province ?? '');
         city.tier = String(raw?.tier ?? '');
+        city.kind = raw?.kind != null ? String(raw.kind) : null;
         return city;
     }
 
@@ -112,50 +95,38 @@ class RoutesController {
      */
     init(geometries: { [routeId: string]: Geometry }) {
         const routesDataTyped: RawRoutesData = routesData;
-        const routesCitiesDataTyped: RawRoutesCitiesData = routesCitiesData;
         const citiesDataTyped: RawCitiesData = citiesData;
 
         const sharedCitiesById: { [key: string]: RawCity } = {};
         for (const cityEntry of citiesDataTyped.cities) {
             if (sharedCitiesById[cityEntry.id]) {
-                console.warn(`Duplicate city id in national_cities.json: ${cityEntry.id}`);
+                console.warn(`Duplicate city id in cities.json: ${cityEntry.id}`);
                 continue;
             }
             sharedCitiesById[cityEntry.id] = cityEntry;
         }
 
-        // Create a map of city refs by route id for quick lookup
-        const citiesMap: { [key: string]: RawCity[] } = {};
-        for (const citiesEntry of routesCitiesDataTyped.routes) {
-            const resolvedCities: RawCity[] = [];
-            for (const cityId of citiesEntry.city_refs ?? []) {
-                const rawCity = sharedCitiesById[cityId];
-                if (!rawCity) {
-                    console.warn(`Missing city reference: route ${citiesEntry.id} -> city ${cityId}`);
-                    continue;
-                }
-                resolvedCities.push(rawCity);
-            }
-            citiesMap[citiesEntry.id] = resolvedCities;
-        }
-
         this.geometriesMap = geometries;
 
-        // Populate routes with data from national_routes.json and national_routes_cities.json
+        // Populate routes with data from routes.json, resolving each city id
+        // against the shared cities.json catalog.
         for (const routeEntry of routesDataTyped.routes) {
             const route = new Route();
             route.route_id = routeEntry.id;
-            route.route_number = routeEntry.route;
-            route.route_name = routeEntry.name;
-            route.full_name = routeEntry.full_name;
-            route.direction = routeEntry.sentido;
+            route.route_number = routeEntry.id.slice(3);
+            route.route_name = `RN ${route.route_number}`;
+            route.full_name = routeEntry.full_name ?? '';
             route.length_km = routeEntry.length_km;
-            route.road_type = routeEntry.tipo_calzada;
             route.description = routeEntry.description ?? '';
 
-            // Assign cities from cities data
-            if (citiesMap[routeEntry.id]) {
-                route.cities = citiesMap[routeEntry.id].map((rawCity) => this.toCity(rawCity));
+            // Assign cities, resolved from the shared catalog
+            for (const cityId of routeEntry.cities ?? []) {
+                const rawCity = sharedCitiesById[cityId];
+                if (!rawCity) {
+                    console.warn(`Missing city reference: route ${routeEntry.id} -> city ${cityId}`);
+                    continue;
+                }
+                route.cities.push(this.toCity(rawCity));
             }
 
             this.resolveRouteImageUrl(route.route_number)
@@ -185,7 +156,7 @@ class RoutesController {
 
     /**
      * Get geometry for a specific route by route id
-     * @param routeId - The route id (e.g., 'rn-0001')
+     * @param routeId - The route id (e.g., 'rn-1')
      * @returns The GeoJSON geometry object or undefined if not found
      */
     getGeometryById(routeId: string): Geometry | undefined {
