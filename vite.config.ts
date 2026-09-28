@@ -12,13 +12,36 @@ if (useHttps && !hasHttpsCertificates) {
   console.warn('[vite] VITE_USE_HTTPS=true but certificates are missing. Starting in HTTP mode.')
 }
 
+const ROUTES_DATA_PATH = resolve(process.cwd(), 'src', 'assets', 'data', 'routes.json')
+const CITIES_DATA_PATH = resolve(process.cwd(), 'src', 'assets', 'data', 'cities.json')
+
+type RouteEntry = { cities?: string[] }
+type CityEntry = { id: string; kind?: string }
+
+/**
+ * Totals quoted in the loading screen copy, derived from the game data so they
+ * never drift from it. A route counts once it has something to type (the same
+ * rule as the route picker in GameFlowCoordinator); a stop counts as a town
+ * unless it has a `kind` (bridge, ferry, detour, endpoint).
+ */
+function readDataStats(): { routeCount: number; townCount: number } {
+  const routes: RouteEntry[] = JSON.parse(readFileSync(ROUTES_DATA_PATH, 'utf8')).routes
+  const cities: CityEntry[] = JSON.parse(readFileSync(CITIES_DATA_PATH, 'utf8')).cities
+  const kindById = new Map(cities.map((city) => [city.id, city.kind]))
+
+  const playableRoutes = routes.filter((route) => (route.cities ?? []).length > 0)
+  const stopIds = new Set(playableRoutes.flatMap((route) => route.cities ?? []))
+  const townCount = [...stopIds].filter((id) => kindById.has(id) && !kindById.get(id)).length
+
+  return { routeCount: playableRoutes.length, townCount }
+}
+
 const PUG_MARKER_RE =
   /<template\s+data-type=["']pug["']\s+data-src=["']([^"']+)["']\s*><\/template>/i
 
 function pugHtmlTemplate(): Plugin {
   let root = process.cwd()
   const watchedPugDeps = new Set<string>()
-  const pugLocals = {}
 
   return {
     name: 'pug-html-template',
@@ -53,14 +76,17 @@ function pugHtmlTemplate(): Plugin {
         const rendered = pug.renderFile(pugPath, {
           basedir: root,
           doctype: 'html',
-          ...pugLocals,
+          dataStats: readDataStats(),
         })
 
         return html.replace(markerMatch[0], rendered)
       },
     },
     handleHotUpdate(ctx) {
-      if (ctx.file.endsWith('.pug') && watchedPugDeps.has(ctx.file)) {
+      const isPugDep = ctx.file.endsWith('.pug') && watchedPugDeps.has(ctx.file)
+      // The page copy quotes totals from these (see `readDataStats`).
+      const isDataStatsSource = ctx.file === ROUTES_DATA_PATH || ctx.file === CITIES_DATA_PATH
+      if (isPugDep || isDataStatsSource) {
         ctx.server.ws.send({
           type: 'full-reload',
         })

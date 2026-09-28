@@ -481,7 +481,7 @@ class GameFlowCoordinator {
      * the `if (changed) save()` idiom the user-stats writes use.
      *
      * Cheap enough to call on any progress change: the rules are set arithmetic
-     * over ~96 routes and already-unlocked trophies short-circuit.
+     * over ~100 routes and already-unlocked trophies short-circuit.
      */
     private evaluateAchievements(): void {
         const unlocked = this.achievements.evaluate(this.buildAchievementContext());
