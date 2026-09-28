@@ -227,9 +227,9 @@ class Settings
     // 0 to 3 stars. Scored against the stored best record, never a single run.
     this.starRating = {
       maxStars: 3,
-      accuracy: { full: 100, half: 97 },
+      accuracy: { full: 98, half: 95 },
       mistakes: { full: 0, half: 2 },
-      netWpm: { full: 50, half: 30 }
+      netWpm: { full: 40, half: 25 }
     };
 
     // Warm-up beat before the clock starts, so the first city can be read. The
