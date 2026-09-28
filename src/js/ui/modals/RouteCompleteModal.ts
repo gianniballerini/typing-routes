@@ -165,7 +165,7 @@ class RouteCompleteModal extends BaseModal {
 
 		renderStars(this.starsEl, payload.stars, { animate: true });
 		if (this.ratingLabelEl) {
-			this.ratingLabelEl.textContent = buildRatingLabel(payload.stars);
+			this.ratingLabelEl.textContent = buildRatingLabel(payload.stars, payload.elapsedMs);
 		}
 
 		this.renderStat(this.comboEl, formatInteger(payload.combo), Boolean(payload.isNewComboRecord));

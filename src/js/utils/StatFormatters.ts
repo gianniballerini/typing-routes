@@ -26,14 +26,45 @@ function formatInteger(value: number | null | undefined): string {
     return `${Math.max(0, Math.round(value))}`;
 }
 
+const RATING_LABELS: Record<1 | 2 | 3, readonly string[]> = {
+    3: [
+        '¡Perfecto!',
+        '¡Teclado en llamas!',
+        '¡Ni el GPS es tan preciso!',
+        '¡Llegaste antes que el micro!',
+        '¡Sos un Fangio del teclado!',
+        '¡Cero baches!'
+    ],
+    2: [
+        '¡Muy bien!',
+        '¡Buen viaje!',
+        'Casi sin pozos',
+        '¡Vas en quinta!',
+        'Un par de lomas de burro nomás',
+        '¡Te faltó poquito!'
+    ],
+    1: [
+        'Mejorable',
+        'Llegaste... que es lo importante',
+        'Viaje con escalas',
+        'Hubo desvíos',
+        'Ripio en el camino',
+        'El mate se enfrió en el viaje'
+    ]
+};
+
 // The stars come from the stored best record, so a slower repeat run keeps the
 // rating it already earned instead of appearing to lose stars. Shared because
-// the route-complete panel and the share card have to agree on the wording.
-function buildRatingLabel(stars: number): string {
-    if (stars >= 3) return '¡Perfecto!';
-    if (stars >= 2) return '¡Muy bien!';
-    if (stars >= 1) return 'Mejorable';
-    return '';
+// the route-complete panel and the share card have to agree on the wording:
+// the variant is picked from `seed` (e.g. the run's elapsed time) rather than
+// `Math.random()`, so both surfaces land on the same label for the same run.
+function buildRatingLabel(stars: number, seed: number): string {
+    const tier = stars >= 3 ? 3 : stars >= 2 ? 2 : stars >= 1 ? 1 : null;
+    if (tier === null) return '';
+
+    const labels = RATING_LABELS[tier];
+    const index = Number.isFinite(seed) ? Math.floor(Math.abs(seed)) % labels.length : 0;
+    return labels[index];
 }
 
 export { buildRatingLabel, EMPTY_TIME, EMPTY_VALUE, formatAccuracy, formatElapsedTime, formatInteger, formatOneDecimal };

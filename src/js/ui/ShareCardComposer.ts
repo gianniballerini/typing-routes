@@ -96,7 +96,7 @@ class ShareCardComposer {
         // Never animated here: a staggered reveal would be captured mid-flight
         // and the image would go out with the wrong number of stars lit.
         renderStars(this.starsEl, payload.stars, { animate: false });
-        if (this.ratingLabelEl) this.ratingLabelEl.textContent = buildRatingLabel(payload.stars);
+        if (this.ratingLabelEl) this.ratingLabelEl.textContent = buildRatingLabel(payload.stars, payload.elapsedMs);
 
         if (this.wpmEl) this.wpmEl.textContent = formatOneDecimal(payload.netWpm);
         if (this.accuracyEl) this.accuracyEl.textContent = formatAccuracy(payload.accuracy);
