@@ -185,6 +185,13 @@ export interface SettingsShape {
       hoverVolume: number;
       hoverThrottleMs: number;
     };
+    keyPacks: {
+      defaultId: string;
+      freeIds: string[];
+      unlocks: { packId: string; percent: number }[];
+      previewKeyCount: number;
+      previewIntervalMs: number;
+    };
     music: {
       menuTrack: string;
       fadeOutMs: number;

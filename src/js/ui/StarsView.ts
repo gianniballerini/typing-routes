@@ -73,5 +73,5 @@ function buildStarSvg(className: string): SVGSVGElement {
     return svgEl;
 }
 
-export { renderStars };
+export { buildStarSvg, renderStars };
 export type { RenderStarsOptions };

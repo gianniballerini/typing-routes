@@ -3,7 +3,7 @@ import type { MenuKeysTipElements } from '../app/GsapManager';
 import type { GameStateValue } from '../GameState';
 import { GameState } from '../GameState';
 import type { Route } from '../Route';
-import { renderStars } from './StarsView';
+import { buildStarSvg, renderStars } from './StarsView';
 
 interface MenuRouteRecord {
     bestCombo: number;
@@ -14,9 +14,17 @@ interface MenuRouteRecord {
     fewestMistakes: number | null;
 }
 
+interface HomeProgressMilestone {
+    packId: string;
+    percent: number;
+    packName: string;
+    unlocked: boolean;
+}
+
 interface HomeProgress {
     completionPercent: number;
     averageBestWpm: number | null;
+    milestones: HomeProgressMilestone[];
 }
 
 class GameUiPresenter {
@@ -41,6 +49,8 @@ class GameUiPresenter {
     private menu_progress_percent_el: HTMLElement | null;
     private menu_progress_bar_fill_el: HTMLElement | null;
     private menu_progress_wpm_best_el: HTMLElement | null;
+    private menu_progress_milestones_el: HTMLElement | null;
+    private milestonePreviewRequestedHandler: ((packId: string) => void) | null;
     private menu_route_stars_el: HTMLElement | null;
     private menu_route_image_container_el: HTMLElement | null;
     private menu_route_image_el: HTMLImageElement | null;
@@ -113,6 +123,10 @@ class GameUiPresenter {
         this.menu_progress_percent_el = document.querySelector('.game-menu__progress-percent');
         this.menu_progress_bar_fill_el = document.querySelector('.game-menu__progress-bar-fill');
         this.menu_progress_wpm_best_el = document.querySelector('.game-menu__progress-wpm-best');
+        this.menu_progress_milestones_el = document.querySelector('.game-menu__milestones');
+        this.milestonePreviewRequestedHandler = null;
+        // A tap on a star opens its tip; a tap anywhere else closes it.
+        document.addEventListener('pointerdown', this.handleMilestoneOutsidePointerDown);
         this.menu_route_record_combo_el = document.querySelector('.game-menu__route-record-combo');
         this.menu_route_record_gross_wpm_el = document.querySelector('.game-menu__route-record-gross-wpm');
         this.menu_route_record_net_wpm_el = document.querySelector('.game-menu__route-record-net-wpm');
@@ -292,6 +306,10 @@ class GameUiPresenter {
 
     onAchievementsRequested(handler: () => void): void {
         this.bindActivation(this.sign_button_achievements_el, handler);
+    }
+
+    onMilestonePreviewRequested(handler: (packId: string) => void): void {
+        this.milestonePreviewRequestedHandler = handler;
     }
 
     onSettingsRequested(handler: () => void): void {
@@ -610,7 +628,67 @@ class GameUiPresenter {
         if (this.menu_progress_wpm_best_el) {
             this.menu_progress_wpm_best_el.textContent = this.formatAverageWpm(progress.averageBestWpm);
         }
+        this.renderMilestones(progress.milestones);
     }
+
+    private renderMilestones(milestones: HomeProgressMilestone[]): void {
+        if (!this.menu_progress_milestones_el) return;
+
+        this.menu_progress_milestones_el.replaceChildren(
+            ...milestones.map((milestone) => this.buildMilestoneButton(milestone))
+        );
+    }
+
+    private buildMilestoneButton(milestone: HomeProgressMilestone): HTMLButtonElement {
+        const { packId, percent, packName, unlocked } = milestone;
+        const tipText = unlocked ? 'Desbloqueado' : `Se desbloquea al ${percent}%`;
+
+        const buttonEl = document.createElement('button');
+        buttonEl.type = 'button';
+        buttonEl.className = 'game-menu__milestone';
+        buttonEl.classList.toggle('game-menu__milestone--unlocked', unlocked);
+        // Hugging an end of the bar would push a centered tip off the card.
+        buttonEl.classList.toggle('game-menu__milestone--start', percent <= 20);
+        buttonEl.classList.toggle('game-menu__milestone--end', percent >= 80);
+        buttonEl.style.left = `${percent}%`;
+        buttonEl.setAttribute('aria-label', `${packName}. ${tipText}`);
+
+        buttonEl.appendChild(buildStarSvg('game-menu__milestone-star'));
+
+        const tipEl = document.createElement('span');
+        tipEl.className = 'game-menu__milestone-tip';
+        tipEl.setAttribute('aria-hidden', 'true');
+
+        const tipNameEl = document.createElement('span');
+        tipNameEl.className = 'game-menu__milestone-tip-name';
+        tipNameEl.textContent = packName;
+        const tipStateEl = document.createElement('span');
+        tipStateEl.className = 'game-menu__milestone-tip-state';
+        tipStateEl.textContent = tipText;
+        tipEl.append(tipNameEl, tipStateEl);
+        buttonEl.appendChild(tipEl);
+
+        buttonEl.addEventListener('click', () => {
+            this.closeMilestoneTips(buttonEl);
+            buttonEl.classList.toggle('is-open');
+            this.milestonePreviewRequestedHandler?.(packId);
+        });
+        buttonEl.addEventListener('blur', () => buttonEl.classList.remove('is-open'));
+
+        return buttonEl;
+    }
+
+    private closeMilestoneTips(except?: HTMLElement): void {
+        const openEls = this.menu_progress_milestones_el?.querySelectorAll('.game-menu__milestone.is-open');
+        openEls?.forEach((el) => {
+            if (el !== except) el.classList.remove('is-open');
+        });
+    }
+
+    private handleMilestoneOutsidePointerDown = (event: PointerEvent): void => {
+        if (event.target instanceof Element && event.target.closest('.game-menu__milestone')) return;
+        this.closeMilestoneTips();
+    };
 
     private formatAverageWpm(wpm: number | null): string {
         return wpm === null ? '--' : `${Math.round(wpm)}`;

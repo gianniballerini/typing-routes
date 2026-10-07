@@ -301,6 +301,26 @@ class Settings
         // milliseconds; below this the hover click becomes a rattle.
         hoverThrottleMs: 40
       },
+      keyPacks: {
+        defaultId: 'cherrymx-red-abs',
+        // Always selectable, whatever the player's progress.
+        freeIds: ['cherrymx-red-abs', 'model-f-xt'],
+        // km-weighted completion percent that unlocks each pack, ascending.
+        unlocks: [
+          { packId: 'eg-crystal-purple', percent: 5 },
+          { packId: 'cherrymx-blue-abs', percent: 10 },
+          { packId: 'creams', percent: 15 },
+          { packId: 'unicomp-classic', percent: 25 },
+          { packId: 'typewriter', percent: 35 },
+          { packId: 'fallout-terminal', percent: 50 },
+          { packId: 'animalese', percent: 65 },
+          { packId: 'animal-crossing-new-leaf', percent: 80 },
+          { packId: 'chrono-trigger', percent: 100 }
+        ],
+        // The preview burst: how many keys it plays and the gap between them.
+        previewKeyCount: 4,
+        previewIntervalMs: 90
+      },
       music: {
         // Name of the manifest entry played over the menu.
         menuTrack: 'menu-music',

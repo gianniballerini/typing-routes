@@ -1,13 +1,14 @@
 import { DebugPaneController } from './DebugPaneController';
 import { GameFlowCoordinator } from './GameFlowCoordinator';
 import { UserStatsStorage } from './UserStatsStorage';
+import keyPackCatalog from '../../assets/data/key_packs.json';
 import soundManifest from '../../assets/data/sounds.json';
 import { decodeRouteGeometries } from '../data/RouteGeometryStore';
 import { Achievements } from '../achievements/Achievements';
 import { AchievementsStorage } from '../achievements/AchievementsStorage';
 import { AudioManager } from '../audio/AudioManager';
 import { AudioPreferencesStorage } from '../audio/AudioPreferencesStorage';
-import type { SoundManifest } from '../audio/types';
+import type { KeyPackCatalogEntry, SoundManifest } from '../audio/types';
 import { UiSoundController } from '../audio/UiSoundController';
 import { Game } from '../Game';
 import { KeyboardInputCoordinator } from '../input/KeyboardInputCoordinator';
@@ -49,7 +50,10 @@ class MainApplication {
         // download runs alongside the map tiles rather than after them.
         this.audio_preferences_storage = new AudioPreferencesStorage();
         this.audio_manager = new AudioManager(this.audio_preferences_storage);
-        const audio_loading = this.audio_manager.load(soundManifest as SoundManifest);
+        const audio_loading = this.audio_manager.load({
+            ...(soundManifest as SoundManifest),
+            keyPacks: keyPackCatalog as KeyPackCatalogEntry[],
+        });
         this.audio_manager.bindKeyboardSounds();
         this.ui_sound_controller = new UiSoundController(this.audio_manager);
         this.ui_sound_controller.init();

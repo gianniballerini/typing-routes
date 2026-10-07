@@ -79,6 +79,34 @@ python3 data/simplify_geometries.py data/raw/national_routes_geometries.json src
 `cities` are never sourced from the DNV export — they're curated by hand
 against `cities.json` after the fact.
 
+## Keyboard sound packs
+
+`data/build_sound_packs.py` normalizes raw Mechvibes packs from `data/raw/sounds/<original folder>/` into one shape. It needs `ffmpeg` on the PATH and is not part of the app build.
+
+The raw downloads are **not** kept in the repo. The built packs in `public/sounds/keys/` are the source of truth. When the script runs, a pack with no raw folder keeps its built output and catalog entry, and only packs with a raw folder are rebuilt.
+
+To add a new pack:
+
+1. Unzip it from [Mechvibes](https://mechvibes.com) into `data/raw/sounds/<folder>/`.
+2. Add an entry to `PACKS` in the script (`id`, `dir`, `name`, `author`).
+3. Run the script:
+
+   ```sh
+   python3 data/build_sound_packs.py
+   ```
+
+4. Set its unlock percent in `Settings.audio.keyPacks.unlocks` (or add it to `freeIds`), and credit it in the root `README.md`.
+5. Delete `data/raw/sounds/` again.
+
+Re-encoding an existing pack (for example after changing `BITRATE`) needs its raw folder back. Never feed the script a built `sound.m4a`, because that would re-encode lossy audio.
+
+For every pack (`single` sprite or `multi` per-key files) it resolves each key to a clip, decodes it to mono 44.1 kHz, trims trailing silence, dedupes identical clips, joins them with a 30 ms gap into one AAC-LC sprite, and rewrites `defines` as `[startMs, durationMs]`. Missing files referenced by a config are skipped (for example `1.wav` in Fallout Terminal). Outputs:
+
+- `public/sounds/keys/<id>/sound.m4a` and `config.json` (`{id, name, author, defines}`)
+- `src/assets/data/key_packs.json`, the catalog the runtime loads, with real byte sizes
+
+Pack ids, display names and authors are set in the `PACKS` table at the top of the script; which completion percent unlocks each pack is in `Settings.audio.keyPacks`.
+
 ## Provenance note
 
 RN3's city list (`rn-3`) was hand-scaffolded against Wikipedia and the

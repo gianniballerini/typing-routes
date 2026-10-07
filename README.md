@@ -18,6 +18,24 @@ Routes and cities live in `src/assets/data/routes.json` and `src/assets/data/cit
 - https://portal-andino.datos.gob.ar/dataset/limites-entre-jurisdicciones
 - https://es.wikipedia.org/wiki/Rutas_nacionales_de_Argentina
 
+## Credits
+
+### Keyboard sounds
+
+Keyboard sound packs come from [Mechvibes](https://mechvibes.com), normalized into `public/sounds/keys/<id>/`.
+
+- **Cherry MX Red** (`cherrymx-red-abs`): a pre-installed Mechvibes pack
+- **Cherry MX Blue** (`cherrymx-blue-abs`): a pre-installed Mechvibes pack
+- **EG Crystal Purple** (`eg-crystal-purple`): a pre-installed Mechvibes pack
+- **Model F XT** (`model-f-xt`): by Rezenee
+- **Creams** (`creams`): by Aksh Aggarwal
+- **Unicomp Classic** (`unicomp-classic`): by Thànhh the Xignature
+- **Typewriter** (`typewriter`, "Typewriter 1.0 Beta"): by thonkadonk
+- **Fallout Terminal** (`fallout-terminal`): by Ditoxin
+- **Animalese** (`animalese`, "Isabelle Animal Crossing"): by Nihilistic Janitor
+- **Animal Crossing: New Leaf** (`animal-crossing-new-leaf`): by Ameer Yaqoob
+- **Chrono Trigger** (`chrono-trigger`, "Chrono Trigger Keyboard"): by M. Kirin
+
 
 ### To Do
  - Mobile warning

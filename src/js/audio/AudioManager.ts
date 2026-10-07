@@ -2,7 +2,7 @@ import { Settings } from '../Settings';
 import type { AudioPreferences } from './AudioPreferencesStorage';
 import { AudioPreferencesStorage } from './AudioPreferencesStorage';
 import { KeyboardSoundPack } from './KeyboardSoundPack';
-import type { KeyPackDefinition, SoundCategory, SoundDefinition, SoundManifest } from './types';
+import type { KeyPackCatalogEntry, KeyPackDefinition, SoundCategory, SoundDefinition, SoundManifest } from './types';
 
 interface PlayOptions {
     volume?: number;
@@ -64,6 +64,15 @@ class AudioManager {
     private readonly voices = new Map<string, PlayingVoice[]>();
     private readonly missingWarned = new Set<string>();
 
+    private keyPackCatalog: KeyPackCatalogEntry[] = [];
+    private keyPackVolume = 1;
+    private selectedKeyPackId: string | null = null;
+    private keyPackLoadToken = 0;
+    // Packs auditioned without being selected (milestone stars, locked entries),
+    // decoded on first use and kept: each is a few hundred KB at most.
+    private readonly previewPacks = new Map<string, { pack: KeyboardSoundPack; loading: Promise<void> }>();
+    private previewTimers: number[] = [];
+
     private keySoundsEnabled = false;
     private keyboardBound = false;
     private unlocked = false;
@@ -108,7 +117,12 @@ class AudioManager {
         manifest: SoundManifest,
         onProgress?: (loadedBytes: number, totalBytes: number) => void
     ): LoadResult {
-        const totalBytes = this.totalBytes(manifest);
+        this.keyPackCatalog = manifest.keyPacks ?? [];
+        this.keyPackVolume = manifest.keyPackVolume ?? 1;
+        const selectedEntry = this.resolveInitialKeyPack(manifest);
+        this.selectedKeyPackId = selectedEntry?.id ?? null;
+
+        const totalBytes = this.totalBytes(manifest, selectedEntry);
         let loadedBytes = 0;
         const reportBytes = (bytes: number): void => {
             loadedBytes += bytes;
@@ -117,8 +131,15 @@ class AudioManager {
 
         // Both packs gate the loading screen: the start CTA is itself a click, so
         // the UI pack has to be decoded before the player ever reaches the menu.
+        const token = ++this.keyPackLoadToken;
         const blocking = Promise.all([
-            this.loadPack(this.keyPack, manifest.keyPack, 'Keyboard', reportBytes),
+            this.loadPack(
+                this.keyPack,
+                selectedEntry ? this.definitionForEntry(selectedEntry) : undefined,
+                'Keyboard',
+                reportBytes,
+                () => this.keyPackLoadToken !== token
+            ),
             this.loadPack(this.uiPack, manifest.uiPack, 'UI', reportBytes),
         ]).then(() => undefined);
 
@@ -141,11 +162,12 @@ class AudioManager {
         pack: KeyboardSoundPack,
         definition: KeyPackDefinition | undefined,
         label: string,
-        reportBytes: (bytes: number) => void
+        reportBytes: (bytes: number) => void,
+        isStale?: () => boolean
     ): Promise<void> {
         if (!definition) return Promise.resolve();
 
-        return pack.load(definition, reportBytes).catch((error: unknown) => {
+        return pack.load(definition, reportBytes, isStale).catch((error: unknown) => {
             console.warn(`${label} sound pack failed to load; its sounds are off`, error);
         });
     }
@@ -200,10 +222,11 @@ class AudioManager {
         return null;
     }
 
-    private totalBytes(manifest: SoundManifest): number {
+    private totalBytes(manifest: SoundManifest, selectedEntry: KeyPackCatalogEntry | null): number {
         // A pack reports whichever encoding this browser picked, so budget for the
-        // largest of them and let the cap in `reportBytes` absorb the slack.
-        const packBytes = [manifest.keyPack, manifest.uiPack].reduce(
+        // largest of them and let the cap in `reportBytes` absorb the slack. Only
+        // the selected typing pack is fetched at boot.
+        const packBytes = [selectedEntry, manifest.uiPack].reduce(
             (sum, pack) => sum + (pack?.sources ?? [])
                 .reduce((largest, source) => Math.max(largest, source.size ?? 0), 0),
             0
@@ -413,6 +436,111 @@ class AudioManager {
 
         this.resumeIfNeeded();
         return true;
+    }
+
+    // --- key packs ---------------------------------------------------------
+
+    getKeyPackCatalog(): KeyPackCatalogEntry[] {
+        return this.keyPackCatalog;
+    }
+
+    getSelectedKeyPackId(): string | null {
+        return this.selectedKeyPackId;
+    }
+
+    // Swaps the typing pack live. Voices from the old pack are cut first: they
+    // point into a buffer that is about to be replaced.
+    setKeyPack(entry: KeyPackCatalogEntry): Promise<void> {
+        const alreadyActive = this.selectedKeyPackId === entry.id && this.keyPack.ready;
+
+        this.selectedKeyPackId = entry.id;
+        if (this.preferences.keyPackId !== entry.id) {
+            this.preferences.keyPackId = entry.id;
+            this.schedulePreferencesSave();
+        }
+        if (alreadyActive) return Promise.resolve();
+
+        this.keyPack.stopAll();
+        const token = ++this.keyPackLoadToken;
+        return this.loadPack(
+            this.keyPack,
+            this.definitionForEntry(entry),
+            'Keyboard',
+            () => undefined,
+            () => this.keyPackLoadToken !== token
+        );
+    }
+
+    // A short burst of distinct keys, so a pack can be judged by ear. Works for
+    // packs that are not selected (and may be locked): those decode on demand.
+    previewKeyPack(entry: KeyPackCatalogEntry): void {
+        if (this.preferences.muted) return;
+
+        this.clearPreviewTimers();
+        this.resumeIfNeeded();
+
+        const selected = entry.id === this.selectedKeyPackId && this.keyPack.ready;
+        const entryPack = selected ? { pack: this.keyPack, loading: Promise.resolve() } : this.ensurePreviewPack(entry);
+
+        void entryPack.loading.then(() => {
+            if (!entryPack.pack.ready) return;
+            this.playPreviewBurst(entryPack.pack);
+        });
+    }
+
+    private resolveInitialKeyPack(manifest: SoundManifest): KeyPackCatalogEntry | null {
+        const catalog = manifest.keyPacks ?? [];
+        const wanted = [
+            this.preferences.keyPackId,
+            manifest.defaultKeyPackId,
+            Settings.audio.keyPacks.defaultId,
+        ];
+
+        for (const id of wanted) {
+            const entry = catalog.find((candidate) => candidate.id === id);
+            if (entry) return entry;
+        }
+
+        return catalog[0] ?? null;
+    }
+
+    private definitionForEntry(entry: KeyPackCatalogEntry): KeyPackDefinition {
+        return {
+            configUrl: entry.configUrl,
+            sources: entry.sources,
+            volume: this.keyPackVolume,
+        };
+    }
+
+    private ensurePreviewPack(entry: KeyPackCatalogEntry): { pack: KeyboardSoundPack; loading: Promise<void> } {
+        const cached = this.previewPacks.get(entry.id);
+        if (cached) return cached;
+
+        const pack = new KeyboardSoundPack(this.context, this.categoryGains.keys);
+        const loading = this.loadPack(pack, this.definitionForEntry(entry), 'Preview', () => undefined);
+        const created = { pack, loading };
+        this.previewPacks.set(entry.id, created);
+        return created;
+    }
+
+    private playPreviewBurst(pack: KeyboardSoundPack): void {
+        const { previewKeyCount, previewIntervalMs } = Settings.audio.keyPacks;
+        const pool = pack.definedKeycodes();
+        const picks: number[] = [];
+        while (picks.length < previewKeyCount && pool.length > 0) {
+            picks.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+        }
+
+        picks.forEach((keycode, index) => {
+            const handle = window.setTimeout(() => pack.playForKeycode(keycode, 1), index * previewIntervalMs);
+            this.previewTimers.push(handle);
+        });
+    }
+
+    private clearPreviewTimers(): void {
+        for (const handle of this.previewTimers.splice(0)) {
+            window.clearTimeout(handle);
+        }
     }
 
     // --- ui sounds ---------------------------------------------------------

@@ -74,8 +74,12 @@
         .game-menu__progress-header
             span.game-menu__progress-label Argentina recorrida
             span.game-menu__progress-percent 0%
-        .game-menu__progress-bar
-            .game-menu__progress-bar-fill
+        //- The bar clips its fill (overflow hidden), so the unlock stars live in
+        //- this wrapper instead; they are built from TS.
+        .game-menu__progress-track
+            .game-menu__progress-bar
+                .game-menu__progress-bar-fill
+            .game-menu__milestones
         .game-menu__progress-stats
             .game-menu__progress-stat
                 span.game-menu__progress-stat-label PPM promedio

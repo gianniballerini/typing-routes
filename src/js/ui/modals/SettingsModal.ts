@@ -1,4 +1,4 @@
-import type { SoundCategory } from '../../audio/types';
+import type { KeyPackState, SoundCategory } from '../../audio/types';
 import { BaseModal } from './BaseModal';
 
 const SOUND_CATEGORIES: SoundCategory[] = ['music', 'sfx', 'keys'];
@@ -8,6 +8,9 @@ class SettingsModal extends BaseModal {
     private mutedNoteEl: HTMLElement | null;
     private onVolumeChangeHandler: ((category: SoundCategory, value: number) => void) | null;
     private onCategoryMuteToggleHandler: ((category: SoundCategory) => void) | null;
+    private keyPacksEl: HTMLElement | null;
+    private keyPackButtonEls: HTMLButtonElement[];
+    private onKeyPackSelectedHandler: ((packId: string) => void) | null;
 
     constructor(onCloseRequested: () => void) {
         super('.settings-modal', '.settings-modal__close-button', onCloseRequested);
@@ -18,6 +21,9 @@ class SettingsModal extends BaseModal {
         this.mutedNoteEl = this.rootEl?.querySelector('.settings-modal__muted-note') ?? null;
         this.onVolumeChangeHandler = null;
         this.onCategoryMuteToggleHandler = null;
+        this.keyPacksEl = this.rootEl?.querySelector('.settings-modal__keypacks') ?? null;
+        this.keyPackButtonEls = [];
+        this.onKeyPackSelectedHandler = null;
 
         for (const sliderEl of this.sliderEls) {
             sliderEl.addEventListener('input', this.handleSliderInput);
@@ -31,6 +37,17 @@ class SettingsModal extends BaseModal {
 
     onCategoryMuteToggle(handler: (category: SoundCategory) => void): void {
         this.onCategoryMuteToggleHandler = handler;
+    }
+
+    onKeyPackSelected(handler: (packId: string) => void): void {
+        this.onKeyPackSelectedHandler = handler;
+    }
+
+    renderKeyPacks(states: KeyPackState[]): void {
+        if (!this.keyPacksEl) return;
+
+        this.keyPackButtonEls = states.map((state) => this.buildKeyPackButton(state));
+        this.keyPacksEl.replaceChildren(...this.keyPackButtonEls);
     }
 
     renderVolumes(volumes: Record<SoundCategory, number>): void {
@@ -56,6 +73,81 @@ class SettingsModal extends BaseModal {
         }
 
         firstSliderEl.focus({ preventScroll: true });
+    }
+
+    private buildKeyPackButton(state: KeyPackState): HTMLButtonElement {
+        const { entry, unlocked, unlockPercent, selected } = state;
+
+        const buttonEl = document.createElement('button');
+        buttonEl.type = 'button';
+        buttonEl.className = 'settings-modal__keypack';
+        buttonEl.dataset.packId = entry.id;
+        buttonEl.setAttribute('role', 'radio');
+        buttonEl.setAttribute('aria-checked', selected ? 'true' : 'false');
+        buttonEl.classList.toggle('settings-modal__keypack--selected', selected);
+        buttonEl.classList.toggle('settings-modal__keypack--locked', !unlocked);
+        buttonEl.disabled = !unlocked;
+        // Only the selected radio sits in the tab order; arrows move within the group.
+        buttonEl.tabIndex = selected ? 0 : -1;
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'settings-modal__keypack-name';
+        nameEl.textContent = entry.name;
+        buttonEl.append(nameEl);
+
+        const captionEl = document.createElement('span');
+        captionEl.className = 'settings-modal__keypack-caption';
+        captionEl.textContent = unlocked
+            ? (entry.author ?? '')
+            : `Se desbloquea al ${unlockPercent ?? 100}%`;
+        if (captionEl.textContent) buttonEl.append(captionEl);
+
+        if (!unlocked) {
+            buttonEl.setAttribute('aria-label', `${entry.name}. Se desbloquea al ${unlockPercent ?? 100}%`);
+        }
+
+        buttonEl.addEventListener('click', () => this.onKeyPackSelectedHandler?.(entry.id));
+        buttonEl.addEventListener('keydown', this.handleKeyPackKeydown);
+        return buttonEl;
+    }
+
+    private handleKeyPackKeydown = (event: KeyboardEvent): void => {
+        const buttonEl = event.currentTarget;
+        if (!(buttonEl instanceof HTMLButtonElement)) return;
+
+        if (event.key === 'Enter' || event.key === ' ') {
+            // Same reason as the sliders: Enter skips the countdown elsewhere.
+            event.stopPropagation();
+            return;
+        }
+
+        const step = this.getKeyPackNavigationStep(event.key);
+        if (step === 0) return;
+
+        event.preventDefault();
+        const enabled = this.keyPackButtonEls.filter((el) => !el.disabled);
+        const index = enabled.indexOf(buttonEl);
+        if (index === -1) return;
+
+        const next = index + step;
+        if (next < 0) {
+            this.sliderEls[this.sliderEls.length - 1]?.focus({ preventScroll: true });
+            return;
+        }
+        if (next >= enabled.length) return;
+
+        this.focusKeyPackButton(enabled[next]);
+    };
+
+    private getKeyPackNavigationStep(key: string): number {
+        if (key === 'ArrowDown' || key === 'ArrowRight') return 1;
+        if (key === 'ArrowUp' || key === 'ArrowLeft') return -1;
+        return 0;
+    }
+
+    private focusKeyPackButton(buttonEl: HTMLButtonElement): void {
+        for (const el of this.keyPackButtonEls) el.tabIndex = el === buttonEl ? 0 : -1;
+        buttonEl.focus({ preventScroll: true });
     }
 
     private handleSliderInput = (event: Event): void => {
@@ -113,7 +205,15 @@ class SettingsModal extends BaseModal {
         if (currentIndex === -1) return;
 
         const nextIndex = Math.max(0, Math.min(this.sliderEls.length - 1, currentIndex + step));
-        if (nextIndex === currentIndex) return;
+        if (nextIndex === currentIndex) {
+            // Past the last slider, the arrows carry on into the pack picker.
+            if (step > 0) {
+                const target = this.keyPackButtonEls.find((el) => el.tabIndex === 0 && !el.disabled)
+                    ?? this.keyPackButtonEls.find((el) => !el.disabled);
+                if (target) this.focusKeyPackButton(target);
+            }
+            return;
+        }
 
         this.sliderEls[nextIndex].focus({ preventScroll: true });
     }

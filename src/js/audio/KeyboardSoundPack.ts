@@ -35,14 +35,15 @@ class KeyboardSoundPack {
 
     async load(
         definition: KeyPackDefinition,
-        onBytesLoaded?: (bytes: number) => void
+        onBytesLoaded?: (bytes: number) => void,
+        // Lets a caller that can start a newer load drop this one's result, so a
+        // slow download never overwrites the pack that was picked after it.
+        isStale?: () => boolean
     ): Promise<void> {
         const source = this.pickPlayableSource(definition.sources);
         if (!source) {
             throw new Error('No playable keyboard sprite source for this browser');
         }
-
-        this.packVolume = definition.volume ?? 1;
 
         const config = await this.fetchConfig(definition.configUrl);
         // The sprite is the heavy half; the config is a few KB and its download
@@ -52,7 +53,11 @@ class KeyboardSoundPack {
 
         // `decodeAudioData` detaches the buffer it is handed, so nothing may read
         // `spriteBytes` after this point.
-        this.buffer = await this.context.decodeAudioData(spriteBytes);
+        const decoded = await this.context.decodeAudioData(spriteBytes);
+        if (isStale?.()) return;
+
+        this.packVolume = definition.volume ?? 1;
+        this.buffer = decoded;
         this.regions = this.buildRegions(config, source.offsetCompensationMs ?? 0);
     }
 
@@ -68,6 +73,11 @@ class KeyboardSoundPack {
     // button instead of as a random keypress.
     playForKeycode(keycode: number, volume: number): void {
         this.playRegion(this.regions.get(keycode) ?? this.fallbackRegion(), volume);
+    }
+
+    // Distinct keycodes this pack defines, for callers that audition it.
+    definedKeycodes(): number[] {
+        return [...this.regions.keys()];
     }
 
     playFallback(volume: number): void {

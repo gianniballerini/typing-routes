@@ -5,7 +5,7 @@ import type { AchievementDefinition } from '../achievements/AchievementDefinitio
 import { ACHIEVEMENT_PLACEHOLDER_IMAGE } from '../achievements/AchievementDefinitions';
 import { AchievementsStorage } from '../achievements/AchievementsStorage';
 import { AudioManager } from '../audio/AudioManager';
-import type { SoundCategory } from '../audio/types';
+import type { KeyPackState, SoundCategory } from '../audio/types';
 import { Game } from '../Game';
 import { GameState } from '../GameState';
 import { MapRouteCursor } from '../input/MapRouteCursor';
@@ -182,6 +182,8 @@ class GameFlowCoordinator {
         this.modal_controller.routeListModal.onRouteActivated(this.handleRouteListActivated);
         this.modal_controller.settingsModal.onVolumeChange(this.handleVolumeChange);
         this.modal_controller.settingsModal.onCategoryMuteToggle(this.handleCategoryMuteToggle);
+        this.modal_controller.settingsModal.onKeyPackSelected(this.handleKeyPackSelected);
+        this.ui_presenter.onMilestonePreviewRequested(this.handleMilestonePreviewRequested);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
         this.map_route_cursor.bind();
 
@@ -196,6 +198,7 @@ class GameFlowCoordinator {
         this.ui_presenter.renderState(this.game.state);
         this.ui_presenter.renderAudioMuted(this.audio_manager.isMuted());
         this.refreshMenuFromSelectedRoute();
+        this.ensureSelectedKeyPackUnlocked();
         this.renderHomeProgress();
     }
 
@@ -370,6 +373,8 @@ class GameFlowCoordinator {
     };
 
     private handleSettingsRequested = (): void => {
+        this.ensureSelectedKeyPackUnlocked();
+        this.modal_controller.settingsModal.renderKeyPacks(this.getKeyPackStates());
         this.modal_controller.settingsModal.renderVolumes(this.audio_manager.getCategoryVolumes());
         this.modal_controller.settingsModal.renderMuted(this.audio_manager.isMuted());
         this.modal_controller.show(ModalState.SETTINGS);
@@ -414,28 +419,102 @@ class GameFlowCoordinator {
      * Hidden until the first route is completed.
      */
     private renderHomeProgress(): void {
-        const playableRoutes = this.getOrderedPlayableRoutes();
-        let totalKm = 0;
-        let completedKm = 0;
-        let completedRoutes = 0;
-
-        for (const route of playableRoutes) {
-            totalKm += route.length_km;
-            if (!this.user_stats.hasCompletedRoute(route.route_id)) continue;
-            completedKm += route.length_km;
-            completedRoutes += 1;
-        }
+        const { completionPercent, completedRoutes } = this.getCompletionProgress();
 
         if (completedRoutes === 0) {
             this.ui_presenter.renderHomeProgress(null);
             return;
         }
 
+        const catalog = this.audio_manager.getKeyPackCatalog();
+        const milestones = Settings.audio.keyPacks.unlocks.map(({ packId, percent }) => ({
+            packId,
+            percent,
+            packName: catalog.find((entry) => entry.id === packId)?.name ?? packId,
+            unlocked: this.isPercentReached(completionPercent, percent)
+        }));
+
         this.ui_presenter.renderHomeProgress({
-            completionPercent: totalKm > 0 ? (completedKm / totalKm) * 100 : 0,
-            averageBestWpm: this.user_stats.getAverageBestNetWpm()
+            completionPercent,
+            averageBestWpm: this.user_stats.getAverageBestNetWpm(),
+            milestones
         });
     }
+
+    private getCompletionPercent(): number {
+        return this.getCompletionProgress().completionPercent;
+    }
+
+    private getCompletionProgress(): { completionPercent: number; completedRoutes: number } {
+        let totalKm = 0;
+        let completedKm = 0;
+        let completedRoutes = 0;
+
+        for (const route of this.getOrderedPlayableRoutes()) {
+            totalKm += route.length_km;
+            if (!this.user_stats.hasCompletedRoute(route.route_id)) continue;
+            completedKm += route.length_km;
+            completedRoutes += 1;
+        }
+
+        return {
+            completionPercent: totalKm > 0 ? (completedKm / totalKm) * 100 : 0,
+            completedRoutes
+        };
+    }
+
+    private isPercentReached(completionPercent: number, requiredPercent: number): boolean {
+        // 100% is a sum of float km; do not let rounding hold the last pack hostage.
+        return completionPercent >= requiredPercent - 1e-6;
+    }
+
+    /**
+     * Unlock state is derived from progress on every call, so nothing about it
+     * is stored: resetting stats re-locks packs, completing routes unlocks them.
+     */
+    private getKeyPackStates(): KeyPackState[] {
+        const { freeIds, unlocks } = Settings.audio.keyPacks;
+        const completionPercent = this.getCompletionPercent();
+        const selectedId = this.audio_manager.getSelectedKeyPackId();
+
+        return this.audio_manager.getKeyPackCatalog().map((entry) => {
+            const unlock = unlocks.find((candidate) => candidate.packId === entry.id);
+            const free = freeIds.includes(entry.id) || !unlock;
+
+            return {
+                entry,
+                unlocked: free || this.isPercentReached(completionPercent, unlock.percent),
+                unlockPercent: free ? null : unlock.percent,
+                selected: entry.id === selectedId
+            };
+        });
+    }
+
+    // A pack can end up selected yet locked (stats reset, hand-edited storage).
+    private ensureSelectedKeyPackUnlocked(): void {
+        const states = this.getKeyPackStates();
+        const selected = states.find((state) => state.selected);
+        if (!selected || selected.unlocked) return;
+
+        const fallback = states.find((state) => state.entry.id === Settings.audio.keyPacks.defaultId)
+            ?? states.find((state) => state.unlocked);
+        if (fallback) void this.audio_manager.setKeyPack(fallback.entry);
+    }
+
+    private handleKeyPackSelected = (packId: string): void => {
+        const state = this.getKeyPackStates().find((candidate) => candidate.entry.id === packId);
+        if (!state || !state.unlocked) return;
+
+        void this.audio_manager.setKeyPack(state.entry).then(() => {
+            this.audio_manager.previewKeyPack(state.entry);
+        });
+        this.modal_controller.settingsModal.renderKeyPacks(this.getKeyPackStates());
+    };
+
+    private handleMilestonePreviewRequested = (packId: string): void => {
+        const entry = this.audio_manager.getKeyPackCatalog().find((candidate) => candidate.id === packId);
+        if (entry) this.audio_manager.previewKeyPack(entry);
+    };
 
     private buildRouteListRows(): RouteListRow[] {
         return this.getOrderedPlayableRoutes()

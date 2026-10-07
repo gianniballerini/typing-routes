@@ -24,6 +24,9 @@
                     label.settings-modal__setting-label(for="settings-volume-keys") Teclado
                     input.settings-modal__slider#settings-volume-keys(type="range" min="0" max="100" step="1" value="100" data-audio-category="keys")
                     span.settings-modal__setting-value 100%
+            .settings-modal__keypacks-section
+                span.settings-modal__keypacks-title Sonido del teclado
+                .settings-modal__keypacks(role="radiogroup" aria-label="Sonido del teclado")
             .settings-modal__credits
                 span.settings-modal__credits-title Créditos
                 .settings-modal__credits-body

@@ -1,23 +1,13 @@
 {
-  "keyPack": {
-    "configUrl": "/sounds/cherrymx-red-abs/config.json",
-    "sources": [
-      {
-        "url": "/sounds/cherrymx-red-abs/sound.m4a",
-        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
-        "size": 613735,
-        "offsetCompensationMs": 0
-      }
-    ],
-    "volume": 0.6
-  },
+  "defaultKeyPackId": "cherrymx-red-abs",
+  "keyPackVolume": 0.6,
   "uiPack": {
-    "configUrl": "/sounds/model-f-xt/config.json",
+    "configUrl": "/sounds/keys/model-f-xt/config.json",
     "sources": [
       {
-        "url": "/sounds/model-f-xt/sound.m4a",
+        "url": "/sounds/keys/model-f-xt/sound.m4a",
         "type": "audio/mp4; codecs=\"mp4a.40.2\"",
-        "size": 769737,
+        "size": 341192,
         "offsetCompensationMs": 0
       }
     ],

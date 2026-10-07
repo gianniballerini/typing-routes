@@ -210,6 +210,79 @@
     }
 }
 
+.settings-modal__keypacks-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10 * $ptr;
+}
+
+.settings-modal__keypacks-title {
+    font-size: 14 * $ptr;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.settings-modal__keypacks {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8 * $ptr;
+
+    @include respond-to($small-breakpoint) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.settings-modal__keypack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2 * $ptr;
+
+    padding: 10 * $ptr 12 * $ptr;
+
+    border-radius: 10 * $ptr;
+    border: 1 * $ptr solid rgba($white, 0.3);
+    background-color: rgba($black, 0.14);
+
+    color: inherit;
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        background-color: rgba($white, 0.14);
+    }
+
+    &:focus-visible {
+        outline: 2 * $ptr solid rgba($flag-yellow, 0.92);
+        outline-offset: 2 * $ptr;
+    }
+}
+
+.settings-modal__keypack--selected {
+    border-color: $flag-yellow;
+    background-color: rgba($flag-yellow, 0.16);
+}
+
+// Same gray treatment as a muted volume row.
+.settings-modal__keypack--locked {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.settings-modal__keypack-name {
+    font-size: 16 * $ptr;
+    line-height: 1.2;
+}
+
+.settings-modal__keypack-caption {
+    font-size: 13 * $ptr;
+    line-height: 1.2;
+    opacity: 0.8;
+}
+
 .settings-modal__credits {
     display: flex;
     flex-direction: column;

@@ -2,9 +2,18 @@ import { Settings } from '../Settings';
 import type { SoundCategory } from './types';
 
 const AUDIO_PREFERENCES_STORAGE_KEY = 'typing-routes.audio.v1';
-const AUDIO_PREFERENCES_VERSION = 2;
+const AUDIO_PREFERENCES_VERSION = 3;
 
 interface AudioPreferences {
+    muted: boolean;
+    masterVolume: number;
+    categoryVolumes: Record<SoundCategory, number>;
+    // Undefined until the player picks one; the default pack applies.
+    keyPackId?: string;
+}
+
+interface AudioPreferencesV2Snapshot {
+    version: 2;
     muted: boolean;
     masterVolume: number;
     categoryVolumes: Record<SoundCategory, number>;
@@ -55,6 +64,7 @@ class AudioPreferencesStorage {
             muted: preferences.muted,
             masterVolume: preferences.masterVolume,
             categoryVolumes: { ...preferences.categoryVolumes },
+            keyPackId: preferences.keyPackId,
         };
 
         this.setStoredValue(JSON.stringify(snapshot));
@@ -98,6 +108,16 @@ class AudioPreferencesStorage {
                 muted: value.muted,
                 masterVolume: value.masterVolume,
                 categoryVolumes: { ...value.categoryVolumes },
+                keyPackId: typeof value.keyPackId === 'string' ? value.keyPackId : undefined,
+            };
+        }
+
+        if (this.isValidV2Snapshot(value)) {
+            return {
+                muted: value.muted,
+                masterVolume: value.masterVolume,
+                categoryVolumes: { ...value.categoryVolumes },
+                keyPackId: undefined,
             };
         }
 
@@ -117,6 +137,19 @@ class AudioPreferencesStorage {
 
         const candidate = value as Partial<AudioPreferencesSnapshot>;
         if (candidate.version !== AUDIO_PREFERENCES_VERSION) return false;
+        if (typeof candidate.muted !== 'boolean') return false;
+        if (typeof candidate.masterVolume !== 'number') return false;
+        if (!Number.isFinite(candidate.masterVolume)) return false;
+        if (!this.isValidCategoryVolumes(candidate.categoryVolumes)) return false;
+
+        return candidate.masterVolume >= 0 && candidate.masterVolume <= 1;
+    }
+
+    private isValidV2Snapshot(value: unknown): value is AudioPreferencesV2Snapshot {
+        if (!value || typeof value !== 'object') return false;
+
+        const candidate = value as Partial<AudioPreferencesV2Snapshot>;
+        if (candidate.version !== 2) return false;
         if (typeof candidate.muted !== 'boolean') return false;
         if (typeof candidate.masterVolume !== 'number') return false;
         if (!Number.isFinite(candidate.masterVolume)) return false;

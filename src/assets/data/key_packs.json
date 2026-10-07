@@ -1,0 +1,153 @@
+[
+  {
+    "id": "cherrymx-red-abs",
+    "name": "Cherry MX Red",
+    "configUrl": "/sounds/keys/cherrymx-red-abs/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/cherrymx-red-abs/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 283430,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "model-f-xt",
+    "name": "Model F XT",
+    "author": "Rezenee",
+    "configUrl": "/sounds/keys/model-f-xt/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/model-f-xt/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 341192,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "eg-crystal-purple",
+    "name": "EG Crystal Purple",
+    "configUrl": "/sounds/keys/eg-crystal-purple/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/eg-crystal-purple/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 242964,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "cherrymx-blue-abs",
+    "name": "Cherry MX Blue",
+    "configUrl": "/sounds/keys/cherrymx-blue-abs/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/cherrymx-blue-abs/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 287932,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "creams",
+    "name": "Creams",
+    "author": "Aksh Aggarwal",
+    "configUrl": "/sounds/keys/creams/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/creams/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 2883,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "unicomp-classic",
+    "name": "Unicomp Classic",
+    "author": "Thànhh the Xignature",
+    "configUrl": "/sounds/keys/unicomp-classic/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/unicomp-classic/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 5719,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "typewriter",
+    "name": "Máquina de escribir",
+    "author": "thonkadonk",
+    "configUrl": "/sounds/keys/typewriter/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/typewriter/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 21527,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "fallout-terminal",
+    "name": "Terminal de Fallout",
+    "author": "Ditoxin",
+    "configUrl": "/sounds/keys/fallout-terminal/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/fallout-terminal/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 26987,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "animalese",
+    "name": "Animalese (Isabelle)",
+    "author": "Nihilistic Janitor",
+    "configUrl": "/sounds/keys/animalese/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/animalese/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 244254,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "animal-crossing-new-leaf",
+    "name": "Animal Crossing: New Leaf",
+    "author": "Ameer Yaqoob",
+    "configUrl": "/sounds/keys/animal-crossing-new-leaf/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/animal-crossing-new-leaf/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 110727,
+        "offsetCompensationMs": 0
+      }
+    ]
+  },
+  {
+    "id": "chrono-trigger",
+    "name": "Chrono Trigger",
+    "author": "M. Kirin",
+    "configUrl": "/sounds/keys/chrono-trigger/config.json",
+    "sources": [
+      {
+        "url": "/sounds/keys/chrono-trigger/sound.m4a",
+        "type": "audio/mp4; codecs=\"mp4a.40.2\"",
+        "size": 81275,
+        "offsetCompensationMs": 0
+      }
+    ]
+  }
+]
