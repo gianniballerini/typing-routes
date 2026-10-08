@@ -112,7 +112,7 @@ $coin-metals: (
     justify-content: center;
 
     color: $dark;
-    background: radial-gradient(circle at 35% 30%, $light 0%, $base 55%, color.adjust(, : -8%) 100%);
+    background: radial-gradient(circle at 35% 30%, $light 0%, $base 55%, color.adjust($base, $lightness: -8%) 100%);
     border-radius: 50%;
     // Outer lip, then the raised rim (light on top, dark under), then the cast shadow.
     box-shadow:
