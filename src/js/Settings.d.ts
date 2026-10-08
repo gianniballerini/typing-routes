@@ -147,6 +147,9 @@ export interface SettingsShape {
     goHoldMs: number;
     soundFadeOutMs: number;
   };
+  cleanCombo: {
+    minStreak: number;
+  };
   progressMarker: {
     size: number;
     color: string;
@@ -197,7 +200,12 @@ export interface SettingsShape {
       fadeOutMs: number;
     };
     cues: {
+      clearCity: {
+        comboSteps: string[];
+      };
+      wrongKey: string;
       restartRun: string;
+      wrongKeyThrottleMs: number;
     };
   };
 }

@@ -248,6 +248,13 @@ class Settings
       soundFadeOutMs: 100
     };
 
+    // Golden counter under the timer for cities cleared since the last mistake
+    // (the same streak that drives the clear-city combo cue).
+    this.cleanCombo = {
+      // A single clean city isn't a combo yet; the counter slams in on the next.
+      minStreak: 2
+    };
+
     this.progressMarker = {
       // Car length in px (the sprite points north and is rotated by the route heading).
       size: 26,
@@ -329,7 +336,23 @@ class Settings
       },
       cues: {
         // Manifest entries played while typing.
+        // Played on each city cleared. The clean streak (cities cleared since
+        // the last mistake) picks the step, each one higher than the last; a
+        // mistake drops back to the first. The last step holds once reached.
+        clearCity: {
+          comboSteps: [
+            'clear-city-combo-1',
+            'clear-city-combo-2',
+            'clear-city-combo-3',
+            'clear-city-combo-4',
+            'clear-city-combo-5'
+          ]
+        },
+        wrongKey: 'wrong-key',
         restartRun: 'rewind',
+        // Mashing a wrong key fires a mistake per press; this keeps the buzz
+        // from stacking into a drone.
+        wrongKeyThrottleMs: 60
       }
     };
   }

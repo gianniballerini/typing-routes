@@ -31,6 +31,48 @@
       "volume": 0.8
     },
     {
+      "name": "clear-city-combo-1",
+      "url": "/sounds/clear-city-combo-1.m4a",
+      "size": 11602,
+      "category": "sfx",
+      "volume": 0.7
+    },
+    {
+      "name": "clear-city-combo-2",
+      "url": "/sounds/clear-city-combo-2.m4a",
+      "size": 12989,
+      "category": "sfx",
+      "volume": 0.7
+    },
+    {
+      "name": "clear-city-combo-3",
+      "url": "/sounds/clear-city-combo-3.m4a",
+      "size": 13749,
+      "category": "sfx",
+      "volume": 0.7
+    },
+    {
+      "name": "clear-city-combo-4",
+      "url": "/sounds/clear-city-combo-4.m4a",
+      "size": 13147,
+      "category": "sfx",
+      "volume": 0.7
+    },
+    {
+      "name": "clear-city-combo-5",
+      "url": "/sounds/clear-city-combo-5.m4a",
+      "size": 11962,
+      "category": "sfx",
+      "volume": 0.7
+    },
+    {
+      "name": "wrong-key",
+      "url": "/sounds/wrong-key.m4a",
+      "size": 5131,
+      "category": "sfx",
+      "volume": 0.6
+    },
+    {
       "name": "rewind",
       "url": "/sounds/rewind.m4a",
       "size": 15725,

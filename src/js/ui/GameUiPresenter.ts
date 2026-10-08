@@ -84,6 +84,9 @@ class GameUiPresenter {
     private accuracy_number_el: HTMLElement | null;
     private timer_number_el: HTMLElement | null;
     private timer_milliseconds_el: HTMLElement | null;
+    private clean_combo_el: HTMLElement | null;
+    private clean_combo_count_el: HTMLElement | null;
+    private clean_combo_shown: number = 0;
     private countdown_el: HTMLElement | null;
     private countdown_value_el: HTMLElement | null;
     private quit_button_el: HTMLElement | null;
@@ -167,6 +170,8 @@ class GameUiPresenter {
         this.accuracy_number_el = document.querySelector('.game-playing__accuracy-number');
         this.timer_number_el = document.querySelector('.game-playing__timer-number');
         this.timer_milliseconds_el = document.querySelector('.game-playing__timer-milliseconds');
+        this.clean_combo_el = document.querySelector('.game-playing__clean-combo');
+        this.clean_combo_count_el = document.querySelector('.game-playing__clean-combo-count');
         this.countdown_el = document.querySelector('.game-playing__countdown');
         this.countdown_value_el = document.querySelector('.game-playing__countdown-value');
         this.quit_button_el = document.querySelector('.game-playing__quit');
@@ -895,6 +900,29 @@ class GameUiPresenter {
         this.countdown_el.classList.add('hidden');
         this.countdown_el.classList.remove('game-playing__countdown--tick', 'game-playing__countdown--go');
         if (this.countdown_value_el) this.countdown_value_el.textContent = '';
+    }
+
+    // Golden streak counter under the timer. `count` 0 hides it; every new
+    // non-zero count replays the slam so each clean city lands as a hit.
+    renderCleanCombo(count: number): void {
+        const el = this.clean_combo_el;
+        const safeCount = Math.max(0, Math.round(count));
+        if (!el || safeCount === this.clean_combo_shown) return;
+
+        this.clean_combo_shown = safeCount;
+        el.classList.remove('game-playing__clean-combo--slam');
+
+        if (safeCount === 0) {
+            // The count text stays put so it fades out showing the streak it lost.
+            el.classList.remove('game-playing__clean-combo--visible');
+            return;
+        }
+
+        if (this.clean_combo_count_el) this.clean_combo_count_el.textContent = `x${safeCount}`;
+        el.classList.add('game-playing__clean-combo--visible');
+        // Forces a reflow so the slam replays when the class lands again.
+        void el.offsetWidth;
+        el.classList.add('game-playing__clean-combo--slam');
     }
 
     renderElapsedTime(elapsedMs: number): void {

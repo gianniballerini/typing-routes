@@ -52,6 +52,8 @@ interface ActiveRunStats {
     citiesCompleted: number;
     citiesRemaining: number;
     lastTypedLength: number;
+    // Cities cleared since the last mistake; drives the clear-city cue.
+    cleanCityStreak: number;
 }
 
 interface CalculatedRunMetrics {
@@ -98,6 +100,7 @@ class GameFlowCoordinator {
     private pendingRunRouteId: string | null;
     private runCameraZoom: number | null;
     private lastAchievementCueAt: number;
+    private lastWrongKeyCueAt: number;
     // Packs already unlocked when last checked, so only newly crossed milestones
     // are announced.
     private knownUnlockedKeyPackIds: Set<string>;
@@ -127,6 +130,7 @@ class GameFlowCoordinator {
         this.pendingRunRouteId = null;
         this.runCameraZoom = null;
         this.lastAchievementCueAt = -Infinity;
+        this.lastWrongKeyCueAt = -Infinity;
         this.knownUnlockedKeyPackIds = new Set();
 
         // Owned here rather than by MainApplication: every dependency it needs is
@@ -756,6 +760,12 @@ class GameFlowCoordinator {
             this.renderActiveRunStats(this.activeRunStats);
         }
 
+        this.playClearCityCue(this.activeRunStats?.cleanCityStreak ?? 0);
+        if (this.activeRunStats) {
+            this.activeRunStats.cleanCityStreak += 1;
+            this.renderCleanCombo(this.activeRunStats.cleanCityStreak);
+        }
+
         const changed = this.user_stats.markCityCompleted(customEvent.detail.cityId);
         if (changed) this.user_stats_storage.save(this.user_stats);
     };
@@ -967,8 +977,33 @@ class GameFlowCoordinator {
 
         this.activeRunStats.mistakes += 1;
         this.activeRunStats.currentCombo = 0;
+        this.activeRunStats.cleanCityStreak = 0;
+        this.renderCleanCombo(0);
         this.renderActiveRunStats(this.activeRunStats);
+        this.playWrongKeyCue();
     };
+
+    // Below the threshold the counter stays hidden rather than showing "x1".
+    private renderCleanCombo(streak: number): void {
+        this.ui_presenter.renderCleanCombo(streak >= Settings.cleanCombo.minStreak ? streak : 0);
+    }
+
+    /**
+     * Each clean city plays the next step of the combo progression, holding on
+     * the last one; `streak` 0 is the base sound.
+     */
+    private playClearCityCue(streak: number): void {
+        const { comboSteps } = Settings.audio.cues.clearCity;
+        this.audio_manager.play(comboSteps[Math.min(streak, comboSteps.length - 1)]);
+    }
+
+    private playWrongKeyCue(): void {
+        const now = performance.now();
+        if (now - this.lastWrongKeyCueAt < Settings.audio.cues.wrongKeyThrottleMs) return;
+
+        this.lastWrongKeyCueAt = now;
+        this.audio_manager.play(Settings.audio.cues.wrongKey);
+    }
 
     private initializeRouteSnappingData(routeId: string): void {
         const route = this.game.current_route;
@@ -1108,6 +1143,7 @@ class GameFlowCoordinator {
 
         this.ui_presenter.renderRunStats(0, totalCities, 0, 0, 0, 100);
         this.ui_presenter.renderElapsedTime(0);
+        this.renderCleanCombo(0);
     }
 
     private initializeRunStats(routeId: string): void {
@@ -1123,7 +1159,8 @@ class GameFlowCoordinator {
             bestCombo: 0,
             citiesCompleted: 0,
             citiesRemaining: totalCities,
-            lastTypedLength: 0
+            lastTypedLength: 0,
+            cleanCityStreak: 0
         };
 
         this.resetRunStatsDisplay();
