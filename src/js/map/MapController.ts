@@ -834,6 +834,12 @@ class MapController {
         if (hit?.kind === 'city') {
             const city = this.cityById.get(hit.id);
             if (city && city.properties.name) this.emitCitySelected(hit.id, city.properties.name);
+
+            // A city behaves like a click on the first route passing through it.
+            const firstRouteId = this.cityRoutesMap[hit.id]?.[0]?.id;
+            if (firstRouteId !== undefined) {
+                this.selectRoute(this.selectedId === firstRouteId ? null : firstRouteId, true);
+            }
             return;
         }
 
