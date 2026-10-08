@@ -2,6 +2,9 @@
 // It only reuses the game's input pieces (TypingController, the text input
 // forwarder) and the city catalog.
 
+import '@fontsource-variable/inter/index.css';
+import '@fontsource-variable/source-serif-4/index.css';
+import '@fontsource-variable/source-serif-4/wght-italic.css';
 import { initHoursCalculator } from '../info/hoursCalculator';
 import { DualTaskDemo } from './DualTaskDemo';
 import { MiniRoute } from './MiniRoute';

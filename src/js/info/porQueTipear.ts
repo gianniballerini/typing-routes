@@ -1,6 +1,9 @@
 // Entry for /por-que-tipear.html. Standalone: it must not import the game, so
 // the page stays light.
 
+import '@fontsource-variable/inter/index.css';
+import '@fontsource-variable/source-serif-4/index.css';
+import '@fontsource-variable/source-serif-4/wght-italic.css';
 import { initHoursCalculator } from './hoursCalculator';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';

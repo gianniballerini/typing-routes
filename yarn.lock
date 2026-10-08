@@ -49,6 +49,16 @@
   dependencies:
     tslib "^2.4.0"
 
+"@fontsource-variable/inter@5.2.5":
+  version "5.2.5"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/inter/-/inter-5.2.5.tgz#10f44952c460d8145fd9eac7133e0012ca17d252"
+  integrity sha512-TrWffUAFOnT8zroE9YmGybagoOgM/HjRqMQ8k9R0vVgXlnUh/vnpbGPAS/Caz1KIlOPnPGh6fvJbb7DHbFCncA==
+
+"@fontsource-variable/source-serif-4@5.2.5":
+  version "5.2.5"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/source-serif-4/-/source-serif-4-5.2.5.tgz#97e8aa8e6bc3609d7de9d72d95cb2ff085d84939"
+  integrity sha512-pME7tAmvBb9F/fVsiXVQsiaBiAESutwkt+e6ix4BqTlrLZOcZFaGJvBu3oCcw1YKOtBUFcz3+89/WIhn+wjt3A==
+
 "@napi-rs/wasm-runtime@^1.1.6":
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-1.1.6.tgz#ed33806d0f9be98dc76d0c3d4fd872fda701b5d5"

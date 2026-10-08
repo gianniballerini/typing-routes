@@ -1,0 +1,29 @@
+// Palette and type for the standalone article pages (/por-que-tipear.html and
+// /ensayo.html). Built from the map's sea blues rather than the sign green, so
+// the pages read as calm long-form text instead of game chrome.
+@use 'common/colors' as *;
+
+$ink: #1F2A30;
+$ink-muted: #56646C;
+$paper: #F7F9FA;
+$surface: $white;
+$line: rgba($ink, 0.1);
+
+// Deep sea for the header band; matches `$sea-deep` behind the map.
+$header-bg: $sea-deep;
+$header-ink: #EAF2F6;
+
+// Text-safe accent on `$paper` (AA for body text), plus a darker hover shade
+// and a soft tint for highlighted surfaces.
+$accent: #1E5C8A;
+$accent-dark: #154466;
+$accent-soft: #E3EEF5;
+
+// Mid sea blue for chart bars and decorative fills.
+$accent-fill: #3D6579;
+
+$highlight: $flag-yellow;
+$danger: #C0392B;
+
+$serif-font: 'Source Serif 4 Variable', Georgia, serif;
+$sans-font: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;

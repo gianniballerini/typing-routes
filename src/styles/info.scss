@@ -1,12 +1,9 @@
 // Standalone styles for /por-que-tipear.html. Deliberately does not load
 // `common/_common.scss`, which locks the game's body to a fixed, non-scrolling
 // full-screen layout.
-@use 'common/fonts' as *;
 @use 'common/colors' as *;
+@use 'article_palette' as *;
 
-$ink: $dark-gray;
-$paper: $parchment-light;
-$danger: #C0392B;
 $gutter: 16px;
 
 *, *::before, *::after {
@@ -14,7 +11,7 @@ $gutter: 16px;
 }
 
 html {
-    font-size: 16px;
+    font-size: 17px;
     text-size-adjust: 100%;
 }
 
@@ -24,65 +21,84 @@ body.info {
     color: $ink;
     background-color: $paper;
 
-    font-family: $arimo-font, sans-serif;
-    line-height: 1.55;
+    font-family: $serif-font;
+    line-height: 1.65;
 }
 
 a {
-    color: $signs-green-dark;
+    color: $accent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+
+    &:hover {
+        color: $accent-dark;
+    }
 }
 
 a:focus-visible,
 input:focus-visible {
-    outline: 3px solid $flag-yellow;
+    outline: 3px solid $highlight;
     outline-offset: 2px;
 }
 
 .info__wrap {
     width: 100%;
-    max-width: 760px;
+    max-width: 720px;
     margin: 0 auto;
     padding: 0 $gutter;
 }
 
 .info__header {
-    padding: 20px 0 28px;
+    padding: 24px 0 36px;
 
-    color: $white;
-    background-color: $signs-green;
+    color: $header-ink;
+    background-color: $header-bg;
 
     a {
-        color: $white;
+        color: $header-ink;
+
+        &:hover {
+            color: $white;
+        }
     }
 }
 
 .info__back {
     display: inline-block;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+
+    font-family: $sans-font;
+    font-size: 0.85rem;
+    font-weight: 500;
 }
 
 .info__title {
-    margin: 0 0 8px;
+    margin: 0 0 12px;
 
-    font-family: $milonga-font, serif;
-    font-size: 2.4rem;
-    font-weight: 400;
-    line-height: 1.1;
-    text-transform: uppercase;
+    font-family: $sans-font;
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: $white;
 }
 
 .info__lead {
     margin: 0;
 
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    line-height: 1.55;
 }
 
 .info__toc {
-    margin: 24px 0 8px;
-    padding: 12px 16px;
+    margin: 28px 0 8px;
+    padding: 14px 18px;
 
-    background-color: rgba($white, 0.6);
-    border-radius: 8px;
+    font-family: $sans-font;
+    font-size: 0.95rem;
+
+    background-color: $accent-soft;
+    border-radius: 10px;
 
     ol {
         margin: 0;
@@ -91,28 +107,32 @@ input:focus-visible {
 }
 
 .info__section {
-    padding: 28px 0;
+    padding: 32px 0;
 
-    border-bottom: 2px solid rgba($ink, 0.12);
+    border-bottom: 1px solid $line;
 
     h2 {
-        margin: 0 0 12px;
+        margin: 0 0 14px;
 
-        font-family: $milonga-font, serif;
-        font-size: 1.7rem;
-        font-weight: 400;
-        line-height: 1.15;
-        color: $signs-green-dark;
+        font-family: $sans-font;
+        font-size: 1.6rem;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.015em;
+        color: $ink;
     }
 
     h3 {
-        margin: 24px 0 8px;
+        margin: 26px 0 8px;
 
-        font-size: 1.15rem;
+        font-family: $sans-font;
+        font-size: 1.1rem;
+        font-weight: 650;
+        color: $accent-dark;
     }
 
     p {
-        margin: 0 0 14px;
+        margin: 0 0 16px;
     }
 
     scroll-margin-top: 8px;
@@ -121,14 +141,16 @@ input:focus-visible {
 .info__caption {
     margin: -4px 0 16px;
 
-    font-size: 0.85rem;
-    color: rgba($ink, 0.75);
+    font-family: $sans-font;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: $ink-muted;
 }
 
 .info__stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 10px;
 
     margin: 0 0 16px;
     padding: 0;
@@ -140,25 +162,30 @@ input:focus-visible {
         flex-direction: column;
         align-items: center;
 
-        padding: 12px 4px;
+        padding: 14px 4px;
 
-        background-color: rgba($white, 0.7);
-        border-radius: 8px;
+        background-color: $surface;
+        border: 1px solid $line;
+        border-radius: 10px;
     }
 }
 
 .info__stat-value {
+    font-family: $sans-font;
     font-size: 1.8rem;
+    font-weight: 700;
     line-height: 1.1;
-    color: $signs-green-dark;
+    color: $accent;
 }
 
 .info__stat-label {
-    font-size: 0.85rem;
+    font-family: $sans-font;
+    font-size: 0.8rem;
+    color: $ink-muted;
 }
 
 .info__list {
-    margin: 0 0 14px;
+    margin: 0 0 16px;
     padding-left: 22px;
 
     li {
@@ -167,6 +194,7 @@ input:focus-visible {
 }
 
 .info__sources {
+    font-size: 0.9rem;
     word-break: break-word;
 }
 
@@ -176,18 +204,19 @@ input:focus-visible {
 
 .info__cta {
     display: inline-block;
-    padding: 12px 24px;
+    padding: 12px 26px;
 
     color: $white;
-    background-color: $signs-green;
-    border-radius: 6px;
+    background-color: $accent;
+    border-radius: 999px;
 
+    font-family: $sans-font;
     font-weight: 600;
     text-decoration: none;
-    text-transform: uppercase;
 
     &:hover {
-        background-color: $signs-green-dark;
+        color: $white;
+        background-color: $accent-dark;
     }
 }
 
@@ -198,10 +227,13 @@ input:focus-visible {
     gap: 12px;
 
     margin-bottom: 12px;
-    padding: 16px;
+    padding: 18px;
 
-    background-color: rgba($white, 0.7);
-    border-radius: 8px;
+    font-family: $sans-font;
+
+    background-color: $surface;
+    border: 1px solid $line;
+    border-radius: 10px;
 }
 
 .info__field {
@@ -210,7 +242,7 @@ input:focus-visible {
     gap: 4px;
 
     label {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 600;
     }
 
@@ -219,21 +251,22 @@ input:focus-visible {
         padding: 10px 12px;
 
         color: $ink;
-        background-color: $white;
-        border: 2px solid rgba($ink, 0.25);
-        border-radius: 6px;
+        background-color: $paper;
+        border: 1px solid rgba($ink, 0.2);
+        border-radius: 8px;
 
         font: inherit;
     }
 }
 
 .info__result {
-    font-size: 1.1rem;
+    font-family: $sans-font;
+    font-size: 1.05rem;
 
     output {
         font-size: 1.5rem;
         font-weight: 700;
-        color: $signs-green-dark;
+        color: $accent;
     }
 }
 
@@ -245,7 +278,7 @@ input:focus-visible {
     height: auto;
     margin: 12px 0 8px;
 
-    font-family: $arimo-font, sans-serif;
+    font-family: $sans-font;
 }
 
 .chart__label,
@@ -259,11 +292,11 @@ input:focus-visible {
 }
 
 .chart__track {
-    fill: rgba($ink, 0.1);
+    fill: rgba($ink, 0.08);
 }
 
-.chart__bar--green {
-    fill: $signs-green;
+.chart__bar--blue {
+    fill: $accent-fill;
 }
 
 .chart__bar--red {
@@ -271,7 +304,7 @@ input:focus-visible {
 }
 
 .chart__bar--yellow {
-    fill: $flag-yellow;
+    fill: $highlight;
 }
 
 .chart__axis {
@@ -286,7 +319,7 @@ input:focus-visible {
 
 .chart__line {
     fill: none;
-    stroke: $signs-green;
+    stroke: $accent-fill;
     stroke-width: 3;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -294,16 +327,20 @@ input:focus-visible {
 }
 
 .chart__dot {
-    fill: $signs-green-dark;
+    fill: $accent;
 }
 
 .chart__tick {
-    fill: rgba($ink, 0.8);
+    fill: $ink-muted;
     font-size: 11px;
 }
 
 .info__footer {
-    padding: 24px 0 40px;
+    padding: 28px 0 44px;
+
+    font-family: $sans-font;
+    font-size: 0.9rem;
+    color: $ink-muted;
 
     p {
         margin: 8px 0 0;
@@ -312,11 +349,11 @@ input:focus-visible {
 
 @media (min-width: 768px) {
     html {
-        font-size: 17px;
+        font-size: 18px;
     }
 
     .info__title {
-        font-size: 3.2rem;
+        font-size: 3rem;
     }
 
     .info__calc {

@@ -33,6 +33,7 @@ export class MiniRoute {
 	private readonly stops: Stop[];
 	private readonly svg: SVGSVGElement;
 	private readonly pathEl: SVGPathElement;
+	private readonly traveledEl: SVGPathElement;
 	private readonly markerEl: SVGCircleElement;
 	private readonly statusEl: HTMLElement;
 	private readonly targetEl: HTMLElement;
@@ -43,9 +44,8 @@ export class MiniRoute {
 	private readonly scoreEl: HTMLElement;
 
 	private labelEls: SVGTextElement[] = [];
+	private dotEls: SVGCircleElement[] = [];
 	private stopIndex = 0;
-	private typedBefore = 0;
-	private readonly totalChars: number;
 	private answers: number[] = [];
 
 	constructor(root: HTMLElement) {
@@ -55,10 +55,10 @@ export class MiniRoute {
 			if (!city) throw new Error(`MiniRoute: unknown city ${id}`);
 			return { name: city.name, typing: city.name.normalize('NFC') };
 		});
-		this.totalChars = this.stops.reduce((sum, stop) => sum + stop.typing.length, 0);
 
 		this.svg = root.querySelector('[data-role="svg"]') as SVGSVGElement;
 		this.pathEl = this.svg.querySelector('[data-role="path"]') as SVGPathElement;
+		this.traveledEl = this.svg.querySelector('[data-role="traveled"]') as SVGPathElement;
 		this.statusEl = root.querySelector('[data-role="status"]') as HTMLElement;
 		this.targetEl = root.querySelector('[data-role="target"]') as HTMLElement;
 		this.inputEl = root.querySelector('[data-role="input"]') as HTMLInputElement;
@@ -67,7 +67,7 @@ export class MiniRoute {
 		this.chipsEl = root.querySelector('[data-role="chips"]') as HTMLElement;
 		this.scoreEl = root.querySelector('[data-role="score"]') as HTMLElement;
 
-		this.markerEl = svgEl('circle', { class: 'essay-route__marker', r: 7 });
+		this.markerEl = svgEl('circle', { class: 'essay-route__marker', r: 8 });
 		this.drawStops();
 
 		bindTypingInput(this.inputEl, this.typing);
@@ -86,33 +86,54 @@ export class MiniRoute {
 		const last = this.stops.length - 1;
 		this.stops.forEach((stop, i) => {
 			const point = this.pointAt(i / last);
-			const above = i % 2 === 0;
-			this.svg.append(svgEl('circle', { class: 'essay-route__dot', cx: point.x, cy: point.y, r: 5 }));
+			// Alternate sides so long neighbouring names never overlap; the ends
+			// anchor inwards so they stay inside the viewBox.
+			const above = i % 2 === 1;
+			const anchor = i === 0 ? 'start' : i === last ? 'end' : 'middle';
+			const nudge = i === 0 ? -6 : i === last ? 6 : 0;
+			const dot = svgEl('circle', { class: 'essay-route__dot', cx: point.x, cy: point.y, r: 5 });
 			const label = svgEl('text', {
 				class: 'essay-route__label',
-				x: point.x,
-				y: point.y + (above ? -12 : 20),
-				'text-anchor': 'middle',
+				x: point.x + nudge,
+				y: point.y + (above ? -14 : 24),
+				'text-anchor': anchor,
 			}, stop.name);
+			this.dotEls.push(dot);
 			this.labelEls.push(label);
-			this.svg.append(label);
+			this.svg.append(dot, label);
 		});
 		this.svg.append(this.markerEl);
 	}
 
-	private moveMarker(typedChars: number): void {
-		const point = this.pointAt(typedChars / this.totalChars);
+	// Stops sit at even fractions of the road, so progress is measured per
+	// segment: typing stop i drives the marker from stop i - 1 to stop i. The
+	// first stop is the starting point, so typing it leaves the marker there.
+	private moveMarker(): void {
+		const last = this.stops.length - 1;
+		const typed = this.typing.target ? this.typing.typed.length / this.typing.target.length : 0;
+		const fraction = this.stopIndex === 0 ? 0 : (this.stopIndex - 1 + typed) / last;
+		const point = this.pointAt(fraction);
 		this.markerEl.setAttribute('cx', String(point.x));
 		this.markerEl.setAttribute('cy', String(point.y));
+		this.traveledEl.style.strokeDasharray = `${Math.min(fraction, 1)} 1`;
+	}
+
+	private highlightStops(): void {
+		this.dotEls.forEach((dot, i) => {
+			dot.classList.toggle('essay-route__dot--visited', i < this.stopIndex);
+			dot.classList.toggle('essay-route__dot--current', i === this.stopIndex);
+		});
+		this.labelEls.forEach((label, i) => {
+			label.classList.toggle('essay-route__label--current', i === this.stopIndex);
+		});
 	}
 
 	private readonly handleProgress = (): void => {
 		renderTarget(this.targetEl, this.typing.target, this.typing.typed);
-		this.moveMarker(this.typedBefore + this.typing.typed.length);
+		this.moveMarker();
 	};
 
 	private readonly handleCityComplete = (): void => {
-		this.typedBefore += this.typing.target.length;
 		this.stopIndex += 1;
 		if (this.stopIndex < this.stops.length) {
 			this.loadStop();
@@ -123,7 +144,9 @@ export class MiniRoute {
 
 	private loadStop(): void {
 		const stop = this.stops[this.stopIndex];
+		this.highlightStops();
 		this.typing.setTarget(stop.typing);
+		this.moveMarker();
 		renderTarget(this.targetEl, stop.typing, '');
 		this.statusEl.textContent = `Localidad ${this.stopIndex + 1} de ${this.stops.length}: tipeala para seguir por el camino.`;
 	}
@@ -131,6 +154,8 @@ export class MiniRoute {
 	private startRecall(): void {
 		this.typeBox.hidden = true;
 		this.recallBox.hidden = false;
+		this.highlightStops();
+		this.moveMarker();
 		this.scoreEl.textContent = '';
 		this.statusEl.textContent = 'Ahora sin mirar: tocá las localidades en el orden en que aparecen en el recorrido, de izquierda a derecha.';
 		this.labelEls.forEach((label) => {
@@ -174,7 +199,6 @@ export class MiniRoute {
 
 	private reset(): void {
 		this.stopIndex = 0;
-		this.typedBefore = 0;
 		this.answers = [];
 		this.typeBox.hidden = false;
 		this.recallBox.hidden = true;
@@ -182,7 +206,6 @@ export class MiniRoute {
 			label.textContent = this.stops[i].name;
 			label.classList.remove('essay-route__label--right', 'essay-route__label--wrong');
 		});
-		this.moveMarker(0);
 		this.inputEl.value = '';
 		this.loadStop();
 	}

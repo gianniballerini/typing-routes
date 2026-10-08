@@ -44,9 +44,6 @@ html(lang="es")
     link(rel="icon", type="image/png", sizes="512x512", href="/images/logos/icon_512.png")
     link(rel="apple-touch-icon", sizes="180x180", href="/images/logos/icon_180.png")
 
-    link(rel="preload", href="/fonts/arimo/arimo-regular.woff2", as="font", type="font/woff2", crossorigin)
-    link(rel="preload", href="/fonts/milonga/milonga-regular.woff2", as="font", type="font/woff2", crossorigin)
-
     link(href="/src/styles/info.scss", rel="stylesheet")
     link(href="/src/styles/essay.scss", rel="stylesheet")
 
@@ -185,8 +182,11 @@ html(lang="es")
         .essay-widget#mini-route
           h3.essay-widget__title Mini ruta
           p.essay-widget__intro Un tramo esquemático de la Ruta Nacional 3 con cinco localidades. Tipeás cada nombre en orden y el marcador avanza por el camino. Después se ocultan los nombres y se te pide recordar el orden: una prueba de recuperación en miniatura.
-          svg.essay-route(data-role="svg" viewBox="0 0 320 150" role="img" aria-label="Tramo esquemático de ruta con cinco localidades" xmlns="http://www.w3.org/2000/svg")
-            path.essay-route__path(data-role="path" d="M45 85 C 95 20, 140 130, 185 75 S 250 35, 275 70")
+          - var routeD = "M24 64 C 60 34, 96 34, 124 62 S 196 92, 232 62 S 280 38, 296 52"
+          svg.essay-route(data-role="svg" viewBox="0 0 320 120" role="img" aria-label="Tramo esquemático de ruta con cinco localidades" xmlns="http://www.w3.org/2000/svg")
+            path.essay-route__road(d=routeD)
+            path.essay-route__traveled(data-role="traveled" d=routeD pathLength="1")
+            path.essay-route__path(data-role="path" d=routeD)
           p.essay-widget__round(data-role="status" aria-live="polite")
           div(data-role="type")
             p.essay-target(data-role="target" aria-hidden="true")
@@ -222,8 +222,8 @@ html(lang="es")
           "Tamaño del efecto de los juegos educativos según dos metaanálisis",
           "Retención, 0,36 (Wouters y otros, 2013). Aprendizaje frente a enseñanza sin juegos, 0,33 (Clark y otros, 2016). Aprendizaje, 0,29 (Wouters y otros, 2013).",
           [
-            { label: "Retención (Wouters y otros)", value: 0.36, valueLabel: "0,36", tone: "green" },
-            { label: "Aprendizaje (Clark y otros)", value: 0.33, valueLabel: "0,33", tone: "green" },
+            { label: "Retención (Wouters y otros)", value: 0.36, valueLabel: "0,36", tone: "blue" },
+            { label: "Aprendizaje (Clark y otros)", value: 0.33, valueLabel: "0,33", tone: "blue" },
             { label: "Aprendizaje (Wouters y otros)", value: 0.29, valueLabel: "0,29", tone: "yellow" }
           ],
           0.5
