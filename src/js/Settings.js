@@ -134,6 +134,20 @@ class Settings
           maxWidth: 1.6
         }
       },
+      // The route being played, drawn as a road: a pale sea-blue band, the
+      // stretch already typed filled in darker blue, and a dashed white centre
+      // line on top. Only while a run is active; the menu keeps `colors`.
+      run: {
+        bandColor: '#A9C6D6',
+        traveledColor: '#1E5C8A',
+        centerLine: {
+          color: '#FFFFFF',
+          // Fraction of the line width.
+          widthRatio: 0.2,
+          // Dash and gap, in line widths, so the pattern scales with zoom.
+          dash: [1.6, 1.6]
+        }
+      },
       // Opaque on purpose: a translucent line would let its own casing bleed
       // through and mud every colour above.
       opacity: 1,

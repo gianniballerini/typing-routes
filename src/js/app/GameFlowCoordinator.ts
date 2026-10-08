@@ -25,7 +25,7 @@ import { ShareCardComposer } from '../ui/ShareCardComposer';
 import { Toast } from '../ui/Toast';
 import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
-import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
+import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute, sliceRouteUpTo } from '../utils/GeometryUtils';
 import { calculateStarRating } from '../utils/StarRating';
 import { GameplayPreferencesStorage } from './GameplayPreferencesStorage';
 import { UserStatsStorage } from './UserStatsStorage';
@@ -265,6 +265,8 @@ class GameFlowCoordinator {
 
         this.game.selectRoute(routeId);
         this.initializeRouteSnappingData(routeId);
+        // The route turns into a road for the whole run, countdown included.
+        this.map_controller.setRunProgress(routeId, []);
         this.pendingRunRouteId = routeId;
         this.resetRunStatsDisplay();
 
@@ -965,6 +967,7 @@ class GameFlowCoordinator {
             // No-op when the run was abandoned mid-countdown: there are no stats yet.
             this.finalizeRunStats();
             this.renderHomeProgress();
+            this.map_controller.clearRunProgress();
         }
 
         this.ui_presenter.renderState(this.game.state);
@@ -1115,6 +1118,7 @@ class GameFlowCoordinator {
 
         const coordinateOnRoute = interpolateOnRoute(this.routeMetrics, distanceAlongRoute);
         const headingOnRoute = bearingOnRoute(this.routeMetrics, distanceAlongRoute);
+        this.map_controller.setRunProgress(route.route_id, sliceRouteUpTo(this.routeMetrics, distanceAlongRoute));
         this.setProgressMarkerAndFollowCamera(coordinateOnRoute, headingOnRoute ?? undefined);
     }
 

@@ -153,6 +153,51 @@ export const interpolateOnRoute = (
     return lastSegment.end;
 };
 
+/**
+ * The stretch of route from its start up to `distanceAlongRoute`, as one line
+ * per contiguous run of segments. A MultiLineString's parts are concatenated
+ * without a bridging segment, so a segment that does not start where the
+ * previous one ended opens a new line rather than drawing across the gap.
+ */
+export const sliceRouteUpTo = (
+    routeMetrics: RouteMetrics,
+    distanceAlongRoute: number
+): Coordinate[][] => {
+    const lines: Coordinate[][] = [];
+    if (distanceAlongRoute <= 0) return lines;
+
+    let current: Coordinate[] | null = null;
+    let previousEnd: Coordinate | null = null;
+
+    for (const segment of routeMetrics.segments) {
+        if (segment.startDistance >= distanceAlongRoute) break;
+
+        const contiguous = previousEnd !== null
+            && previousEnd[0] === segment.start[0]
+            && previousEnd[1] === segment.start[1];
+        if (!current || !contiguous) {
+            current = [segment.start];
+            lines.push(current);
+        }
+
+        const segmentEndDistance = segment.startDistance + segment.length;
+        if (distanceAlongRoute >= segmentEndDistance) {
+            current.push(segment.end);
+            previousEnd = segment.end;
+            continue;
+        }
+
+        const ratio = (distanceAlongRoute - segment.startDistance) / segment.length;
+        current.push([
+            segment.start[0] + (segment.end[0] - segment.start[0]) * ratio,
+            segment.start[1] + (segment.end[1] - segment.start[1]) * ratio
+        ]);
+        break;
+    }
+
+    return lines;
+};
+
 // Roughly 5 km in degrees: wide enough that consecutive short segments don't make
 // the heading jitter, short enough to still follow real curves.
 const BEARING_SAMPLE_DISTANCE = 0.05;

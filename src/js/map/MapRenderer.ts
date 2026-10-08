@@ -26,6 +26,13 @@ export type RouteOutlineState = {
     strokeOpacity: number;
 };
 
+export type RunRouteState = {
+    /** Route being played, or null outside a run. */
+    routeId: string | null;
+    /** Stretch already typed, in world units: interleaved x,y per subpath. */
+    traveled: Float64Array[];
+};
+
 export type CityBurstState = {
     cityId: string;
     /** 0 when the city was just completed, 1 when the burst is over. */
@@ -170,6 +177,42 @@ class MapRenderer {
     }
 
     /**
+     * The route being played, drawn as a road over everything else: casing,
+     * pale band, the typed stretch in a darker blue, then a dashed centre line
+     * across the whole route so the road reads the same on both sides of the car.
+     */
+    private strokeRunRoute(
+        ctx: CanvasRenderingContext2D,
+        camera: MapCamera,
+        route: RouteFeature,
+        traveled: Float64Array[],
+        lineWidth: number,
+        casedWidth: number
+    ): void {
+        const style = Settings.routeLine.run;
+
+        ctx.lineWidth = casedWidth;
+        ctx.strokeStyle = Settings.routeLine.casing.color;
+        this.strokeParts(ctx, camera, route.parts);
+
+        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = style.bandColor;
+        this.strokeParts(ctx, camera, route.parts);
+
+        ctx.strokeStyle = style.traveledColor;
+        this.strokeParts(ctx, camera, traveled);
+
+        const [dash, gap] = style.centerLine.dash;
+        ctx.setLineDash([dash * lineWidth, gap * lineWidth]);
+        ctx.lineCap = 'butt';
+        ctx.lineWidth = lineWidth * style.centerLine.widthRatio;
+        ctx.strokeStyle = style.centerLine.color;
+        this.strokeParts(ctx, camera, route.parts);
+        ctx.setLineDash([]);
+        ctx.lineCap = 'round';
+    }
+
+    /**
      * Strokes a hollow outline along a route: a wide stroke with a narrower one
      * punched out of it. It is built off-screen so the punch clears only the
      * outline, leaving the map visible in the gap between ring and road.
@@ -222,6 +265,7 @@ class MapRenderer {
         routeOutline: RouteOutlineState,
         bursts: CityBurstState[],
         marker: ProgressMarkerState,
+        runRoute: RunRouteState,
         hitboxOverlay: HTMLCanvasElement | null
     ): void {
         const ctx = this.ctx;
@@ -297,8 +341,13 @@ class MapRenderer {
         // crosses, below the road it circles.
         const plain: RouteFeature[] = [];
         const highlighted: RouteFeature[] = [];
+        let played: RouteFeature | null = null;
         for (const route of routes) {
             if (!this.isRouteVisible(route, camera, casedWidth)) continue;
+            if (route.id === runRoute.routeId) {
+                played = route;
+                continue;
+            }
             (route.selected || route.hovered ? highlighted : plain).push(route);
         }
 
@@ -324,6 +373,7 @@ class MapRenderer {
         }
         ctx.globalAlpha = Settings.routeLine.opacity;
         strokeCased(highlighted);
+        if (played) this.strokeRunRoute(ctx, camera, played, runRoute.traveled, lineWidth, casedWidth);
         ctx.globalAlpha = 1;
 
         // 5. Cities.

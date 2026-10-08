@@ -9,7 +9,8 @@ import {
     type CityBurstState,
     type HoverRingState,
     type ProgressMarkerState,
-    type RouteOutlineState
+    type RouteOutlineState,
+    type RunRouteState
 } from './MapRenderer';
 import { interpolateByZoom, projectLat, projectLon } from './MercatorProjection';
 import { PickBuffer } from './PickBuffer';
@@ -60,6 +61,7 @@ class MapController {
     private infoCardTarget: string | null;
 
     private marker: ProgressMarkerState;
+    private runRoute: RunRouteState;
     private hoverRing: HoverRingState;
     private hoverPulseStartedAtMs: number;
     private routeOutline: RouteOutlineState;
@@ -100,6 +102,7 @@ class MapController {
         this.infoCardTarget = null;
 
         this.marker = { x: 0, y: 0, visible: false, bearing: 0 };
+        this.runRoute = { routeId: null, traveled: [] };
         this.hoverRing = { cityId: null, radius: 0, strokeOpacity: 0 };
         this.hoverPulseStartedAtMs = 0;
         this.routeOutline = { routeId: null, width: 0, strokeOpacity: 0 };
@@ -476,6 +479,30 @@ class MapController {
         this.invalidate();
     }
 
+    // --- run route ---------------------------------------------------------
+
+    /** Draws `routeId` as a road, with `traveled` ([lon, lat] lines) filled in. */
+    setRunProgress(routeId: string, traveled: Array<Array<[number, number]>>): void {
+        this.runRoute.routeId = routeId;
+        this.runRoute.traveled = traveled
+            .filter((line) => line.length >= 2)
+            .map((line) => {
+                const part = new Float64Array(line.length * 2);
+                line.forEach(([lon, lat], i) => {
+                    part[i * 2] = projectLon(lon);
+                    part[i * 2 + 1] = projectLat(lat);
+                });
+                return part;
+            });
+        this.invalidate();
+    }
+
+    clearRunProgress(): void {
+        if (this.runRoute.routeId === null) return;
+        this.runRoute = { routeId: null, traveled: [] };
+        this.invalidate();
+    }
+
     // --- camera ------------------------------------------------------------
 
     flyToCoordinate(center: [number, number], zoom?: number): void {
@@ -690,6 +717,7 @@ class MapController {
             this.routeOutline,
             bursts,
             this.marker,
+            this.runRoute,
             this.showHitboxes ? this.pickBuffer.getCanvas() : null
         );
     }

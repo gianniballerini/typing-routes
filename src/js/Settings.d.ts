@@ -66,6 +66,15 @@ export interface SettingsShape {
         maxWidth: number;
       };
     };
+    run: {
+      bandColor: string;
+      traveledColor: string;
+      centerLine: {
+        color: string;
+        widthRatio: number;
+        dash: [number, number];
+      };
+    };
     opacity: number;
     widthByZoom: {
       minZoom: number;
