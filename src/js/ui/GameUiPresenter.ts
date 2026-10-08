@@ -19,6 +19,7 @@ interface HomeProgressMilestone {
     percent: number;
     packName: string;
     unlocked: boolean;
+    selected: boolean;
 }
 
 interface HomeProgress {
@@ -634,19 +635,29 @@ class GameUiPresenter {
     private renderMilestones(milestones: HomeProgressMilestone[]): void {
         if (!this.menu_progress_milestones_el) return;
 
+        const nextLocked = milestones.find((milestone) => !milestone.unlocked);
         this.menu_progress_milestones_el.replaceChildren(
-            ...milestones.map((milestone) => this.buildMilestoneButton(milestone))
+            ...milestones.map((milestone) => {
+                const buttonEl = this.buildMilestoneButton(milestone);
+                buttonEl.classList.toggle('game-menu__milestone--next', milestone === nextLocked);
+                return buttonEl;
+            })
         );
     }
 
     private buildMilestoneButton(milestone: HomeProgressMilestone): HTMLButtonElement {
-        const { packId, percent, packName, unlocked } = milestone;
-        const tipText = unlocked ? 'Desbloqueado' : `Se desbloquea al ${percent}%`;
+        const { packId, percent, packName, unlocked, selected } = milestone;
+        const tipText = this.getMilestoneTipText(milestone);
 
         const buttonEl = document.createElement('button');
         buttonEl.type = 'button';
         buttonEl.className = 'game-menu__milestone';
         buttonEl.classList.toggle('game-menu__milestone--unlocked', unlocked);
+        buttonEl.classList.toggle('game-menu__milestone--selected', selected);
+        buttonEl.dataset.packId = packId;
+        buttonEl.dataset.packName = packName;
+        buttonEl.dataset.percent = `${percent}`;
+        buttonEl.setAttribute('aria-pressed', `${selected}`);
         // Hugging an end of the bar would push a centered tip off the card.
         buttonEl.classList.toggle('game-menu__milestone--start', percent <= 20);
         buttonEl.classList.toggle('game-menu__milestone--end', percent >= 80);
@@ -674,8 +685,38 @@ class GameUiPresenter {
             this.milestonePreviewRequestedHandler?.(packId);
         });
         buttonEl.addEventListener('blur', () => buttonEl.classList.remove('is-open'));
+        buttonEl.addEventListener('animationend', () => buttonEl.classList.remove('game-menu__milestone--just-selected'));
 
         return buttonEl;
+    }
+
+    private getMilestoneTipText({ percent, unlocked, selected }: Omit<HomeProgressMilestone, 'packId' | 'packName'>): string {
+        if (selected) return 'En uso en tu teclado';
+        if (unlocked) return 'Desbloqueado · tocá para usarlo';
+        return `Se desbloquea al ${percent}%`;
+    }
+
+    /** Moves the "in use" mark to `packId`'s star and celebrates the switch. */
+    markMilestoneSelected(packId: string): void {
+        const buttonEls = this.menu_progress_milestones_el?.querySelectorAll<HTMLButtonElement>('.game-menu__milestone');
+        buttonEls?.forEach((buttonEl) => {
+            const selected = buttonEl.dataset.packId === packId;
+            const percent = Number(buttonEl.dataset.percent);
+            const unlocked = buttonEl.classList.contains('game-menu__milestone--unlocked');
+            const tipText = selected ? '¡Listo! Ahora suena tu teclado' : this.getMilestoneTipText({ percent, unlocked, selected });
+
+            buttonEl.classList.toggle('game-menu__milestone--selected', selected);
+            buttonEl.setAttribute('aria-pressed', `${selected}`);
+            buttonEl.setAttribute('aria-label', `${buttonEl.dataset.packName ?? ''}. ${tipText}`);
+            const tipStateEl = buttonEl.querySelector('.game-menu__milestone-tip-state');
+            if (tipStateEl) tipStateEl.textContent = tipText;
+
+            if (!selected) return;
+            // Restart the pop even when the same star is clicked twice.
+            buttonEl.classList.remove('game-menu__milestone--just-selected');
+            void buttonEl.offsetWidth;
+            buttonEl.classList.add('game-menu__milestone--just-selected', 'is-open');
+        });
     }
 
     private closeMilestoneTips(except?: HTMLElement): void {

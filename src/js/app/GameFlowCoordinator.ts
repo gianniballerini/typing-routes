@@ -32,6 +32,8 @@ import { UserStatsStorage } from './UserStatsStorage';
 // Several trophies can land in the same tick; past this they share one cue.
 const ACHIEVEMENT_CUE_THROTTLE_MS = 150;
 
+const KEY_PACK_UNLOCK_IMAGE = '/images/keypacks/unlocked.svg';
+
 // Said only once the image is actually on the clipboard, so the player is never
 // sent to a chat to paste something that is not there.
 const SHARE_MESSAGES: Record<ShareCardResult, string> = {
@@ -96,6 +98,9 @@ class GameFlowCoordinator {
     private pendingRunRouteId: string | null;
     private runCameraZoom: number | null;
     private lastAchievementCueAt: number;
+    // Packs already unlocked when last checked, so only newly crossed milestones
+    // are announced.
+    private knownUnlockedKeyPackIds: Set<string>;
     private map_route_cursor: MapRouteCursor;
 
     constructor(dependencies: GameFlowCoordinatorDependencies) {
@@ -122,6 +127,7 @@ class GameFlowCoordinator {
         this.pendingRunRouteId = null;
         this.runCameraZoom = null;
         this.lastAchievementCueAt = -Infinity;
+        this.knownUnlockedKeyPackIds = new Set();
 
         // Owned here rather than by MainApplication: every dependency it needs is
         // a method on this coordinator, so handing it over would only be a
@@ -199,6 +205,9 @@ class GameFlowCoordinator {
         this.ui_presenter.renderAudioMuted(this.audio_manager.isMuted());
         this.refreshMenuFromSelectedRoute();
         this.ensureSelectedKeyPackUnlocked();
+        // Seeded silently, like `catchUpAchievements`: packs a saved game already
+        // earned are not announced again on every load.
+        this.knownUnlockedKeyPackIds = this.getUnlockedKeyPackIds();
         this.renderHomeProgress();
     }
 
@@ -427,11 +436,13 @@ class GameFlowCoordinator {
         }
 
         const catalog = this.audio_manager.getKeyPackCatalog();
+        const selectedId = this.audio_manager.getSelectedKeyPackId();
         const milestones = Settings.audio.keyPacks.unlocks.map(({ packId, percent }) => ({
             packId,
             percent,
             packName: catalog.find((entry) => entry.id === packId)?.name ?? packId,
-            unlocked: this.isPercentReached(completionPercent, percent)
+            unlocked: this.isPercentReached(completionPercent, percent),
+            selected: packId === selectedId
         }));
 
         this.ui_presenter.renderHomeProgress({
@@ -501,6 +512,33 @@ class GameFlowCoordinator {
         if (fallback) void this.audio_manager.setKeyPack(fallback.entry);
     }
 
+    private getUnlockedKeyPackIds(): Set<string> {
+        return new Set(
+            this.getKeyPackStates()
+                .filter((state) => state.unlocked)
+                .map((state) => state.entry.id)
+        );
+    }
+
+    private announceKeyPackUnlocks(): void {
+        const unlockedIds = this.getUnlockedKeyPackIds();
+        const catalog = this.audio_manager.getKeyPackCatalog();
+
+        for (const id of unlockedIds) {
+            if (this.knownUnlockedKeyPackIds.has(id)) continue;
+
+            const entry = catalog.find((candidate) => candidate.id === id);
+            this.achievement_toast.show({
+                label: 'Sonido desbloqueado',
+                title: entry?.name ?? id,
+                imageUrl: KEY_PACK_UNLOCK_IMAGE
+            });
+            this.playAchievementCue();
+        }
+
+        this.knownUnlockedKeyPackIds = unlockedIds;
+    }
+
     private handleKeyPackSelected = (packId: string): void => {
         const state = this.getKeyPackStates().find((candidate) => candidate.entry.id === packId);
         if (!state || !state.unlocked) return;
@@ -511,9 +549,21 @@ class GameFlowCoordinator {
         this.modal_controller.settingsModal.renderKeyPacks(this.getKeyPackStates());
     };
 
+    // Locked stars only audition their pack; unlocked ones also switch to it.
     private handleMilestonePreviewRequested = (packId: string): void => {
-        const entry = this.audio_manager.getKeyPackCatalog().find((candidate) => candidate.id === packId);
-        if (entry) this.audio_manager.previewKeyPack(entry);
+        const state = this.getKeyPackStates().find((candidate) => candidate.entry.id === packId);
+        if (!state) return;
+
+        if (!state.unlocked) {
+            this.audio_manager.previewKeyPack(state.entry);
+            return;
+        }
+
+        void this.audio_manager.setKeyPack(state.entry).then(() => {
+            this.audio_manager.previewKeyPack(state.entry);
+        });
+        this.ui_presenter.markMilestoneSelected(packId);
+        this.modal_controller.settingsModal.renderKeyPacks(this.getKeyPackStates());
     };
 
     private buildRouteListRows(): RouteListRow[] {
@@ -631,7 +681,13 @@ class GameFlowCoordinator {
     private handleAchievementUnlocked = (event: Event): void => {
         const customEvent = event as CustomEvent<{ definition: AchievementDefinition }>;
 
-        this.achievement_toast.show(customEvent.detail.definition);
+        const { definition } = customEvent.detail;
+
+        this.achievement_toast.show({
+            label: 'Trofeo desbloqueado',
+            title: definition.title,
+            imageUrl: definition.imageUrl
+        });
         this.playAchievementCue();
     };
 
@@ -1121,6 +1177,7 @@ class GameFlowCoordinator {
         // the only point where a derived trophy can change. Runs before the modal
         // so the toasts drop in over it rather than behind it.
         this.evaluateAchievements();
+        this.announceKeyPackUnlocks();
 
         this.modal_controller.routeCompleteModal.render({
             routeId: runStats.routeId,

@@ -1,4 +1,3 @@
-import type { AchievementDefinition } from '../achievements/AchievementDefinitions';
 import { ACHIEVEMENT_PLACEHOLDER_IMAGE } from '../achievements/AchievementDefinitions';
 import { GsapManager } from '../app/GsapManager';
 
@@ -10,10 +9,18 @@ const VISIBLE_MS = 2000;
 // retired early to make room.
 const MAX_VISIBLE_CARDS = 4;
 
+// What a card shows. Trophies and unlocked key packs share the card, so it only
+// takes the text and art rather than either domain type.
+interface UnlockToastContent {
+    label: string;
+    title: string;
+    imageUrl?: string | null;
+}
+
 /**
  * The unlock notification: a small card that drops in at the top of the screen,
  * holds for a beat and leaves. Manual DOM like the rest of `src/js/ui/`, and the
- * only thing it knows about a trophy is its image and title.
+ * only thing it knows about an unlock is its label, title and image.
  *
  * Cards stack because the host is a flex column, so concurrent unlocks need no
  * queueing of their own.
@@ -29,18 +36,20 @@ class AchievementToast {
         this.timeoutHandlesByCard = new Map();
     }
 
-    show(definition: AchievementDefinition): void {
+    show(content: UnlockToastContent): void {
         if (!this.hostEl || !this.cardTemplateEl) return;
 
         const cardEl = this.cardTemplateEl.content.firstElementChild?.cloneNode(true);
         if (!(cardEl instanceof HTMLElement)) return;
 
+        const labelEl = cardEl.querySelector('.achievement-toast__card-label');
         const titleEl = cardEl.querySelector('.achievement-toast__card-title');
         const imageEl = cardEl.querySelector('img');
 
-        if (titleEl) titleEl.textContent = definition.title;
+        if (labelEl) labelEl.textContent = content.label;
+        if (titleEl) titleEl.textContent = content.title;
         if (imageEl) {
-            imageEl.src = definition.imageUrl ?? ACHIEVEMENT_PLACEHOLDER_IMAGE;
+            imageEl.src = content.imageUrl ?? ACHIEVEMENT_PLACEHOLDER_IMAGE;
             imageEl.alt = '';
         }
 
@@ -89,3 +98,4 @@ class AchievementToast {
 }
 
 export { AchievementToast };
+export type { UnlockToastContent };

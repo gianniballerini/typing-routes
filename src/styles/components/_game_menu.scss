@@ -651,7 +651,7 @@
 
 // Country-wide progress in the bottom left corner. Same surface as the route
 // info card, which docks over this corner — so it steps aside while the card
-// is open (`--covered`).
+// is open (`--covered`). Mirrors the keys tip's inset in the opposite corner.
 .game-menu__progress {
     position: absolute;
     left: 30 * $ptr;
@@ -661,7 +661,8 @@
     flex-direction: column;
     row-gap: 10 * $ptr;
 
-    width: min(#{280 * $ptr}, calc(100vw - #{60 * $ptr}));
+    // Wide enough that the 5%-apart stars at the start of the bar stay apart.
+    width: min(#{400 * $ptr}, calc(100vw - #{60 * $ptr}));
     padding: 16 * $ptr 18 * $ptr;
 
     font-family: $noto-sans-font;
@@ -717,7 +718,8 @@
         width: 0;
         height: 100%;
 
-        background-color: $flag-yellow;
+        // Blue, not yellow, so the unlocked stars stand out on the fill.
+        background-color: $flag-light-blue;
         border-radius: inherit;
 
         transition: width 0.6s ease-out;
@@ -738,8 +740,8 @@
         align-items: center;
         justify-content: center;
 
-        width: 20 * $ptr;
-        height: 20 * $ptr;
+        width: 18 * $ptr;
+        height: 18 * $ptr;
         padding: 0;
 
         transform: translate(-50%, -50%);
@@ -768,12 +770,69 @@
         color: $star-fill-color;
     }
 
+    // The pack currently on the keyboard: a white outline behind the star's
+    // usual stroke, built from four hard shadows so it follows the points,
+    // plus a soft yellow halo.
+    .game-menu__milestone--selected .game-menu__milestone-star {
+        $outline: 1.5 * $ptr;
+
+        filter:
+            drop-shadow($outline 0 0 $white)
+            drop-shadow(-$outline 0 0 $white)
+            drop-shadow(0 $outline 0 $white)
+            drop-shadow(0 (-$outline) 0 $white)
+            drop-shadow(0 0 3 * $ptr rgba($flag-yellow, 0.95));
+    }
+
+    // The next pack to unlock shines to draw the eye: a pulsing glow behind
+    // the star. `isolation` keeps the glow above the bar.
+    .game-menu__milestone--next {
+        isolation: isolate;
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset: -10 * $ptr;
+            z-index: -1;
+
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                rgba($flag-yellow, 0.9) 0%,
+                rgba($flag-yellow, 0.4) 40%,
+                rgba($flag-yellow, 0) 70%
+            );
+
+            animation: game-menu-milestone-shine 2.4s ease-in-out infinite;
+        }
+    }
+
+    .game-menu__milestone--just-selected .game-menu__milestone-star {
+        animation: game-menu-milestone-pop 0.5s ease-out;
+    }
+
+    .game-menu__milestone--just-selected .game-menu__milestone-tip-state {
+        color: $flag-yellow;
+        font-weight: 700;
+    }
+
+    @keyframes game-menu-milestone-pop {
+        0% { transform: scale(1); }
+        40% { transform: scale(1.6) rotate(-12deg); }
+        100% { transform: scale(1) rotate(0); }
+    }
+
+    @keyframes game-menu-milestone-shine {
+        0%, 100% { transform: scale(0.85); opacity: 0.7; }
+        50% { transform: scale(1.1); opacity: 1; }
+    }
+
     .game-menu__milestone-star {
         width: 100%;
         height: 100%;
 
         fill: currentColor;
-        // Keeps the star legible where it overlaps the yellow fill of the bar.
+        // Keeps the star legible where it overlaps the fill of the bar.
         stroke: rgba($black, 0.55);
         stroke-width: 1.2;
         stroke-linejoin: round;
@@ -825,6 +884,13 @@
         transition: opacity 0.15s ease, visibility 0s linear 0s;
     }
 
+    // Hovering a star hands the tip over from any star left open or focused.
+    .game-menu__milestones:hover .game-menu__milestone:not(:hover) .game-menu__milestone-tip {
+        opacity: 0;
+        visibility: hidden;
+        transition: none;
+    }
+
     .game-menu__milestone-tip-name {
         font-size: 14 * $ptr;
         font-weight: 700;
@@ -865,6 +931,11 @@
     .game-menu__progress-bar-fill,
     .game-menu__milestone-tip {
         transition: none;
+    }
+
+    .game-menu__milestone--just-selected .game-menu__milestone-star,
+    .game-menu__milestone--next::before {
+        animation: none;
     }
 }
 
