@@ -27,8 +27,9 @@ class LoadingManager {
     private finishedHandler: (() => void) | null = null;
     private startGestureHandler: (() => void) | null = null;
 
-    private readonly handleStartClick = (): void => {
+    private readonly handleStartClick = (event: MouseEvent): void => {
         if (!this.readyToStart || this.exitStarted) return;
+        if (this.isArticleLinkEvent(event)) return;
         this.startGestureHandler?.();
         this.playExitAnimation();
     };
@@ -38,6 +39,8 @@ class LoadingManager {
     private readonly handleStartKeydown = (event: KeyboardEvent): void => {
         if (event.key !== 'Enter') return;
         if (!this.readyToStart || this.exitStarted) return;
+        // Enter on a focused article link opens it; it must not also start the game.
+        if (this.isArticleLinkEvent(event)) return;
 
         event.preventDefault();
         this.startGestureHandler?.();
@@ -136,6 +139,10 @@ class LoadingManager {
         window.addEventListener('keydown', this.handleStartKeydown);
 
         GsapManager.disappearWithSwell(this.progressElement as HTMLElement);
+    }
+
+    private isArticleLinkEvent(event: Event): boolean {
+        return event.target instanceof Element && event.target.closest('.loading-screen__article') !== null;
     }
 
     private playExitAnimation(): void {

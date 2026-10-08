@@ -112,6 +112,71 @@
     left: 0;
 }
 
+// Visible while loading, so there is something to read during the wait.
+.loading-screen__articles {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    row-gap: 8 * $ptr;
+    max-width: 30ch;
+
+    text-align: right;
+
+    animation: loading-screen-articles-in 0.6s ease 0.3s both;
+}
+
+@keyframes loading-screen-articles-in {
+    from {
+        opacity: 0;
+        transform: translateY(10 * $ptr);
+    }
+}
+
+.loading-screen__articles-subtitle {
+    font-family: $arimo-font;
+    font-size: clamp(13px, 1.2vw, 15px);
+    font-style: italic;
+    line-height: 1.35;
+    color: rgba($white, 0.75);
+}
+
+.loading-screen__articles-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8 * $ptr;
+}
+
+.loading-screen__article {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 6 * $ptr;
+    padding: 6 * $ptr 12 * $ptr;
+
+    font-family: $noto-sans-font;
+    font-size: clamp(12px, 1.1vw, 14px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: $white;
+
+    border: 2 * $ptr solid rgba($white, 0.6);
+    border-radius: 999px;
+
+    transition: border-color 0.2s ease, color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+        color: $flag-yellow;
+        border-color: $flag-yellow;
+        outline: none;
+    }
+}
+
 .loading-screen__value,
 .loading-screen__unit {
     font-family: $noto-sans-font;
