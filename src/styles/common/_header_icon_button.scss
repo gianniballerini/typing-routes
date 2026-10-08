@@ -1,4 +1,6 @@
+@use 'sass:color';
 @use 'sass:list';
+@use 'sass:map';
 @use 'sass:math';
 @use 'colors' as *;
 @use 'common' as *;
@@ -98,9 +100,9 @@ $coin-metals: (
 // One side of a coin: a round metallic face with a raised rim, a ring of small
 // embossed dots just inside it, and the icon pressed into the centre.
 @mixin coin-face($metal) {
-    $base: nth(map-get($coin-metals, $metal), 1);
-    $light: nth(map-get($coin-metals, $metal), 2);
-    $dark: nth(map-get($coin-metals, $metal), 3);
+    $base: list.nth(map.get($coin-metals, $metal), 1);
+    $light: list.nth(map.get($coin-metals, $metal), 2);
+    $dark: list.nth(map.get($coin-metals, $metal), 3);
 
     position: absolute;
     inset: 0;
@@ -110,7 +112,7 @@ $coin-metals: (
     justify-content: center;
 
     color: $dark;
-    background: radial-gradient(circle at 35% 30%, $light 0%, $base 55%, darken($base, 8%) 100%);
+    background: radial-gradient(circle at 35% 30%, $light 0%, $base 55%, color.adjust(, : -8%) 100%);
     border-radius: 50%;
     // Outer lip, then the raised rim (light on top, dark under), then the cast shadow.
     box-shadow:
