@@ -1,0 +1,331 @@
+// Standalone styles for /por-que-tipear.html. Deliberately does not load
+// `common/_common.scss`, which locks the game's body to a fixed, non-scrolling
+// full-screen layout.
+@use 'common/fonts' as *;
+@use 'common/colors' as *;
+
+$ink: $dark-gray;
+$paper: $parchment-light;
+$danger: #C0392B;
+$gutter: 16px;
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    text-size-adjust: 100%;
+}
+
+body.info {
+    margin: 0;
+
+    color: $ink;
+    background-color: $paper;
+
+    font-family: $arimo-font, sans-serif;
+    line-height: 1.55;
+}
+
+a {
+    color: $signs-green-dark;
+}
+
+a:focus-visible,
+input:focus-visible {
+    outline: 3px solid $flag-yellow;
+    outline-offset: 2px;
+}
+
+.info__wrap {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 $gutter;
+}
+
+.info__header {
+    padding: 20px 0 28px;
+
+    color: $white;
+    background-color: $signs-green;
+
+    a {
+        color: $white;
+    }
+}
+
+.info__back {
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
+.info__title {
+    margin: 0 0 8px;
+
+    font-family: $milonga-font, serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.info__lead {
+    margin: 0;
+
+    font-size: 1.1rem;
+}
+
+.info__toc {
+    margin: 24px 0 8px;
+    padding: 12px 16px;
+
+    background-color: rgba($white, 0.6);
+    border-radius: 8px;
+
+    ol {
+        margin: 0;
+        padding-left: 20px;
+    }
+}
+
+.info__section {
+    padding: 28px 0;
+
+    border-bottom: 2px solid rgba($ink, 0.12);
+
+    h2 {
+        margin: 0 0 12px;
+
+        font-family: $milonga-font, serif;
+        font-size: 1.7rem;
+        font-weight: 400;
+        line-height: 1.15;
+        color: $signs-green-dark;
+    }
+
+    h3 {
+        margin: 24px 0 8px;
+
+        font-size: 1.15rem;
+    }
+
+    p {
+        margin: 0 0 14px;
+    }
+
+    scroll-margin-top: 8px;
+}
+
+.info__caption {
+    margin: -4px 0 16px;
+
+    font-size: 0.85rem;
+    color: rgba($ink, 0.75);
+}
+
+.info__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+
+    margin: 0 0 16px;
+    padding: 0;
+
+    list-style: none;
+
+    li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        padding: 12px 4px;
+
+        background-color: rgba($white, 0.7);
+        border-radius: 8px;
+    }
+}
+
+.info__stat-value {
+    font-size: 1.8rem;
+    line-height: 1.1;
+    color: $signs-green-dark;
+}
+
+.info__stat-label {
+    font-size: 0.85rem;
+}
+
+.info__list {
+    margin: 0 0 14px;
+    padding-left: 22px;
+
+    li {
+        margin-bottom: 8px;
+    }
+}
+
+.info__sources {
+    word-break: break-word;
+}
+
+.info__figure {
+    margin: 0;
+}
+
+.info__cta {
+    display: inline-block;
+    padding: 12px 24px;
+
+    color: $white;
+    background-color: $signs-green;
+    border-radius: 6px;
+
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    &:hover {
+        background-color: $signs-green-dark;
+    }
+}
+
+// Calculator
+.info__calc {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+
+    margin-bottom: 12px;
+    padding: 16px;
+
+    background-color: rgba($white, 0.7);
+    border-radius: 8px;
+}
+
+.info__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    label {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px 12px;
+
+        color: $ink;
+        background-color: $white;
+        border: 2px solid rgba($ink, 0.25);
+        border-radius: 6px;
+
+        font: inherit;
+    }
+}
+
+.info__result {
+    font-size: 1.1rem;
+
+    output {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $signs-green-dark;
+    }
+}
+
+// Charts
+.chart {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    margin: 12px 0 8px;
+
+    font-family: $arimo-font, sans-serif;
+}
+
+.chart__label,
+.chart__value {
+    fill: $ink;
+    font-size: 13px;
+}
+
+.chart__value {
+    font-weight: 700;
+}
+
+.chart__track {
+    fill: rgba($ink, 0.1);
+}
+
+.chart__bar--green {
+    fill: $signs-green;
+}
+
+.chart__bar--red {
+    fill: $danger;
+}
+
+.chart__bar--yellow {
+    fill: $flag-yellow;
+}
+
+.chart__axis {
+    stroke: rgba($ink, 0.4);
+    stroke-width: 1;
+}
+
+.chart__grid {
+    stroke: rgba($ink, 0.12);
+    stroke-width: 1;
+}
+
+.chart__line {
+    fill: none;
+    stroke: $signs-green;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 6 5;
+}
+
+.chart__dot {
+    fill: $signs-green-dark;
+}
+
+.chart__tick {
+    fill: rgba($ink, 0.8);
+    font-size: 11px;
+}
+
+.info__footer {
+    padding: 24px 0 40px;
+
+    p {
+        margin: 8px 0 0;
+    }
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 17px;
+    }
+
+    .info__title {
+        font-size: 3.2rem;
+    }
+
+    .info__calc {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        scroll-behavior: auto;
+    }
+}

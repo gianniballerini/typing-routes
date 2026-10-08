@@ -1,0 +1,339 @@
+doctype html
+//
+  Every figure on this page comes from a peer-reviewed paper or an official
+  curriculum document, cited by DOI/URL in the "Fuentes" section. Keep it that
+  way: no press or blog sources. Text mirrors docs/ensayo-borrador.md.
+
+include partials/bar_chart.pug
+include partials/hours_calculator.pug
+
+html(lang="es")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=Edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+    -
+      var pageTitle = "Escribir el mapa | TipeAndo"
+      var pageDescription = "Un ensayo interactivo sobre qué dice la investigación acerca de tipear con fluidez, recordar lo que se escribe y aprender jugando, y cómo cada decisión de diseño de TipeAndo intenta apoyarse en esa evidencia."
+      var pageUrl = "https://tipeando.com.ar/ensayo.html"
+      var socialImage = "https://tipeando.com.ar/images/logos/banner.png"
+
+    title= pageTitle
+    meta(name="title", content=pageTitle)
+    meta(name="description", content=pageDescription)
+    link(rel="canonical", href=pageUrl)
+
+    meta(property="og:locale", content="es_AR")
+    meta(property="og:type", content="article")
+    meta(property="og:title", content=pageTitle)
+    meta(property="og:description", content=pageDescription)
+    meta(property="og:url", content=pageUrl)
+    meta(property="og:site_name", content="TipeAndo")
+    meta(property="og:image", content=socialImage)
+    meta(property="og:image:secure_url", content=socialImage)
+
+    meta(name="twitter:card", content="summary_large_image")
+    meta(name="twitter:title", content=pageTitle)
+    meta(name="twitter:description", content=pageDescription)
+    meta(name="twitter:image", content=socialImage)
+    meta(name="twitter:url", content=pageUrl)
+
+    link(rel="icon", type="image/png", sizes="32x32", href="/images/logos/icon.png")
+    link(rel="icon", type="image/png", sizes="192x192", href="/images/logos/icon_192.png")
+    link(rel="icon", type="image/png", sizes="512x512", href="/images/logos/icon_512.png")
+    link(rel="apple-touch-icon", sizes="180x180", href="/images/logos/icon_180.png")
+
+    link(rel="preload", href="/fonts/arimo/arimo-regular.woff2", as="font", type="font/woff2", crossorigin)
+    link(rel="preload", href="/fonts/milonga/milonga-regular.woff2", as="font", type="font/woff2", crossorigin)
+
+    link(href="/src/styles/info.scss", rel="stylesheet")
+    link(href="/src/styles/essay.scss", rel="stylesheet")
+
+  body.info
+    header.info__header
+      .info__wrap
+        a.info__back(href="/") &larr; Volver al juego
+        h1.info__title Escribir el mapa: por qué TipeAndo es un juego de tipeo sobre rutas
+        p.info__lead
+          | TipeAndo no nació de una pregunta pedagógica. Nació de algo más simple: un mapa de la Argentina, las Rutas Nacionales dibujadas encima y la idea de recorrerlas escribiendo. Pero en cuanto el juego empezó a funcionar, apareció la pregunta incómoda: ¿sirve para algo, más allá de pasar el rato?
+        p.info__lead
+          | Este ensayo intenta contestarla con honestidad. No es un estudio sobre TipeAndo: el juego no recolecta datos y no podemos afirmar que mejore nada. Lo que sí podemos hacer es mostrar qué dice la investigación sobre las tres cosas que el juego combina —tipear con fluidez, recordar lo que se escribe y aprender jugando— y explicar cómo cada decisión de diseño intenta apoyarse en esa evidencia.
+        p.info__lead
+          | En el camino vas a poder probar algunas de estas ideas con tu propio teclado.
+
+    main.info__wrap
+      nav.info__toc(aria-label="Contenido")
+        ol
+          li: a(href="#manos") 1. Las manos le roban atención a la cabeza
+          li: a(href="#velocidad") 2. ¿Qué tan rápido tipeás, en serio?
+          li: a(href="#practica") 3. Lo que compra la práctica
+          li: a(href="#mapa") 4. Aprender el mapa tipeándolo
+          li: a(href="#juego") 5. Por qué un juego y no un ejercicio
+          li: a(href="#limites") 6. Lo que todavía no sabemos
+          li: a(href="#cierre") Cierre
+          li: a(href="#fuentes") Fuentes
+
+      section.info__section#manos
+        h2 1. Las manos le roban atención a la cabeza
+        p
+          | Escribir es hacer dos cosas a la vez: decidir qué decir y ejecutarlo. Cuando la ejecución todavía no es automática, compite por la misma atención que necesita el contenido.
+        p
+          | Un estudio con estudiantes universitarios lo midió directamente: quienes tenían menor habilidad de tipeo mostraron mayor esfuerzo cognitivo mientras tipeaban y produjeron textos de menor calidad (
+          a(href="https://doi.org/10.1080/00207590701398951" target="_blank" rel="noopener") Alves, Castro y Olive, 2008
+          | ). Con 276 estudiantes de 8.º y 9.º año, la relación entre la fluidez para producir letras y la calidad de lo escrito fue más fuerte en los textos tipeados que en los escritos a mano (
+          a(href="https://doi.org/10.1348/0007099042376373" target="_blank" rel="noopener") Christensen, 2004
+          | ).
+
+        .essay-widget#dual-task
+          h3.essay-widget__title Doble tarea
+          p.essay-widget__intro Tipeá una frase corta dos veces: primero normalmente y después contando en voz alta de 100 hacia atrás de a 3. Al final se muestran las dos velocidades lado a lado.
+          p.essay-widget__round(data-role="round" aria-live="polite")
+          p.essay-target(data-role="target" aria-hidden="true")
+          input.essay-widget__input(data-role="input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Escribí la frase acá")
+          .essay-widget__results(data-role="results" hidden)
+            .essay-widget__result(data-role="result")
+              span.essay-widget__result-label Ronda 1
+              strong.essay-widget__result-value(data-role="value") –
+            .essay-widget__result(data-role="result")
+              span.essay-widget__result-label Ronda 2
+              strong.essay-widget__result-value(data-role="value") –
+          p.info__caption
+            em Esto es una demostración, no un experimento: ilustra la idea de atención compartida, no la mide.
+          button.essay-widget__button(type="button" data-role="reset") Reiniciar
+
+        p
+          | Si la segunda vuelta te costó más, sentiste en pequeño lo que le pasa a alguien para quien cada tecla es una búsqueda: la cabeza está ocupada en otra cosa.
+        p
+          | La buena noticia es que esto se entrena. En el mismo trabajo de Christensen, un programa de práctica de tipeo mejoró la calidad de los textos de estudiantes que tipeaban lento más que escribir un diario en computadora todos los días. Y un metaanálisis sobre enseñanza de la escritura en adolescentes encontró que escribir con procesador de texto mejora la calidad de los textos, con un tamaño de efecto de 0,55 (
+          a(href="https://doi.org/10.1037/0022-0663.99.3.445" target="_blank" rel="noopener") Graham y Perin, 2007
+          | ).
+        p
+          strong Qué hace TipeAndo con esto:
+          |
+          | el juego es, ante todo, práctica de tipeo. Las palabras son cortas y conocidas (nombres de ciudades), así que el esfuerzo se concentra en la ejecución y no en pensar qué escribir.
+
+      section.info__section#velocidad
+        h2 2. ¿Qué tan rápido tipeás, en serio?
+        p
+          | La referencia más grande que tenemos viene de 168.000 personas que hicieron una prueba de tipeo en línea, en inglés: tipearon en promedio unas 52 palabras por minuto, con alrededor de 1,2% de errores sin corregir, y las más rápidas superaron las 120 ppm (
+          a(href="https://doi.org/10.1145/3173574.3174220" target="_blank" rel="noopener") Dhakal, Feit, Kristensson y Oulasvirta, 2018
+          | ).
+
+        .essay-widget#speed-test
+          h3.essay-widget__title Prueba de 30 segundos
+          p.essay-widget__intro Tipeá nombres de ciudades del juego, una tras otra. Al terminar ves tus ppm y tu precisión sobre una barra con dos marcas: 52 (promedio) y 120 (los más rápidos).
+          p.essay-widget__round(data-role="status" aria-live="polite")
+          p.essay-target(data-role="target" aria-hidden="true")
+          input.essay-widget__input(data-role="input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Escribí las ciudades acá")
+          .essay-widget__speed(data-role="result" hidden)
+            .essay-widget__results
+              .essay-widget__result
+                span.essay-widget__result-label Velocidad
+                strong.essay-widget__result-value(data-role="wpm") –
+              .essay-widget__result
+                span.essay-widget__result-label Precisión
+                strong.essay-widget__result-value(data-role="accuracy") –
+            .speed-bar(role="img" aria-label="Tu velocidad sobre una escala de 0 a 140 ppm, con marcas en 52 (promedio) y 120 (los más rápidos)")
+              .speed-bar__track
+              .speed-bar__mark(style="left: " + (52 / 140 * 100) + "%")
+                span.speed-bar__mark-label 52 promedio
+              .speed-bar__mark(style="left: " + (120 / 140 * 100) + "%")
+                span.speed-bar__mark-label 120 los más rápidos
+              .speed-bar__marker(data-role="marker")
+                span.speed-bar__marker-label Vos
+              span.speed-bar__scale-min 0
+              span.speed-bar__scale-max 140 ppm
+          p.info__caption
+            em El estudio fue en inglés; tipear en castellano, con tildes, no es exactamente comparable. Tu resultado no sale de este navegador.
+          button.essay-widget__button(type="button" data-role="reset") Reiniciar
+
+        p
+          | Lo interesante del estudio no es el promedio sino qué separa a los rápidos del resto: cómo encadenan las teclas, alternando manos y dedos. Y no hace falta la técnica clásica de diez dedos: personas autodidactas que usaban unos seis dedos alcanzaron la velocidad y la precisión de quienes tipeaban "como corresponde" (
+          a(href="https://doi.org/10.1145/2858036.2858233" target="_blank" rel="noopener") Feit, Weir y Oulasvirta, 2016
+          | ). Lo que pesa es la práctica sostenida, no el método.
+        p
+          strong Qué hace TipeAndo con esto:
+          |
+          | no enseña una técnica ni corrige la posición de los dedos. Mide ppm, precisión y combos, y guarda tu mejor marca por ruta para que la comparación sea contra vos mismo.
+
+      section.info__section#practica
+        h2 3. Lo que compra la práctica
+        p
+          | Tipear más rápido no es una medalla: es tiempo. Y el tiempo se puede calcular.
+        +hoursCalculator
+        p
+          | Con los valores por defecto —pasar de 15 a 35 ppm, escribiendo 1.500 palabras por día, 200 días al año— el resultado ronda las 190 horas al año. Es una cuenta, no un dato medido; pero sirve para dimensionar por qué vale la pena practicar algo que usamos todos los días.
+
+      section.info__section#mapa
+        h2 4. Aprender el mapa tipeándolo
+        p
+          | Acá está la apuesta más particular de TipeAndo: usar el tipeo no solo como habilidad sino como forma de memorizar.
+        p
+          | Dos efectos de la psicología de la memoria lo sostienen. El primero es el
+          |
+          strong efecto de producción
+          | : escribir una palabra deja más huella que leerla en silencio, y eso se observó al decirla en voz alta, al escribirla a mano y también al tipearla (
+          a(href="https://doi.org/10.3758/s13421-012-0210-8" target="_blank" rel="noopener") Forrin, MacLeod y Ozubko, 2012
+          | ). El segundo es el
+          |
+          strong efecto de la práctica de recuperación
+          | : traer algo de la memoria lo fortalece más que volver a estudiarlo. En el experimento clásico, quienes practicaron recordando retuvieron más a los dos días y a la semana que quienes releyeron el material (
+          a(href="https://doi.org/10.1111/j.1467-9280.2006.01693.x" target="_blank" rel="noopener") Roediger y Karpicke, 2006
+          | ).
+
+        .essay-widget#mini-route
+          h3.essay-widget__title Mini ruta
+          p.essay-widget__intro Un tramo esquemático de la Ruta Nacional 3 con cinco localidades. Tipeás cada nombre en orden y el marcador avanza por el camino. Después se ocultan los nombres y se te pide recordar el orden: una prueba de recuperación en miniatura.
+          svg.essay-route(data-role="svg" viewBox="0 0 320 150" role="img" aria-label="Tramo esquemático de ruta con cinco localidades" xmlns="http://www.w3.org/2000/svg")
+            path.essay-route__path(data-role="path" d="M45 85 C 95 20, 140 130, 185 75 S 250 35, 275 70")
+          p.essay-widget__round(data-role="status" aria-live="polite")
+          div(data-role="type")
+            p.essay-target(data-role="target" aria-hidden="true")
+            input.essay-widget__input(data-role="input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Escribí la localidad acá")
+          div(data-role="recall" hidden)
+            .essay-widget__chips(data-role="chips")
+            p.essay-widget__score(data-role="score" aria-live="polite")
+          button.essay-widget__button(type="button" data-role="reset") Reiniciar
+
+        p
+          strong Qué hace TipeAndo con esto:
+          |
+          | cada ruta se recorre escribiendo sus localidades en orden mientras ves dónde quedan. Repetir una ruta es volver a recuperar esos nombres y su ubicación. Eso conecta con los Núcleos de Aprendizajes Prioritarios de Ciencias Sociales, que incluyen la división política de la Argentina y su representación cartográfica (
+          a(href="https://cfe.educacion.gob.ar/resoluciones/res05/235-05-ane1-cs.pdf" target="_blank" rel="noopener") NAP Ciencias Sociales, Res. CFCyE 235/05
+          | ).
+        p
+          | Una aclaración honesta: hoy el juego muestra los nombres mientras los tipeás, así que se parece más a la producción que a la recuperación. La recuperación aparece al repetir rutas, cuando ya sabés qué ciudad viene.
+
+      section.info__section#juego
+        h2 5. Por qué un juego y no un ejercicio
+        p
+          | Se podría practicar todo lo anterior con una lista de ciudades y un cronómetro. ¿Por qué un juego?
+        p
+          | Dos metaanálisis encontraron que los juegos digitales con fines educativos mejoran el aprendizaje frente a la enseñanza sin juegos. El efecto es moderado: 0,29 en aprendizaje y 0,36 en retención según
+          |
+          a(href="https://doi.org/10.1037/a0031311" target="_blank" rel="noopener") Wouters y otros (2013)
+          | , y 0,33 según
+          |
+          a(href="https://doi.org/10.3102/0034654315582065" target="_blank" rel="noopener") Clark, Tanner-Smith y Killingsworth (2016)
+          | . Y crece cuando el juego se combina con la enseñanza en lugar de reemplazarla.
+        +barChart(
+          "chart-games",
+          "Tamaño del efecto de los juegos educativos según dos metaanálisis",
+          "Retención, 0,36 (Wouters y otros, 2013). Aprendizaje frente a enseñanza sin juegos, 0,33 (Clark y otros, 2016). Aprendizaje, 0,29 (Wouters y otros, 2013).",
+          [
+            { label: "Retención (Wouters y otros)", value: 0.36, valueLabel: "0,36", tone: "green" },
+            { label: "Aprendizaje (Clark y otros)", value: 0.33, valueLabel: "0,33", tone: "green" },
+            { label: "Aprendizaje (Wouters y otros)", value: 0.29, valueLabel: "0,29", tone: "yellow" }
+          ],
+          0.5
+        )
+        p.info__caption Tamaño del efecto (d de Cohen o g de Hedges) frente a enseñanza sin juegos. Un valor de 0,2 se considera pequeño y 0,5, mediano.
+        p
+          | Cada mecánica de TipeAndo intenta empujar en la dirección correcta:
+        ul.info__list
+          li
+            strong Combo de ciudades limpias.
+            |
+            | El combo sube con cada ciudad escrita sin errores y se corta con uno. Premia la precisión antes que la velocidad, que es el orden que conviene al practicar.
+          li
+            strong Respuesta inmediata.
+            |
+            | Cada tecla se marca como correcta o incorrecta al instante, con sonido; no hay que esperar al final para saber qué salió mal.
+          li
+            strong Rutas cortas y repetibles.
+            |
+            | Una partida dura minutos, se reinicia con una tecla y se puede repetir para superar la propia marca.
+          li
+            strong Desbloqueos.
+            |
+            | Los paquetes de sonidos de teclado se desbloquean jugando: una recompensa chica que invita a volver.
+        p
+          | Ninguna de estas mecánicas fue evaluada por separado. Son decisiones de diseño informadas por la evidencia, no resultados.
+
+      section.info__section#limites
+        h2 6. Lo que todavía no sabemos
+        p
+          | Conviene decirlo claramente:
+        ul.info__list
+          li
+            strong No hay datos sobre TipeAndo.
+            |
+            | El juego no tiene servidor ni registro; el progreso queda en cada navegador. Todo lo anterior justifica el diseño, pero no prueba que funcione.
+          li
+            strong La evidencia viene de contextos parecidos, no iguales.
+            |
+            | Los estudios de velocidad son en inglés; los de memoria usan listas de palabras, no mapas; los metaanálisis de juegos promedian juegos muy distintos.
+          li
+            strong El efecto de producción y la recuperación se miden en días o semanas,
+            |
+            | no en meses. No sabemos cuánto queda de una ruta después de un año.
+        p
+          | Lo que sí se puede hacer es medir. Una escuela que quiera usar TipeAndo puede registrar ppm y precisión al inicio y al final de cuatro semanas, y pedir a los estudiantes que ubiquen localidades en un mapa mudo antes y después. Si te interesa probarlo en un aula, nos encantaría saber cómo resulta.
+
+      section.info__section#cierre
+        h2 Cierre
+        p
+          | TipeAndo es una apuesta chica: que practicar algo útil (tipear) y aprender algo propio (el mapa del país) puedan ser la misma actividad, y que esa actividad pueda ser divertida. La investigación no garantiza que salga bien, pero sí dice que cada una de esas partes tiene sentido.
+        p
+          | La mejor forma de saber si funciona es jugarlo.
+        p
+          a.info__cta(href="/") Jugar ahora
+
+      section.info__section#fuentes
+        h2 Fuentes
+        ul.info__list.info__sources
+          li
+            a(href="https://doi.org/10.1080/00207590701398951" target="_blank" rel="noopener")
+              | Alves, R. A., Castro, S. L. y Olive, T. (2008). Execution and pauses in writing narratives: Processing time, cognitive effort and typing skill. 
+              em International Journal of Psychology
+              | , 43(6), 969–979.
+          li
+            a(href="https://doi.org/10.1348/0007099042376373" target="_blank" rel="noopener")
+              | Christensen, C. A. (2004). Relationship between orthographic-motor integration and computer use for the production of creative and well-structured written text. 
+              em British Journal of Educational Psychology
+              | , 74(4), 551–564.
+          li
+            a(href="https://doi.org/10.3102/0034654315582065" target="_blank" rel="noopener")
+              | Clark, D. B., Tanner-Smith, E. E. y Killingsworth, S. S. (2016). Digital games, design, and learning: A systematic review and meta-analysis. 
+              em Review of Educational Research
+              | , 86(1), 79–122.
+          li
+            a(href="https://doi.org/10.1145/3173574.3174220" target="_blank" rel="noopener")
+              | Dhakal, V., Feit, A. M., Kristensson, P. O. y Oulasvirta, A. (2018). Observations on typing from 136 million keystrokes. 
+              em Proceedings of CHI 2018
+              | , 1–12.
+          li
+            a(href="https://doi.org/10.1145/2858036.2858233" target="_blank" rel="noopener")
+              | Feit, A. M., Weir, D. y Oulasvirta, A. (2016). How we type: Movement strategies and performance in everyday typing. 
+              em Proceedings of CHI 2016
+              | , 4262–4273.
+          li
+            a(href="https://doi.org/10.3758/s13421-012-0210-8" target="_blank" rel="noopener")
+              | Forrin, N. D., MacLeod, C. M. y Ozubko, J. D. (2012). Widening the boundaries of the production effect. 
+              em Memory &amp; Cognition
+              | , 40(7), 1046–1055.
+          li
+            a(href="https://doi.org/10.1037/0022-0663.99.3.445" target="_blank" rel="noopener")
+              | Graham, S. y Perin, D. (2007). A meta-analysis of writing instruction for adolescent students. 
+              em Journal of Educational Psychology
+              | , 99(3), 445–476.
+          li
+            a(href="https://doi.org/10.1111/j.1467-9280.2006.01693.x" target="_blank" rel="noopener")
+              | Roediger, H. L. y Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. 
+              em Psychological Science
+              | , 17(3), 249–255.
+          li
+            a(href="https://doi.org/10.1037/a0031311" target="_blank" rel="noopener")
+              | Wouters, P., van Nimwegen, C., van Oostendorp, H. y van der Spek, E. D. (2013). A meta-analysis of the cognitive and motivational effects of serious games. 
+              em Journal of Educational Psychology
+              | , 105(2), 249–265.
+          li
+            a(href="https://cfe.educacion.gob.ar/resoluciones/res05/235-05-ane1-cs.pdf" target="_blank" rel="noopener") Consejo Federal de Cultura y Educación (2005). Núcleos de Aprendizajes Prioritarios, Ciencias Sociales, Segundo Ciclo, Nivel Primario (Res. 235/05).
+
+    footer.info__footer
+      .info__wrap
+        a(href="/") &larr; Volver al juego
+        p TipeAndo, por #[a(href="https://gianniballerini.dev/" target="_blank" rel="noopener") Gianni Ballerini].
+
+    script(type="module", src="/src/js/essay/essay.ts")

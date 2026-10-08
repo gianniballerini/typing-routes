@@ -1,0 +1,20 @@
+//- Hours-saved calculator markup, driven by src/js/info/hoursCalculator.ts
+mixin hoursCalculator
+  form.info__calc#calc(novalidate)
+    .info__field
+      label(for="calc-current") PPM actual
+      input#calc-current(type="number" inputmode="numeric" min="1" max="200" value="15")
+    .info__field
+      label(for="calc-target") PPM objetivo
+      input#calc-target(type="number" inputmode="numeric" min="1" max="200" value="35")
+    .info__field
+      label(for="calc-words") Palabras tipeadas por día
+      input#calc-words(type="number" inputmode="numeric" min="0" max="100000" value="1500")
+    .info__field
+      label(for="calc-days") Días de tipeo por año
+      input#calc-days(type="number" inputmode="numeric" min="1" max="365" value="200")
+  p.info__result
+    | Horas ahorradas por año:
+    |
+    output#calc-result(for="calc-current calc-target calc-words calc-days" aria-live="polite") &ndash;
+  p.info__caption La cuenta es: palabras por día &times; días &times; (1 / ppm actual &minus; 1 / ppm objetivo) &divide; 60. Los días de tipeo por año son un supuesto editable, no un dato medido.

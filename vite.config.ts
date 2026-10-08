@@ -103,6 +103,16 @@ export default defineConfig({
   // The simplified route geometry ships as a binary blob (see
   // `data/simplify_geometries.py`); Vite does not treat `.bin` as an asset by default.
   assetsInclude: ['**/*.bin'],
+  build: {
+    rollupOptions: {
+      // `por-que-tipear.html` and `ensayo.html` are standalone pages: they do not load the game.
+      input: {
+        main: resolve(process.cwd(), 'index.html'),
+        porQueTipear: resolve(process.cwd(), 'por-que-tipear.html'),
+        ensayo: resolve(process.cwd(), 'ensayo.html'),
+      },
+    },
+  },
   server: {
     https: useHttps && hasHttpsCertificates
       ? {

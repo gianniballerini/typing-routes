@@ -1,0 +1,14 @@
+//- One horizontal bar chart in inline SVG. rows: [{label, value, valueLabel, tone}]
+mixin barChart(id, title, description, rows, max)
+  - var rowHeight = 46
+  - var barWidth = 250
+  svg.chart(viewBox="0 0 320 " + (rows.length * rowHeight) role="img" aria-labelledby=id + "-title " + id + "-desc" xmlns="http://www.w3.org/2000/svg")
+    title(id=id + "-title")= title
+    desc(id=id + "-desc")= description
+    each row, i in rows
+      - var y = i * rowHeight
+      - var w = Math.round((row.value / max) * barWidth * 10) / 10
+      text.chart__label(x="0" y=y + 14)= row.label
+      rect.chart__track(x="0" y=y + 22 width=barWidth height="16" rx="3")
+      rect(class="chart__bar chart__bar--" + row.tone x="0" y=y + 22 width=w height="16" rx="3")
+      text.chart__value(x=w + 6 y=y + 35)= row.valueLabel

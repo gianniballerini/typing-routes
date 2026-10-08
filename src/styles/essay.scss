@@ -1,0 +1,283 @@
+// Widget styles for /ensayo.html. Loaded after info.scss, which provides the
+// page layout and base typography.
+@use 'common/colors' as *;
+
+$ink: $dark-gray;
+$danger: #C0392B;
+
+.info__lead + .info__lead {
+    margin-top: 12px;
+}
+
+.essay-widget {
+    margin: 20px 0;
+    padding: 16px;
+
+    background-color: rgba($white, 0.7);
+    border: 2px solid rgba($signs-green, 0.35);
+    border-radius: 8px;
+
+    // The page copy styles `.info__section h3`; keep the widget heading tighter.
+    .essay-widget__title {
+        margin: 0 0 6px;
+    }
+
+    p {
+        margin: 0 0 12px;
+    }
+}
+
+.essay-widget__intro {
+    font-size: 0.95rem;
+}
+
+.essay-widget__round {
+    min-height: 1.5em;
+
+    font-weight: 600;
+    color: $signs-green-dark;
+}
+
+.essay-target {
+    min-height: 1.6em;
+    margin: 0 0 10px;
+    padding: 10px 12px;
+
+    background-color: $white;
+    border-radius: 6px;
+
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 1.15rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.essay-target__done {
+    color: $signs-green-dark;
+}
+
+.essay-target__current {
+    background-color: rgba($flag-yellow, 0.7);
+    border-bottom: 2px solid $ink;
+}
+
+.essay-widget__input {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+
+    color: $ink;
+    background-color: $white;
+    border: 2px solid rgba($ink, 0.25);
+    border-radius: 6px;
+
+    // 16px keeps iOS from zooming when the input gets focus.
+    font: inherit;
+    font-size: 1rem;
+
+    &:disabled {
+        opacity: 0.5;
+    }
+}
+
+.essay-widget__button,
+.essay-widget__chip {
+    padding: 8px 16px;
+
+    color: $white;
+    background-color: $signs-green;
+    border: 0;
+    border-radius: 6px;
+
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        background-color: $signs-green-dark;
+    }
+
+    &:focus-visible {
+        outline: 3px solid $flag-yellow;
+        outline-offset: 2px;
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+}
+
+.essay-widget__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    margin-bottom: 12px;
+}
+
+.essay-widget__score {
+    font-weight: 700;
+}
+
+.essay-widget__results {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+
+    margin-bottom: 12px;
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+.essay-widget__speed[hidden],
+.essay-widget [hidden] {
+    display: none;
+}
+
+.essay-widget__result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 10px 4px;
+
+    background-color: $white;
+    border-radius: 8px;
+}
+
+.essay-widget__result-label {
+    font-size: 0.85rem;
+}
+
+.essay-widget__result-value {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    color: $signs-green-dark;
+}
+
+// Speed scale: 0 to 140 wpm, with fixed marks and the reader's marker.
+.speed-bar {
+    position: relative;
+
+    height: 112px;
+    margin: 0 8px 12px;
+}
+
+.speed-bar__track {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    left: 0;
+    height: 14px;
+
+    background-color: rgba($ink, 0.12);
+    border-radius: 7px;
+}
+
+.speed-bar__mark {
+    position: absolute;
+    top: 34px;
+    width: 2px;
+    height: 26px;
+
+    background-color: $ink;
+}
+
+.speed-bar__mark-label {
+    position: absolute;
+    top: 30px;
+    left: 0;
+
+    font-size: 0.75rem;
+    white-space: nowrap;
+    transform: translateX(-50%);
+
+    // Labels hang below the track so they never collide with the marker label.
+    margin-top: 2px;
+}
+
+.speed-bar__marker {
+    position: absolute;
+    top: 36px;
+    width: 6px;
+    height: 22px;
+
+    background-color: $signs-green-dark;
+    border-radius: 3px;
+    transform: translateX(-50%);
+}
+
+.speed-bar__marker-label {
+    position: absolute;
+    bottom: 26px;
+    left: 50%;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: $signs-green-dark;
+    transform: translateX(-50%);
+}
+
+.speed-bar__scale-min,
+.speed-bar__scale-max {
+    position: absolute;
+    top: 92px;
+
+    font-size: 0.75rem;
+    color: rgba($ink, 0.75);
+}
+
+.speed-bar__scale-min {
+    left: 0;
+}
+
+.speed-bar__scale-max {
+    right: 0;
+}
+
+// Mini route
+.essay-route {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    margin: 4px 0 8px;
+}
+
+.essay-route__path {
+    fill: none;
+    stroke: rgba($ink, 0.45);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 2 8;
+}
+
+.essay-route__dot {
+    fill: $signs-green-dark;
+    stroke: $white;
+    stroke-width: 2;
+}
+
+.essay-route__marker {
+    fill: $flag-yellow;
+    stroke: $ink;
+    stroke-width: 2;
+}
+
+.essay-route__label {
+    fill: $ink;
+    font-size: 11px;
+}
+
+.essay-route__label--right {
+    fill: $signs-green-dark;
+    font-weight: 700;
+}
+
+.essay-route__label--wrong {
+    fill: $danger;
+    font-weight: 700;
+}

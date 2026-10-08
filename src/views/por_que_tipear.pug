@@ -1,0 +1,291 @@
+doctype html
+//
+  Every figure on this page comes from a peer-reviewed paper or an official
+  curriculum document, cited by DOI/URL in the "Fuentes" section. Keep it that
+  way: no press or blog sources.
+//- TODO: contact email (not provided yet; do not invent one).
+
+include partials/bar_chart.pug
+include partials/hours_calculator.pug
+
+html(lang="es")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=Edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+    -
+      var pageTitle = "Por qué tipear | TipeAndo"
+      var pageDescription = "Qué dice la investigación sobre tipear con fluidez, recordar lo que se escribe y aprender jugando, y una guía para docentes que quieran usar TipeAndo en el aula."
+      var pageUrl = "https://tipeando.com.ar/por-que-tipear.html"
+      var socialImage = "https://tipeando.com.ar/images/logos/banner.png"
+
+    title= pageTitle
+    meta(name="title", content=pageTitle)
+    meta(name="description", content=pageDescription)
+    link(rel="canonical", href=pageUrl)
+
+    meta(property="og:locale", content="es_AR")
+    meta(property="og:type", content="article")
+    meta(property="og:title", content=pageTitle)
+    meta(property="og:description", content=pageDescription)
+    meta(property="og:url", content=pageUrl)
+    meta(property="og:site_name", content="TipeAndo")
+    meta(property="og:image", content=socialImage)
+    meta(property="og:image:secure_url", content=socialImage)
+
+    meta(name="twitter:card", content="summary_large_image")
+    meta(name="twitter:title", content=pageTitle)
+    meta(name="twitter:description", content=pageDescription)
+    meta(name="twitter:image", content=socialImage)
+    meta(name="twitter:url", content=pageUrl)
+
+    link(rel="icon", type="image/png", sizes="32x32", href="/images/logos/icon.png")
+    link(rel="icon", type="image/png", sizes="192x192", href="/images/logos/icon_192.png")
+    link(rel="icon", type="image/png", sizes="512x512", href="/images/logos/icon_512.png")
+    link(rel="apple-touch-icon", sizes="180x180", href="/images/logos/icon_180.png")
+
+    link(rel="preload", href="/fonts/arimo/arimo-regular.woff2", as="font", type="font/woff2", crossorigin)
+    link(rel="preload", href="/fonts/milonga/milonga-regular.woff2", as="font", type="font/woff2", crossorigin)
+
+    link(href="/src/styles/info.scss", rel="stylesheet")
+
+  body.info
+    header.info__header
+      .info__wrap
+        a.info__back(href="/") &larr; Volver al juego
+        h1.info__title Por qué tipear
+        p.info__lead
+          | Esta página junta lo que dicen estudios publicados en revistas científicas sobre tipear con fluidez, recordar lo que se escribe y aprender jugando, y cómo TipeAndo puede ayudar en el aula.
+        p.info__lead
+          a(href="/ensayo.html") Leé el ensayo: Escribir el mapa
+
+    main.info__wrap
+      nav.info__toc(aria-label="Contenido")
+        ol
+          li: a(href="#fluidez") Tipear con fluidez
+          li: a(href="#velocidad") Velocidad: dónde estás y cuánto se puede mejorar
+          li: a(href="#practica") Qué logra la práctica
+          li: a(href="#mapa") Aprender el mapa tipeando
+          li: a(href="#jugar") Jugar para aprender
+          li: a(href="#beneficios") En resumen
+          li: a(href="#tipeando") Cómo ayuda TipeAndo
+          li: a(href="#fuentes") Fuentes
+
+      section.info__section#fluidez
+        h2 1. Tipear con fluidez
+        p
+          | Escribir exige pensar qué decir y, al mismo tiempo, ejecutarlo con las manos. Cuando tipear todavía cuesta, esa ejecución consume atención que no queda para el contenido: en un estudio con estudiantes universitarios, quienes tenían menor habilidad de tipeo mostraron mayor esfuerzo cognitivo al tipear y produjeron textos de menor calidad.
+          |
+          |
+          a(href="https://doi.org/10.1080/00207590701398951" target="_blank" rel="noopener") (Alves, Castro y Olive, 2008)
+        p
+          | Con 276 estudiantes de 8.º y 9.º año, la relación entre la fluidez para producir letras y la calidad de lo escrito fue más fuerte en los textos tipeados. En un segundo estudio, un programa de práctica de tipeo mejoró la calidad de los textos de estudiantes que tipeaban lento más que escribir un diario en computadora todos los días.
+          |
+          |
+          a(href="https://doi.org/10.1348/0007099042376373" target="_blank" rel="noopener") (Christensen, 2004)
+        p
+          | Un metaanálisis sobre enseñanza de la escritura en adolescentes encontró que escribir con procesador de texto mejora la calidad de los textos, con un tamaño de efecto de 0,55.
+          |
+          |
+          a(href="https://doi.org/10.1037/0022-0663.99.3.445" target="_blank" rel="noopener") (Graham y Perin, 2007)
+        ul.info__stats
+          li
+            strong.info__stat-value 0,55
+            span.info__stat-label Efecto del procesador de texto en la calidad de la escritura
+
+      section.info__section#velocidad
+        h2 2. Velocidad: dónde estás y cuánto se puede mejorar
+        p
+          | Un estudio con datos de 168.000 personas que hicieron una prueba de tipeo en línea (en inglés) midió una velocidad promedio de unas 52 palabras por minuto (ppm), con alrededor de 1,2% de errores sin corregir. Las personas más rápidas superan las 120 ppm. Lo que más distingue a quienes tipean rápido es cómo encadenan las teclas, alternando manos y dedos: una habilidad que se entrena.
+          |
+          |
+          a(href="https://doi.org/10.1145/3173574.3174220" target="_blank" rel="noopener") (Dhakal, Feit, Kristensson y Oulasvirta, 2018)
+        ul.info__stats
+          li
+            strong.info__stat-value 52
+            span.info__stat-label ppm promedio
+          li
+            strong.info__stat-value 120+
+            span.info__stat-label ppm de los más rápidos
+          li
+            strong.info__stat-value 1,2%
+            span.info__stat-label Errores sin corregir
+        p
+          | No hace falta un único método: en otro estudio, personas autodidactas que usaban unos seis dedos alcanzaron la velocidad y la precisión de quienes tipeaban con la técnica clásica de diez dedos. Lo que pesa es la práctica sostenida.
+          |
+          |
+          a(href="https://doi.org/10.1145/2858036.2858233" target="_blank" rel="noopener") (Feit, Weir y Oulasvirta, 2016)
+
+      section.info__section#practica
+        h2 3. Qué logra la práctica
+        p
+          | Tipear más rápido libera tiempo. Probá la calculadora con tus propios números: estima cuántas horas por año se ahorran al pasar de una velocidad a otra.
+        +hoursCalculator
+
+        h3 Cómo se vería la mejora (ilustrativo)
+        figure.info__figure
+          svg.chart.chart--curve#curve(viewBox="0 0 320 190" role="img" aria-labelledby="curve-title curve-desc" xmlns="http://www.w3.org/2000/svg")
+            title#curve-title Progresión ilustrativa de PPM en 12 semanas
+            desc#curve-desc Curva ilustrativa que va de la velocidad actual a la velocidad objetivo con mejoras cada vez más lentas. No son datos medidos.
+          figcaption.info__caption
+            strong Ilustrativo:
+            |
+            | una curva con rendimientos decrecientes entre tus dos valores de ppm. No representa datos medidos.
+
+      section.info__section#mapa
+        h2 4. Aprender el mapa tipeando
+        p
+          | Escribir una palabra deja más huella en la memoria que leerla en silencio. Este efecto de producción se observó al decirla en voz alta, al escribirla a mano y también al tipearla.
+          |
+          |
+          a(href="https://doi.org/10.3758/s13421-012-0210-8" target="_blank" rel="noopener") (Forrin, MacLeod y Ozubko, 2012)
+        p
+          | Además, recuperar algo de la memoria fortalece el recuerdo más que volver a estudiarlo: en el experimento clásico sobre este efecto, quienes practicaron recordando retuvieron más a los dos días y a la semana que quienes releyeron el material.
+          |
+          |
+          a(href="https://doi.org/10.1111/j.1467-9280.2006.01693.x" target="_blank" rel="noopener") (Roediger y Karpicke, 2006)
+        p
+          | En TipeAndo cada ruta se recorre escribiendo sus localidades en orden, viendo dónde quedan en el mapa. Repetir una ruta es volver a recuperar esos nombres y su ubicación. Eso conecta con los Núcleos de Aprendizajes Prioritarios de Ciencias Sociales, que incluyen el conocimiento de la división política de la Argentina y su representación cartográfica.
+          |
+          |
+          a(href="https://cfe.educacion.gob.ar/resoluciones/res05/235-05-ane1-cs.pdf" target="_blank" rel="noopener") (NAP Ciencias Sociales, Res. CFCyE 235/05)
+
+      section.info__section#jugar
+        h2 5. Jugar para aprender
+        p
+          | Dos metaanálisis encontraron que los juegos digitales con fines educativos mejoran el aprendizaje frente a la enseñanza sin juegos. El efecto es moderado y crece cuando el juego se combina con la enseñanza: por eso la guía docente de más abajo propone usar TipeAndo dentro de una clase, no en lugar de ella.
+          |
+          |
+          a(href="https://doi.org/10.1037/a0031311" target="_blank" rel="noopener") (Wouters y otros, 2013)
+          |
+          |
+          a(href="https://doi.org/10.3102/0034654315582065" target="_blank" rel="noopener") (Clark, Tanner-Smith y Killingsworth, 2016)
+        +barChart(
+          "chart-games",
+          "Tamaño del efecto de los juegos educativos según dos metaanálisis",
+          "Retención, 0,36 (Wouters y otros, 2013). Aprendizaje frente a enseñanza sin juegos, 0,33 (Clark y otros, 2016). Aprendizaje, 0,29 (Wouters y otros, 2013).",
+          [
+            { label: "Retención (Wouters y otros)", value: 0.36, valueLabel: "0,36", tone: "green" },
+            { label: "Aprendizaje (Clark y otros)", value: 0.33, valueLabel: "0,33", tone: "green" },
+            { label: "Aprendizaje (Wouters y otros)", value: 0.29, valueLabel: "0,29", tone: "yellow" }
+          ],
+          0.5
+        )
+        p.info__caption Tamaño del efecto (d de Cohen o g de Hedges) frente a enseñanza sin juegos. Un valor de 0,2 se considera pequeño y 0,5, mediano.
+
+      section.info__section#beneficios
+        h2 6. En resumen
+        ul.info__list
+          li
+            strong Menos carga cognitiva.
+            |
+            | Cuando las teclas dejan de ser un problema, la atención queda libre para pensar el contenido.
+          li
+            strong Mejores textos.
+            |
+            | La fluidez al tipear se asocia con textos de mayor calidad, y practicarla puede mejorarlos.
+          li
+            strong Un mapa que se recuerda.
+            |
+            | Tipear y volver a recuperar los nombres de las localidades ayuda a fijarlos en la memoria junto con su lugar en el mapa.
+
+      section.info__section#tipeando
+        h2 7. Cómo ayuda TipeAndo
+        p
+          | TipeAndo combina práctica de tipeo con geografía: el estudiante recorre las
+          |
+          = " " + dataStats.routeCount + " "
+          | Rutas Nacionales escribiendo, en orden, las ciudades del camino, con
+          = " " + dataStats.townCount + " "
+          | localidades en total. Mide ppm, precisión y combos, y guarda los mejores resultados de cada ruta.
+        ul.info__list
+          li
+            strong Privacidad.
+            |
+            | No hay registro ni servidor: el progreso queda en el navegador de cada dispositivo y no se envían datos personales.
+          li
+            strong Requisitos.
+            |
+            | Se juega en computadora con teclado. Las tildes y la ñ se aceptan pero no son obligatorias; en Ajustes se puede activar el modo estricto.
+          li
+            strong Encaje curricular.
+            |
+            | Puede acompañar el trabajo con los NAP de Ciencias Sociales (Res. CFCyE 235/05), en lo que hace a la división política y la cartografía de la Argentina, y con los NAP de Educación Digital, Programación y Robótica (Res. CFE 343/18).
+            |
+            |
+            a(href="https://siteal.iiep.unesco.org/sites/default/files/sit_accion_files/nap_educacion_digital_programacion_y_robotica.pdf" target="_blank" rel="noopener") (documento)
+
+        h3 Guía docente: una clase de 40 minutos
+        ol.info__list
+          li
+            strong Minutos 0 a 5.
+            |
+            | Presentar el juego y la idea: cuanto menos cuesta tipear, más atención queda para pensar.
+          li
+            strong Minutos 5 a 15.
+            |
+            | Postura y posición de las manos. Cada estudiante elige una ruta corta y hace una primera pasada para tener su punto de partida.
+          li
+            strong Minutos 15 a 35.
+            |
+            | Práctica libre: repetir rutas priorizando la precisión sobre la velocidad.
+          li
+            strong Minutos 35 a 40.
+            |
+            | Cierre: cada estudiante anota su ppm y su precisión.
+
+        h3 Progresión en 4 semanas
+        ol.info__list
+          li
+            strong Semana 1.
+            |
+            | Línea base: una ruta corta y registro de ppm y precisión.
+          li
+            strong Semana 2.
+            |
+            | Precisión primero: rutas cortas sin apurarse, buscando cero errores.
+          li
+            strong Semana 3.
+            |
+            | Fluidez: rutas más largas, cuidando el combo.
+          li
+            strong Semana 4.
+            |
+            | Repetir la ruta de la semana 1 y comparar los resultados.
+
+        p
+          a.info__cta(href="/") Jugar ahora
+
+      section.info__section#fuentes
+        h2 8. Fuentes
+        ul.info__list.info__sources
+          li
+            a(href="https://doi.org/10.1080/00207590701398951" target="_blank" rel="noopener") Alves, R. A., Castro, S. L. y Olive, T. (2008). Execution and pauses in writing narratives: Processing time, cognitive effort and typing skill. International Journal of Psychology, 43(6), 969–979.
+          li
+            a(href="https://doi.org/10.1348/0007099042376373" target="_blank" rel="noopener") Christensen, C. A. (2004). Relationship between orthographic-motor integration and computer use for the production of creative and well-structured written text. British Journal of Educational Psychology, 74(4), 551–564.
+          li
+            a(href="https://doi.org/10.3102/0034654315582065" target="_blank" rel="noopener") Clark, D. B., Tanner-Smith, E. E. y Killingsworth, S. S. (2016). Digital games, design, and learning: A systematic review and meta-analysis. Review of Educational Research, 86(1), 79–122.
+          li
+            a(href="https://doi.org/10.1145/3173574.3174220" target="_blank" rel="noopener") Dhakal, V., Feit, A. M., Kristensson, P. O. y Oulasvirta, A. (2018). Observations on typing from 136 million keystrokes. Proceedings of CHI 2018, 1–12.
+          li
+            a(href="https://doi.org/10.1145/2858036.2858233" target="_blank" rel="noopener") Feit, A. M., Weir, D. y Oulasvirta, A. (2016). How we type: Movement strategies and performance in everyday typing. Proceedings of CHI 2016, 4262–4273.
+          li
+            a(href="https://doi.org/10.3758/s13421-012-0210-8" target="_blank" rel="noopener") Forrin, N. D., MacLeod, C. M. y Ozubko, J. D. (2012). Widening the boundaries of the production effect. Memory &amp; Cognition, 40(7), 1046–1055.
+          li
+            a(href="https://doi.org/10.1037/0022-0663.99.3.445" target="_blank" rel="noopener") Graham, S. y Perin, D. (2007). A meta-analysis of writing instruction for adolescent students. Journal of Educational Psychology, 99(3), 445–476.
+          li
+            a(href="https://doi.org/10.1111/j.1467-9280.2006.01693.x" target="_blank" rel="noopener") Roediger, H. L. y Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. Psychological Science, 17(3), 249–255.
+          li
+            a(href="https://doi.org/10.1037/a0031311" target="_blank" rel="noopener") Wouters, P., van Nimwegen, C., van Oostendorp, H. y van der Spek, E. D. (2013). A meta-analysis of the cognitive and motivational effects of serious games. Journal of Educational Psychology, 105(2), 249–265.
+          li
+            a(href="https://cfe.educacion.gob.ar/resoluciones/res05/235-05-ane1-cs.pdf" target="_blank" rel="noopener") Consejo Federal de Cultura y Educación (2005). Núcleos de Aprendizajes Prioritarios, Ciencias Sociales, Segundo Ciclo, Nivel Primario (Res. 235/05).
+          li
+            a(href="https://siteal.iiep.unesco.org/sites/default/files/sit_accion_files/nap_educacion_digital_programacion_y_robotica.pdf" target="_blank" rel="noopener") Consejo Federal de Educación (2018). NAP de Educación Digital, Programación y Robótica (Res. 343/18).
+
+    footer.info__footer
+      .info__wrap
+        a(href="/") &larr; Volver al juego
+        p TipeAndo, por #[a(href="https://gianniballerini.dev/" target="_blank" rel="noopener") Gianni Ballerini].
+
+    script(type="module", src="/src/js/info/porQueTipear.ts")
