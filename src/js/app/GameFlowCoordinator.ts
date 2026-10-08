@@ -172,6 +172,7 @@ class GameFlowCoordinator {
         this.ui_presenter.onStartRequested(this.handleStartRequested);
         this.ui_presenter.onCloseRequested(this.handleCloseRequested);
         this.ui_presenter.onQuitRequested(this.handleQuitRequested);
+        this.ui_presenter.onRestartRequested(this.handleRestartRequested);
         this.ui_presenter.onTypingInput(this.handleTypingInput);
         this.ui_presenter.onHowToPlayRequested(this.handleHowToPlayRequested);
         this.ui_presenter.onRouteListRequested(this.handleRouteListRequested);
@@ -367,6 +368,10 @@ class GameFlowCoordinator {
 
     private handleQuitRequested = (): void => {
         this.quitActiveRun();
+    };
+
+    private handleRestartRequested = (): void => {
+        this.restartActiveRun();
     };
 
     private handleHowToPlayRequested = (): void => {
@@ -723,6 +728,22 @@ class GameFlowCoordinator {
         this.runCameraZoom = null;
         this.map_controller.selectRoute(null);
         this.game.returnToMenu();
+    }
+
+    /**
+     * Throws the current run away and starts the same route from its first city.
+     * Goes out through `quitActiveRun` so nothing is recorded, then back in
+     * through `selectAndStartRoute`, the same door "Reintentar" uses.
+     */
+    restartActiveRun(): void {
+        if (this.game.state !== GameState.PLAYING && this.game.state !== GameState.COUNTDOWN) return;
+
+        const routeId = this.game.current_route?.route_id;
+        if (!routeId) return;
+
+        this.audio_manager.play(Settings.audio.cues.restartRun);
+        this.quitActiveRun();
+        this.selectAndStartRoute(routeId);
     }
 
     private handleCityVisited = (event: Event): void => {

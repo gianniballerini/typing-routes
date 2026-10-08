@@ -5,12 +5,14 @@ class KeyboardInputCoordinator {
     private game: Game;
     private onQuitRun: () => void;
     private onSkipCountdown: () => void;
+    private onRestartRun: () => void;
     private bound: boolean;
 
-    constructor(game: Game, onQuitRun: () => void, onSkipCountdown: () => void) {
+    constructor(game: Game, onQuitRun: () => void, onSkipCountdown: () => void, onRestartRun: () => void) {
         this.game = game;
         this.onQuitRun = onQuitRun;
         this.onSkipCountdown = onSkipCountdown;
+        this.onRestartRun = onRestartRun;
         this.bound = false;
     }
 
@@ -32,6 +34,16 @@ class KeyboardInputCoordinator {
         if (this.game.state === GameState.COUNTDOWN && (event.key === 'Enter' || event.key === ' ')) {
             event.preventDefault();
             this.onSkipCountdown();
+            return;
+        }
+
+        // Also ahead of the editable-element guard: focus sits in the hidden typing
+        // input for the whole run. Mac's "delete" key reports as Backspace. Held
+        // keys repeat, and each repeat would restart the run again.
+        const isRunActive = this.game.state === GameState.PLAYING || this.game.state === GameState.COUNTDOWN;
+        if (isRunActive && (event.key === 'Backspace' || event.key === 'Delete')) {
+            event.preventDefault();
+            if (!event.repeat) this.onRestartRun();
             return;
         }
 

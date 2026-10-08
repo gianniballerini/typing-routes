@@ -15,10 +15,15 @@
     .game-playing__countdown.hidden(aria-hidden='true')
         span.game-playing__countdown-value
     .game-playing__top
-        .game-playing__timer
-            span.game-playing__timer-number
-            span :
-            span.game-playing__timer-milliseconds
+        .game-playing__timer-row
+            .game-playing__timer
+                span.game-playing__timer-number
+                span :
+                span.game-playing__timer-milliseconds
+            .button.game-playing__restart(role='button' tabindex='-1' title='Reiniciar (⌫)' aria-label='Reiniciar la ruta (tecla Borrar)')
+                svg( xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw")
+                    path( d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8")
+                    path( d="M3 3v5h5")
     .game-playing__bottom
         .game-playing__user-stats
             .game-playing__user-stats-top

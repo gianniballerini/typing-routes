@@ -196,6 +196,9 @@ export interface SettingsShape {
       menuTrack: string;
       fadeOutMs: number;
     };
+    cues: {
+      restartRun: string;
+    };
   };
 }
 

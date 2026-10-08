@@ -106,7 +106,8 @@ class MainApplication {
         this.keyboard_input_coordinator = new KeyboardInputCoordinator(
             this.game,
             () => this.game_flow_coordinator.quitActiveRun(),
-            () => this.game_flow_coordinator.skipCountdown()
+            () => this.game_flow_coordinator.skipCountdown(),
+            () => this.game_flow_coordinator.restartActiveRun()
         );
 
         // Silent by construction: nothing is subscribed to the unlock event until

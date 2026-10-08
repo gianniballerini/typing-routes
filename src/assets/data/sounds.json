@@ -31,6 +31,13 @@
       "volume": 0.8
     },
     {
+      "name": "rewind",
+      "url": "/sounds/rewind.m4a",
+      "size": 15725,
+      "category": "sfx",
+      "volume": 0.8
+    },
+    {
       "name": "countdown",
       "url": "/sounds/countdown.m4a",
       "size": 42964,

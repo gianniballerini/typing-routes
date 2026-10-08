@@ -88,6 +88,8 @@ class GameUiPresenter {
     private countdown_value_el: HTMLElement | null;
     private quit_button_el: HTMLElement | null;
     private quitRequestedHandler: (() => void) | null;
+    private restart_button_el: HTMLElement | null;
+    private restartRequestedHandler: (() => void) | null;
     private typingInputHandler: ((inputText: string) => void) | null;
     private audio_toggle_el: HTMLElement | null;
     private audio_toggle_label_el: HTMLElement | null;
@@ -170,6 +172,9 @@ class GameUiPresenter {
         this.quit_button_el = document.querySelector('.game-playing__quit');
         this.quitRequestedHandler = null;
         this.quit_button_el?.addEventListener('click', this.handleQuitButtonClick);
+        this.restart_button_el = document.querySelector('.game-playing__restart');
+        this.restartRequestedHandler = null;
+        this.restart_button_el?.addEventListener('click', this.handleRestartButtonClick);
         this.typingInputHandler = null;
         this.audio_toggle_el = document.querySelector('.audio-toggle');
         this.audio_toggle_label_el = document.querySelector('.audio-toggle__label');
@@ -379,6 +384,10 @@ class GameUiPresenter {
         this.quitRequestedHandler = handler;
     }
 
+    onRestartRequested(handler: () => void): void {
+        this.restartRequestedHandler = handler;
+    }
+
     onTypingInput(handler: (inputText: string) => void): void {
         this.typingInputHandler = handler;
     }
@@ -407,6 +416,10 @@ class GameUiPresenter {
 
     private handleQuitButtonClick = (): void => {
         this.quitRequestedHandler?.();
+    };
+
+    private handleRestartButtonClick = (): void => {
+        this.restartRequestedHandler?.();
     };
 
     private handleKeyboardFocusInput = (event: Event): void => {

@@ -33,7 +33,7 @@
 
     .game-playing__quit {
         position: absolute;
-        top: calc(16 * $ptr + env(safe-area-inset-top));
+        top: calc(30 * $ptr + env(safe-area-inset-top));
         left: 16 * $ptr;
 
         z-index: 3;
@@ -78,19 +78,61 @@
         justify-content: flex-start;
         align-items: center;
         row-gap: 16 * $ptr;
-        padding-top: 30 * $ptr;
+        padding-top: calc(30 * $ptr + env(safe-area-inset-top));
 
+    }
+
+    // Anchors the restart button beside the timer without pulling the timer off
+    // the panel's centre line.
+    .game-playing__timer-row {
+        position: relative;
+    }
+
+    .game-playing__restart {
+        position: absolute;
+        top: 0;
+        left: calc(100% + 8 * $ptr);
+
+        z-index: 2;
+
+        width: 40 * $ptr;
+        height: 40 * $ptr;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background: $dark-gray;
+        border-radius: 10 * $ptr;
+        box-shadow: 0 3 * $ptr 5 * $ptr rgba($black, 0.5);
+
+        color: $white;
+
+        pointer-events: auto;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        svg {
+            width: 20 * $ptr;
+            height: 20 * $ptr;
+        }
     }
 
     .game-playing__timer {
         z-index: 2;
 
+        // Same height as the quit and restart buttons so the three line up.
+        height: 40 * $ptr;
+        box-sizing: border-box;
+
         display: flex;
         flex-direction: row;
-        align-items: baseline;
+        align-items: center;
         column-gap: 4 * $ptr;
 
-        padding: 6 * $ptr 16 * $ptr;
+        padding: 0 16 * $ptr;
 
         background: $dark-gray;
         border-radius: 10 * $ptr;

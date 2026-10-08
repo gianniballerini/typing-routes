@@ -326,6 +326,10 @@ class Settings
         menuTrack: 'menu-music',
         // Long enough to duck under the countdown rather than cut on the "3".
         fadeOutMs: 400
+      },
+      cues: {
+        // Manifest entries played while typing.
+        restartRun: 'rewind',
       }
     };
   }
