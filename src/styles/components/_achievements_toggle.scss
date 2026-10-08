@@ -1,0 +1,7 @@
+@use '../common' as *;
+
+// Sits directly left of the sound button (16 + 44 + 8 from the right edge).
+// Only shown in the menu; GameUiPresenter.renderState toggles `hidden`.
+.achievements-toggle {
+    @include header-icon-button(68 * $ptr, 'gold', 'gold');
+}

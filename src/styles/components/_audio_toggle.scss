@@ -3,52 +3,22 @@
 // Sits above the map in every game state — menu, countdown and run — so the
 // sound can always be cut. Fixed rather than laid out in `.header`, which is
 // otherwise an empty passthrough element.
+//
+// Gold side = sound on, silver side = muted; the muted class flips the coin.
 .audio-toggle {
-    position: fixed;
-    top: 16 * $ptr;
-    right: 16 * $ptr;
-    z-index: 10;
+    @include header-icon-button(16 * $ptr, 'gold', 'silver');
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 44 * $ptr;
-    height: 44 * $ptr;
-
-    color: $argentina-dark-gray;
-    background-color: rgba($white, 0.82);
-    border-radius: 50%;
-    box-shadow: 0 2 * $ptr 6 * $ptr rgba($black, 0.25);
-
-    transition: color 0.15s ease, background-color 0.15s ease;
-
-    &:hover {
-        color: $black;
-        background-color: $white;
-    }
-
-    &__icon {
-        width: 22 * $ptr;
-        height: 22 * $ptr;
-
-        pointer-events: none;
-    }
-
-    // The two icons are both in the markup; the muted class picks one.
-    &__icon--off {
-        display: none;
-    }
+    // The toss runs from the face being left to the one being landed on: back to
+    // front when sound comes on, front to back when it is muted.
+    --toss-from: 180deg;
+    --toss-to: 360deg;
 
     &--muted {
-        color: $argentina-gray;
+        --toss-from: 0deg;
+        --toss-to: 180deg;
 
-        .audio-toggle__icon--on {
-            display: none;
-        }
-
-        .audio-toggle__icon--off {
-            display: block;
+        .coin__flipper {
+            transform: rotateY(180deg);
         }
     }
 

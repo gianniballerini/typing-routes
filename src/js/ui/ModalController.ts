@@ -1,4 +1,5 @@
 import { GsapManager } from '../app/GsapManager';
+import { AboutModal } from './modals/AboutModal';
 import { AchievementsModal } from './modals/AchievementsModal';
 import { BaseModal } from './modals/BaseModal';
 import { HowToPlayModal } from './modals/HowToPlayModal';
@@ -14,6 +15,7 @@ import { SettingsModal } from './modals/SettingsModal';
 class ModalController {
 	readonly routeCompleteModal: RouteCompleteModal;
 	readonly howToPlayModal: HowToPlayModal;
+	readonly aboutModal: AboutModal;
 	readonly routeListModal: RouteListModal;
 	readonly achievementsModal: AchievementsModal;
 	readonly settingsModal: SettingsModal;
@@ -32,6 +34,7 @@ class ModalController {
 
 		this.routeCompleteModal = new RouteCompleteModal(this.hide);
 		this.howToPlayModal = new HowToPlayModal(this.hide);
+		this.aboutModal = new AboutModal(this.hide);
 		this.routeListModal = new RouteListModal(this.hide);
 		this.achievementsModal = new AchievementsModal(this.hide);
 		this.settingsModal = new SettingsModal(this.hide);
@@ -39,6 +42,7 @@ class ModalController {
 		this.modalsByState = {
 			[ModalState.ROUTE_COMPLETE]: this.routeCompleteModal,
 			[ModalState.HOW_TO_PLAY]: this.howToPlayModal,
+			[ModalState.ABOUT]: this.aboutModal,
 			[ModalState.ROUTE_LIST]: this.routeListModal,
 			[ModalState.ACHIEVEMENTS]: this.achievementsModal,
 			[ModalState.SETTINGS]: this.settingsModal

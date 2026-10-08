@@ -195,7 +195,7 @@
             }
         }
 
-        .game-menu__sign-button--achievements {
+        .game-menu__sign-button--about {
             --sign-lift: #{-4 * $ptr};
             --sign-tilt: -0.9deg;
 
@@ -634,8 +634,8 @@
     .game-menu__sign-button:focus-visible,
     .game-menu__sign-button--route-list:hover,
     .game-menu__sign-button--route-list:focus-visible,
-    .game-menu__sign-button--achievements:hover,
-    .game-menu__sign-button--achievements:focus-visible {
+    .game-menu__sign-button--about:hover,
+    .game-menu__sign-button--about:focus-visible {
         transform: none;
         animation: none;
 
@@ -940,8 +940,7 @@
 }
 
 // Hand-drawn hint in the bottom right corner pointing at the arrow keys.
-// Arrow keys are meaningless without a physical keyboard, so it only shows
-// from the medium breakpoint up.
+// It only shows from the medium breakpoint up.
 .game-menu__keys-tip {
     position: absolute;
     right: 30 * $ptr;

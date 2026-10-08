@@ -29,3 +29,13 @@ $sea-deep: #2B4A5C !default;
 // Base of the route info panel on the menu; its darker and lighter surfaces are
 // derived from this one value in `_game_menu.scss`.
 $info-card-base: #3D6579 !default;
+
+// Coin metals for the header buttons: Argentine 50 centavos (brass, gold) and
+// 25 centavos (cupronickel, silver). Each is a face, a highlight and a shadow.
+$coin-gold: #c9a64a !default;
+$coin-gold-light: #f1dc8f !default;
+$coin-gold-dark: #7d6324 !default;
+
+$coin-silver: #b9bcbf !default;
+$coin-silver-light: #eef0f1 !default;
+$coin-silver-dark: #6d7174 !default;

@@ -1,0 +1,129 @@
+@use '../../../common' as *;
+@use '../modal' as *;
+
+.about-modal {
+    display: flex;
+    flex-direction: column;
+
+    width: min(560 * $ptr, 100%);
+    min-height: 0;
+    max-height: min(90vh, calc(100vh - 48 * $ptr));
+    max-height: min(90dvh, calc(100dvh - 48 * $ptr));
+
+    font-family: $arimo-font;
+
+    pointer-events: auto;
+}
+
+.about-modal__content {
+    @include modal-panel;
+
+    min-height: 0;
+    overflow: hidden;
+}
+
+.about-modal__top {
+    display: flex;
+    flex-direction: row;
+    gap: 16 * $ptr;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.about-modal__title {
+    text-align: center;
+    padding: 10 * $ptr 12 * $ptr;
+}
+
+.about-modal__title-text {
+    @include modal-title-text;
+}
+
+.about-modal__close-button {
+    @include modal-close-button;
+}
+
+.about-modal__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 20 * $ptr;
+
+    width: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 0 16 * $ptr;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba($white, 0.75) rgba($black, 0.18);
+}
+
+.about-modal__section {
+    display: flex;
+    flex-direction: column;
+    gap: 8 * $ptr;
+
+    & + & {
+        padding-top: 16 * $ptr;
+
+        border-top: 2 * $ptr solid rgba($white, 0.35);
+    }
+}
+
+.about-modal__section-title {
+    font-size: 20 * $ptr;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.about-modal__text {
+    margin: 0;
+
+    font-size: 15 * $ptr;
+    line-height: 1.4;
+
+    opacity: 0.9;
+
+    @include respond-to($medium-breakpoint) {
+        font-size: 16 * $ptr;
+    }
+}
+
+.about-modal__links {
+    display: flex;
+    flex-direction: column;
+    gap: 10 * $ptr;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.about-modal__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8 * $ptr;
+
+    font-size: 16 * $ptr;
+
+    color: $white;
+
+    svg {
+        flex-shrink: 0;
+
+        width: 22 * $ptr;
+        height: 22 * $ptr;
+    }
+
+    &:hover {
+        color: $flag-yellow;
+    }
+
+    &:focus-visible {
+        outline: 3 * $ptr solid $flag-yellow;
+        outline-offset: 3 * $ptr;
+    }
+}

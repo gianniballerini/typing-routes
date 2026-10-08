@@ -1,0 +1,235 @@
+@use 'sass:list';
+@use 'sass:math';
+@use 'colors' as *;
+@use 'common' as *;
+
+$coin-metals: (
+    'gold': ($coin-gold, $coin-gold-light, $coin-gold-dark),
+    'silver': ($coin-silver, $coin-silver-light, $coin-silver-dark),
+);
+
+// A coin spinning down on a flat table (Euler's disk). It settles by precessing:
+// the tilt axis circles the vertical while the tilt angle alpha decays to 0, and
+// the wobble speeds up as alpha shrinks (precession rate ~ 1/sqrt(alpha)) — the
+// finite-time singularity behind the accelerating "whirr" before it stops dead.
+// The face barely rotates; the rim tips around in a circle.
+//
+//   alpha(t) = alpha0 * (1 - t)^0.6   slow at first, then a quick settle at the end
+//   omega(t) ~ 1 / sqrt(alpha(t))     integrated step by step, scaled to `$turns`
+//
+// Emits `$name` (the spinner: rotateZ(phi) rotateX(alpha) rotateZ(-phi), so the
+// tilt direction circles while the face does not spin) and `$name-shadow` (a
+// contact shadow that leans away from the raised rim and tightens as alpha -> 0).
+// Both end exactly on the identity. Play them with `linear` timing.
+@mixin coin-settle-keyframes($name, $alpha0, $turns, $steps: 72, $shift: 4 * $ptr) {
+    $exponent: 0.6;
+
+    // Angular weight of each step, sampled at its midpoint.
+    $weights: ();
+    $total: 0;
+    @for $i from 1 through $steps {
+        $t: math.div($i - 0.5, $steps);
+        $weight: math.pow(1 - $t, -0.5 * $exponent);
+        $weights: list.append($weights, $weight);
+        $total: $total + $weight;
+    }
+
+    // Cumulative tilt direction and tilt angle at every keyframe, 0 through $steps.
+    $phis: (0deg);
+    $alphas: ($alpha0);
+    $phi: 0deg;
+    @for $i from 1 through $steps {
+        $phi: $phi + math.div(list.nth($weights, $i), $total) * $turns * 360deg;
+        $phis: list.append($phis, $phi);
+        $alphas: list.append($alphas, $alpha0 * math.pow(1 - math.div($i, $steps), $exponent));
+    }
+
+    @keyframes #{$name} {
+        @for $i from 0 through $steps - 1 {
+            #{math.div($i, $steps) * 100%} {
+                transform: rotateZ(list.nth($phis, $i + 1)) rotateX(list.nth($alphas, $i + 1)) rotateZ(-1 * list.nth($phis, $i + 1));
+            }
+        }
+
+        // Keeps the final phi so the last step does not unwind the whole spin; with
+        // alpha at 0 the three rotations cancel out to the identity.
+        100% {
+            transform: rotateZ(list.nth($phis, $steps + 1)) rotateX(0deg) rotateZ(-1 * list.nth($phis, $steps + 1));
+        }
+    }
+
+    @keyframes #{$name}-shadow {
+        @for $i from 0 through $steps - 1 {
+            $phi: list.nth($phis, $i + 1);
+            $lean: math.div(list.nth($alphas, $i + 1), $alpha0);
+
+            #{math.div($i, $steps) * 100%} {
+                transform: translate(math.sin($phi) * $shift * $lean, -1 * math.cos($phi) * $shift * $lean) scale(1 + 0.15 * $lean);
+                opacity: 0.55 * math.sqrt($lean);
+            }
+        }
+
+        100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0;
+        }
+    }
+}
+
+@include coin-settle-keyframes('coin-nudge', 18deg, 4, 48, 3 * $ptr);
+@include coin-settle-keyframes('coin-settle', 28deg, 9, 90, 4 * $ptr);
+
+// The quick toss to the new face: a lift, a turn from `--toss-from` to
+// `--toss-to`, and back down onto the table.
+@keyframes coin-toss {
+    0% {
+        transform: rotateY(var(--toss-from)) translateZ(0) scale(1);
+    }
+
+    50% {
+        transform: rotateY(calc((var(--toss-from) + var(--toss-to)) / 2)) translateZ(14 * $ptr) scale(1.12);
+    }
+
+    100% {
+        transform: rotateY(var(--toss-to)) translateZ(0) scale(1);
+    }
+}
+
+// One side of a coin: a round metallic face with a raised rim, a ring of small
+// embossed dots just inside it, and the icon pressed into the centre.
+@mixin coin-face($metal) {
+    $base: nth(map-get($coin-metals, $metal), 1);
+    $light: nth(map-get($coin-metals, $metal), 2);
+    $dark: nth(map-get($coin-metals, $metal), 3);
+
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: $dark;
+    background: radial-gradient(circle at 35% 30%, $light 0%, $base 55%, darken($base, 8%) 100%);
+    border-radius: 50%;
+    // Outer lip, then the raised rim (light on top, dark under), then the cast shadow.
+    box-shadow:
+        inset 0 0 0 1 * $ptr rgba($dark, 0.9),
+        inset 0 0 0 3 * $ptr $base,
+        inset 0 1 * $ptr 1 * $ptr 3 * $ptr rgba($light, 0.9),
+        inset 0 -1 * $ptr 3 * $ptr 3 * $ptr rgba($dark, 0.55),
+        0 2 * $ptr 6 * $ptr rgba($black, 0.35);
+
+    backface-visibility: hidden;
+
+    // The ring of dots, drawn as a dotted border with a light/dark pair for relief.
+    &::before {
+        position: absolute;
+        inset: 4.5 * $ptr;
+
+        border: 2 * $ptr dotted rgba($dark, 0.75);
+        border-radius: 50%;
+        filter: drop-shadow(0 1 * $ptr 0 rgba($light, 0.8));
+        content: '';
+        pointer-events: none;
+    }
+
+    svg {
+        position: relative;
+
+        width: 20 * $ptr;
+        height: 20 * $ptr;
+
+        filter: drop-shadow(0 1 * $ptr 0 rgba($light, 0.85)) drop-shadow(0 -1 * $ptr 0 rgba($dark, 0.45));
+        pointer-events: none;
+    }
+}
+
+// The round, fixed coin button that floats over the map in the top-right corner
+// (sound, trophies). `$offset-right` is the distance from the right edge, so a
+// row of buttons shares one look and only differs by where it sits.
+//
+// Markup: button > .coin__spinner (precession wobble) > .coin__flipper (face
+// toss) > .coin__face--front + .coin__face--back. Each layer owns one transform
+// so the animations never fight. `CoinAnimator` toggles `coin--nudge` (hover),
+// `coin--settle` and `coin--toss` (click); the button's `::after` is the contact
+// shadow, visible only while one of them plays.
+@mixin header-icon-button($offset-right: 16 * $ptr, $front: 'gold', $back: 'gold') {
+    position: fixed;
+    top: 16 * $ptr;
+    right: $offset-right;
+    z-index: 10;
+
+    width: 44 * $ptr;
+    height: 44 * $ptr;
+
+    border-radius: 50%;
+
+    perspective: 300 * $ptr;
+
+    // Where the toss starts and ends; a coin with a resting face of its own
+    // overrides them.
+    --toss-from: 0deg;
+    --toss-to: 360deg;
+
+    &::after {
+        position: absolute;
+        inset: 2 * $ptr;
+        z-index: -1;
+
+        background: radial-gradient(circle, rgba($black, 0.5) 40%, rgba($black, 0) 72%);
+        border-radius: 50%;
+        opacity: 0;
+        content: '';
+        pointer-events: none;
+    }
+
+    .coin__spinner,
+    .coin__flipper {
+        position: absolute;
+        inset: 0;
+
+        transform-style: preserve-3d;
+    }
+
+    .coin__face--front {
+        @include coin-face($front);
+    }
+
+    .coin__face--back {
+        @include coin-face($back);
+
+        transform: rotateY(180deg);
+    }
+
+    &.coin--nudge .coin__spinner {
+        animation: coin-nudge 0.8s linear;
+    }
+
+    &.coin--nudge::after {
+        animation: coin-nudge-shadow 0.8s linear;
+    }
+
+    // The settle waits out most of the toss, so the coin lands and then wobbles.
+    &.coin--settle .coin__spinner {
+        animation: coin-settle 1.3s linear 0.2s;
+    }
+
+    &.coin--settle::after {
+        animation: coin-settle-shadow 1.3s linear 0.2s;
+    }
+
+    &.coin--toss .coin__flipper {
+        animation: coin-toss 0.25s ease-out;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &.coin--nudge .coin__spinner,
+        &.coin--settle .coin__spinner,
+        &.coin--toss .coin__flipper,
+        &.coin--nudge::after,
+        &.coin--settle::after {
+            animation: none;
+        }
+    }
+}

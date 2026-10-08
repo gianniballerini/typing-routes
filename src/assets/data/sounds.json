@@ -85,6 +85,20 @@
       "size": 42964,
       "category": "sfx",
       "volume": 0.8
+    },
+    {
+      "name": "coin_hover",
+      "url": "/sounds/coin_hover.m4a",
+      "size": 31000,
+      "category": "sfx",
+      "volume": 0.6
+    },
+    {
+      "name": "coin_click",
+      "url": "/sounds/coin_click.m4a",
+      "size": 50000,
+      "category": "sfx",
+      "volume": 0.8
     }
   ]
 }

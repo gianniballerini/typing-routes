@@ -182,10 +182,12 @@ class GameFlowCoordinator {
         this.ui_presenter.onRestartRequested(this.handleRestartRequested);
         this.ui_presenter.onTypingInput(this.handleTypingInput);
         this.ui_presenter.onHowToPlayRequested(this.handleHowToPlayRequested);
+        this.ui_presenter.onAboutRequested(this.handleAboutRequested);
         this.ui_presenter.onRouteListRequested(this.handleRouteListRequested);
         this.ui_presenter.onAchievementsRequested(this.handleAchievementsRequested);
         this.ui_presenter.onSettingsRequested(this.handleSettingsRequested);
         this.ui_presenter.onAudioToggleRequested(this.handleAudioToggleRequested);
+        this.ui_presenter.onCoinHover(() => this.audio_manager.play('coin_hover'));
         this.ui_presenter.onMapCursorRequested(this.handleMapCursorRequested);
         this.ui_presenter.onMenuKeyboardStep(() => this.achievements.reportMenuKeyboardStep());
         this.ui_presenter.onMenuKeyboardActivation(this.handleMenuKeyboardActivation);
@@ -224,8 +226,11 @@ class GameFlowCoordinator {
 
     private handleAudioToggleRequested = (): void => {
         const muted = this.audio_manager.toggleMute();
+        // Played after the toggle on purpose: muting stays silent, and unmuting
+        // confirms itself with the click.
+        if (!muted) this.audio_manager.play('coin_click');
 
-        this.ui_presenter.renderAudioMuted(muted);
+        this.ui_presenter.renderAudioMuted(muted, true);
         this.modal_controller.settingsModal.renderMuted(muted);
 
         // The toggle lives outside `.game-playing`, so clicking it mid-run pulls
@@ -386,6 +391,10 @@ class GameFlowCoordinator {
 
     private handleHowToPlayRequested = (): void => {
         this.modal_controller.show(ModalState.HOW_TO_PLAY);
+    };
+
+    private handleAboutRequested = (): void => {
+        this.modal_controller.show(ModalState.ABOUT);
     };
 
     private handleRouteListRequested = (): void => {
@@ -608,6 +617,7 @@ class GameFlowCoordinator {
     }
 
     private handleAchievementsRequested = (): void => {
+        this.audio_manager.play('coin_click');
         this.modal_controller.achievementsModal.render(this.buildAchievementRows());
         this.modal_controller.show(ModalState.ACHIEVEMENTS);
     };

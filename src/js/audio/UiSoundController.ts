@@ -28,6 +28,10 @@ const NAVIGATION_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRigh
 // for them" — for instance a modal focusing its close button as it opens.
 const NAVIGATION_FOCUS_WINDOW_MS = 100;
 
+// The header coins voice themselves (`coin_hover` / `coin_click`), so the generic
+// UI sounds skip them rather than double up.
+const COIN_SELECTOR = '.audio-toggle, .achievements-toggle';
+
 // Clicks and hovers on UI chrome, voiced by the UI sound pack. Typing during a
 // run is not this class's business: that goes through `AudioManager`'s keyboard
 // pack instead.
@@ -116,9 +120,11 @@ class UiSoundController {
     }
 
     private targetElement(target: EventTarget | null, selector: string): HTMLElement | null {
-        return target instanceof Element
+        const element = target instanceof Element
             ? target.closest<HTMLElement>(selector)
             : null;
+
+        return element && !element.matches(COIN_SELECTOR) ? element : null;
     }
 }
 

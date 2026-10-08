@@ -2,6 +2,7 @@ const ModalState = {
     NONE: 'none',
     ROUTE_COMPLETE: 'route-complete',
     HOW_TO_PLAY: 'how-to-play',
+    ABOUT: 'about',
     ROUTE_LIST: 'route-list',
     ACHIEVEMENTS: 'achievements',
     SETTINGS: 'settings'

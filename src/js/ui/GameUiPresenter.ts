@@ -4,6 +4,7 @@ import type { GameStateValue } from '../GameState';
 import { GameState } from '../GameState';
 import type { Route } from '../Route';
 import { bindTextInput } from '../input/TextInputForwarder';
+import { CoinAnimator } from './CoinAnimator';
 import { buildStarSvg, renderStars } from './StarsView';
 
 interface MenuRouteRecord {
@@ -67,7 +68,8 @@ class GameUiPresenter {
     private sign_button_els: HTMLElement[];
     private sign_button_how_to_play_el: HTMLElement | null;
     private sign_button_route_list_el: HTMLElement | null;
-    private sign_button_achievements_el: HTMLElement | null;
+    private sign_button_about_el: HTMLElement | null;
+    private achievements_toggle_el: HTMLElement | null;
     private sign_button_settings_el: HTMLElement | null;
     private last_rendered_state: GameStateValue | null;
     private typing_el: HTMLElement | null;
@@ -97,6 +99,8 @@ class GameUiPresenter {
     private typingInputHandler: ((inputText: string) => void) | null;
     private typingReplacementHandler: ((inputText: string) => void) | null;
     private audio_toggle_el: HTMLElement | null;
+    private achievements_coin: CoinAnimator | null;
+    private audio_coin: CoinAnimator | null;
     private audio_toggle_label_el: HTMLElement | null;
     private modalOpenPredicate: (() => boolean) | null;
     private mapCursorRequestedHandler: (() => void) | null;
@@ -160,7 +164,8 @@ class GameUiPresenter {
         this.last_rendered_state = null;
         this.sign_button_how_to_play_el = document.querySelector('.game-menu__sign-button--how-to-play');
         this.sign_button_route_list_el = document.querySelector('.game-menu__sign-button--route-list');
-        this.sign_button_achievements_el = document.querySelector('.game-menu__sign-button--achievements');
+        this.sign_button_about_el = document.querySelector('.game-menu__sign-button--about');
+        this.achievements_toggle_el = document.querySelector('.achievements-toggle');
         this.sign_button_settings_el = document.querySelector('.game-menu__sign-button--settings');
         this.typing_el = document.querySelector('.game-playing__typing');
         this.typing_prev_city_el = document.querySelector('.game-playing__typing-prev-city');
@@ -191,6 +196,8 @@ class GameUiPresenter {
         this.typingReplacementHandler = null;
         this.audio_toggle_el = document.querySelector('.audio-toggle');
         this.audio_toggle_label_el = document.querySelector('.audio-toggle__label');
+        this.achievements_coin = this.achievements_toggle_el ? new CoinAnimator(this.achievements_toggle_el) : null;
+        this.audio_coin = this.audio_toggle_el ? new CoinAnimator(this.audio_toggle_el) : null;
         this.modalOpenPredicate = null;
         this.mapCursorRequestedHandler = null;
         this.menuKeyboardStepHandler = null;
@@ -324,7 +331,20 @@ class GameUiPresenter {
     }
 
     onAchievementsRequested(handler: () => void): void {
-        this.bindActivation(this.sign_button_achievements_el, handler);
+        this.bindActivation(this.achievements_toggle_el, () => {
+            this.achievements_coin?.click();
+            handler();
+        });
+    }
+
+    // Both header coins voice their own hover; `AudioManager` is not known here.
+    onCoinHover(handler: () => void): void {
+        if (this.achievements_coin) this.achievements_coin.onPointerHover = handler;
+        if (this.audio_coin) this.audio_coin.onPointerHover = handler;
+    }
+
+    onAboutRequested(handler: () => void): void {
+        this.bindActivation(this.sign_button_about_el, handler);
     }
 
     onMilestonePreviewRequested(handler: (packId: string) => void): void {
@@ -339,8 +359,11 @@ class GameUiPresenter {
         this.bindActivation(this.audio_toggle_el, handler);
     }
 
-    renderAudioMuted(muted: boolean): void {
+    // `animate` plays the toss to the new face and the settle; the initial render
+    // just sets the resting face.
+    renderAudioMuted(muted: boolean, animate = false): void {
         this.audio_toggle_el?.classList.toggle('audio-toggle--muted', muted);
+        if (animate) this.audio_coin?.click();
         this.audio_toggle_el?.setAttribute('aria-pressed', String(muted));
         this.audio_toggle_el?.setAttribute('aria-label', muted ? 'Activar sonido' : 'Silenciar');
 
@@ -459,6 +482,8 @@ class GameUiPresenter {
 
         this.game_menu_el?.classList.toggle('hidden', !showMenu);
         this.game_playing_el?.classList.toggle('hidden', showMenu);
+        // Menu only: a trophy modal must not open over the countdown or a run.
+        this.achievements_toggle_el?.classList.toggle('hidden', !showMenu);
 
         if (showMenu) {
             this.renderTyping('', '');
@@ -614,7 +639,7 @@ class GameUiPresenter {
     /**
      * Horizontal space the open info card takes from the map, in CSS px, so the
      * camera can frame the route beside it. 0 when the card covers most of the
-     * screen (phones): there is no useful strip left to frame into.
+     * screen (narrow windows): there is no useful strip left to frame into.
      */
     getMenuInfoCardInset(): number {
         const el = this.menu_info_card_el;
