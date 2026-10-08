@@ -1,3 +1,5 @@
+@use '../common' as *;
+
 .map {
     // The map is a <canvas>; `block` keeps it off the text baseline, which would
     // otherwise leave a few pixels of gap under it.

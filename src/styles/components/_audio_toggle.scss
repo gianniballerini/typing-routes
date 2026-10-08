@@ -1,3 +1,5 @@
+@use '../common' as *;
+
 // Sits above the map in every game state — menu, countdown and run — so the
 // sound can always be cut. Fixed rather than laid out in `.header`, which is
 // otherwise an empty passthrough element.

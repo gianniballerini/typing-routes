@@ -1,3 +1,5 @@
+@use '../../common' as *;
+
 // Shared shell for every modal state: the green sign panel with its white
 // inset double border, the title text and the top-right close button.
 @mixin modal-panel {

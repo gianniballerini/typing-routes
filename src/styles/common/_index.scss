@@ -1,0 +1,7 @@
+// Shared tokens and mixins. Partials load this with `@use '<path>/common' as *;`
+// to get colors, fonts, breakpoints, `$ptr` and the helper mixins.
+@forward 'mixins';
+@forward 'device_support';
+@forward 'fonts';
+@forward 'colors';
+@forward 'common';

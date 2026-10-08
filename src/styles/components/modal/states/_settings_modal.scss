@@ -1,3 +1,6 @@
+@use '../../../common' as *;
+@use '../modal' as *;
+
 .settings-modal {
     display: flex;
     flex-direction: column;

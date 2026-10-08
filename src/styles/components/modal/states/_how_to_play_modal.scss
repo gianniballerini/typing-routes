@@ -1,3 +1,6 @@
+@use '../../../common' as *;
+@use '../modal' as *;
+
 .how-to-play-modal {
     // Flex column, so the panel below is a flex item that can actually shrink
     // to this cap — a percentage max-height on it would resolve against an

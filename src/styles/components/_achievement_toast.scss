@@ -1,3 +1,5 @@
+@use '../common' as *;
+
 // Sits above the modal (z-index 20), because a trophy earned at route-complete
 // lands while the results panel is already on screen.
 .achievement-toast-stack {

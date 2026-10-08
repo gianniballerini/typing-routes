@@ -1,28 +1,28 @@
-@import 'common/mixins';
-@import 'common/device_support';
-@import 'common/fonts';
-@import 'common/colors';
-@import 'common/common';
-@import 'common/button';
-@import 'common/section';
+@use 'common/mixins';
+@use 'common/device_support';
+@use 'common/fonts';
+@use 'common/colors';
+@use 'common/common';
+@use 'common/button';
+@use 'common/section';
 
-@import 'components/audio_toggle';
-@import 'components/stars';
-@import 'components/mouse_info_card';
-@import 'components/game_menu';
-@import 'components/game_playing';
-@import 'components/loading_screen';
-@import 'components/desktop_only_screen';
-@import 'components/achievement_toast';
-@import 'components/toast';
-@import 'components/share_card';
+@use 'components/audio_toggle';
+@use 'components/stars';
+@use 'components/mouse_info_card';
+@use 'components/game_menu';
+@use 'components/game_playing';
+@use 'components/loading_screen';
+@use 'components/desktop_only_screen';
+@use 'components/achievement_toast';
+@use 'components/toast';
+@use 'components/share_card';
 
-@import 'components/modal/modal';
-@import 'components/modal/states/route_complete_modal';
-@import 'components/modal/states/how_to_play_modal';
-@import 'components/modal/states/route_list_modal';
-@import 'components/modal/states/achievements_modal';
-@import 'components/modal/states/settings_modal';
+@use 'components/modal/modal';
+@use 'components/modal/states/route_complete_modal';
+@use 'components/modal/states/how_to_play_modal';
+@use 'components/modal/states/route_list_modal';
+@use 'components/modal/states/achievements_modal';
+@use 'components/modal/states/settings_modal';
 
-@import 'map/map';
+@use 'map/map';
 

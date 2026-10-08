@@ -1,3 +1,6 @@
+@use '../../../common' as *;
+@use '../modal' as *;
+
 .route-list-modal {
     width: min(1080 * $ptr, 100%);
     font-family: $arimo-font;

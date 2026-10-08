@@ -1,3 +1,6 @@
+@use '../../../common' as *;
+@use '../modal' as *;
+
 .achievements-modal {
     // Flex column, so the panel below is a flex item that can actually shrink to
     // the cap — a percentage max-height on an auto height would be ignored.

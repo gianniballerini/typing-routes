@@ -1,3 +1,5 @@
+@use '../common' as *;
+
 // Hidden by default: only the touch-only media query below reveals it, so a desktop
 // browser never paints it even for a frame.
 .desktop-only {

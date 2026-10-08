@@ -1,3 +1,5 @@
+@use '../common' as *;
+
 // Shared star rating widget, built by src/js/ui/StarsView.ts. Every star is an
 // outline shape with a gold copy clipped on top, so halves need no extra asset.
 $star-empty-color: rgba($white, 0.35) !default;

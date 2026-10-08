@@ -1,3 +1,7 @@
+@use 'mixins' as *;
+@use 'fonts' as *;
+@use 'colors' as *;
+
 // Small Devices Portrait
 $small-breakpoint: 370px;
 

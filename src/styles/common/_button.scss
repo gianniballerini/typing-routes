@@ -1,3 +1,5 @@
+@use 'index' as *;
+
 .button {
     @include user-select('none');
     cursor: pointer;

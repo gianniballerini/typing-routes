@@ -1,3 +1,6 @@
+@use '../../../common' as *;
+@use '../modal' as *;
+
 .route-complete-modal {
 	width: min(560 * $ptr, 100%);
     font-family: $arimo-font;

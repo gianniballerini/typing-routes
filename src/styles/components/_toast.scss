@@ -1,3 +1,5 @@
+@use '../common' as *;
+
 // Bottom-edge counterpart to the achievement stack. Same z-index tier (30):
 // the two never overlap — one hugs the top, this one the bottom — and both only
 // need to clear `.modal` (z-index 20), since the share toast fires while the
