@@ -286,6 +286,105 @@
     opacity: 0.8;
 }
 
+.settings-modal__rules-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10 * $ptr;
+}
+
+.settings-modal__rules-title {
+    font-size: 14 * $ptr;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.settings-modal__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16 * $ptr;
+
+    padding: 10 * $ptr 12 * $ptr;
+
+    border-radius: 10 * $ptr;
+    border: 1 * $ptr solid rgba($white, 0.3);
+    background-color: rgba($black, 0.14);
+
+    color: inherit;
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba($white, 0.14);
+    }
+
+    &:focus-visible {
+        outline: 2 * $ptr solid rgba($flag-yellow, 0.92);
+        outline-offset: 2 * $ptr;
+    }
+
+    &[aria-checked='true'] {
+        border-color: $flag-yellow;
+        background-color: rgba($flag-yellow, 0.16);
+    }
+}
+
+.settings-modal__toggle-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2 * $ptr;
+}
+
+.settings-modal__toggle-label {
+    font-size: 16 * $ptr;
+    line-height: 1.2;
+}
+
+.settings-modal__toggle-hint {
+    font-size: 13 * $ptr;
+    line-height: 1.2;
+    opacity: 0.8;
+}
+
+.settings-modal__toggle-switch {
+    position: relative;
+    flex: none;
+
+    width: 40 * $ptr;
+    height: 22 * $ptr;
+
+    border-radius: 11 * $ptr;
+    background-color: rgba($white, 0.3);
+
+    transition: background-color 0.15s ease;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 3 * $ptr;
+        left: 3 * $ptr;
+
+        width: 16 * $ptr;
+        height: 16 * $ptr;
+
+        border-radius: 50%;
+        background-color: $white;
+
+        transition: transform 0.15s ease;
+    }
+
+    .settings-modal__toggle[aria-checked='true'] & {
+        background-color: $flag-yellow;
+
+        &::after {
+            transform: translateX(18 * $ptr);
+        }
+    }
+}
+
 .settings-modal__credits {
     display: flex;
     flex-direction: column;

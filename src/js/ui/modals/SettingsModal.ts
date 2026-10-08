@@ -11,6 +11,8 @@ class SettingsModal extends BaseModal {
     private keyPacksEl: HTMLElement | null;
     private keyPackButtonEls: HTMLButtonElement[];
     private onKeyPackSelectedHandler: ((packId: string) => void) | null;
+    private strictAccentsToggleEl: HTMLButtonElement | null;
+    private onStrictAccentsToggleHandler: ((value: boolean) => void) | null;
 
     constructor(onCloseRequested: () => void) {
         super('.settings-modal', '.settings-modal__close-button', onCloseRequested);
@@ -24,6 +26,11 @@ class SettingsModal extends BaseModal {
         this.keyPacksEl = this.rootEl?.querySelector('.settings-modal__keypacks') ?? null;
         this.keyPackButtonEls = [];
         this.onKeyPackSelectedHandler = null;
+        this.strictAccentsToggleEl = this.rootEl?.querySelector('.settings-modal__toggle') ?? null;
+        this.onStrictAccentsToggleHandler = null;
+
+        this.strictAccentsToggleEl?.addEventListener('click', this.handleStrictAccentsClick);
+        this.strictAccentsToggleEl?.addEventListener('keydown', this.handleStrictAccentsKeydown);
 
         for (const sliderEl of this.sliderEls) {
             sliderEl.addEventListener('input', this.handleSliderInput);
@@ -41,6 +48,14 @@ class SettingsModal extends BaseModal {
 
     onKeyPackSelected(handler: (packId: string) => void): void {
         this.onKeyPackSelectedHandler = handler;
+    }
+
+    onStrictAccentsToggle(handler: (value: boolean) => void): void {
+        this.onStrictAccentsToggleHandler = handler;
+    }
+
+    renderStrictAccents(value: boolean): void {
+        this.strictAccentsToggleEl?.setAttribute('aria-checked', value ? 'true' : 'false');
     }
 
     renderKeyPacks(states: KeyPackState[]): void {
@@ -149,6 +164,18 @@ class SettingsModal extends BaseModal {
         for (const el of this.keyPackButtonEls) el.tabIndex = el === buttonEl ? 0 : -1;
         buttonEl.focus({ preventScroll: true });
     }
+
+    private handleStrictAccentsClick = (): void => {
+        const toggleEl = this.strictAccentsToggleEl;
+        if (!toggleEl) return;
+
+        this.onStrictAccentsToggleHandler?.(toggleEl.getAttribute('aria-checked') !== 'true');
+    };
+
+    private handleStrictAccentsKeydown = (event: KeyboardEvent): void => {
+        // Same reason as the sliders: Enter skips the countdown elsewhere.
+        if (event.key === 'Enter' || event.key === ' ') event.stopPropagation();
+    };
 
     private handleSliderInput = (event: Event): void => {
         const sliderEl = event.currentTarget;

@@ -27,6 +27,13 @@
             .settings-modal__keypacks-section
                 span.settings-modal__keypacks-title Sonido del teclado
                 .settings-modal__keypacks(role="radiogroup" aria-label="Sonido del teclado")
+            .settings-modal__rules-section
+                span.settings-modal__rules-title Reglas
+                button.settings-modal__toggle(type="button" role="switch" aria-checked="false" aria-describedby="settings-strict-accents-hint")
+                    span.settings-modal__toggle-text
+                        span.settings-modal__toggle-label Tildes y ñ obligatorias
+                        span.settings-modal__toggle-hint#settings-strict-accents-hint Si está activado, hay que escribir cada letra con su tilde o ñ.
+                    span.settings-modal__toggle-switch(aria-hidden="true")
             .settings-modal__credits
                 span.settings-modal__credits-title Créditos
                 .settings-modal__credits-body

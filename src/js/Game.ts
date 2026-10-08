@@ -85,7 +85,7 @@ class Game extends EventTarget {
 
     private loadCurrentCityTarget(): void {
         const city = this.current_route?.cities[this.current_city_index];
-        if (city) this.typing_controller.setTarget(city.typing);
+        if (city) this.typing_controller.setTarget(city.name.normalize('NFC'));
     }
 
     private advanceCity(): void {

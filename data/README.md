@@ -1,7 +1,8 @@
 # Game data
 
 Two hand-curated JSON sources plus one generated geometry artifact, all under
-`src/assets/data/` and loaded at build time (not fetched at runtime).
+`src/assets/data/`. The JSON is imported at build time; only the `routes_render.bin`
+blob is fetched at runtime (see `src/js/data/RouteGeometryStore.ts`).
 
 ## Files
 
@@ -17,7 +18,8 @@ Two hand-curated JSON sources plus one generated geometry artifact, all under
   (`"Ruta Nacional N"`) — `GameUiPresenter`/`GameFlowCoordinator` already fall
   back to `route_name`/`"Ruta N"` when it's missing. `cities` is the ordered
   list of city ids the player types, resolved against `cities.json`. A route
-  with no curated cities yet (e.g. `rn-173`, `rn-175`) has `cities: []`.
+  with no curated cities yet would have `cities: []` (and is skipped by the
+  route picker), but every route currently has some.
 
 - `cities.json` — the shared, deduplicated city catalog (cities can belong to
   multiple routes):
@@ -50,10 +52,11 @@ Two hand-curated JSON sources plus one generated geometry artifact, all under
   province) is filed under `tierra-del-fuego/estrecho-de-magallanes`.
 - **Province**: canonical display names only — no `"N/A"`, no parenthetical
   qualifiers like the old `"Buenos Aires (CABA)"`.
-- `typing` must be lowercase and accent-free; it should normally match what
-  you'd get by stripping accents/punctuation from `name`, but a handful of
-  entries intentionally diverge (shortened landmark names, one city with a
-  literal `.` in `typing`) — the validator warns on these rather than failing.
+- `typing` must be lowercase and accent-free. At runtime the game types the
+  accented `name` (matching is folded by `src/js/utils/TextFolding.ts`), so
+  `typing` is kept equal to `name` folded; the validator warns when it differs
+  from its name-derived guess (today only `corrientes/mariano-i-loza`, which
+  keeps a literal `.`) rather than failing.
 
 ## Regenerating geometry
 
@@ -63,7 +66,7 @@ kept only as the simplifier's input). To rebuild `routes_render.{json,bin}`
 from it:
 
 ```
-python3 data/simplify_geometries.py data/raw/national_routes_geometries.json src/assets/data
+python3 data/simplify_geometries.py data/raw/national_routes_geometries.json src/assets/data --px 0.25
 ```
 
 To rebuild from a fresh DNV WFS export instead (regenerates `routes.json`'s
@@ -73,7 +76,7 @@ id — see the script's docstring):
 
 ```
 python3 data/build_national_routes.py <input_ows.json> src/assets/data/routes.json
-python3 data/simplify_geometries.py data/raw/national_routes_geometries.json src/assets/data
+python3 data/simplify_geometries.py data/raw/national_routes_geometries.json src/assets/data --px 0.25
 ```
 
 `cities` are never sourced from the DNV export — they're curated by hand

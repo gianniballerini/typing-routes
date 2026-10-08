@@ -27,6 +27,7 @@ import { UserStats } from '../UserStats';
 import type { RouteMetrics, SnappedRoutePoint } from '../utils/GeometryUtils';
 import { bearingOnRoute, buildRouteMetrics, interpolateOnRoute, projectPointOnRoute } from '../utils/GeometryUtils';
 import { calculateStarRating } from '../utils/StarRating';
+import { GameplayPreferencesStorage } from './GameplayPreferencesStorage';
 import { UserStatsStorage } from './UserStatsStorage';
 
 // Several trophies can land in the same tick; past this they share one cue.
@@ -77,6 +78,7 @@ interface GameFlowCoordinatorDependencies {
 }
 
 class GameFlowCoordinator {
+    private gameplay_preferences_storage: GameplayPreferencesStorage;
     private game: Game;
     private routes_controller: RoutesController;
     private map_controller: MapController;
@@ -120,6 +122,7 @@ class GameFlowCoordinator {
         this.share_card_composer = new ShareCardComposer();
         this.toast = new Toast();
         this.audio_manager = dependencies.audio_manager;
+        this.gameplay_preferences_storage = new GameplayPreferencesStorage();
         this.routeMetrics = null;
         this.snappedCityPoints = [];
         this.activeRunStats = null;
@@ -194,6 +197,9 @@ class GameFlowCoordinator {
         this.modal_controller.settingsModal.onVolumeChange(this.handleVolumeChange);
         this.modal_controller.settingsModal.onCategoryMuteToggle(this.handleCategoryMuteToggle);
         this.modal_controller.settingsModal.onKeyPackSelected(this.handleKeyPackSelected);
+        this.modal_controller.settingsModal.onStrictAccentsToggle(this.handleStrictAccentsToggle);
+        this.ui_presenter.onTypingReplacement(this.handleTypingReplacement);
+        this.game.typing_controller.setStrict(this.gameplay_preferences_storage.load().strictAccents);
         this.ui_presenter.onMilestonePreviewRequested(this.handleMilestonePreviewRequested);
         this.map_controller.addEventListener('route-selected', this.handleRouteSelected as EventListener);
         this.map_route_cursor.bind();
@@ -395,6 +401,7 @@ class GameFlowCoordinator {
         this.modal_controller.settingsModal.renderKeyPacks(this.getKeyPackStates());
         this.modal_controller.settingsModal.renderVolumes(this.audio_manager.getCategoryVolumes());
         this.modal_controller.settingsModal.renderMuted(this.audio_manager.isMuted());
+        this.modal_controller.settingsModal.renderStrictAccents(this.game.typing_controller.strict);
         this.modal_controller.show(ModalState.SETTINGS);
     };
 
@@ -863,6 +870,23 @@ class GameFlowCoordinator {
             if (char === '\n' || char === '\r') continue;
             this.game.typing_controller.handleInput(char);
         }
+    };
+
+    // A press-and-hold replacement (plain `a` then `á`) is not a new keystroke: no
+    // key sound, and the controller decides whether it advances or is dropped.
+    private handleTypingReplacement = (inputText: string): void => {
+        if (this.game.state !== GameState.PLAYING) return;
+
+        for (const char of inputText) {
+            if (char === '\n' || char === '\r') continue;
+            this.game.typing_controller.handleReplacement(char);
+        }
+    };
+
+    private handleStrictAccentsToggle = (value: boolean): void => {
+        this.game.typing_controller.setStrict(value);
+        this.gameplay_preferences_storage.save({ strictAccents: value });
+        this.modal_controller.settingsModal.renderStrictAccents(value);
     };
 
     private getRouteSelectionZoom(routeLengthKm: number | undefined): number {

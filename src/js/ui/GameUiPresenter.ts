@@ -3,6 +3,7 @@ import type { MenuKeysTipElements } from '../app/GsapManager';
 import type { GameStateValue } from '../GameState';
 import { GameState } from '../GameState';
 import type { Route } from '../Route';
+import { bindTextInput } from '../input/TextInputForwarder';
 import { buildStarSvg, renderStars } from './StarsView';
 
 interface MenuRouteRecord {
@@ -94,6 +95,7 @@ class GameUiPresenter {
     private restart_button_el: HTMLElement | null;
     private restartRequestedHandler: (() => void) | null;
     private typingInputHandler: ((inputText: string) => void) | null;
+    private typingReplacementHandler: ((inputText: string) => void) | null;
     private audio_toggle_el: HTMLElement | null;
     private audio_toggle_label_el: HTMLElement | null;
     private modalOpenPredicate: (() => boolean) | null;
@@ -112,7 +114,12 @@ class GameUiPresenter {
         this.game_playing_el = document.querySelector('.game-playing');
         this.game_playing_focus_input_el = document.querySelector('.game-playing__keyboard-focus-target');
         this.game_playing_el?.addEventListener('pointerdown', this.handlePlayingPointerDown);
-        this.game_playing_focus_input_el?.addEventListener('input', this.handleKeyboardFocusInput);
+        if (this.game_playing_focus_input_el) {
+            bindTextInput(this.game_playing_focus_input_el, {
+                onText: (text) => this.typingInputHandler?.(text),
+                onReplacement: (text) => this.typingReplacementHandler?.(text),
+            });
+        }
 
         this.menu_info_card_el = document.querySelector('.game-menu__info-card');
         this.menu_info_card_close_button_el = document.querySelector('.game-menu__info-card-close');
@@ -181,6 +188,7 @@ class GameUiPresenter {
         this.restartRequestedHandler = null;
         this.restart_button_el?.addEventListener('click', this.handleRestartButtonClick);
         this.typingInputHandler = null;
+        this.typingReplacementHandler = null;
         this.audio_toggle_el = document.querySelector('.audio-toggle');
         this.audio_toggle_label_el = document.querySelector('.audio-toggle__label');
         this.modalOpenPredicate = null;
@@ -397,6 +405,10 @@ class GameUiPresenter {
         this.typingInputHandler = handler;
     }
 
+    onTypingReplacement(handler: (inputText: string) => void): void {
+        this.typingReplacementHandler = handler;
+    }
+
     focusTypingInput(): void {
         if (!this.game_playing_focus_input_el) return;
         this.game_playing_focus_input_el.focus({ preventScroll: true });
@@ -425,24 +437,6 @@ class GameUiPresenter {
 
     private handleRestartButtonClick = (): void => {
         this.restartRequestedHandler?.();
-    };
-
-    private handleKeyboardFocusInput = (event: Event): void => {
-        const inputEl = this.game_playing_focus_input_el;
-        if (!inputEl) return;
-
-        const inputEvent = event as InputEvent;
-        const inputText = typeof inputEvent.data === 'string' && inputEvent.data.length > 0
-            ? inputEvent.data
-            : inputEl.value;
-
-        try {
-            if (inputText && this.typingInputHandler) {
-                this.typingInputHandler(inputText);
-            }
-        } finally {
-            inputEl.value = '';
-        }
     };
 
     private handleCloseButtonClick = (): void => {
