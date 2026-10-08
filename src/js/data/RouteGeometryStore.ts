@@ -7,9 +7,9 @@ import renderBinaryUrl from '../../assets/data/routes_render.bin?url';
  *
  * The raw DNV export is 247k coordinates of survey-grade detail (19.7 MB of JSON
  * inlined straight into the bundle). The game never draws finer than a pixel at
- * `Settings.maxZoom`, so the build step simplifies to ~17.6k coordinates, projects
+ * `Settings.maxZoom`, so the build step simplifies to ~25.5k coordinates, projects
  * them to Web Mercator and quantizes each route to Int16 against its own bounding
- * box — 70 KB of binary fetched alongside the app instead of megabytes parsed
+ * box — ~100 KB of binary fetched alongside the app instead of megabytes parsed
  * before the first frame.
  *
  * Coordinates are stored projected because that is what the renderer ultimately

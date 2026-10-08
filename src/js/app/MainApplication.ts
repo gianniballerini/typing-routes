@@ -46,8 +46,8 @@ class MainApplication {
     constructor(loading_manager: LoadingManager, route_geometry: ArrayBuffer) {
         this.loading_manager = loading_manager;
 
-        // Kicked off first: the keyboard sprite is a couple of MB and its
-        // download runs alongside the map tiles rather than after them.
+        // Kicked off first: the keyboard sprite is the heaviest blocking audio
+        // download and it runs alongside the map setup rather than after it.
         this.audio_preferences_storage = new AudioPreferencesStorage();
         this.audio_manager = new AudioManager(this.audio_preferences_storage);
         const audio_loading = this.audio_manager.load({

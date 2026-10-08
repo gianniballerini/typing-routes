@@ -86,7 +86,7 @@ class RouteListModal extends BaseModal {
     }
 
     /**
-     * Tiles are created on the first render and patched afterwards: there are ~96
+     * Tiles are created on the first render and patched afterwards: there are 98
      * of them and only their stats change between openings.
      */
     render(rows: RouteListRow[], selectedRouteId: string | null = null): void {
@@ -323,7 +323,7 @@ class RouteListModal extends BaseModal {
                 break;
         }
 
-        // Type-ahead by route number: with ~96 tiles, "40" beats forty arrow presses.
+        // Type-ahead by route number: with ~100 tiles, "40" beats forty arrow presses.
         if (/^\d$/.test(event.key)) {
             event.preventDefault();
             this.pushTypeAhead(event.key);

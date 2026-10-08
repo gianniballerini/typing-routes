@@ -1,5 +1,5 @@
 // Shapes for `src/assets/data/sounds.json` and for the Mechvibes pack descriptor
-// that ships alongside each keyboard sprite in `public/sounds/<pack>/config.json`.
+// that ships alongside each keyboard sprite in `public/sounds/keys/<id>/config.json`.
 
 type SoundCategory = 'music' | 'sfx' | 'keys';
 

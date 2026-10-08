@@ -13,7 +13,7 @@ declare global {
 // (see `src/styles/common/_device_support.scss`), so there is no reason to construct the
 // loading screen or pay for the download below just to tell someone to come back later.
 if (isDesktopExperienceSupported()) {
-    // This entry is deliberately tiny. `MainApplication` drags in MapLibre, and while
+    // This entry is deliberately tiny. `MainApplication` drags in the whole game, and while
     // that is one static import graph the browser has to fetch and parse *all* of it
     // before a single frame of the intro can run. Importing it dynamically keeps the
     // entry chunk down to the loading screen, so the title starts animating while the

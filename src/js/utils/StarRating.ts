@@ -18,8 +18,8 @@ interface StarRatingResult {
  * never been completed: there is nothing to rate yet, which reads differently
  * from "completed and earned zero stars".
  *
- * Records migrated from v2 have null accuracy/WPM (see UserStatsStorage), so a
- * missing metric scores zero rather than being treated as perfect.
+ * A stored record may carry null or missing metrics (`UserStatsStorage` accepts
+ * both), so a missing metric scores zero rather than being treated as perfect.
  */
 function calculateStarRating(record: RouteRecordSnapshot | null, completed: boolean): StarRatingResult | null {
     if (!completed) return null;
