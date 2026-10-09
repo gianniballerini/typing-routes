@@ -994,6 +994,15 @@
       "tier": "major"
     },
     {
+      "id": "entre-rios/la-paz",
+      "name": "La Paz",
+      "typing": "la paz",
+      "lat": -30.7451,
+      "lon": -59.6453,
+      "province": "Entre Ríos",
+      "tier": "minor"
+    },
+    {
       "id": "corrientes/goya",
       "name": "Goya",
       "typing": "goya",
