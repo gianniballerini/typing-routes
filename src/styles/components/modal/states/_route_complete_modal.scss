@@ -5,7 +5,18 @@
 	width: min(560 * $ptr, 100%);
     font-family: $arimo-font;
 
+    // The action bar sits under the panel, outside it, so the two read as
+    // "result" and "what next".
+    display: flex;
+    flex-direction: column;
+    gap: 16 * $ptr;
+
     pointer-events: auto;
+
+    // Holds focus while no action is picked yet; nothing to show for that.
+    &:focus {
+        outline: none;
+    }
 }
 
 .route-complete-modal__content {
@@ -110,36 +121,67 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    flex-wrap: wrap;
 
-    gap: 10 * $ptr;
+    gap: 12 * $ptr;
 
     align-self: center;
 }
 
+// Icon-only, in the dark-gray style of the run's quit and restart buttons. The
+// action's name only shows, centred underneath, on hover or keyboard focus.
+.route-complete-modal__route-list-button,
 .route-complete-modal__retry-button,
-.route-complete-modal__share-button {
+.route-complete-modal__share-button,
+.route-complete-modal__next-button {
+    width: 48 * $ptr;
+    height: 48 * $ptr;
+
     display: flex;
-    flex-direction: row;
+    justify-content: center;
     align-items: center;
 
-    gap: 10 * $ptr;
+    background: $dark-gray;
+    border-radius: 10 * $ptr;
+    box-shadow: 0 3 * $ptr 5 * $ptr rgba($black, 0.5);
 
-    padding: 10 * $ptr 15 * $ptr;
+    color: $white;
 
-    &:hover {
-        background-color: rgba($white, 0.2);
+    transition: transform 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+        transform: scale(1.05);
+
+        .route-complete-modal__button-text {
+            opacity: 1;
+        }
     }
 }
 
 .route-complete-modal__button-text {
-    font-size: 20 * $ptr;
+    position: absolute;
+    top: calc(100% + 10 * $ptr);
+    left: 50%;
+    transform: translateX(-50%);
+
+    padding: 4 * $ptr 8 * $ptr;
+
+    background: $dark-gray;
+    border-radius: 6 * $ptr;
+
+    font-size: 13 * $ptr;
+    font-weight: bold;
     text-transform: uppercase;
+    white-space: nowrap;
+
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
 }
 
 .route-complete-modal__button-icon {
-    width: 30 * $ptr;
-    height: 30 * $ptr;
+    width: 24 * $ptr;
+    height: 24 * $ptr;
 
     svg {
         width: 100%;

@@ -30,11 +30,14 @@ interface RouteCompleteModalPayload {
 	citiesCompleted: number;
 	citiesTotal: number;
 	mistakes: number;
+	// The route after this one in the course list, or null on the last one.
+	nextRouteId: string | null;
 }
 
 class RouteCompleteModal extends BaseModal {
 	private route_name: string;
 	private route_id: string;
+	private next_route_id: string | null;
 	private titleEl: HTMLElement | null;
 	private starsEl: HTMLElement | null;
 	private ratingLabelEl: HTMLElement | null;
@@ -46,8 +49,10 @@ class RouteCompleteModal extends BaseModal {
 	private citiesEl: HTMLElement | null;
 	private mistakesEl: HTMLElement | null;
 
+	private routeListButtonEl: HTMLElement | null;
 	private retryButtonEl: HTMLElement | null;
 	private shareButtonEl: HTMLElement | null;
+	private nextButtonEl: HTMLElement | null;
 	// Left to right, which is the order the arrows walk them in.
 	private actionButtonEls: HTMLElement[];
 	// The card is drawn from the run, not from the panel, so the last rendered
@@ -59,12 +64,15 @@ class RouteCompleteModal extends BaseModal {
 	private isSharing: boolean;
 	private onShareRequestedHandler: ((payload: RouteCompleteModalPayload) => Promise<void>) | null;
 	private onRetryHandler: ((routeId: string) => void) | null;
+	private onNextRouteHandler: ((routeId: string) => void) | null;
+	private onRouteListRequestedHandler: (() => void) | null;
 
 	constructor(onCloseRequested: () => void) {
 		super('.route-complete-modal', '.route-complete-modal__close-button', onCloseRequested);
 
 		this.route_name = '';
 		this.route_id = '';
+		this.next_route_id = null;
 
 		this.titleEl = document.querySelector('.route-complete-modal__title-text');
 		this.starsEl = document.querySelector('.route-complete-modal__stars');
@@ -77,19 +85,26 @@ class RouteCompleteModal extends BaseModal {
 		this.citiesEl = document.querySelector('.route-complete-modal__stat-value--cities');
 		this.mistakesEl = document.querySelector('.route-complete-modal__stat-value--mistakes');
 
+		this.routeListButtonEl = document.querySelector('.route-complete-modal__route-list-button');
 		this.retryButtonEl = document.querySelector('.route-complete-modal__retry-button');
 		this.shareButtonEl = document.querySelector('.route-complete-modal__share-button');
+		this.nextButtonEl = document.querySelector('.route-complete-modal__next-button');
 
-		this.actionButtonEls = [this.retryButtonEl, this.shareButtonEl]
+		this.actionButtonEls = [this.routeListButtonEl, this.retryButtonEl, this.shareButtonEl, this.nextButtonEl]
 			.filter((el): el is HTMLElement => el !== null);
 
 		this.lastPayload = null;
 		this.isSharing = false;
 		this.onShareRequestedHandler = null;
 		this.onRetryHandler = null;
+		this.onNextRouteHandler = null;
+		this.onRouteListRequestedHandler = null;
 
+		this.bindAction(this.routeListButtonEl, this.openRouteList);
 		this.bindAction(this.retryButtonEl, this.retry);
 		this.bindAction(this.shareButtonEl, this.share);
+		this.bindAction(this.nextButtonEl, this.playNextRoute);
+		this.rootEl?.addEventListener('keydown', this.handleRootKeydown);
 	}
 
 	onShareRequested(handler: (payload: RouteCompleteModalPayload) => Promise<void>): void {
@@ -100,15 +115,44 @@ class RouteCompleteModal extends BaseModal {
 		this.onRetryHandler = handler;
 	}
 
-	// Opens on "Reintentar" so Enter replays the route straight away — by far the
-	// likeliest thing to want next, and the reason the button exists.
+	onNextRoute(handler: (routeId: string) => void): void {
+		this.onNextRouteHandler = handler;
+	}
+
+	onRouteListRequested(handler: () => void): void {
+		this.onRouteListRequestedHandler = handler;
+	}
+
+	// Opens with no action picked: the panel itself holds focus, so keys stay out
+	// of the hidden typing input and Escape still reads as "close this". The
+	// first arrow press hands focus to the buttons.
 	protected focusInitialElement(): void {
-		if (!this.retryButtonEl) {
+		if (!this.rootEl) {
 			super.focusInitialElement();
 			return;
 		}
 
-		this.retryButtonEl.focus({ preventScroll: true });
+		this.rootEl.focus({ preventScroll: true });
+	}
+
+	// Only while the panel itself is focused; once a button has focus its own
+	// handler walks the row.
+	private handleRootKeydown = (event: KeyboardEvent): void => {
+		if (event.target !== this.rootEl) return;
+
+		const step = this.getNavigationStep(event.key);
+		if (step === 0) return;
+
+		const visibleEls = this.getVisibleActionEls();
+		if (visibleEls.length === 0) return;
+
+		event.preventDefault();
+		const targetEl = step > 0 ? visibleEls[0] : visibleEls[visibleEls.length - 1];
+		targetEl.focus({ preventScroll: true });
+	};
+
+	private getVisibleActionEls(): HTMLElement[] {
+		return this.actionButtonEls.filter((el) => !el.classList.contains('hidden'));
 	}
 
 	// The action buttons are divs, so Enter and Space need wiring by hand, and the
@@ -140,14 +184,17 @@ class RouteCompleteModal extends BaseModal {
 		return 0;
 	}
 
+	// Only the visible buttons count, so the arrows never land on a hidden
+	// "Siguiente ruta" after the last route.
 	private focusRelativeAction(currentEl: HTMLElement, step: number): void {
-		const currentIndex = this.actionButtonEls.indexOf(currentEl);
+		const visibleEls = this.getVisibleActionEls();
+		const currentIndex = visibleEls.indexOf(currentEl);
 		if (currentIndex === -1) return;
 
-		const nextIndex = Math.max(0, Math.min(this.actionButtonEls.length - 1, currentIndex + step));
+		const nextIndex = Math.max(0, Math.min(visibleEls.length - 1, currentIndex + step));
 		if (nextIndex === currentIndex) return;
 
-		this.actionButtonEls[nextIndex].focus({ preventScroll: true });
+		visibleEls[nextIndex].focus({ preventScroll: true });
 	}
 
 	private retry = (): void => {
@@ -156,9 +203,21 @@ class RouteCompleteModal extends BaseModal {
 		this.onRetryHandler?.(this.route_id);
 	};
 
+	private playNextRoute = (): void => {
+		if (!this.next_route_id) return;
+
+		this.onNextRouteHandler?.(this.next_route_id);
+	};
+
+	private openRouteList = (): void => {
+		this.onRouteListRequestedHandler?.();
+	};
+
 	render(payload: RouteCompleteModalPayload): void {
 		this.lastPayload = payload;
 		this.route_id = payload.routeId;
+		this.next_route_id = payload.nextRouteId;
+		this.nextButtonEl?.classList.toggle('hidden', payload.nextRouteId === null);
 		this.route_name = payload.routeTitle || 'Ruta completada';
 		const title = this.route_name;
 		if (this.titleEl) this.titleEl.textContent = title;

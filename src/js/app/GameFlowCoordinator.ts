@@ -195,6 +195,8 @@ class GameFlowCoordinator {
         this.achievements.addEventListener('achievement-unlocked', this.handleAchievementUnlocked as EventListener);
         this.modal_controller.routeCompleteModal.onShareRequested(this.handleShareRequested);
         this.modal_controller.routeCompleteModal.onRetry(this.handleRetryRequested);
+        this.modal_controller.routeCompleteModal.onNextRoute(this.handleNextRouteRequested);
+        this.modal_controller.routeCompleteModal.onRouteListRequested(this.handleRouteListRequested);
         this.modal_controller.routeListModal.onRouteActivated(this.handleRouteListActivated);
         this.modal_controller.settingsModal.onVolumeChange(this.handleVolumeChange);
         this.modal_controller.settingsModal.onCategoryMuteToggle(this.handleCategoryMuteToggle);
@@ -449,6 +451,15 @@ class GameFlowCoordinator {
             .sort((a, b) => this.toRouteNumber(a.route_number) - this.toRouteNumber(b.route_number));
     }
 
+    // The route after this one in the course grid's order, or null on the last.
+    private getNextPlayableRouteId(routeId: string): string | null {
+        const routes = this.getOrderedPlayableRoutes();
+        const index = routes.findIndex((route) => route.route_id === routeId);
+        if (index === -1) return null;
+
+        return routes[index + 1]?.route_id ?? null;
+    }
+
     /**
      * Country-wide progress for the home screen. Completion is weighted by
      * route length, so it reads as "how much of the country was driven".
@@ -681,6 +692,13 @@ class GameFlowCoordinator {
     private handleRetryRequested = (routeId: string): void => {
         // Closed first: hiding hands focus back to whatever opened the modal, and
         // the COUNTDOWN transition below is what should own focus from here on.
+        this.modal_controller.hide();
+        this.selectAndStartRoute(routeId);
+    };
+
+    // "Siguiente ruta" goes in through the same door as "Reintentar", just with
+    // the route after this one in the course list.
+    private handleNextRouteRequested = (routeId: string): void => {
         this.modal_controller.hide();
         this.selectAndStartRoute(routeId);
     };
@@ -1291,7 +1309,8 @@ class GameFlowCoordinator {
             elapsedMs: calculatedMetrics.elapsedMs,
             citiesCompleted: runStats.citiesCompleted,
             citiesTotal: totalCities,
-            mistakes: runStats.mistakes
+            mistakes: runStats.mistakes,
+            nextRouteId: this.getNextPlayableRouteId(runStats.routeId)
         });
         this.modal_controller.show(ModalState.ROUTE_COMPLETE);
     }
