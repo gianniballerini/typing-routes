@@ -23,7 +23,7 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src",
 ROUTE_ID_RE = re.compile(r"^rn-[1-9][0-9]*$")
 CITY_ID_RE = re.compile(r"^[a-z0-9-]+/[a-z0-9-]+$")
 ALLOWED_TIERS = {"major", "medium", "minor"}
-ALLOWED_KINDS = {"bridge", "ferry", "detour", "endpoint"}
+ALLOWED_KINDS = {"bridge", "ferry", "detour", "endpoint", "border", "landmark"}
 
 
 def slugify(value: str) -> str:

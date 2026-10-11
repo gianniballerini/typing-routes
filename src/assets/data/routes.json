@@ -10,6 +10,7 @@
         "buenos-aires/avellaneda",
         "buenos-aires/quilmes",
         "buenos-aires/berazategui",
+        "buenos-aires/hudson",
         "buenos-aires/ensenada",
         "buenos-aires/la-plata"
       ]
@@ -21,24 +22,45 @@
       "description": "La Ruta Nacional 3 es una carretera de 3.079 kilómetros que une la Provincia de Buenos Aires con Tierra del Fuego, en el extremo sur de Argentina. Es famosa por cruzar la Patagonia y llegar hasta el 'Fin del Mundo'",
       "cities": [
         "caba/buenos-aires",
+        "buenos-aires/lomas-del-mirador",
+        "buenos-aires/san-justo",
+        "buenos-aires/isidro-casanova",
+        "buenos-aires/gregorio-de-laferrere",
+        "buenos-aires/gonzalez-catan",
+        "buenos-aires/virrey-del-pino",
+        "buenos-aires/santa-rosa",
         "buenos-aires/canuelas",
+        "buenos-aires/abbott",
         "buenos-aires/san-miguel-del-monte",
         "buenos-aires/las-flores",
+        "buenos-aires/cachari",
         "buenos-aires/azul",
+        "buenos-aires/chillar",
         "buenos-aires/benito-juarez",
+        "buenos-aires/adolfo-gonzales-chaves",
         "buenos-aires/tres-arroyos",
+        "buenos-aires/micaela-cascallares",
+        "buenos-aires/el-perdido",
+        "buenos-aires/coronel-dorrego",
         "buenos-aires/bahia-blanca",
+        "buenos-aires/mayor-buratovich",
+        "buenos-aires/hilario-ascasubi",
+        "buenos-aires/pedro-luro",
+        "buenos-aires/villalonga",
+        "buenos-aires/stroeder",
         "buenos-aires/carmen-de-patagones",
         "rio-negro/viedma",
         "rio-negro/san-antonio-oeste",
         "rio-negro/las-grutas",
         "rio-negro/sierra-grande",
-        "chubut/puerto-piramides",
         "chubut/puerto-madryn",
         "chubut/trelew",
         "chubut/garayalde",
         "chubut/comodoro-rivadavia",
+        "chubut/rada-tilly",
+        "santa-cruz/sindicato-dodero",
         "santa-cruz/caleta-olivia",
+        "santa-cruz/fitz-roy",
         "santa-cruz/puerto-san-julian",
         "santa-cruz/comandante-luis-piedrabuena",
         "santa-cruz/rio-gallegos",
@@ -57,11 +79,29 @@
       "description": "La Ruta Nacional 5 une Buenos Aires con La Pampa a lo largo de 545 km. Eje agrícola vital, conecta Luján con Santa Rosa, hilvanando pueblos productivos e historias del corazón pampeano argentino.",
       "cities": [
         "buenos-aires/lujan",
+        "buenos-aires/jose-maria-jauregui",
+        "buenos-aires/olivera",
+        "buenos-aires/gowland",
         "buenos-aires/mercedes",
+        "buenos-aires/suipacha",
+        "buenos-aires/gorostiaga",
         "buenos-aires/chivilcoy",
+        "buenos-aires/alberti",
+        "buenos-aires/mechita",
+        "buenos-aires/bragado",
+        "buenos-aires/nueve-de-julio",
+        "buenos-aires/french",
+        "buenos-aires/carlos-casares",
         "buenos-aires/pehuajo",
+        "buenos-aires/francisco-madero",
+        "buenos-aires/juan-jose-paso",
+        "buenos-aires/beruti",
         "buenos-aires/trenque-lauquen",
+        "buenos-aires/pellegrini",
         "la-pampa/catrilo",
+        "la-pampa/lonquimay",
+        "la-pampa/uriburu",
+        "la-pampa/anguil",
         "la-pampa/santa-rosa"
       ]
     },
@@ -72,18 +112,44 @@
       "description": "La Ruta Nacional 7 atraviesa Argentina de este a oeste. Une Buenos Aires con Mendoza y el límite con Chile a lo largo de 1224 km, siendo el corredor bioceánico más clave de la producción del país.",
       "cities": [
         "caba/buenos-aires",
+        "buenos-aires/ciudadela",
+        "buenos-aires/el-palomar",
+        "buenos-aires/haedo",
+        "buenos-aires/villa-tesei",
+        "buenos-aires/castelar",
+        "buenos-aires/ituzaingo",
+        "buenos-aires/villa-udaondo",
+        "buenos-aires/paso-del-rey",
         "buenos-aires/moreno",
+        "buenos-aires/la-reja",
+        "buenos-aires/francisco-alvarez",
+        "buenos-aires/general-rodriguez",
         "buenos-aires/lujan",
+        "buenos-aires/san-andres-de-giles",
+        "buenos-aires/carmen-de-areco",
+        "buenos-aires/chacabuco",
         "buenos-aires/junin",
+        "buenos-aires/vedia",
         "santa-fe/rufino",
         "cordoba/laboulaye",
+        "cordoba/general-levalle",
         "cordoba/vicuna-mackenna",
+        "san-luis/justo-daract",
         "san-luis/villa-mercedes",
         "san-luis/san-luis",
         "mendoza/la-paz",
+        "mendoza/santa-rosa",
         "mendoza/san-martin",
+        "mendoza/palmira",
+        "mendoza/rodeo-del-medio",
+        "mendoza/rodeo-de-la-cruz",
+        "mendoza/villa-nueva",
         "mendoza/mendoza",
+        "mendoza/dorrego",
+        "mendoza/perdriel",
         "mendoza/uspallata",
+        "mendoza/los-penitentes",
+        "mendoza/puente-del-inca",
         "mendoza/las-cuevas"
       ]
     },
@@ -92,13 +158,44 @@
       "length_km": 726.86,
       "description": "La Ruta Nacional 8 conecta Buenos Aires con San Luis a lo largo de 695 km. Une Pilar con Villa Mercedes, atravesando el núcleo agropecuario de Córdoba y Santa Fe como un eje logístico esencial.",
       "cities": [
+        "buenos-aires/el-talar",
+        "buenos-aires/ingeniero-pablo-nogues",
+        "buenos-aires/garin",
+        "buenos-aires/tortuguitas",
+        "buenos-aires/manuel-alberti",
+        "buenos-aires/lagomarsino",
+        "buenos-aires/del-viso",
+        "buenos-aires/maquinista-savio",
+        "buenos-aires/la-lonja",
         "buenos-aires/pilar",
+        "buenos-aires/manzanares",
+        "buenos-aires/fatima",
+        "buenos-aires/parada-robles",
+        "buenos-aires/solis",
         "buenos-aires/san-antonio-de-areco",
+        "buenos-aires/duggan",
+        "buenos-aires/capitan-sarmiento",
+        "buenos-aires/arrecifes",
+        "buenos-aires/todd",
+        "buenos-aires/vina",
+        "buenos-aires/juan-anchorena",
+        "buenos-aires/fontezuela",
         "buenos-aires/pergamino",
+        "buenos-aires/el-arbolito",
+        "buenos-aires/colon",
+        "santa-fe/hughes",
         "santa-fe/venado-tuerto",
+        "cordoba/arias",
+        "cordoba/alejo-ledesma",
         "cordoba/canals",
         "cordoba/la-carlota",
+        "cordoba/villa-reduccion",
         "cordoba/rio-cuarto",
+        "cordoba/santa-catalina",
+        "cordoba/las-vertientes",
+        "cordoba/sampacho",
+        "cordoba/chajan",
+        "san-luis/juan-jorba",
         "san-luis/villa-mercedes"
       ]
     },
@@ -107,19 +204,67 @@
       "length_km": 1975.46,
       "description": "La Ruta Nacional 9 es el gran eje histórico de Argentina. Une Buenos Aires con la frontera de Bolivia a lo largo de 1.967 km, conectando Rosario, Córdoba, Tucumán y Jujuy en un vital corredor productivo.",
       "cities": [
+        "buenos-aires/villa-martelli",
+        "buenos-aires/munro",
+        "buenos-aires/florida",
+        "buenos-aires/olivos",
+        "buenos-aires/martinez",
+        "buenos-aires/villa-adelina",
+        "buenos-aires/jose-leon-suarez",
+        "buenos-aires/boulogne",
+        "buenos-aires/victoria",
+        "buenos-aires/don-torcuato",
+        "buenos-aires/el-talar",
+        "buenos-aires/general-pacheco",
+        "buenos-aires/ricardo-rojas",
+        "buenos-aires/garin",
+        "buenos-aires/ingeniero-maschwitz",
+        "buenos-aires/belen-de-escobar",
+        "buenos-aires/lomas-del-rio-lujan",
+        "buenos-aires/campana",
         "buenos-aires/san-nicolas-de-los-arroyos",
+        "santa-fe/arroyo-seco",
+        "santa-fe/pueblo-esther",
         "santa-fe/rosario",
+        "santa-fe/funes",
+        "santa-fe/roldan",
         "santa-fe/carcarana",
+        "santa-fe/correa",
         "santa-fe/canada-de-gomez",
+        "santa-fe/armstrong",
+        "cordoba/general-roca",
+        "cordoba/marcos-juarez",
         "cordoba/villa-maria",
+        "cordoba/oliva",
+        "cordoba/oncativo",
+        "cordoba/laguna-larga",
+        "cordoba/rio-segundo",
+        "cordoba/toledo",
         "cordoba/cordoba",
         "cordoba/jesus-maria",
+        "cordoba/villa-del-totoral",
+        "cordoba/villa-de-maria",
+        "santiago-del-estero/villa-ojo-de-agua",
+        "santiago-del-estero/villa-san-martin",
+        "santiago-del-estero/arraga",
         "santiago-del-estero/santiago-del-estero",
+        "santiago-del-estero/termas-de-rio-hondo",
+        "tucuman/banda-del-rio-sali",
+        "tucuman/las-talitas",
         "tucuman/san-miguel-de-tucuman",
+        "tucuman/tafi-viejo",
+        "tucuman/trancas",
+        "salta/rosario-de-la-frontera",
         "salta/metan",
+        "salta/san-jose-de-metan",
         "salta/salta",
+        "salta/la-caldera",
+        "jujuy/el-carmen",
         "jujuy/san-salvador-de-jujuy",
+        "jujuy/tumbaya",
+        "jujuy/tilcara",
         "jujuy/humahuaca",
+        "jujuy/abra-pampa",
         "jujuy/la-quiaca"
       ]
     },
@@ -130,10 +275,58 @@
       "description": "La Ruta Nacional 11 bordea el río Paraná a lo largo de 983 km. Une Rosario con Clorinda en la frontera de Paraguay, atravesando Santa Fe, Chaco y Formosa como un eje vital de integración regional.",
       "cities": [
         "santa-fe/rosario",
+        "santa-fe/granadero-baigorria",
+        "santa-fe/capitan-bermudez",
+        "santa-fe/fray-luis-beltran",
         "santa-fe/san-lorenzo",
+        "santa-fe/puerto-general-san-martin",
+        "santa-fe/timbues",
+        "santa-fe/oliveros",
+        "santa-fe/maciel",
+        "santa-fe/monje",
+        "santa-fe/barrancas",
+        "santa-fe/san-fabian",
+        "santa-fe/arocena",
+        "santa-fe/coronda",
+        "santa-fe/desvio-arijon",
+        "santa-fe/sauce-viejo",
+        "santa-fe/santo-tome",
         "santa-fe/santa-fe",
+        "santa-fe/recreo",
+        "santa-fe/gobernador-candioti",
+        "santa-fe/nelson",
+        "santa-fe/llambi-campbell",
+        "santa-fe/emilia",
+        "santa-fe/videla",
+        "santa-fe/san-justo",
+        "santa-fe/ramayon",
+        "santa-fe/marcelino-escalada",
+        "santa-fe/gobernador-crespo",
+        "santa-fe/la-criolla",
+        "santa-fe/vera-y-pintado",
+        "santa-fe/pedro-gomez-cello",
+        "santa-fe/calchaqui",
+        "santa-fe/margarita",
+        "santa-fe/vera",
+        "santa-fe/malabrigo",
+        "santa-fe/berna",
         "santa-fe/reconquista",
+        "santa-fe/avellaneda",
+        "santa-fe/guadalupe-norte",
+        "santa-fe/las-garzas",
+        "santa-fe/el-sombrerito",
+        "santa-fe/villa-ocampo",
+        "santa-fe/tacuarendi",
+        "santa-fe/san-antonio-de-obligado",
+        "santa-fe/las-toscas",
+        "santa-fe/el-rabon",
+        "santa-fe/florencia",
+        "chaco/basail",
         "chaco/resistencia",
+        "chaco/margarita-belen",
+        "chaco/puerto-eva-peron",
+        "formosa/general-lucio-v-mansilla",
+        "formosa/tatane",
         "formosa/formosa",
         "formosa/clorinda"
       ]
@@ -147,14 +340,31 @@
         "buenos-aires/zarate",
         "entre-rios/ceibas",
         "entre-rios/gualeguay",
+        "entre-rios/general-galarza",
+        "entre-rios/nogoya",
+        "entre-rios/general-ramirez",
+        "entre-rios/crespo",
         "entre-rios/parana",
+        "entre-rios/san-benito",
         "entre-rios/la-paz",
         "corrientes/esquina",
         "corrientes/goya",
+        "corrientes/san-roque",
+        "corrientes/empedrado",
         "corrientes/corrientes",
+        "corrientes/san-cosme",
         "corrientes/ituzaingo",
         "misiones/posadas",
+        "misiones/garupa",
+        "misiones/candelaria",
+        "misiones/santa-ana",
+        "misiones/san-ignacio",
+        "misiones/jardin-america",
+        "misiones/puerto-rico",
+        "misiones/montecarlo",
         "misiones/eldorado",
+        "misiones/colonia-wanda",
+        "misiones/puerto-libertad",
         "misiones/puerto-iguazu"
       ]
     },
@@ -168,13 +378,24 @@
         "entre-rios/gualeguaychu",
         "entre-rios/concepcion-del-uruguay",
         "entre-rios/colon",
+        "entre-rios/san-jose",
         "entre-rios/concordia",
         "entre-rios/federacion",
+        "entre-rios/chajari",
+        "corrientes/mocoreta",
         "corrientes/paso-de-los-libres",
+        "corrientes/la-cruz",
+        "corrientes/alvear",
         "corrientes/santo-tome",
+        "corrientes/gobernador-virasoro",
         "misiones/apostoles",
+        "misiones/leandro-n-alem",
         "misiones/obera",
+        "misiones/campo-viera",
+        "misiones/campo-grande",
+        "misiones/aristobulo-del-valle",
         "misiones/san-vicente",
+        "misiones/san-pedro",
         "misiones/bernardo-de-irigoyen"
       ]
     },
@@ -184,11 +405,28 @@
       "length_km": 707.25,
       "description": "La Ruta Nacional 16 cruza el Gran Chaco a lo largo de 707 km. Une Corrientes y Resistencia con San José de Metán en Salta, actuando como el corredor bioceánico del norte argentino y el Mercosur.",
       "cities": [
+        "corrientes/corrientes",
         "chaco/resistencia",
+        "chaco/puerto-tirol",
+        "chaco/makalle",
+        "chaco/lapachito",
+        "chaco/presidencia-de-la-plaza",
+        "chaco/machagai",
+        "chaco/quitilipi",
         "chaco/presidencia-roque-saenz-pena",
+        "chaco/avia-terai",
+        "chaco/concepcion-del-bermejo",
         "chaco/pampa-del-infierno",
-        "chaco/taco-pozo",
+        "chaco/los-frentones",
+        "chaco/rio-muerto",
+        "santiago-del-estero/pampa-de-los-guanacos",
         "santiago-del-estero/monte-quemado",
+        "chaco/taco-pozo",
+        "salta/nuestra-senora-de-talavera",
+        "salta/el-quebrachal",
+        "salta/gaona",
+        "salta/joaquin-v-gonzalez",
+        "salta/el-tunal",
         "salta/el-galpon",
         "salta/metan"
       ]
@@ -199,7 +437,11 @@
       "description": "Carretera asfaltada de 227 km que atraviesa Entre Ríos de oeste a este. Une San Benito, cerca de Paraná, con la RN 14 cerca de Concordia. Se encuentra en proceso de transformación en autovía.",
       "cities": [
         "entre-rios/parana",
+        "entre-rios/san-benito",
+        "entre-rios/colonia-avellaneda",
+        "entre-rios/viale",
         "entre-rios/villaguay",
+        "entre-rios/villa-clara",
         "entre-rios/san-salvador",
         "entre-rios/general-campos",
         "entre-rios/concordia"
@@ -210,11 +452,27 @@
       "length_km": 337.17,
       "description": "Carretera asfaltada que vincula las capitales de Córdoba y Santa Fe en un recorrido de 137 km. Es parte del corredor bioceánico central, conectando el túnel subfluvial con la red troncal este-oeste.",
       "cities": [
-        "corrientes/santo-tome",
+        "santa-fe/santo-tome",
+        "santa-fe/colonia-san-jose",
+        "santa-fe/san-agustin",
         "santa-fe/san-carlos-centro",
+        "santa-fe/san-jeronimo-del-sauce",
+        "santa-fe/sa-pereira",
+        "santa-fe/angelica",
+        "santa-fe/josefina",
+        "santa-fe/frontera",
         "cordoba/san-francisco",
+        "cordoba/devoto",
+        "cordoba/la-francia",
         "cordoba/arroyito",
+        "cordoba/el-tio",
+        "cordoba/transito",
+        "cordoba/los-chanaritos",
+        "cordoba/santiago-temple",
+        "cordoba/rio-primero",
+        "cordoba/piquillin",
         "cordoba/monte-cristo",
+        "cordoba/malvinas-argentinas",
         "cordoba/cordoba"
       ]
     },
@@ -225,8 +483,13 @@
       "cities": [
         "cordoba/cordoba",
         "cordoba/villa-carlos-paz",
-        "cordoba/mina-clavero",
+        "cordoba/villa-dolores",
         "san-luis/quines",
+        "san-luis/lujan",
+        "san-juan/pie-de-palo",
+        "san-juan/caucete",
+        "san-juan/villa-independencia",
+        "san-juan/santa-lucia",
         "san-juan/san-juan"
       ]
     },
@@ -236,14 +499,30 @@
       "length_km": 1404.49,
       "description": "Carretera asfaltada de 685 km que atraviesa Buenos Aires, La Pampa, Río Negro y Neuquén. Es el principal acceso a la región patagónica, conectando Bahía Blanca con Zapala y la RN 40.",
       "cities": [
-        "buenos-aires/bahia-blanca",
+        "buenos-aires/medanos",
+        "buenos-aires/nicolas-levalle",
+        "buenos-aires/juan-couste",
+        "la-pampa/la-adela",
         "rio-negro/rio-colorado",
         "rio-negro/choele-choel",
+        "rio-negro/darwin",
+        "rio-negro/coronel-belisle",
+        "rio-negro/chimpay",
+        "rio-negro/chelforo",
+        "rio-negro/chichinales",
         "rio-negro/villa-regina",
+        "rio-negro/general-enrique-godoy",
+        "rio-negro/ingeniero-luis-a-huergo",
+        "rio-negro/mainque",
+        "rio-negro/cervantes",
         "rio-negro/general-roca",
+        "rio-negro/allen",
+        "rio-negro/general-fernandez-oro",
         "rio-negro/cipolletti",
         "neuquen/neuquen",
         "neuquen/plottier",
+        "neuquen/senillosa",
+        "neuquen/arroyito",
         "neuquen/plaza-huincul",
         "neuquen/cutral-co",
         "neuquen/zapala"
@@ -255,13 +534,18 @@
       "length_km": 599.11,
       "description": "Carretera de 605 km que recorre Río Negro de este a oeste, desde la costa atlántica hasta la cordillera. Conocida como la Línea Sur, conecta la RN 3 con la RN 40 en Dina Huapi.",
       "cities": [
-        "rio-negro/san-antonio-oeste",
+        "rio-negro/aguada-cecilio",
         "rio-negro/valcheta",
+        "rio-negro/nahuel-niyeu",
         "rio-negro/ministro-ramos-mexia",
         "rio-negro/sierra-colorada",
         "rio-negro/los-menucos",
+        "rio-negro/aguada-de-guerra",
         "rio-negro/maquinchao",
         "rio-negro/ingeniero-jacobacci",
+        "rio-negro/clemente-onelli",
+        "rio-negro/comallo",
+        "rio-negro/pilcaniyeu",
         "rio-negro/dina-huapi"
       ]
     },
@@ -273,10 +557,11 @@
         "chubut/rawson",
         "chubut/trelew",
         "chubut/gaiman",
+        "chubut/dolavon",
         "chubut/las-plumas",
         "chubut/los-altares",
-        "chubut/tecka",
-        "chubut/esquel"
+        "chubut/paso-de-indios",
+        "chubut/tecka"
       ]
     },
     {
@@ -286,8 +571,8 @@
       "cities": [
         "chubut/comodoro-rivadavia",
         "chubut/rada-tilly",
-        "chubut/sarmiento",
-        "chubut/rio-mayo"
+        "chubut/el-trebol",
+        "chubut/sarmiento"
       ]
     },
     {
@@ -297,13 +582,29 @@
       "description": "Carretera asfaltada que atraviesa Buenos Aires sin pasar por el AMBA. Une los puertos de Rosario y Bahía Blanca, siendo una columna vertebral del transporte de cargas del centro del país.",
       "cities": [
         "buenos-aires/bahia-blanca",
+        "buenos-aires/tornquist",
+        "buenos-aires/saavedra",
         "buenos-aires/pigue",
+        "buenos-aires/espartillar",
+        "buenos-aires/guamini",
+        "buenos-aires/casbas",
         "buenos-aires/garre",
         "buenos-aires/trenque-lauquen",
+        "buenos-aires/fortin-olavarria",
+        "buenos-aires/america",
+        "buenos-aires/general-villegas",
+        "buenos-aires/piedritas",
+        "buenos-aires/canada-seca",
         "santa-fe/rufino",
+        "santa-fe/amenabar",
         "santa-fe/venado-tuerto",
+        "santa-fe/murphy",
         "santa-fe/firmat",
+        "santa-fe/villada",
+        "santa-fe/chabas",
         "santa-fe/casilda",
+        "santa-fe/pujato",
+        "santa-fe/zavalla",
         "santa-fe/perez",
         "santa-fe/rosario"
       ]
@@ -315,18 +616,35 @@
       "description": "Importante carretera asfaltada que recorre el norte argentino de norte a sur. Atraviesa provincias como Salta, Tucumán, Santiago del Estero, Santa Fe y Buenos Aires.",
       "cities": [
         "santa-fe/rosario",
-        "santa-fe/san-jorge",
+        "santa-fe/totoras",
+        "santa-fe/san-genaro",
+        "santa-fe/canada-rosquin",
+        "santa-fe/san-vicente",
+        "santa-fe/angelica",
         "santa-fe/rafaela",
+        "santa-fe/sunchales",
         "santa-fe/ceres",
+        "santiago-del-estero/selva",
         "santiago-del-estero/pinto",
         "santiago-del-estero/anatuya",
+        "santiago-del-estero/herrera",
+        "santiago-del-estero/garza",
+        "santiago-del-estero/fernandez",
+        "santiago-del-estero/ingeniero-forres",
         "santiago-del-estero/la-banda",
+        "santiago-del-estero/pozo-hondo",
         "salta/rosario-de-la-frontera",
         "salta/metan",
         "salta/general-guemes",
         "jujuy/san-pedro-de-jujuy",
         "jujuy/libertador-general-san-martin",
+        "jujuy/fraile-pintado",
+        "jujuy/calilegua",
+        "salta/pichanal",
+        "salta/embarcacion",
+        "salta/general-mosconi",
         "salta/tartagal",
+        "salta/aguaray",
         "salta/profesor-salvador-mazza"
       ]
     },
@@ -337,10 +655,12 @@
       "description": "Carretera asfaltada que une Santa Fe con Córdoba. Es un corredor estratégico que conecta la región pampeana con el centro del país, facilitando el transporte de producciones agropecuarias.",
       "cities": [
         "buenos-aires/bahia-blanca",
+        "buenos-aires/villa-bordeu",
         "la-pampa/jacinto-arauz",
-        "la-pampa/general-acha",
+        "la-pampa/ataliva-roca",
         "la-pampa/santa-rosa",
         "la-pampa/eduardo-castex",
+        "la-pampa/embajador-martini",
         "la-pampa/realico",
         "cordoba/huinca-renanco",
         "cordoba/vicuna-mackenna",
@@ -352,12 +672,15 @@
       "length_km": 813.12,
       "description": "Autovía de 217 km que une Córdoba con Río Cuarto en la provincia homónima. Es el principal acceso al sur cordobés, pasando por Alcira Gigena, Berrotarán y Almafuerte.",
       "cities": [
+        "cordoba/las-higueras",
         "cordoba/rio-cuarto",
+        "cordoba/alcira-gigena",
         "cordoba/elena",
         "cordoba/berrotaran",
         "cordoba/almafuerte",
         "cordoba/rio-tercero",
         "cordoba/san-agustin",
+        "cordoba/despenaderos",
         "cordoba/alta-gracia",
         "cordoba/cordoba"
       ]
@@ -369,13 +692,31 @@
       "description": "Carretera pavimentada que une Córdoba con Tucumán atravesando La Rioja y Catamarca. Conocida como Ruta Monseñor Angelelli, conecta el Valle de Punilla con el noroeste argentino.",
       "cities": [
         "cordoba/villa-carlos-paz",
+        "cordoba/bialet-masse",
+        "cordoba/santa-maria-de-punilla",
         "cordoba/cosquin",
+        "cordoba/valle-hermoso",
         "cordoba/la-falda",
+        "cordoba/huerta-grande",
+        "cordoba/villa-giardino",
+        "cordoba/la-cumbre",
+        "cordoba/capilla-del-monte",
         "cordoba/cruz-del-eje",
+        "cordoba/villa-de-soto",
         "la-rioja/chamical",
+        "la-rioja/punta-de-los-llanos",
+        "la-rioja/patquia",
         "la-rioja/la-rioja",
+        "catamarca/chumbicha",
         "catamarca/san-fernando-del-valle-de-catamarca",
+        "catamarca/san-isidro",
+        "catamarca/la-merced",
+        "tucuman/la-cocha",
+        "tucuman/ciudad-alberdi",
+        "tucuman/aguilares",
         "tucuman/concepcion",
+        "tucuman/rio-seco",
+        "tucuman/monteros",
         "tucuman/famailla",
         "tucuman/san-miguel-de-tucuman"
       ]
@@ -386,37 +727,85 @@
       "length_km": 5080.16,
       "description": "La carretera más emblemática de Argentina, con más de 5.000 km que recorren el oeste del país. Atraviesa 20 provincias desde La Quiaca hasta Cabo Vírgenes, pasando por los Andes y la Patagonia.",
       "cities": [
+        "santa-cruz/punta-loyola",
         "santa-cruz/cabo-virgenes",
         "santa-cruz/rio-gallegos",
         "santa-cruz/28-de-noviembre",
+        "santa-cruz/esperanza",
         "santa-cruz/el-calafate",
         "santa-cruz/gobernador-gregores",
         "santa-cruz/perito-moreno",
         "chubut/rio-mayo",
+        "chubut/gobernador-costa",
         "chubut/tecka",
         "chubut/esquel",
+        "chubut/el-hoyo",
         "rio-negro/el-bolson",
         "rio-negro/san-carlos-de-bariloche",
+        "rio-negro/dina-huapi",
         "neuquen/villa-la-angostura",
         "neuquen/san-martin-de-los-andes",
         "neuquen/junin-de-los-andes",
         "neuquen/zapala",
+        "neuquen/las-lajas",
+        "neuquen/chorriaca",
         "neuquen/chos-malal",
+        "neuquen/buta-ranquil",
+        "neuquen/barrancas",
+        "mendoza/bardas-blancas",
         "mendoza/malargue",
-        "mendoza/san-rafael",
+        "mendoza/el-sosneado",
+        "mendoza/pareditas",
+        "mendoza/chilecito",
+        "mendoza/eugenio-bustos",
         "mendoza/tunuyan",
+        "mendoza/ugarteche",
+        "mendoza/perdriel",
+        "mendoza/lujan-de-cuyo",
+        "mendoza/godoy-cruz",
+        "mendoza/dorrego",
         "mendoza/mendoza",
+        "mendoza/san-jose",
+        "mendoza/bermejo",
+        "mendoza/las-heras",
+        "mendoza/jocoli-viejo",
+        "mendoza/jocoli",
+        "san-juan/media-agua",
+        "san-juan/carpinteria",
+        "san-juan/villa-nacusi",
+        "san-juan/villa-krause",
         "san-juan/san-juan",
+        "san-juan/villa-paula-albarracin-de-sarmiento",
+        "san-juan/niquivil",
         "san-juan/san-jose-de-jachal",
+        "san-juan/huaco",
+        "la-rioja/guandacol",
         "la-rioja/villa-union",
+        "la-rioja/sanogasta",
+        "la-rioja/nonogasta",
         "la-rioja/chilecito",
+        "la-rioja/pituil",
+        "la-rioja/san-blas-de-los-sauces",
         "catamarca/londres",
         "catamarca/belen",
+        "catamarca/san-jose",
+        "catamarca/chanar-punco",
+        "catamarca/loro-huasi",
         "catamarca/santa-maria",
+        "tucuman/colalao-del-valle",
+        "salta/tolombon",
         "salta/cafayate",
+        "salta/animana",
+        "salta/san-carlos",
+        "salta/molinos",
+        "salta/seclantas",
         "salta/cachi",
+        "salta/payogasta",
+        "salta/la-poma",
         "salta/san-antonio-de-los-cobres",
+        "jujuy/sey",
         "jujuy/susques",
+        "jujuy/coranzuli",
         "jujuy/la-quiaca"
       ]
     },
@@ -426,6 +815,7 @@
       "description": "La Ruta Nacional 50 es una carretera pavimentada de 71 kilómetros que conecta la ciudad de Pichanal con el puente internacional sobre el Río Bermejo, frontera natural con Bolivia. El camino se encuentra en el Departamento Orán, al norte de la provincia de Salta y ha sido asfaltado desde Pichanal hasta Oran.",
       "cities": [
         "salta/pichanal",
+        "salta/hipolito-yrigoyen",
         "salta/oran",
         "salta/aguas-blancas"
       ]
@@ -436,6 +826,7 @@
       "description": "La Ruta Nacional 51 es una carretera argentina pavimentada que se encuentra en el oeste de la Provincia de Salta y sudoeste de la Provincia de Jujuy. Tiene un recorrido de 283 km y une la rotonda del Aeropuerto con el Paso Sico, a 4092 m s.n.m., en el límite con Chile.",
       "cities": [
         "salta/salta",
+        "salta/la-silleta",
         "salta/campo-quijano",
         "salta/santa-rosa-de-tastil",
         "salta/san-antonio-de-los-cobres",
@@ -449,7 +840,8 @@
       "cities": [
         "jujuy/purmamarca",
         "jujuy/susques",
-        "jujuy/paso-de-jama"
+        "jujuy/paso-de-jama",
+        "jujuy/jama"
       ]
     },
     {
@@ -457,9 +849,14 @@
       "length_km": 1569.39,
       "description": "La Ruta Nacional 60 es una carretera pavimentada que conecta las provincias de Córdoba, Catamarca y La Rioja. Con un recorrido de 794 km, esta ruta nacional es utilizada por vehículos de gran porte y mercadería en su trayecto hacia el norte de la República Argentina y Bolivia.",
       "cities": [
-        "cordoba/villa-de-maria-de-rio-seco",
+        "cordoba/sarmiento",
         "cordoba/dean-funes",
+        "cordoba/quilino",
+        "catamarca/chumbicha",
+        "la-rioja/villa-mazan",
         "la-rioja/aimogasta",
+        "catamarca/el-salado",
+        "catamarca/copacabana",
         "catamarca/tinogasta",
         "catamarca/fiambala",
         "catamarca/paso-de-san-francisco"
@@ -471,8 +868,10 @@
       "description": "La Ruta Nacional 64 es una carretera argentina pavimentada que se extiende desde el sur de Tucumán, pasa por Catamarca y se encuentra en el centro-oeste de la Provincia de Santiago del Estero. Tiene un recorrido de 164 kilómetros asfaltados que une la esquina de Avenida Aristóbulo del Valle y Avenida Bolivia (ex-Ruta Nacional 34) en la ciudad de La Banda y la Ruta Nacional 38 en las cercanías de la pequeña localidad de Rumi Punco. Fue diseñada sobre un antiguo camino de tierra que fue pavimentado en 1946 y convertido en ruta asfaltada en su totalidad en 1952.",
       "cities": [
         "santiago-del-estero/santiago-del-estero",
+        "santiago-del-estero/lavalle",
         "santiago-del-estero/san-pedro-de-guasayan",
         "catamarca/banado-de-ovanta",
+        "catamarca/los-altos",
         "catamarca/altos-de-san-antonio"
       ]
     },
@@ -483,8 +882,7 @@
       "cities": [
         "tucuman/concepcion",
         "tucuman/alpachiri",
-        "catamarca/las-estancias",
-        "catamarca/andalgala"
+        "catamarca/las-estancias"
       ]
     },
     {
@@ -493,8 +891,10 @@
       "description": "La Ruta Nacional 66 es una carretera pavimentada en el sudeste de la Provincia de Jujuy, que se extiende sobre un recorrido de 38 km desde San Salvador de Jujuy hasta la confluencia con la Ruta Nacional 34. La ruta comienza como autopista entre el empalme con la Ruta Nacional 9 y el aeropuerto Horacio Guzmán, antes de cambiar su rumbo hacia el este y seguir un recorrido alternativo hasta llegar a su finalización.",
       "cities": [
         "jujuy/san-salvador-de-jujuy",
+        "jujuy/alto-comedero",
         "jujuy/palpala",
-        "jujuy/perico"
+        "jujuy/perico",
+        "jujuy/san-juancito"
       ]
     },
     {
@@ -504,8 +904,10 @@
       "cities": [
         "salta/cafayate",
         "salta/talapampa",
+        "salta/la-vina",
         "salta/coronel-moldes",
         "salta/el-carril",
+        "salta/la-merced",
         "salta/cerrillos",
         "salta/salta"
       ]
@@ -526,6 +928,7 @@
       "description": "La Ruta Nacional 74 es una carretera argentina pavimentada que une las localidades de Patquía y Nonogasta en un recorrido de 113 km, extendiéndose por el valle limitado por la Sierra de Velasco al este y la Sierra de Sañogasta al oeste. Fue inaugurada el 4 de julio de 1950 y se mantiene bajo la modalidad de contratos de recuperación y mantenimiento.",
       "cities": [
         "la-rioja/patquia",
+        "la-rioja/vichigasta",
         "la-rioja/nonogasta"
       ]
     },
@@ -546,8 +949,9 @@
       "length_km": 377.21,
       "description": "La Ruta Nacional 76 es una carretera argentina que se localiza en el oeste de la Provincia de La Rioja. Conecta la Ruta Nacional 150 con el paso montañoso internacional Pircas Negras, situado a una altitud de 4165 m s. n. m., pasando por el interior de la Reserva Provincial Laguna Brava y el parque nacional Talampaya.",
       "cities": [
-        "san-juan/san-jose-de-jachal",
+        "la-rioja/pagancillo",
         "la-rioja/villa-union",
+        "la-rioja/villa-castelli",
         "la-rioja/vinchina",
         "la-rioja/jague",
         "la-rioja/paso-pircas-negras"
@@ -558,6 +962,7 @@
       "length_km": 101.95,
       "description": "La Ruta Nacional 77 es una carretera pavimentada que une el pueblo de Desiderio Tello con el empalme con la Ruta Nacional 38, uniendo las provincias de La Rioja y Córdoba. Tiene una longitud de 102 km y su recorrido pasa por varios departamentos y localidades en ambas provincias.",
       "cities": [
+        "la-rioja/desiderio-tello",
         "la-rioja/milagro",
         "cordoba/el-chacho"
       ]
@@ -568,6 +973,7 @@
       "description": "La Ruta Nacional 78 es una carretera pavimentada en el norte de la Provincia de La Rioja, Argentina. Originalmente era un tramo de la Ruta Nacional 40, pero a través del Decreto Nacional 1595 en 1979, se intercambiaron caminos y se le dio la misma denominación a las nuevas rutas provinciales. En 1997, se cambió la denominación a Ruta Nacional 78 después de un convenio entre la Dirección Nacional de Vialidad y la Provincia de La Rioja. La carretera fue pavimentada al norte de Famatina en 2007.",
       "cities": [
         "la-rioja/famatina",
+        "la-rioja/angulos",
         "la-rioja/campanas"
       ]
     },
@@ -593,9 +999,18 @@
       "cities": [
         "formosa/formosa",
         "formosa/palo-santo",
+        "formosa/comandante-fontana",
+        "formosa/ibarreta",
+        "formosa/estanislao-del-campo",
+        "formosa/pozo-del-tigre",
         "formosa/las-lomitas",
+        "formosa/laguna-yema",
+        "formosa/los-chiriguanos",
         "formosa/ingeniero-juarez",
-        "salta/pluma-de-pato"
+        "salta/los-blancos",
+        "salta/coronel-juan-sola",
+        "salta/pluma-de-pato",
+        "salta/dragones"
       ]
     },
     {
@@ -604,9 +1019,17 @@
       "description": "La Ruta Nacional 86 es una carretera parcialmente asfaltada que se encuentra en el norte de la Provincia de Formosa y parte de la Provincia de Salta. El camino tiene un recorrido de 521 km, donde el tramo entre Clorinda y General Manuel Belgrano está asfaltado, mientras que hacia el noroeste es de tierra. Luego de un tramo de interrupción, la ruta continúa en el noreste de la Provincia de Salta, entre Tonono y Tartagal, en un tramo de 35 km de tierra.",
       "cities": [
         "formosa/clorinda",
+        "formosa/laguna-blanca",
+        "formosa/buena-vista",
+        "formosa/el-espinillo",
         "formosa/general-belgrano",
+        "formosa/mision-tacaagle",
         "formosa/villa-general-guemes",
-        "formosa/posta-cambio-zalazar"
+        "formosa/san-martin-2",
+        "formosa/fortin-lugones",
+        "formosa/posta-cambio-zalazar",
+        "formosa/lamadrid",
+        "formosa/guadalcazar"
       ]
     },
     {
@@ -615,8 +1038,12 @@
       "description": "Es una carretera argentina pavimentada que se encuentra en el sur de la Provincia del Chaco y el centro-este de la Provincia de Santiago del Estero. Conecta la Ruta Nacional 16 en Avia Terai con la Ruta Nacional 34 en Taboada, recorriendo 348 kilómetros.",
       "cities": [
         "chaco/avia-terai",
+        "chaco/campo-largo",
+        "chaco/corzuela",
+        "chaco/las-brenas",
         "chaco/charata",
         "chaco/general-pinedo",
+        "chaco/gancedo",
         "santiago-del-estero/quimili",
         "santiago-del-estero/suncho-corral"
       ]
@@ -626,9 +1053,14 @@
       "length_km": 1410.39,
       "description": "La Ruta Nacional 95 es una carretera argentina pavimentada que une las provincias argentinas de Santa Fe, Chaco y Formosa. Tiene un recorrido de 675 kilómetros y conecta las ciudades de Ceres y Villa General Güemes.",
       "cities": [
+        "santa-fe/ceres",
         "santa-fe/tostado",
+        "chaco/santa-sylvina",
+        "chaco/coronel-du-graty",
         "chaco/villa-angela",
         "chaco/presidencia-roque-saenz-pena",
+        "chaco/tres-isletas",
+        "chaco/zaparinqui",
         "chaco/castelli",
         "formosa/villa-general-guemes"
       ]
@@ -640,6 +1072,7 @@
       "cities": [
         "santa-fe/vera",
         "santa-fe/tostado",
+        "santiago-del-estero/guardia-escolta",
         "santiago-del-estero/bandera",
         "santiago-del-estero/pinto"
       ]
@@ -661,7 +1094,9 @@
       "description": "La Ruta Nacional 105 es una carretera argentina pavimentada que se encuentra en el sudoeste de la Provincia de Misiones, con un recorrido de 46 km desde el Puente Internacional 'San Roque González de Santa Cruz' hasta la Ruta Nacional 14. Fue construida entre 1953 y 1954 durante la gobernación de Juan Filomeno Velazco y actualmente se encuentra en construcción una segunda calzada para convertirla en su totalidad en autovía.",
       "cities": [
         "misiones/posadas",
+        "misiones/villalonga",
         "misiones/garupa",
+        "misiones/pindapoy",
         "misiones/san-jose",
         "misiones/apostoles"
       ]
@@ -731,6 +1166,7 @@
       "cities": [
         "corrientes/9-de-julio",
         "corrientes/chavarria",
+        "corrientes/felipe-yofre",
         "corrientes/mercedes"
       ]
     },
@@ -739,7 +1175,12 @@
       "length_km": 325.35,
       "description": "La Ruta Nacional 127 es una carretera asfaltada argentina que une las provincias de Entre Ríos y Corrientes. Con un recorrido total de 260 km, se inicia en el km 497 de la Ruta Nacional 12 y termina en la intersección con las rutas nacionales 14 y 119 en Cuatro Bocas. Fue reasfaltada en 2011 con una inversión superior a los 250 millones de pesos.",
       "cities": [
+        "entre-rios/el-pingo",
+        "entre-rios/pueblo-arrua",
+        "entre-rios/bovril",
+        "entre-rios/sauce-de-luna",
         "entre-rios/federal",
+        "entre-rios/los-conquistadores",
         "entre-rios/san-jaime-de-la-frontera",
         "entre-rios/cuatro-bocas"
       ]
@@ -761,9 +1202,10 @@
       "length_km": 40.92,
       "description": "Es una carretera argentina asfaltada que se encuentra en el centro-oeste de la Provincia de Entre Ríos. Con un recorrido de 41 kilómetros, une el puerto de Diamante con la Ruta Nacional 12 cerca de Crespo. Fue asfaltada en 2011 y ampliada con una inversión superior a los 5 millones de pesos.",
       "cities": [
+        "entre-rios/strobel",
         "entre-rios/diamante",
         "entre-rios/libertador-san-martin",
-        "entre-rios/villa-crespo"
+        "entre-rios/crespo"
       ]
     },
     {
@@ -791,8 +1233,8 @@
       "description": "La Ruta Nacional 141 es una carretera argentina pavimentada que conecta la Ruta Nacional 79 en La Rioja con la Ruta Nacional 20 en San Juan. Tiene un recorrido de 204 km y pasa por localidades como Chepes, Vallecito y Caucete. También es conocida como antigua traza de la ruta que se extendía desde el límite interprovincial entre San Juan y Mendoza hasta el empalme con la Ruta Nacional 150 en Las Flores.",
       "cities": [
         "la-rioja/chepes",
-        "san-juan/caucete",
-        "san-juan/san-juan"
+        "san-juan/vallecito",
+        "san-juan/caucete"
       ]
     },
     {
@@ -801,6 +1243,7 @@
       "description": "La ruta nacional 142 es una carretera argentina asfaltada que se encuentra en el norte de la Provincia de Mendoza y el sur de la Provincia de San Juan. Tiene un recorrido de 77 km y une la calle Corindu de la localidad de Ingeniero Gustavo André con la Ruta Nacional 20 en la localidad de El Encón, permitiendo llegar a diversos circuitos turísticos, incluyendo la reserva Natural y Cultural Bosques Telteca.",
       "cities": [
         "mendoza/costa-de-araujo",
+        "mendoza/ingeniero-gustavo-andre",
         "san-juan/encon"
       ]
     },
@@ -809,9 +1252,15 @@
       "length_km": 629.77,
       "description": "La Ruta Nacional 143 es una carretera argentina que une la Ruta Nacional 152 en el km 72 y la Ruta Nacional 40 en Pareditas. Tiene un recorrido de 629 kilómetros, siendo 304 km en la provincia de La Pampa y 325 km en la provincia de Mendoza. El camino es de tierra entre el km 56 y el empalme con la Ruta Nacional 151, pero el resto está asfaltado.",
       "cities": [
+        "la-pampa/chacharramendi",
+        "la-pampa/limay-mahuida",
         "la-pampa/santa-isabel",
         "mendoza/carmensa",
         "mendoza/general-alvear",
+        "mendoza/real-del-padre",
+        "mendoza/villa-atuel",
+        "mendoza/salto-de-las-rosas",
+        "mendoza/rama-caida",
         "mendoza/san-rafael",
         "mendoza/pareditas"
       ]
@@ -839,8 +1288,12 @@
       "length_km": 395.11,
       "description": "La Ruta Nacional 146 es una carretera argentina que se extiende por las provincias de San Luis y Mendoza, con un recorrido total de 395 kilómetros. Comunica la RN 20 a nivel del km 286 en Luján con la RN 143 en San Rafael. El tramo de 221 kilómetros en San Luis conecta las localidades de Luján, San Francisco del Monte de Oro, Toro Negro, San Luis y Beazley, mientras que el tramo de 174 kilómetros en Mendoza conecta Monte Comán, Goudge y San Rafael. La ruta fue modificada en la década de 1970 y se pavimentó completamente en la década de 1980.",
       "cities": [
+        "san-luis/lujan",
+        "san-luis/toro-negro",
         "san-luis/san-luis",
+        "san-luis/beazley",
         "mendoza/monte-coman",
+        "mendoza/goudge",
         "mendoza/san-rafael"
       ]
     },
@@ -860,7 +1313,7 @@
       "description": "La Ruta Nacional 148 es una carretera breve ubicada en la región central de Argentina, con una extensión aproximada de 40 km que discurren desde el kilómetro 925 hasta el kilómetro 966. La ruta no atravesa ninguna población y se encuentra localizada en el extremo sur del Valle de San Javier o Traslasierra, en la Provincia de Córdoba.",
       "cities": [
         "san-luis/santa-rosa-del-conlara",
-        "san-luis/villa-dolores"
+        "cordoba/villa-dolores"
       ]
     },
     {
@@ -869,8 +1322,10 @@
       "description": "La Ruta Nacional 149 es una carretera argentina que se encuentra en el noroeste de la Provincia de Mendoza y el sudoeste de la Provincia de San Juan. Con un recorrido de 346 km, une la Ruta Nacional 7 en Uspallata con la Ruta Nacional 150 en Las Flores, pasando por parques nacionales y formando parte del corredor minero. La ruta ha sufrido cambios históricos y trabajos de pavimentación y mejora a lo largo de los años.",
       "cities": [
         "mendoza/uspallata",
+        "san-juan/barreal",
         "san-juan/calingasta",
-        "san-juan/iglesia"
+        "san-juan/iglesia",
+        "san-juan/las-flores"
       ]
     },
     {
@@ -878,8 +1333,11 @@
       "length_km": 385.77,
       "description": "La Ruta Nacional 150 es una carretera argentina pavimentada que se localiza en el sur de la Provincia de La Rioja y el centro norte de la Provincia de San Juan. Conecta el km 356 de la Ruta Nacional 38, localizado en las afueras de la localidad riojana de Patquía, con el paso montañoso internacional Agua Negra, a 4779 m s. n. m., localizado en la frontera chilena. La ruta es parte del futuro corredor bioceánico que conectaría el centro de Argentina con los puertos del Pacífico y el Atlántico.",
       "cities": [
+        "la-rioja/patquia",
+        "san-juan/los-baldecitos",
         "san-juan/san-jose-de-jachal",
         "san-juan/rodeo",
+        "san-juan/las-flores",
         "san-juan/paso-de-agua-negra"
       ]
     },
@@ -889,10 +1347,13 @@
       "description": "La Ruta Nacional 151 es una carretera argentina que se encuentra en el norte de la Provincia de Río Negro y el oeste de la Provincia de La Pampa. Con un recorrido de 315 kilómetros pavimentados, une la rotonda de la ciudad de Cipolletti con el empalme con la Ruta Nacional 143 a 21 km del pueblo de Santa Isabel.",
       "cities": [
         "rio-negro/cipolletti",
+        "rio-negro/ferri",
         "rio-negro/cinco-saltos",
+        "rio-negro/barda-del-medio",
         "rio-negro/catriel",
         "la-pampa/25-de-mayo",
         "la-pampa/puelen",
+        "la-pampa/algarrobo-del-aguila",
         "la-pampa/santa-isabel"
       ]
     },
@@ -930,13 +1391,21 @@
       "length_km": 1250.25,
       "description": "La Ruta Nacional 157 es una carretera argentina que se encuentra en el sudeste de la Provincia de Catamarca, el oeste de la Provincia de Santiago del Estero y el sudeste de la Provincia de Tucumán. Con un recorrido de 310 kilómetros asfaltados, une la Ruta Nacional 60 con el puente sobre el Canal Sur en la ciudad de San Miguel de Tucumán.",
       "cities": [
-        "tucuman/san-miguel-de-tucuman",
-        "tucuman/bella-vista",
-        "tucuman/simoca",
-        "santiago-del-estero/san-pedro-de-guasayan",
+        "catamarca/recreo",
+        "catamarca/san-antonio-de-la-paz",
+        "catamarca/quiros",
         "santiago-del-estero/frias",
-        "santiago-del-estero/san-antonio-de-la-paz",
-        "santiago-del-estero/recreo"
+        "santiago-del-estero/tapso",
+        "santiago-del-estero/lavalle",
+        "santiago-del-estero/san-pedro-de-guasayan",
+        "tucuman/taco-ralo",
+        "tucuman/la-madrid",
+        "tucuman/monteagudo",
+        "tucuman/simoca",
+        "tucuman/rio-colorado",
+        "tucuman/bella-vista",
+        "tucuman/manuel-garcia-fernandez",
+        "tucuman/san-miguel-de-tucuman"
       ]
     },
     {
@@ -945,10 +1414,26 @@
       "description": "Es una carretera argentina que se encuentra en el centro-este de la provincia de Córdoba, con un recorrido de 285 km desde San Francisco hasta Río Cuarto. Forma parte del Corredor Mercosur-Chile y es importante para la integración en Argentina.",
       "cities": [
         "cordoba/san-francisco",
+        "cordoba/monte-redondo",
+        "cordoba/quebracho-herrado",
+        "cordoba/colonia-prosperidad",
+        "cordoba/saturnino-maria-laspiur",
+        "cordoba/las-varas",
         "cordoba/las-varillas",
+        "cordoba/pozo-del-molle",
+        "cordoba/la-playosa",
+        "cordoba/arroyo-algodon",
+        "cordoba/las-mojarras",
         "cordoba/villa-maria",
+        "cordoba/arroyo-cabral",
+        "cordoba/luca",
+        "cordoba/dalmacio-velez-sarsfield",
+        "cordoba/las-perdices",
         "cordoba/general-deheza",
         "cordoba/general-cabrera",
+        "cordoba/carnerillo",
+        "cordoba/chucul",
+        "cordoba/las-higueras",
         "cordoba/rio-cuarto"
       ]
     },
@@ -1006,13 +1491,32 @@
       "description": "La Ruta Nacional 188 es una carretera argentina que tiene su kilómetro 0 en el puerto fluvial de San Nicolás de los Arroyos, provincia de Buenos Aires, y finaliza en la ciudad de General Alvear, provincia de Mendoza. La ruta conecta cuatro provincias argentinas: Buenos Aires, La Pampa, San Luis y Mendoza, con un recorrido total de 803 km pavimentados.",
       "cities": [
         "buenos-aires/san-nicolas-de-los-arroyos",
+        "buenos-aires/campos-salles",
+        "buenos-aires/villa-esperanza",
+        "buenos-aires/general-rojo",
+        "buenos-aires/erezcano",
+        "buenos-aires/conesa",
+        "buenos-aires/guerrico",
+        "buenos-aires/acevedo",
         "buenos-aires/pergamino",
         "buenos-aires/rojas",
+        "buenos-aires/rafael-obligado",
+        "buenos-aires/agustin-roca",
         "buenos-aires/junin",
         "buenos-aires/lincoln",
+        "buenos-aires/general-pinto",
+        "buenos-aires/villa-francia",
+        "buenos-aires/florentino-ameghino",
         "buenos-aires/general-villegas",
+        "buenos-aires/banderalo",
+        "la-pampa/bernardo-larroude",
+        "la-pampa/coronel-hilario-lagos",
         "la-pampa/realico",
+        "la-pampa/rancul",
+        "san-luis/nueva-galia",
+        "san-luis/fortuna",
         "san-luis/union",
+        "mendoza/bowen",
         "mendoza/general-alvear"
       ]
     },
@@ -1033,6 +1537,8 @@
       "length_km": 317.41,
       "description": "La Ruta Nacional 205 es una carretera pavimentada de 317 km que discurre del noreste al centro de la Provincia de Buenos Aires, Argentina. El recorrido entre Ezeiza y Cañuelas se conoce como Autopista Ezeiza-Cañuelas. El resto de la ruta tiene un carril por mano. La RN 205 constituye una vía fundamental para el traslado de productos agrícola-ganaderos desde las cercanías del Río Matanza hacia la zona metropolitana sur.",
       "cities": [
+        "buenos-aires/el-jaguel",
+        "buenos-aires/ezeiza",
         "buenos-aires/canuelas",
         "buenos-aires/lobos",
         "buenos-aires/roque-perez",
@@ -1052,6 +1558,7 @@
         "buenos-aires/olavarria",
         "buenos-aires/san-carlos-de-bolivar",
         "buenos-aires/pehuajo",
+        "buenos-aires/carlos-tejedor",
         "buenos-aires/general-villegas"
       ]
     },
@@ -1070,6 +1577,7 @@
       "length_km": 30.19,
       "description": "Ruta Nacional 229: carretera que recorre Buenos Aires en la región pampeana. Conecta localidades del interior provincial, facilitando el acceso a zonas productivas y comunidades de la región.",
       "cities": [
+        "buenos-aires/grunbein",
         "buenos-aires/villa-general-arias",
         "buenos-aires/punta-alta"
       ]
@@ -1089,7 +1597,7 @@
       "description": "La Ruta Nacional 232 es una carretera argentina pavimentada que se encuentra en el norte de la Provincia de Río Negro y el sur de la Provincia de La Pampa, uniendo la Ruta Nacional 152 y el empalme con la Ruta Nacional 22 en la localidad de Chelforó. Fue inaugurada el 12 de octubre de 1951. También es notable por haber sido parte de la Ruta Nacional 152 hasta 1999 y volver a ser una ruta nacional después de un convenio entre el gobierno nacional y provincial en 2009.",
       "cities": [
         "la-pampa/puelches",
-        "rio-negro/gobernador-duval",
+        "la-pampa/gobernador-duval",
         "rio-negro/chelforo"
       ]
     },
@@ -1107,7 +1615,9 @@
       "length_km": 1630.52,
       "description": "La Ruta Nacional 237 es una carretera argentina asfaltada que se encuentra en el este de la provincia del Neuquén, uniendo la Ruta Nacional 22 con la Ruta Nacional 40 en las cercanías del lago Nahuel Huapi. Tiene una extensión de 361 km y es paralela al río Limay. Su recorrido incluye localidades como Arroyito, Villa El Chocón, Picún Leufú, Piedra del Águila y Confluencia.",
       "cities": [
-        "cordoba/arroyito",
+        "neuquen/arroyito",
+        "neuquen/villa-el-chocon",
+        "neuquen/picun-leufu",
         "neuquen/piedra-del-aguila",
         "neuquen/confluencia",
         "rio-negro/san-carlos-de-bariloche"
@@ -1137,7 +1647,9 @@
       "description": "La Ruta Nacional 250 es una carretera argentina asfaltada que une el kilómetro 1.009 de la Ruta Nacional 3 con el km 997 de la Ruta Nacional 22 en la ciudad de Choele Choel, recorriendo 287 kilómetros por la Provincia de Río Negro. Es el camino más directo para acceder a Neuquén desde Viedma y corre en la margen derecha del Río Negro, excepto en el último kilómetro donde cruza un puente que conecta con Choele Choel.",
       "cities": [
         "rio-negro/general-conesa",
+        "rio-negro/pomona",
         "rio-negro/lamarque",
+        "rio-negro/luis-beltran",
         "rio-negro/choele-choel"
       ]
     },
@@ -1155,8 +1667,9 @@
       "length_km": 9.51,
       "description": "La Ruta Nacional 252 es una carretera asfaltada de 6 km que se encuentra en el partido de Bahía Blanca, Provincia de Buenos Aires. Comienza en el empalme con la Ruta Nacional 3 y finaliza en el puerto de Ingeniero White. La ruta no tiene cabinas de peaje y es gestionada por la empresa Rutas al Sur desde 2003.",
       "cities": [
-        "buenos-aires/saladero",
-        "buenos-aires/ingeniero-white"
+        "buenos-aires/grunbein",
+        "buenos-aires/ingeniero-white",
+        "buenos-aires/saladero"
       ]
     },
     {
@@ -1165,7 +1678,8 @@
       "description": "La Ruta Nacional 259 es una carretera argentina que se encuentra en el noroeste de la provincia del Chubut, uniendo la Ruta Nacional 40 con el Paso internacional Río Futaleufú. Tiene una longitud de 75 km y está parcialmente asfaltada entre la ruta 40 y Trevelín, pero la mayor parte del camino es de ripio. La ruta también pasa cerca del parque nacional Los Alerces y continúa en Chile como Ruta CH-231.",
       "cities": [
         "chubut/esquel",
-        "chubut/trevelin"
+        "chubut/trevelin",
+        "chubut/los-cipreses"
       ]
     },
     {
