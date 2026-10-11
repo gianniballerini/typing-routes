@@ -1,7 +1,7 @@
 import type { AchievementsSnapshot } from './Achievements';
 import { Achievements } from './Achievements';
 
-const ACHIEVEMENTS_STORAGE_KEY = 'typing-routes.achievements.v1';
+const ACHIEVEMENTS_STORAGE_KEY = 'typing-routes.achievements.v2';
 const ACHIEVEMENTS_VERSION = 1;
 
 // Deliberately its own key rather than a field on the user-stats snapshot:

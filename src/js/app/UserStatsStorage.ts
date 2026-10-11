@@ -4,7 +4,7 @@ import { UserStats } from '../UserStats';
 // Bumped alongside the routes.json/cities.json id rewrite (see data/README.md):
 // old snapshots hold city/route ids that no longer resolve to anything, so
 // this key change is a deliberate fresh start rather than a migration.
-const USER_STATS_STORAGE_KEY = 'typing-routes.user-stats.v2';
+const USER_STATS_STORAGE_KEY = 'typing-routes.user-stats.v3';
 const USER_STATS_VERSION = 3;
 
 class UserStatsStorage {
