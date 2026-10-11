@@ -793,7 +793,7 @@ class MapController {
             this.infoCardTarget = nextTarget;
             this.mouseInfoCard.show(
                 route.properties.routeDisplay,
-                `${count} ${count === 1 ? 'ciudad' : 'ciudades'}`,
+                `${count} ${count === 1 ? 'parada' : 'paradas'}`,
                 'route',
                 x + 10,
                 y + 10

@@ -154,7 +154,7 @@ class RouteListModal extends BaseModal {
         const starsEl = tileEl.querySelector<HTMLElement>('.route-list-modal__tile-stars');
 
         if (numberEl) numberEl.textContent = row.routeLabel;
-        if (citiesEl) citiesEl.textContent = `${row.citiesCount} ${row.citiesCount === 1 ? 'ciudad' : 'ciudades'}`;
+        if (citiesEl) citiesEl.textContent = `${row.citiesCount} ${row.citiesCount === 1 ? 'parada' : 'paradas'}`;
         if (nameEl) nameEl.textContent = row.routeName;
 
         // Only ~a quarter of the routes ship a photo, so the sign-only tile is the
