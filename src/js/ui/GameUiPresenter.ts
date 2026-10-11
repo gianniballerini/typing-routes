@@ -78,6 +78,7 @@ class GameUiPresenter {
     private typing_ok_el: HTMLElement | null;
     private typing_next_char_el: HTMLElement | null;
     private typing_rest_el: HTMLElement | null;
+    private typing_fitted_target: string;
     private route_name_el: HTMLElement | null;
     private cities_completed_el: HTMLElement | null;
     private cities_remaining_el: HTMLElement | null;
@@ -207,8 +208,16 @@ class GameUiPresenter {
         this.last_focused_menu_button_el = null;
         this.menu_signs_parked = false;
         this.renderElapsedTime(0);
+        this.typing_fitted_target = '';
 
         window.addEventListener('keydown', this.handleMenuNavigationKeydown);
+
+        // Refits on window resizes and when the card first becomes visible, since
+        // a hidden card measures zero width and the initial fit is skipped.
+        const typingContainerEl = this.typing_el?.parentElement;
+        if (typingContainerEl) {
+            new ResizeObserver(() => this.fitTypingToCard()).observe(typingContainerEl);
+        }
     }
 
     // The presenter is built before ModalController exists, so the menu learns
@@ -845,6 +854,37 @@ class GameUiPresenter {
         if (this.typing_ok_el) this.typing_ok_el.textContent = this.toTypingDisplayText(displayTyped);
         if (this.typing_next_char_el) this.typing_next_char_el.textContent = this.toTypingDisplayText(nextChar);
         if (this.typing_rest_el) this.typing_rest_el.textContent = this.toTypingDisplayText(restText);
+
+        // The full word keeps the same width while it is typed, so it only needs
+        // fitting when the target changes.
+        if (target !== this.typing_fitted_target) {
+            this.typing_fitted_target = target;
+            this.fitTypingToCard();
+        }
+    }
+
+    /**
+     * Shrinks the current word's font so very long city names (e.g. San Fernando
+     * del Valle de Catamarca) stay on one line inside the card. Names that
+     * already fit keep the stylesheet size.
+     */
+    private fitTypingToCard(): void {
+        const el = this.typing_el;
+        const containerEl = el?.parentElement;
+        if (!el || !containerEl) return;
+
+        el.style.fontSize = '';
+
+        const containerStyle = getComputedStyle(containerEl);
+        const availableWidth = containerEl.clientWidth
+            - parseFloat(containerStyle.paddingLeft)
+            - parseFloat(containerStyle.paddingRight);
+        const naturalWidth = el.scrollWidth;
+        if (availableWidth <= 0 || naturalWidth <= availableWidth) return;
+
+        const baseFontSize = parseFloat(getComputedStyle(el).fontSize);
+        const fittedFontSize = Math.floor((baseFontSize * availableWidth / naturalWidth) * 100) / 100;
+        el.style.fontSize = `${fittedFontSize}px`;
     }
 
     renderCurrentRouteAndCity(route: Route | null, cityIndex: number): void {

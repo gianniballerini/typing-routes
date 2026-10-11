@@ -386,7 +386,8 @@
         align-items: center;
         row-gap: 6 * $ptr;
 
-        padding: 12 * $ptr 0;
+        // Side padding keeps the fitted word clear of the inner white border.
+        padding: 12 * $ptr 20 * $ptr;
 
         font-size: 30 * $ptr;
     }
@@ -420,7 +421,8 @@
             align-items: center;
 
             font-size: 25 * $ptr;
-            letter-spacing: 2 * $ptr;
+            // Relative to the font so it scales with the auto-fit in GameUiPresenter.
+            letter-spacing: 0.08em;
             color: $white;
             text-transform: uppercase;
 
