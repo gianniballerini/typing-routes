@@ -502,12 +502,12 @@
       "length_km": 176.03,
       "description": "La Ruta Nacional 68 es una carretera argentina asfaltada que se encuentra en el sur de la Provincia de Salta, uniendo las ciudades de Cafayate y Salta en un recorrido de 183 km. Pasa por la Quebrada de las Conchas, donde se pueden apreciar curiosas formaciones montañosas. La ruta también cruza varios departamentos y localidades, incluyendo Cafayate, La Viña, Coronel Moldes, El Carril, La Merced, Cerrillos y Salta.",
       "cities": [
-        "salta/salta",
-        "salta/cerrillos",
-        "salta/el-carril",
-        "salta/coronel-moldes",
+        "salta/cafayate",
         "salta/talapampa",
-        "salta/cafayate"
+        "salta/coronel-moldes",
+        "salta/el-carril",
+        "salta/cerrillos",
+        "salta/salta"
       ]
     },
     {
