@@ -184,6 +184,14 @@ class Settings
         maxZoom: 7,
         maxRadius: 13
       },
+      // Cities off the selected route fade in between these zooms, so the
+      // zoomed-out country reads as a road network instead of a cloud of dots.
+      // Cities on the selected (or played) route are always drawn. A city only
+      // takes clicks once it is at least half faded in.
+      visibilityByZoom: {
+        hiddenZoom: 4.2,
+        visibleZoom: 4.8
+      },
       // Ring drawn around the hovered city. It sits at the same radius the
       // hitbox debug helper outlines, so hover feedback doubles as a hint of
       // the real click area.

@@ -132,7 +132,13 @@ class PickBuffer {
             Settings.cityCircle.hitRadiusByZoom.maxRadius
         );
 
+        // Off-route cities stop taking clicks halfway through their fade-out,
+        // so a dot too faint to see never steals a click from the route under it.
+        const { hiddenZoom, visibleZoom } = Settings.cityCircle.visibilityByZoom;
+        const offRouteHittable = zoom >= (hiddenZoom + visibleZoom) / 2;
+
         this.cities.forEach((city, index) => {
+            if (!city.selected && !offRouteHittable) return;
             const x = camera.projectWorldX(city.x);
             const y = camera.projectWorldY(city.y);
             if (x < -hitRadius || y < -hitRadius || x > width + hitRadius || y > height + hitRadius) return;

@@ -420,8 +420,17 @@ class MapRenderer {
         const burstById = new Map(bursts.map((burst) => [burst.cityId, burst.progress]));
         const maxShapeScale = Math.max(...Object.values(Settings.cityCircle.shapeScale));
         const maxRadius = radius * visitedStyle.radiusScale * burstStyle.popScale * maxShapeScale;
+        const offRouteOpacity = interpolateByZoom(
+            zoom,
+            Settings.cityCircle.visibilityByZoom.hiddenZoom,
+            0,
+            Settings.cityCircle.visibilityByZoom.visibleZoom,
+            1
+        );
 
         for (const city of cities) {
+            const opacity = city.selected ? 1 : offRouteOpacity;
+            if (opacity <= 0) continue;
             const x = camera.projectWorldX(city.x);
             const y = camera.projectWorldY(city.y);
             if (x < -maxRadius || y < -maxRadius || x > camera.width + maxRadius || y > camera.height + maxRadius) continue;
@@ -438,6 +447,7 @@ class MapRenderer {
                 cityRadius *= 1 + (burstStyle.popScale - 1) * pop;
             }
 
+            ctx.globalAlpha = opacity;
             ctx.fillStyle = visited
                 ? Settings.cityCircle.colors.visited
                 : city.selected
@@ -461,15 +471,15 @@ class MapRenderer {
 
             if (progress !== undefined) {
                 const eased = 1 - Math.pow(1 - progress, 3);
-                ctx.globalAlpha = 1 - progress;
+                ctx.globalAlpha = opacity * (1 - progress);
                 ctx.strokeStyle = burstStyle.ringColor;
                 ctx.lineWidth = burstStyle.ringStrokeWidth;
                 ctx.beginPath();
                 ctx.arc(x, y, cityRadius + burstStyle.ringGrowthPx * eased, 0, Math.PI * 2);
                 ctx.stroke();
-                ctx.globalAlpha = 1;
             }
         }
+        ctx.globalAlpha = 1;
 
         // 6. Hover ring.
         if (hoverRing.cityId !== null && hoverRing.strokeOpacity > 0) {

@@ -108,6 +108,10 @@ export interface SettingsShape {
       maxZoom: number;
       maxRadius: number;
     };
+    visibilityByZoom: {
+      hiddenZoom: number;
+      visibleZoom: number;
+    };
     hoverRing: {
       color: string;
       strokeWidth: number;
