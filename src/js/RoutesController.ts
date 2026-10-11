@@ -81,6 +81,7 @@ class RoutesController {
         city.typing = String(raw?.typing ?? '');
         city.lat = Number(raw?.lat ?? 0);
         city.lon = Number(raw?.lon ?? 0);
+        city.kind = raw?.kind ? String(raw.kind) : null;
         return city;
     }
 
@@ -244,6 +245,7 @@ class RoutesController {
                 properties: {
                     id: city.id,
                     name: city.name,
+                    kind: city.kind,
                     visited
                 },
                 geometry: {

@@ -225,6 +225,22 @@ class Settings
       stroke: {
         width: 1.5,
         color: '#3A2A18'
+      },
+      // Stops that are not towns get their own silhouette so a border crossing
+      // or a bridge never reads as a town. Keyed by the city `kind` in the
+      // data; anything unlisted (towns included) stays a circle. `scale` evens
+      // out the visual weight of each shape against the circle's radius.
+      shapeByKind: {
+        border: 'square',
+        bridge: 'diamond',
+        ferry: 'diamond',
+        landmark: 'triangle'
+      },
+      shapeScale: {
+        circle: 1,
+        square: 0.85,
+        diamond: 1.2,
+        triangle: 1.3
       }
     };
 

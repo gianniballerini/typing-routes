@@ -1,10 +1,41 @@
-import { Settings } from '../Settings';
+import { Settings, type CityMarkerShape } from '../Settings';
 import { createCarMarkerSprite, type CarMarkerSprite } from '../utils/CarMarkerIcon';
 import { createTintedSilhouette } from '../utils/CountrySilhouette';
 import { artworkRect, strokeCountryOutline, type CountryOutline } from './CountryOutline';
 import type { MapCamera } from './MapCamera';
 import type { CityFeature, RouteFeature } from './MapFeatures';
 import { interpolateByZoom } from './MercatorProjection';
+
+/**
+ * Traces (does not fill or stroke) a city marker of the given shape centred on
+ * x,y. `radius` is the circle radius; other shapes are scaled by
+ * `Settings.cityCircle.shapeScale` so they carry the same visual weight.
+ */
+const traceCityMarker = (ctx: CanvasRenderingContext2D, shape: CityMarkerShape, x: number, y: number, radius: number): void => {
+    const r = radius * (Settings.cityCircle.shapeScale[shape] ?? 1);
+    ctx.beginPath();
+    switch (shape) {
+        case 'square':
+            ctx.rect(x - r, y - r, r * 2, r * 2);
+            break;
+        case 'diamond':
+            ctx.moveTo(x, y - r);
+            ctx.lineTo(x + r, y);
+            ctx.lineTo(x, y + r);
+            ctx.lineTo(x - r, y);
+            ctx.closePath();
+            break;
+        case 'triangle':
+            // Centred on its centroid so it sits on the road like the circle does.
+            ctx.moveTo(x, y - r);
+            ctx.lineTo(x + r * 0.866, y + r * 0.5);
+            ctx.lineTo(x - r * 0.866, y + r * 0.5);
+            ctx.closePath();
+            break;
+        default:
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+    }
+};
 
 export type ProgressMarkerState = {
     x: number;
@@ -387,7 +418,8 @@ class MapRenderer {
         const visitedStyle = Settings.cityCircle.visited;
         const burstStyle = Settings.cityCircle.completionBurst;
         const burstById = new Map(bursts.map((burst) => [burst.cityId, burst.progress]));
-        const maxRadius = radius * visitedStyle.radiusScale * burstStyle.popScale;
+        const maxShapeScale = Math.max(...Object.values(Settings.cityCircle.shapeScale));
+        const maxRadius = radius * visitedStyle.radiusScale * burstStyle.popScale * maxShapeScale;
 
         for (const city of cities) {
             const x = camera.projectWorldX(city.x);
@@ -412,8 +444,8 @@ class MapRenderer {
                     ? Settings.cityCircle.colors.selected
                     : Settings.cityCircle.colors.default;
 
-            ctx.beginPath();
-            ctx.arc(x, y, cityRadius, 0, Math.PI * 2);
+            const shape = (city.properties.kind && Settings.cityCircle.shapeByKind[city.properties.kind]) || 'circle';
+            traceCityMarker(ctx, shape, x, y, cityRadius);
             ctx.fill();
             if (Settings.cityCircle.stroke.width > 0) {
                 ctx.lineWidth = Settings.cityCircle.stroke.width;
@@ -423,8 +455,7 @@ class MapRenderer {
 
             if (visited) {
                 ctx.fillStyle = visitedStyle.highlightColor;
-                ctx.beginPath();
-                ctx.arc(x, y, cityRadius * visitedStyle.highlightScale, 0, Math.PI * 2);
+                traceCityMarker(ctx, shape, x, y, cityRadius * visitedStyle.highlightScale);
                 ctx.fill();
             }
 

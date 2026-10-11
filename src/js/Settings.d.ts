@@ -1,3 +1,5 @@
+export type CityMarkerShape = 'circle' | 'square' | 'diamond' | 'triangle';
+
 export interface SettingsShape {
   center: [number, number];
   initialZoom: number;
@@ -135,6 +137,8 @@ export interface SettingsShape {
       width: number;
       color: string;
     };
+    shapeByKind: Record<string, CityMarkerShape>;
+    shapeScale: Record<CityMarkerShape, number>;
   };
   routeSelection: {
     flyToZoom: number;

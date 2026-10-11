@@ -29,6 +29,8 @@ export type RouteFeature = {
 
 export type CityProperties = {
     name: string;
+    /** Non-town stop role from the data (`border`, `bridge`, ...); null for towns. */
+    kind: string | null;
     visited: boolean;
 };
 
