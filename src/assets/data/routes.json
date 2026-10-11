@@ -558,8 +558,8 @@
       "length_km": 101.95,
       "description": "La Ruta Nacional 77 es una carretera pavimentada que une el pueblo de Desiderio Tello con el empalme con la Ruta Nacional 38, uniendo las provincias de La Rioja y Córdoba. Tiene una longitud de 102 km y su recorrido pasa por varios departamentos y localidades en ambas provincias.",
       "cities": [
-        "cordoba/el-chacho",
-        "la-rioja/milagro"
+        "la-rioja/milagro",
+        "cordoba/el-chacho"
       ]
     },
     {
@@ -577,10 +577,13 @@
       "description": "La Ruta Nacional 79 es una carretera argentina pavimentada que une la ciudad de Quines, San Luis con la localidad de Casa de Piedra, Catamarca. El recorrido de la ruta es de 367 kilómetros y se encuentra en el norte de la Provincia de San Luis, el este de la Provincia de La Rioja y el sur de la Provincia de Catamarca.",
       "cities": [
         "san-luis/quines",
+        "san-luis/candelaria",
         "la-rioja/ulapes",
+        "la-rioja/desiderio-tello",
+        "la-rioja/catuna",
         "la-rioja/olta",
         "la-rioja/chamical",
-        "la-pampa/casa-de-piedra"
+        "catamarca/casa-de-piedra"
       ]
     },
     {
@@ -635,10 +638,10 @@
       "length_km": 284.73,
       "description": "La Ruta Nacional 98 es una carretera asfaltada argentina que une las ciudades de Vera y Pinto en el norte de la Provincia de Santa Fe y el este de la Provincia de Santiago del Estero. Con un recorrido de 286 kilómetros, este camino es importante para conectar estas dos regiones.",
       "cities": [
-        "santa-fe/reconquista",
         "santa-fe/vera",
         "santa-fe/tostado",
-        "santiago-del-estero/bandera"
+        "santiago-del-estero/bandera",
+        "santiago-del-estero/pinto"
       ]
     },
     {
@@ -678,8 +681,7 @@
       "description": "La Ruta Nacional 118 es una carretera pavimentada que se encuentra en el noroeste de la provincia de Corrientes, Argentina. Tiene un recorrido de 196 km desde la intersección con la Ruta Nacional 12 y la Ruta Provincial 27 hasta el paraje Vallejos Cué. Pasa por varios departamentos y localidades en la provincia, incluyendo Saladas, Santa Rosa, Concepción, San Miguel y Loreto.",
       "cities": [
         "corrientes/saladas",
-        "corrientes/san-roque",
-        "la-pampa/santa-rosa",
+        "corrientes/santa-rosa",
         "corrientes/san-miguel",
         "corrientes/loreto"
       ]
@@ -691,7 +693,7 @@
       "cities": [
         "corrientes/curuzu-cuatia",
         "corrientes/mariano-i-loza",
-        "buenos-aires/mercedes"
+        "corrientes/mercedes"
       ]
     },
     {
@@ -727,9 +729,9 @@
       "length_km": 214.14,
       "description": "La Ruta Nacional 123 es una carretera argentina que se encuentra en el centro-sur de la Provincia de Corrientes. Con un recorrido de 214 kilómetros asfaltados, une la Ruta Provincial 27 con la Ruta Nacional 14, pasando por departamentos como Bella Vista, San Roque y Mercedes.",
       "cities": [
-        "buenos-aires/mercedes",
+        "corrientes/9-de-julio",
         "corrientes/chavarria",
-        "corrientes/9-de-julio"
+        "corrientes/mercedes"
       ]
     },
     {
@@ -807,11 +809,11 @@
       "length_km": 629.77,
       "description": "La Ruta Nacional 143 es una carretera argentina que une la Ruta Nacional 152 en el km 72 y la Ruta Nacional 40 en Pareditas. Tiene un recorrido de 629 kilómetros, siendo 304 km en la provincia de La Pampa y 325 km en la provincia de Mendoza. El camino es de tierra entre el km 56 y el empalme con la Ruta Nacional 151, pero el resto está asfaltado.",
       "cities": [
-        "mendoza/pareditas",
-        "mendoza/san-rafael",
-        "mendoza/general-alvear",
+        "la-pampa/santa-isabel",
         "mendoza/carmensa",
-        "la-pampa/santa-isabel"
+        "mendoza/general-alvear",
+        "mendoza/san-rafael",
+        "mendoza/pareditas"
       ]
     },
     {
@@ -837,10 +839,9 @@
       "length_km": 395.11,
       "description": "La Ruta Nacional 146 es una carretera argentina que se extiende por las provincias de San Luis y Mendoza, con un recorrido total de 395 kilómetros. Comunica la RN 20 a nivel del km 286 en Luján con la RN 143 en San Rafael. El tramo de 221 kilómetros en San Luis conecta las localidades de Luján, San Francisco del Monte de Oro, Toro Negro, San Luis y Beazley, mientras que el tramo de 174 kilómetros en Mendoza conecta Monte Comán, Goudge y San Rafael. La ruta fue modificada en la década de 1970 y se pavimentó completamente en la década de 1980.",
       "cities": [
-        "mendoza/san-rafael",
+        "san-luis/san-luis",
         "mendoza/monte-coman",
-        "mendoza/la-horqueta",
-        "san-luis/san-luis"
+        "mendoza/san-rafael"
       ]
     },
     {
@@ -910,9 +911,9 @@
       "length_km": 153.5,
       "description": "La Ruta Nacional 153 es una carretera argentina que une la Ruta Nacional 40 en Media Agua, San Juan, con la Ruta Nacional 149 en el límite interprovincial. Tiene un recorrido de 109 kilómetros y se encuentra en estado intransitable principalmente en la Provincia de Mendoza, aunque el tramo sanjuanino fue pavimentado en 2014.",
       "cities": [
-        "san-juan/pedernal",
+        "san-juan/media-agua",
         "san-juan/los-berros",
-        "san-juan/media-agua"
+        "san-juan/pedernal"
       ]
     },
     {
@@ -946,8 +947,8 @@
         "cordoba/san-francisco",
         "cordoba/las-varillas",
         "cordoba/villa-maria",
-        "cordoba/general-cabrera",
         "cordoba/general-deheza",
+        "cordoba/general-cabrera",
         "cordoba/rio-cuarto"
       ]
     },
@@ -1059,9 +1060,9 @@
       "length_km": 139.67,
       "description": "La Ruta Nacional 228 es una carretera asfaltada que une la ciudad de Necochea, en el sur de la provincia de Buenos Aires, con la ciudad de Tres Arroyos. Mide 140 km y está completamente asfaltada. En 2014 se realizaron mejoras en la ruta, incluyendo la construcción de acceso para caminos secundarios y la repavimentación de algunas áreas.",
       "cities": [
-        "buenos-aires/tres-arroyos",
+        "buenos-aires/necochea",
         "buenos-aires/energia",
-        "buenos-aires/necochea"
+        "buenos-aires/tres-arroyos"
       ]
     },
     {
@@ -1070,7 +1071,6 @@
       "description": "Ruta Nacional 229: carretera que recorre Buenos Aires en la región pampeana. Conecta localidades del interior provincial, facilitando el acceso a zonas productivas y comunidades de la región.",
       "cities": [
         "buenos-aires/villa-general-arias",
-        "buenos-aires/villa-maio",
         "buenos-aires/punta-alta"
       ]
     },

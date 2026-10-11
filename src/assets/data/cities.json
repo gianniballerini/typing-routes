@@ -131,7 +131,7 @@
       "name": "Punta Alta",
       "typing": "punta alta",
       "lat": -38.88,
-      "lon": -62.08,
+      "lon": -62.075,
       "province": "Buenos Aires",
       "tier": "minor"
     },
@@ -139,8 +139,8 @@
       "id": "buenos-aires/villa-general-arias",
       "name": "Villa General Arias",
       "typing": "villa general arias",
-      "lat": -38.85,
-      "lon": -62.05,
+      "lat": -38.8167,
+      "lon": -62.1,
       "province": "Buenos Aires",
       "tier": "minor"
     },
@@ -2631,6 +2631,60 @@
       "lat": -38.157,
       "lon": -67.145,
       "province": "La Pampa",
+      "tier": "minor"
+    },
+    {
+      "id": "catamarca/casa-de-piedra",
+      "name": "Casa de Piedra",
+      "typing": "casa de piedra",
+      "lat": -29.6038,
+      "lon": -65.5202,
+      "province": "Catamarca",
+      "tier": "minor"
+    },
+    {
+      "id": "san-luis/candelaria",
+      "name": "Candelaria",
+      "typing": "candelaria",
+      "lat": -32.0667,
+      "lon": -65.8167,
+      "province": "San Luis",
+      "tier": "minor"
+    },
+    {
+      "id": "la-rioja/desiderio-tello",
+      "name": "Desiderio Tello",
+      "typing": "desiderio tello",
+      "lat": -31.2167,
+      "lon": -66.3167,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "la-rioja/catuna",
+      "name": "Catuna",
+      "typing": "catuna",
+      "lat": -30.954,
+      "lon": -66.216,
+      "province": "La Rioja",
+      "tier": "minor"
+    },
+    {
+      "id": "corrientes/santa-rosa",
+      "name": "Santa Rosa",
+      "typing": "santa rosa",
+      "lat": -28.2631,
+      "lon": -58.1189,
+      "province": "Corrientes",
+      "tier": "minor"
+    },
+    {
+      "id": "corrientes/mercedes",
+      "name": "Mercedes",
+      "typing": "mercedes",
+      "lat": -29.2,
+      "lon": -58.0833,
+      "province": "Corrientes",
       "tier": "minor"
     },
     {
