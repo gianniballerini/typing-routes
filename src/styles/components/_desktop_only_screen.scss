@@ -24,7 +24,8 @@
         padding: 40 * $ptr 30 * $ptr;
 
         color: $white;
-        background: #474747;
+        // Same blue the loading screen sweeps in with.
+        background: $flag-light-blue;
     }
 
     .desktop-only__content {
@@ -72,5 +73,51 @@
         letter-spacing: 0.14em;
         text-transform: uppercase;
         color: rgba($white, 0.6);
+    }
+
+    .desktop-only__articles {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 10 * $ptr;
+    }
+
+    .desktop-only__articles-subtitle {
+        font-family: $arimo-font;
+        font-size: clamp(14px, 3.6vw, 17px);
+        font-style: italic;
+        line-height: 1.35;
+        color: rgba($white, 0.85);
+    }
+
+    .desktop-only__articles-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10 * $ptr;
+    }
+
+    .desktop-only__article {
+        display: inline-flex;
+        align-items: center;
+        column-gap: 6 * $ptr;
+        padding: 10 * $ptr 16 * $ptr;
+
+        font-family: $noto-sans-font;
+        font-size: clamp(13px, 3.4vw, 15px);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: $white;
+
+        border: 2 * $ptr solid rgba($white, 0.75);
+        border-radius: 999px;
+
+        &:active,
+        &:focus-visible {
+            color: $flag-yellow;
+            border-color: $flag-yellow;
+            outline: none;
+        }
     }
 }
